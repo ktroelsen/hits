@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Disc, Settings, HelpCircle, Volume2, VolumeX, RotateCcw, Sparkles, ListMusic } from 'lucide-react';
+import { Disc, Settings, HelpCircle, Volume2, VolumeX, ListMusic, Clock } from 'lucide-react';
 import { sfx } from '../services/audioService';
 import { GameSettings } from '../types';
 
 interface NavbarProps {
   settings: GameSettings;
+  remainingSeconds?: number | null;
   onOpenSettings: () => void;
   onOpenRules: () => void;
   onOpenSongCatalog: () => void;
@@ -13,12 +14,19 @@ interface NavbarProps {
 
 export function Navbar({
   settings,
+  remainingSeconds,
   onOpenSettings,
   onOpenRules,
   onOpenSongCatalog,
   onRestartCurrentGame,
 }: NavbarProps) {
   const [soundOn, setSoundOn] = useState(sfx.isEnabled());
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
 
   const toggleSound = () => {
     const next = !soundOn;
@@ -76,11 +84,29 @@ export function Navbar({
               : '🌍 Kun Internationale'}
           </span>
           <span className="text-slate-600">•</span>
-          <span>Mål: {settings.targetCards} sange</span>
+          <span>
+            {settings.winCondition === 'time'
+              ? `På tid: ${settings.timeLimitMinutes} min`
+              : `Mål: ${settings.targetCards} sange`}
+          </span>
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Countdown timer (time-based games) */}
+          {settings.winCondition === 'time' && remainingSeconds != null && (
+            <div
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border font-mono text-sm font-bold tabular-nums ${
+                remainingSeconds <= 30
+                  ? 'bg-rose-500/15 border-rose-500/40 text-rose-300 animate-pulse'
+                  : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
+              }`}
+              title="Resterende tid"
+            >
+              <Clock className="w-4 h-4" />
+              <span>{formatTime(remainingSeconds)}</span>
+            </div>
+          )}
           {/* Sound FX Toggle */}
           <button
             onClick={toggleSound}

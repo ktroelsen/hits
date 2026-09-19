@@ -38,9 +38,13 @@ export interface Player {
   score: number;
 }
 
+export type WinCondition = 'points' | 'time';
+
 export interface GameSettings {
   mode: GameMode;
+  winCondition: WinCondition; // 'points' = first to targetCards, 'time' = most cards when time runs out
   targetCards: number;
+  timeLimitMinutes: number; // Used when winCondition === 'time'
   categoryFilter: 'all' | 'danish' | 'international';
   decades: Decade[];
   autoPlayAudio: boolean;

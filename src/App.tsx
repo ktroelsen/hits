@@ -15,7 +15,9 @@ import { sfx } from './services/audioService';
 
 const DEFAULT_SETTINGS: GameSettings = {
   mode: 'timeline',
+  winCondition: 'points',
   targetCards: 10,
+  timeLimitMinutes: 15,
   categoryFilter: 'all',
   decades: ['60s', '70s', '80s', '90s', '00s', '10s', '20s'],
   autoPlayAudio: true,
@@ -71,6 +73,10 @@ export default function App() {
   const [isVictoryOpen, setIsVictoryOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [winner, setWinner] = useState<Player | null>(null);
+
+  // Time-based mode: timestamp (ms) when the game ends, and live remaining seconds
+  const [gameEndsAt, setGameEndsAt] = useState<number | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
@@ -141,6 +147,15 @@ export default function App() {
       setWinner(null);
       setIsVictoryOpen(false);
 
+      if (activeSettings.winCondition === 'time') {
+        const endsAt = Date.now() + activeSettings.timeLimitMinutes * 60 * 1000;
+        setGameEndsAt(endsAt);
+        setRemainingSeconds(activeSettings.timeLimitMinutes * 60);
+      } else {
+        setGameEndsAt(null);
+        setRemainingSeconds(null);
+      }
+
       sfx.playFlip();
     },
     [settings, players]
@@ -150,6 +165,39 @@ export default function App() {
   useEffect(() => {
     initializeGame();
   }, []);
+
+  // End the game when the time runs out: winner is the team with the most cards
+  const endGameByTime = useCallback(() => {
+    setPlayers((currentPlayers) => {
+      const sorted = [...currentPlayers].sort(
+        (a, b) => b.timeline.length - a.timeline.length || b.score - a.score
+      );
+      const topTeam = sorted[0] || null;
+      sfx.playVictory();
+      setWinner(topTeam);
+      setIsVictoryOpen(true);
+      return currentPlayers;
+    });
+    setPhase('game_over');
+    setGameEndsAt(null);
+  }, []);
+
+  // Countdown tick for time-based games
+  useEffect(() => {
+    if (gameEndsAt === null || phase === 'game_over') return;
+
+    const tick = () => {
+      const secondsLeft = Math.max(0, Math.round((gameEndsAt - Date.now()) / 1000));
+      setRemainingSeconds(secondsLeft);
+      if (secondsLeft <= 0) {
+        endGameByTime();
+      }
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [gameEndsAt, phase, endGameByTime]);
 
   const activePlayer = players[activePlayerIndex] || players[0];
 
@@ -258,7 +306,7 @@ export default function App() {
       setPlayers(updatedPlayers);
 
       // Check victory condition (first team to collect targetCards)
-      if (newPersonalTimeline.length >= settings.targetCards) {
+      if (settings.winCondition === 'points' && newPersonalTimeline.length >= settings.targetCards) {
         setTimeout(() => {
           sfx.playVictory();
           setWinner(updatedPlayers[activePlayerIndex]);
@@ -391,6 +439,7 @@ export default function App() {
       {/* Top Navigation */}
       <Navbar
         settings={settings}
+        remainingSeconds={remainingSeconds}
         onOpenSettings={() => setIsSetupOpen(true)}
         onOpenRules={() => setIsRulesOpen(true)}
         onOpenSongCatalog={() => setIsCatalogOpen(true)}

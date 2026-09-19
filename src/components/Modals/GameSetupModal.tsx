@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { X, Play, Users, Disc, Filter, Sparkles, Check, Plus, Trash2 } from 'lucide-react';
-import { GameMode, GameSettings, Player, Decade } from '../../types';
+import { X, Play, Disc, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
+import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 
 interface GameSetupModalProps {
   isOpen: boolean;
@@ -37,7 +37,9 @@ export function GameSetupModal({
   onStartGame,
 }: GameSetupModalProps) {
   const [mode, setMode] = useState<GameMode>(currentSettings.mode);
+  const [winCondition, setWinCondition] = useState<WinCondition>(currentSettings.winCondition);
   const [targetCards, setTargetCards] = useState<number>(currentSettings.targetCards);
+  const [timeLimitMinutes, setTimeLimitMinutes] = useState<number>(currentSettings.timeLimitMinutes);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'danish' | 'international'>(currentSettings.categoryFilter);
   const [decades, setDecades] = useState<Decade[]>(currentSettings.decades);
   const [players, setPlayers] = useState<Player[]>(currentPlayers);
@@ -75,11 +77,36 @@ export function GameSetupModal({
     setPlayers(players.filter((p) => p.id !== id));
   };
 
+  // Quickly set how many teams participate (adds default teams or trims from the end)
+  const setTeamCount = (count: number) => {
+    setPlayers((prev) => {
+      if (count === prev.length) return prev;
+      if (count < prev.length) {
+        return prev.slice(0, count);
+      }
+      const next = [...prev];
+      while (next.length < count) {
+        const idx = next.length;
+        next.push({
+          id: `p-${Date.now()}-${idx}`,
+          name: `Hold ${idx + 1}`,
+          color: PRESET_COLORS[idx % PRESET_COLORS.length],
+          tokens: 2,
+          timeline: [],
+          score: 0,
+        });
+      }
+      return next;
+    });
+  };
+
   const handleSaveAndStart = () => {
     const updatedSettings: GameSettings = {
       ...currentSettings,
       mode,
+      winCondition,
       targetCards,
+      timeLimitMinutes,
       categoryFilter,
       decades,
     };
@@ -272,39 +299,123 @@ export function GameSetupModal({
             </div>
           </div>
 
-          {/* 4. Mål: Antal kort for at vinde */}
+          {/* 4. Vinderbetingelse: Point eller Tid */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              4. Mål: Antal kort for at vinde
+              4. Vinderbetingelse
             </label>
-            <div className="grid grid-cols-3 gap-2.5">
-              {[
-                { count: 5, label: '5 kort', sub: 'Hurtigt spil (10-15 min)' },
-                { count: 10, label: '10 kort', sub: 'Klassisk Hitster (20-30 min)' },
-                { count: 15, label: '15 kort', sub: 'Maraton (45+ min)' },
-              ].map((opt) => (
-                <button
-                  key={opt.count}
-                  type="button"
-                  onClick={() => setTargetCards(opt.count)}
-                  className={`p-3 rounded-xl border text-center transition-all ${
-                    targetCards === opt.count
-                      ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md'
-                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  <span className="text-sm block">{opt.label}</span>
-                  <span className="text-[10px] opacity-75 block mt-0.5">{opt.sub}</span>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <button
+                type="button"
+                onClick={() => setWinCondition('points')}
+                className={`p-3.5 rounded-2xl border text-left transition-all ${
+                  winCondition === 'points'
+                    ? 'bg-amber-950/40 border-amber-500 ring-2 ring-amber-500/20'
+                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-bold text-sm text-white flex items-center gap-1.5">
+                    <Trophy className="w-4 h-4 text-amber-400" /> Antal point
+                  </span>
+                  {winCondition === 'points' && <Check className="w-4 h-4 text-amber-400" />}
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Første hold til et bestemt antal kort vinder.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setWinCondition('time')}
+                className={`p-3.5 rounded-2xl border text-left transition-all ${
+                  winCondition === 'time'
+                    ? 'bg-cyan-950/40 border-cyan-500 ring-2 ring-cyan-500/20'
+                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-bold text-sm text-white flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-cyan-400" /> På tid
+                  </span>
+                  {winCondition === 'time' && <Check className="w-4 h-4 text-cyan-400" />}
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Flest kort når tiden løber ud vinder.
+                </p>
+              </button>
             </div>
+
+            {winCondition === 'points' ? (
+              <div className="grid grid-cols-3 gap-2.5">
+                {[
+                  { count: 5, label: '5 kort', sub: 'Hurtigt spil (10-15 min)' },
+                  { count: 10, label: '10 kort', sub: 'Klassisk Hitster (20-30 min)' },
+                  { count: 15, label: '15 kort', sub: 'Maraton (45+ min)' },
+                ].map((opt) => (
+                  <button
+                    key={opt.count}
+                    type="button"
+                    onClick={() => setTargetCards(opt.count)}
+                    className={`p-3 rounded-xl border text-center transition-all ${
+                      targetCards === opt.count
+                        ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md'
+                        : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <span className="text-sm block">{opt.label}</span>
+                    <span className="text-[10px] opacity-75 block mt-0.5">{opt.sub}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2.5">
+                {[
+                  { min: 5, label: '5 min', sub: 'Lynrunde' },
+                  { min: 10, label: '10 min', sub: 'Kort spil' },
+                  { min: 15, label: '15 min', sub: 'Klassisk' },
+                ].map((opt) => (
+                  <button
+                    key={opt.min}
+                    type="button"
+                    onClick={() => setTimeLimitMinutes(opt.min)}
+                    className={`p-3 rounded-xl border text-center transition-all ${
+                      timeLimitMinutes === opt.min
+                        ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md'
+                        : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <span className="text-sm block">{opt.label}</span>
+                    <span className="text-[10px] opacity-75 block mt-0.5">{opt.sub}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 5. Spillere / Hold */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              5. Hold & Spillere ({players.length})
+              5. Antal hold ({players.length})
             </label>
+
+            {/* Quick team-count selector */}
+            <div className="flex flex-wrap gap-2 mb-3">
+              {[2, 3, 4, 5, 6].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setTeamCount(n)}
+                  className={`w-10 h-10 rounded-xl text-sm font-bold border transition-all ${
+                    players.length === n
+                      ? 'bg-pink-600 text-white border-pink-500 shadow-md'
+                      : 'bg-slate-950/50 text-slate-300 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
 
             <div className="space-y-2 mb-3">
               {players.map((p, idx) => (
