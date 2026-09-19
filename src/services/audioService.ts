@@ -237,8 +237,13 @@ export function buildItunesSearchUrl(artist: string, title: string): string {
   return `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=3`;
 }
 
+// Accept any object carrying at least artist + title (a full Song, or a lighter
+// candidate from the admin tool). Only these fields are read.
+type PreviewLookup = Pick<Song, 'artist' | 'title'> &
+  Partial<Pick<Song, 'previewUrl' | 'artworkUrl' | 'customPreviewUrl'>>;
+
 export async function fetchSongAudioPreview(
-  song: Song
+  song: PreviewLookup
 ): Promise<PreviewEntry> {
   const { artist, title } = song;
 

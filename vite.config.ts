@@ -2,10 +2,13 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+import {adminApiPlugin} from './scripts/adminServer';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    // adminApiPlugin only applies in dev (`vite`), giving /admin its local
+    // write API. It is a no-op in `vite build`, so production stays static.
+    plugins: [react(), tailwindcss(), adminApiPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
