@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { TurntablePlayer } from './components/TurntablePlayer';
 import { TimelineView } from './components/TimelineView';
 import { PlayerBar } from './components/PlayerBar';
+import { StartScreen } from './components/StartScreen';
 import { DJCompanionMode } from './components/DJCompanionMode';
 import { GameSetupModal } from './components/Modals/GameSetupModal';
 import { RulesModal } from './components/Modals/RulesModal';
@@ -46,6 +47,14 @@ export default function App() {
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [players, setPlayers] = useState<Player[]>(DEFAULT_PLAYERS);
   const [activePlayerIndex, setActivePlayerIndex] = useState(0);
+
+  // Whether the player has left the start screen and is in an active game
+  const [gameStarted, setGameStarted] = useState(false);
+
+  // Auto-play stays disarmed for the very first mystery song after starting a
+  // game, so nothing plays until the player chooses to — leaving room to listen
+  // to the start card first. It arms on the first user-driven song change.
+  const [autoPlayArmed, setAutoPlayArmed] = useState(false);
 
   // Shared Timeline played jointly by Hold 1 and Hold 2
   const [sharedTimeline, setSharedTimeline] = useState<TimelineEntry[]>([]);
@@ -140,16 +149,18 @@ export default function App() {
       setLastPlacementResult(null);
       setWinner(null);
       setIsVictoryOpen(false);
+      setAutoPlayArmed(false); // First mystery song does not auto-play
 
       sfx.playFlip();
     },
     [settings, players]
   );
 
-  // Initial mount: start game
-  useEffect(() => {
+  // Begin a fresh game from the start screen and reveal the game board
+  const startGame = useCallback(() => {
     initializeGame();
-  }, []);
+    setGameStarted(true);
+  }, [initializeGame]);
 
   const activePlayer = players[activePlayerIndex] || players[0];
 
@@ -294,6 +305,7 @@ export default function App() {
     setSelectedSlotIndex(null);
     setYearGuessInput('');
     setLastPlacementResult(null);
+    setAutoPlayArmed(true); // Subsequent turns follow the auto-play setting
 
     sfx.playFlip();
   };
@@ -321,6 +333,7 @@ export default function App() {
       setCurrentSong(newMystery);
       setSelectedSlotIndex(null);
       setYearGuessInput('');
+      setAutoPlayArmed(true);
     }
   };
 
@@ -337,6 +350,7 @@ export default function App() {
     setSelectedSlotIndex(null);
     setYearGuessInput('');
     setLastPlacementResult(null);
+    setAutoPlayArmed(true);
     sfx.playFlip();
   };
 
@@ -348,6 +362,7 @@ export default function App() {
     setYearGuessInput('');
     setLastPlacementResult(null);
     setIsCatalogOpen(false);
+    setAutoPlayArmed(true);
     sfx.playNeedleDrop();
   };
 
@@ -383,11 +398,50 @@ export default function App() {
     setPhase('listening');
     setSelectedSlotIndex(null);
     setLastPlacementResult(null);
+    setAutoPlayArmed(true);
     sfx.playNeedleDrop();
   };
 
+  // Start screen: shown before a game begins
+  if (!gameStarted) {
+    return (
+      <div className="min-h-dvh bg-slate-950 text-slate-100 selection:bg-pink-500 selection:text-white">
+        <StartScreen
+          settings={settings}
+          onStart={startGame}
+          onOpenSettings={() => setIsSetupOpen(true)}
+          onOpenRules={() => setIsRulesOpen(true)}
+          onOpenCatalog={() => setIsCatalogOpen(true)}
+        />
+
+        <GameSetupModal
+          isOpen={isSetupOpen}
+          onClose={() => setIsSetupOpen(false)}
+          currentSettings={settings}
+          currentPlayers={players}
+          onStartGame={(newSettings, newPlayers) => {
+            initializeGame(newSettings, newPlayers);
+            setGameStarted(true);
+          }}
+        />
+        <RulesModal isOpen={isRulesOpen} onClose={() => setIsRulesOpen(false)} />
+        <SongCatalogModal
+          isOpen={isCatalogOpen}
+          onClose={() => setIsCatalogOpen(false)}
+          onPlaySong={(s) => {
+            setIsCatalogOpen(false);
+            handlePlaySongInTurntable(s);
+          }}
+          onSelectAsQuizSong={(s) => handleSelectQuizSong(s)}
+          onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
+          removedTick={removedTick}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-pink-500 selection:text-white pb-16">
+    <div className="min-h-dvh md:h-dvh bg-slate-950 text-slate-100 flex flex-col md:overflow-hidden selection:bg-pink-500 selection:text-white">
       {/* Top Navigation */}
       <Navbar
         settings={settings}
@@ -398,7 +452,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="md:flex-1 md:min-h-0 max-w-7xl w-full mx-auto px-3 sm:px-4 py-2 flex flex-col gap-2">
         {settings.mode === 'dj' ? (
           // Standalone DJ Companion & Physical Boardgame Scanner Mode
           <DJCompanionMode
@@ -409,7 +463,7 @@ export default function App() {
         ) : (
           // Main Hitster Timeline Game
           <>
-            {/* Player Bar & Tokens */}
+            {/* Player Bar & Tokens — standings, prominent at top */}
             <PlayerBar
               players={players}
               activePlayerIndex={activePlayerIndex}
@@ -418,17 +472,8 @@ export default function App() {
               onUseToken={handleUseToken}
             />
 
-            {/* Turntable Vinyl Player (DJ Deck) */}
-            <TurntablePlayer
-              currentSong={currentSong}
-              isRevealed={phase === 'revealed'}
-              autoPlay={settings.autoPlayAudio}
-              onOpenSongPicker={() => setIsCatalogOpen(true)}
-              onDrawRandomSong={handleDrawRandomSong}
-              onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
-            />
-
-            {/* Timeline View (Cards & Interactive Slots on the Shared Timeline) */}
+            {/* Timeline View (the game board / spilleplade) — hero directly below standings */}
+            <div className="md:flex-1 md:min-h-0 flex">
             <TimelineView
               timeline={sharedTimeline}
               activePlayer={activePlayer}
@@ -444,6 +489,17 @@ export default function App() {
               yearGuessInput={yearGuessInput}
               onYearGuessChange={setYearGuessInput}
               lastPlacementResult={lastPlacementResult}
+            />
+            </div>
+
+            {/* Turntable Vinyl Player (DJ Deck) — compact controls at the bottom */}
+            <TurntablePlayer
+              currentSong={currentSong}
+              isRevealed={phase === 'revealed'}
+              autoPlay={settings.autoPlayAudio && autoPlayArmed}
+              onOpenSongPicker={() => setIsCatalogOpen(true)}
+              onDrawRandomSong={handleDrawRandomSong}
+              onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
             />
           </>
         )}

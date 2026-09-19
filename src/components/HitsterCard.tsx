@@ -85,7 +85,7 @@ export function HitsterCard({
   return (
     <div
       id={`hitster-card-${song.id}`}
-      className={`relative w-44 sm:w-48 h-64 sm:h-72 rounded-2xl p-4 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
+      className={`relative w-24 sm:w-28 h-28 rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
         status === 'correct'
           ? 'ring-4 ring-emerald-500/80 border-emerald-400 bg-emerald-950/40'
           : status === 'wrong'
@@ -103,16 +103,16 @@ export function HitsterCard({
         <div className="flex flex-col">
           {isRevealed ? (
             <div className="flex items-center gap-1.5">
-              <span className="text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow font-display">
+              <span className="text-lg sm:text-xl font-black text-white tracking-tight drop-shadow font-display">
                 {song.year}
               </span>
             </div>
           ) : (
-            <div className="text-xl sm:text-2xl font-black text-slate-400 font-mono tracking-widest">
+            <div className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
               ????
             </div>
           )}
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded mt-0.5 w-fit ${decadeStyle.badge}`}>
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded mt-0.5 w-fit ${decadeStyle.badge}`}>
             {song.decade}
           </span>
         </div>
@@ -120,7 +120,7 @@ export function HitsterCard({
         {/* Right side: Claimed by team / starter card badge & Flag */}
         <div className="flex flex-col items-end gap-1">
           <span
-            className="text-lg px-2 py-0.5 rounded-lg bg-slate-950/60 border border-slate-700/60 shadow-sm"
+            className="text-sm px-1.5 py-0.5 rounded-lg bg-slate-950/60 border border-slate-700/60 shadow-sm"
             title={song.category === 'danish' ? 'Dansk hit' : 'Internationalt hit'}
           >
             {song.category === 'danish' ? '🇩🇰' : '🌍'}
@@ -156,18 +156,18 @@ export function HitsterCard({
 
       {/* Center: Vinyl disc mini art or music icon */}
       <div className="relative z-10 my-auto flex flex-col items-center justify-center">
-        <div className="relative w-16 h-16 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+        <div className="relative w-11 h-11 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
           {/* Concentric lines */}
-          <div className="absolute inset-2 rounded-full border border-slate-800 pointer-events-none" />
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
-            <div className="w-2 h-2 rounded-full bg-slate-950" />
+          <div className="absolute inset-1.5 rounded-full border border-slate-800 pointer-events-none" />
+          <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
           </div>
 
           {/* Quick Play Button on Card */}
           <button
             onClick={handlePlayCard}
-            className={`absolute inset-0 rounded-full bg-slate-950/70 hover:bg-slate-950/40 flex items-center justify-center text-white transition-opacity backdrop-blur-xs ${
-              isPlayingAudio ? 'opacity-100 ring-2 ring-pink-500' : 'opacity-0 group-hover:opacity-100'
+            className={`absolute inset-0 rounded-full bg-slate-950/60 hover:bg-slate-950/40 flex items-center justify-center text-white transition-opacity backdrop-blur-xs ${
+              isPlayingAudio ? 'opacity-100 ring-2 ring-pink-500' : 'opacity-90 group-hover:opacity-100'
             }`}
             title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
           >
@@ -194,19 +194,14 @@ export function HitsterCard({
         )}
       </div>
 
-      {/* Bottom Info: Title, Artist & Trivia snippet */}
-      <div className="relative z-10 mt-auto pt-2 border-t border-slate-800/80">
-        <h4 className="font-bold text-white text-sm line-clamp-1 group-hover:text-pink-300 transition-colors">
+      {/* Bottom Info: Title & Artist */}
+      <div className="relative z-10 mt-auto pt-1.5 border-t border-slate-800/80">
+        <h4 className="font-bold text-white text-xs line-clamp-1 group-hover:text-pink-300 transition-colors">
           {song.title}
         </h4>
-        <p className="text-slate-300 text-xs line-clamp-1 font-medium">
+        <p className="text-slate-300 text-[11px] line-clamp-1 font-medium">
           {song.artist}
         </p>
-        {song.funFact && (
-          <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-tight italic">
-            "{song.funFact}"
-          </p>
-        )}
       </div>
     </div>
   );

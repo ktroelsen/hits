@@ -20,7 +20,7 @@ export function PlayerBar({
   const activePlayer = players[activePlayerIndex];
 
   return (
-    <div id="player-bar" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 backdrop-blur-md">
+    <div id="player-bar" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-2.5 backdrop-blur-md">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
         {/* Players / Teams List */}
         <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 w-full sm:w-auto">
@@ -38,15 +38,15 @@ export function PlayerBar({
             return (
               <div
                 key={player.id}
-                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-xl border transition-all shrink-0 ${
+                className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-all shrink-0 ${
                   isActive
-                    ? 'bg-slate-800 border-pink-500 shadow-md ring-2 ring-pink-500/20'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 opacity-75'
+                    ? 'bg-slate-800 border-pink-500 shadow-lg ring-2 ring-pink-500/30 scale-[1.02]'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 opacity-70'
                 }`}
               >
                 {/* Player Color Avatar */}
                 <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-xs shadow"
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-black text-white text-sm shadow ring-2 ring-white/10"
                   style={{ backgroundColor: player.color }}
                 >
                   {player.name.slice(0, 2).toUpperCase()}
@@ -55,33 +55,36 @@ export function PlayerBar({
                 {/* Player Name & Progress */}
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-200">
+                    <span className="text-sm font-bold text-white">
                       {player.name}
                     </span>
                     {isActive && (
-                      <span className="text-[10px] font-bold text-pink-400 bg-pink-950/80 px-1.5 py-0.2 rounded border border-pink-500/30 animate-pulse">
+                      <span className="text-[10px] font-bold text-pink-300 bg-pink-950/80 px-1.5 py-0.5 rounded border border-pink-500/40 animate-pulse">
                         Deres tur
                       </span>
                     )}
                   </div>
                   {/* Progress bar towards target cards */}
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
-                    <div className="w-16 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                  <div className="flex items-center gap-2 text-slate-400 font-mono">
+                    <div className="w-20 h-2 bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-pink-500 to-amber-400 transition-all duration-300"
                         style={{ width: `${progressPercent}%` }}
                       />
                     </div>
-                    <span>{cardCount}/{settings.targetCards}</span>
+                    <span className="text-sm font-black text-white">
+                      {cardCount}
+                      <span className="text-[11px] font-bold text-slate-500">/{settings.targetCards}</span>
+                    </span>
                   </div>
                 </div>
 
                 {/* Token Count */}
                 <div
-                  className="flex items-center gap-1 ml-1 px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono"
+                  className="flex items-center gap-1 ml-1 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-bold font-mono"
                   title="Hitster Tokens (kan bruges til at skifte sang)"
                 >
-                  <Coins className="w-3 h-3 text-amber-400" />
+                  <Coins className="w-3.5 h-3.5 text-amber-400" />
                   <span>{player.tokens}</span>
                 </div>
               </div>

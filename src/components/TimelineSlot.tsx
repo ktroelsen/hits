@@ -27,7 +27,7 @@ export function TimelineSlot({
         id={`timeline-slot-${index}`}
         onClick={onClick}
         disabled={!isPlacing}
-        className={`group relative flex flex-col items-center justify-center transition-all duration-200 rounded-2xl p-2 sm:p-3 ${
+        className={`group relative flex flex-col items-center justify-center transition-all duration-200 rounded-2xl p-1.5 sm:p-2 ${
           isPlacing
             ? isSelected
               ? 'bg-pink-600 text-white ring-4 ring-pink-500/40 scale-105 shadow-lg shadow-pink-500/30'
@@ -40,16 +40,16 @@ export function TimelineSlot({
             ? 'bg-amber-950/80 text-amber-300 border-2 border-dashed border-amber-400 animate-bounce'
             : 'bg-slate-900/40 text-slate-600 border border-slate-800 pointer-events-none'
         }`}
-        style={{ minWidth: '84px', height: '180px' }}
+        style={{ minWidth: '66px', height: '118px' }}
       >
         {/* Top visual indicator icon */}
-        <div className="mb-2">
+        <div className="mb-1.5">
           {isSelected ? (
-            <Check className="w-5 h-5 text-white animate-pulse" />
+            <Check className="w-4 h-4 text-white animate-pulse" />
           ) : showAsTarget ? (
-            <ArrowDown className="w-5 h-5 text-amber-400" />
+            <ArrowDown className="w-4 h-4 text-amber-400" />
           ) : isPlacing ? (
-            <Plus className="w-5 h-5 group-hover:scale-125 transition-transform text-pink-400" />
+            <Plus className="w-4 h-4 group-hover:scale-125 transition-transform text-pink-400" />
           ) : (
             <div className="w-2 h-2 rounded-full bg-slate-700" />
           )}
@@ -57,19 +57,13 @@ export function TimelineSlot({
 
         {/* Action text */}
         <div className="text-center flex flex-col items-center justify-center space-y-1">
-          <span className="text-[11px] font-bold uppercase tracking-wider block">
+          <span className="text-[10px] font-bold uppercase tracking-wider block leading-tight">
             {isSelected ? 'Valgt her' : showAsTarget ? 'Hørte til her' : isPlacing ? 'Placér her' : ''}
           </span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-950/60 text-slate-400 max-w-[80px] break-words">
+          <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-slate-950/60 text-slate-400 max-w-[62px] break-words">
             {label}
           </span>
         </div>
-
-        {isPlacing && (
-          <div className="mt-3 text-[9px] text-pink-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-            Klik for at vælge
-          </div>
-        )}
       </button>
     </div>
   );
