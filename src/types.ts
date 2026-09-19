@@ -12,6 +12,10 @@ export interface Song {
   genre?: string;
   funFact?: string;
   customPreviewUrl?: string;
+  // Pre-baked from the iTunes Search API by scripts/check-previews.ts (npm run bake-songs).
+  // When present, the app plays these directly and never calls Apple at runtime.
+  previewUrl?: string;
+  artworkUrl?: string;
 }
 
 export type GameMode = 'timeline' | 'expert' | 'party' | 'quick' | 'dj';

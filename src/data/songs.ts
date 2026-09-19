@@ -10,7 +10,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Rock',
-    funFact: 'Kim Larsen skrev angiveligt sangen til sin daværende kæreste Mariann på en kaffebar på Christianshavn.'
+    funFact: 'Kim Larsen skrev angiveligt sangen til sin daværende kæreste Mariann på en kaffebar på Christianshavn.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/1a/de/881ade6a-8708-52a9-ddcf-eaa8b1e7a163/mzaf_10272538174925538881.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/fb/79/c0/mzi.zppvuwoj.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-2',
@@ -20,7 +22,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Pop/Rock',
-    funFact: 'Sangen om den forelskede hval Hvalborg der spiser en rødspætte blev et af Danmarks største folkehits.'
+    funFact: 'Sangen om den forelskede hval Hvalborg der spiser en rødspætte blev et af Danmarks største folkehits.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3a/a4/90/3aa4906a-5f03-0f32-a10b-42347a24fa4c/mzaf_16581527242026709974.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a5/b1/f0/a5b1f0b1-8b04-7e3d-928f-624f5bfb7eca/5712192290484.png/600x600bb.jpg'
   },
   {
     id: 'dk-3',
@@ -30,7 +34,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Rock',
-    funFact: 'Inspireret af det vilde natteliv omkring Christianshavn og Gasolins øvelokale.'
+    funFact: 'Inspireret af det vilde natteliv omkring Christianshavn og Gasolins øvelokale.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/65/65/6a65652f-3df7-b9e2-27fc-208a06c7ea7a/mzaf_10439992541879767177.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/fb/79/c0/mzi.zppvuwoj.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-4',
@@ -40,7 +46,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Rock',
-    funFact: 'Melodien er baseret på den traditionelle britiske folkesang "Geordie".'
+    funFact: 'Melodien er baseret på den traditionelle britiske folkesang "Geordie".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ad/b6/64/adb66475-6143-7d68-74db-52099ea66587/mzaf_5812504445703217172.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/15/3d/21/mzi.nyftlyxd.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-5',
@@ -50,7 +58,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Pop/Rock',
-    funFact: 'Sangen med den legendariske linje "De varme lande er noget lort, men Danmark er for koldt".'
+    funFact: 'Sangen med den legendariske linje "De varme lande er noget lort, men Danmark er for koldt".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview20/v4/a2/11/ad/a211adda-56ff-227c-c15c-27a003ce677c/mzaf_7426713746160244759.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music18/v4/62/b5/42/62b542d0-d59f-2f80-3a79-b0475f6ee2c0/6369434971299.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-6',
@@ -60,7 +70,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Pop/Rock',
-    funFact: 'Shu-bi-duas kærlige hyldest til menneskets bedste ven, en golden retriever.'
+    funFact: 'Shu-bi-duas kærlige hyldest til menneskets bedste ven, en golden retriever.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/a1/76/12a17645-1c89-24c3-f6dc-73a9e71a6c31/mzaf_18145741039398385909.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a5/b1/f0/a5b1f0b1-8b04-7e3d-928f-624f5bfb7eca/5712192290484.png/600x600bb.jpg'
   },
   {
     id: 'dk-7',
@@ -80,7 +92,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '60s',
     genre: 'Grand Prix',
-    funFact: 'Vandt Danmarks første Eurovision Song Contest nogensinde i London 1963.'
+    funFact: 'Vandt Danmarks første Eurovision Song Contest nogensinde i London 1963.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7c/de/29/7cde29cf-22e0-4112-c276-9be99cf4bfdc/mzaf_12797507986136280052.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a1/4f/0f/a14f0fa9-f1c7-fec6-8a16-7841bc46bf90/084247970753.jpg/600x600bb.jpg'
   },
 
   // ==================== DANSKE HITS (80'erne) ====================
@@ -92,7 +106,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Rock',
-    funFact: 'Albummet af samme navn er Danmarks bedst sælgende album nogensinde med over 600.000 solgte eksemplarer.'
+    funFact: 'Albummet af samme navn er Danmarks bedst sælgende album nogensinde med over 600.000 solgte eksemplarer.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d8/d1/59/d8d15958-e946-1af4-f0de-8d89082a7e15/mzaf_11437255081899153745.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/9d/7a/95/9d7a95ef-1bd5-95b5-0a4b-5356201ca6e9/5099962463652.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-10',
@@ -102,7 +118,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'New Wave/Pop',
-    funFact: 'Steffen Brandt skrev dette melankolske mesterværk på albummet "Beat".'
+    funFact: 'Steffen Brandt skrev dette melankolske mesterværk på albummet "Beat".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/a0/47/10a04778-ada7-dbce-360e-53efaf2f5d7f/mzaf_5590130649091519050.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/5b/7c/fc/5b7cfcbf-9bf5-f39d-e639-bd6e3a79038f/5099747280023.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-11',
@@ -112,7 +130,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Vise/Pop',
-    funFact: 'En af Danmarks mest elskede lejrbåls- og fællessangsklassikere om livet og kærligheden.'
+    funFact: 'En af Danmarks mest elskede lejrbåls- og fællessangsklassikere om livet og kærligheden.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/3a/4e/d03a4e6c-0376-6e8e-df89-7c9aaf2b6442/mzaf_3699920339548878680.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/9d/7a/95/9d7a95ef-1bd5-95b5-0a4b-5356201ca6e9/5099962463652.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-12',
@@ -122,7 +142,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Hard Rock',
-    funFact: 'Det internationale gennembrudshit for Disneyland After Dark fra albummet No Fuel Left for the Pilgrims.'
+    funFact: 'Det internationale gennembrudshit for Disneyland After Dark fra albummet No Fuel Left for the Pilgrims.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b5/15/0c/b5150cff-a165-f46c-aa6e-bd36b342c76b/mzaf_9710132660674486374.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/b2/6a/91/b26a9185-87cc-b9ab-1413-8cf4e68448c3/5099931909457_1500x1500_300dpi.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-13',
@@ -132,7 +154,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop',
-    funFact: 'Mona Larsens vokal og Poul Halbergs guitar skabte denne ultimative 80\'er kærlighedssang.'
+    funFact: 'Mona Larsens vokal og Poul Halbergs guitar skabte denne ultimative 80\'er kærlighedssang.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/21/9b/91/219b913b-068d-d62f-4541-9a9abc410669/mzaf_7440353935200807943.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/f6/49/a4f649b4-cf9b-6882-abe6-6fd9aaa819e7/886444546751.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-14',
@@ -142,7 +166,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Soul',
-    funFact: 'Aarhusianske Thomas Helmig etablerede sig som Danmarks ubestridte popkonge med dette hit.'
+    funFact: 'Aarhusianske Thomas Helmig etablerede sig som Danmarks ubestridte popkonge med dette hit.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1c/a2/d6/1ca2d6e0-a056-8d69-475c-fc8f23df6302/mzaf_3184993070031409653.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/7c/00/53/mzi.cifiltdm.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-15',
@@ -152,7 +178,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Funk/Pop',
-    funFact: 'Jørgen Klubsangens energiske stemme og det smittende blæserriff er ren 80\'er-nostalgi.'
+    funFact: 'Jørgen Klubsangens energiske stemme og det smittende blæserriff er ren 80\'er-nostalgi.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/bd/dd/5e/bddd5e94-8989-b18a-03ad-e0008d3c925c/mzaf_2860140050091812266.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1d/97/cb/1d97cb8f-973a-e190-9190-d2d67e11d867/4447770017061.png/600x600bb.jpg'
   },
   {
     id: 'dk-16',
@@ -162,7 +190,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Rock/Reggae',
-    funFact: 'Peter A.G.s ikoniske dansetrin og gaderock gjorde sangen til et nationalsymbol for Aarhus.'
+    funFact: 'Peter A.G.s ikoniske dansetrin og gaderock gjorde sangen til et nationalsymbol for Aarhus.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/6c/c7/a96cc737-7dea-f17d-fbd0-b9f9dad2fb1b/mzaf_6249988094622620631.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f4/ec/fa/f4ecfa70-71db-ae56-4a19-e71870197a2c/743212617320.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-17',
@@ -192,7 +222,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Rock/Pop',
-    funFact: 'Danmarks Rockmama cementerede sin status med dette kraftfulde rocknummer.'
+    funFact: 'Danmarks Rockmama cementerede sin status med dette kraftfulde rocknummer.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fe/fd/ca/fefdcac2-2b06-45e4-6b52-a288a3f360a0/mzaf_4256194622837423518.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/13/3d/41/mzi.mklbksig.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-20',
@@ -202,7 +234,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Euro-Disco',
-    funFact: 'Dansk fortolkning af den italienske sang "Sarà perché ti amo" af Ricchi e Poveri.'
+    funFact: 'Dansk fortolkning af den italienske sang "Sarà perché ti amo" af Ricchi e Poveri.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fa/35/7e/fa357e7a-ab49-9fa2-9d36-48e876187c10/mzaf_476018986174288377.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music127/v4/83/84/94/83849438-4f6a-a866-572c-29448691183b/084247969283.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-21',
@@ -212,7 +246,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Folk/Rock',
-    funFact: 'En hyldest til hospitalsskibet Jutlandia som sejlede til Korea under Koreakrigen i 1951.'
+    funFact: 'En hyldest til hospitalsskibet Jutlandia som sejlede til Korea under Koreakrigen i 1951.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/14/7d/56/147d568a-feba-22ff-8691-636226154d67/mzaf_11303113183451116274.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e6/20/93/e6209354-7c45-7b3f-741a-6bd5dbeeaef2/5099995583457_1499x1499_274dpi.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-22',
@@ -232,7 +268,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Rock',
-    funFact: 'Sangen med de legendariske vilde kaniner på marken er blevet et fast indslag til enhver festival.'
+    funFact: 'Sangen med de legendariske vilde kaniner på marken er blevet et fast indslag til enhver festival.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cc/41/db/cc41dbd1-87b3-4e22-b64f-df4d570691f1/mzaf_18025913054550009863.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/aa/f4/16/aaf416cb-0fab-3bab-a889-c7cb4464de1b/886448081302.jpg/600x600bb.jpg'
   },
 
   // ==================== DANSKE HITS (90'erne) ====================
@@ -244,7 +282,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Eurodance',
-    funFact: 'Nåede nr. 1 i over 14 lande og Mattel sagsøgte bandet uden held for at krænke Barbie-brandet!'
+    funFact: 'Nåede nr. 1 i over 14 lande og Mattel sagsøgte bandet uden held for at krænke Barbie-brandet!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/b7/7d/3db77df0-d9a3-b60e-0714-41fd79b9ebff/mzaf_3692738463507322199.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/77/57/ba/7757ba77-0163-a195-950b-95786aa7a90e/17UMGIM98492.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-25',
@@ -254,7 +294,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Eurodance',
-    funFact: 'Danske Sannie Carlson blev den første udenlandske debutant der gik direkte ind som nr. 1 på den britiske hitliste.'
+    funFact: 'Danske Sannie Carlson blev den første udenlandske debutant der gik direkte ind som nr. 1 på den britiske hitliste.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0c/e5/f3/0ce5f3fd-4bb0-062f-5430-ebfe1e63051b/mzaf_17736405399710917664.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/01/97/77/01977768-4b71-8c70-0cc4-130b1027b644/715187773325.png/600x600bb.jpg'
   },
   {
     id: 'dk-26',
@@ -264,7 +306,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Soft Rock',
-    funFact: 'Gjorde MLTR til megastjerner i hele Asien, hvor de har solgt over 12 millioner albums!'
+    funFact: 'Gjorde MLTR til megastjerner i hele Asien, hvor de har solgt over 12 millioner albums!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/66/ef/d6/66efd635-30a3-b33b-55ad-9e2fe56f24a2/mzaf_17784715721026623301.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/05/df/85/05df8555-eebc-a7cf-6dc7-12ce5ea45ac3/724353793456.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-27',
@@ -274,7 +318,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Eurodance',
-    funFact: 'Søstrene Susanne og Pernille Georgi solgte over en million singler af denne bubblegum-dance-basker.'
+    funFact: 'Søstrene Susanne og Pernille Georgi solgte over en million singler af denne bubblegum-dance-basker.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/39/50/75/39507511-83ab-4ba4-d66c-02d4b5552b62/mzaf_3644115385118887631.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/31/44/19/31441909-04fa-bb20-0782-f7a5a811e5b5/094633761353.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-28',
@@ -284,7 +330,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Pop',
-    funFact: 'Helmig skiftede til engelske tekster og opnåede enorm succes med dette album.'
+    funFact: 'Helmig skiftede til engelske tekster og opnåede enorm succes med dette album.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bf/43/4e/bf434e25-36d1-6fdc-e57d-79fea5b53b5e/mzaf_16267055466916308664.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features/a5/2b/6d/dj.fcrlfluw.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-29',
@@ -294,7 +342,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Europop',
-    funFact: 'De udklædte tegneseriefigurer tog Europa med storm med deres farverige rock\'n\'roll-techno.'
+    funFact: 'De udklædte tegneseriefigurer tog Europa med storm med deres farverige rock\'n\'roll-techno.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8e/80/c3/8e80c35a-5667-d4c1-6fe5-5c76d72ce0b3/mzaf_8073232527287568399.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ee/5b/c5/ee5bc528-fc23-9360-1437-4734e7153c9c/724352416752.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-30',
@@ -304,7 +354,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Hard Rock',
-    funFact: 'Åbningsnummeret på Riskin\' It All med Stig Pedersens berømte to-strengede raketbas.'
+    funFact: 'Åbningsnummeret på Riskin\' It All med Stig Pedersens berømte to-strengede raketbas.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/6a/22/04/6a220484-104e-e1cc-1721-7e412d847ff9/mzaf_6098319173575522659.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/3c/e1/ba/mzi.exzplspy.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-31',
@@ -324,7 +376,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '90s',
     genre: 'Eurodance',
-    funFact: 'Opfølgeren til Barbie Girl, der cementerede Aquas status som verdensstjerner.'
+    funFact: 'Opfølgeren til Barbie Girl, der cementerede Aquas status som verdensstjerner.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/58/58/0a/58580a1a-f165-b3dd-a29d-58faa05553c7/mzaf_2027367508590285493.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/e0/d0/42e0d00a-b4da-3590-b3b2-6decf900184d/06UMGIM39320.rgb.jpg/600x600bb.jpg'
   },
 
   // ==================== DANSKE HITS (00'erne) ====================
@@ -336,7 +390,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Hip Hop/Pop',
-    funFact: 'Værløse-duoens debutsingle startede en helt ny æra i dansk popmusik med bandanaer og attitude.'
+    funFact: 'Værløse-duoens debutsingle startede en helt ny æra i dansk popmusik med bandanaer og attitude.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/aa/26/65/aa266532-17a6-f23d-14f1-57c77693b16a/mzaf_6559379260660020182.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/17/a0/76/17a076f6-a646-81fe-176d-1e7912bfd213/0724354227257_1404x1404_300dpi.tif/600x600bb.jpg'
   },
   {
     id: 'dk-34',
@@ -346,7 +402,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Trance/Percussion',
-    funFact: 'Klassisk uddannede slagtøjsspillere Morten Friis og Uffe Savery erobrede verdens klubber med bongotrommer.'
+    funFact: 'Klassisk uddannede slagtøjsspillere Morten Friis og Uffe Savery erobrede verdens klubber med bongotrommer.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/75/86/5375862d-497b-a326-9dac-2035f89382e6/mzaf_7332058131187267332.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/4b/b9/96/4bb99622-d365-2f85-d9a4-02b043639da4/00044001374623.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-35',
@@ -356,7 +414,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Dance-pop',
-    funFact: 'Lå nr. 1 i Danmark i ugevis og blev genindspillet på engelsk som "You and I".'
+    funFact: 'Lå nr. 1 i Danmark i ugevis og blev genindspillet på engelsk som "You and I".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/77/61/a8/7761a8a6-609c-6b4d-c61d-b3e0fe5816fe/mzaf_17418921889545652929.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/c9/e9/69/c9e969f9-5641-6230-59d4-b59c0aeda566/12UMGIM45177.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-36',
@@ -366,7 +426,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Pop',
-    funFact: 'Rasmus Seebachs debutsingle som Tommy Seebachs søn banede vejen for et historisk pladesalg.'
+    funFact: 'Rasmus Seebachs debutsingle som Tommy Seebachs søn banede vejen for et historisk pladesalg.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/cf/6f/10cf6f32-75a4-6d49-ca42-df826536b3d0/mzaf_9042480081294370235.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/50/8f/76/508f764a-ecd7-5299-e230-e65537df86e2/18UMGIM40227.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-37',
@@ -376,7 +438,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Pop/Rap',
-    funFact: 'Et af de mest spillede klubhits i Danmark nogensinde med den uimodståelige hopperytme.'
+    funFact: 'Et af de mest spillede klubhits i Danmark nogensinde med den uimodståelige hopperytme.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/83/81/d7/8381d7d7-9cfe-3f6e-2fb2-83c4fb459482/mzaf_3678842534882096198.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/63/11/a1/6311a1ba-3fb5-ccbd-5f87-d95b1915bc31/094637602652.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-38',
@@ -386,7 +450,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Eurodance',
-    funFact: 'Lina Rafn og Paw Lagermann fik et kæmpe europæisk hit, der toppede som nr. 2 i Storbritannien.'
+    funFact: 'Lina Rafn og Paw Lagermann fik et kæmpe europæisk hit, der toppede som nr. 2 i Storbritannien.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e5/b7/c9/e5b7c966-dbc3-3afb-3812-ab39f84b4b40/mzaf_7641446057397988408.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features/56/33/6c/dj.jxfztwuc.tif/600x600bb.jpg'
   },
   {
     id: 'dk-39',
@@ -396,7 +462,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Rock/Electro',
-    funFact: 'Simon Kvamm og Nephew skabte deres særegne danglish-tekster og tunge synths.'
+    funFact: 'Simon Kvamm og Nephew skabte deres særegne danglish-tekster og tunge synths.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/50/31/bf/5031bf90-0744-773a-fb9f-96dac681f3a4/mzaf_4840225517779940095.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music2/v4/c7/14/cc/c714cc4b-6a60-3f5e-ee08-6c8ea5b73e85/cover.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-40',
@@ -406,7 +474,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Metal/Rockabilly',
-    funFact: 'Michael Poulsens Elvis-inspirerede vokal førte Volbeat hele vejen til toppen af de amerikanske rockhitlister.'
+    funFact: 'Michael Poulsens Elvis-inspirerede vokal førte Volbeat hele vejen til toppen af de amerikanske rockhitlister.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a8/92/35/a8923560-5099-8443-e7f6-eabd3a04d11b/mzaf_3221556397685255466.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/83/3d/40/833d4083-c018-f1bf-5b30-707aa7c2557c/06PNDIM00281.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-41',
@@ -416,7 +486,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Indie Pop',
-    funFact: 'Det jyske band fra Silkeborg brød igennem i England og sang med overskuds-energi.'
+    funFact: 'Det jyske band fra Silkeborg brød igennem i England og sang med overskuds-energi.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/Music2/v4/ec/dc/31/ecdc3121-8da3-c43b-a043-1631185612a9/mzaf_78513333501753083.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/dc/04/90/mzi.xwfzytnn.tif/600x600bb.jpg'
   },
   {
     id: 'dk-42',
@@ -426,7 +498,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Reggae/Dancehall',
-    funFact: 'Blev et kæmpe posthumt hit efter Natasjas tragiske død i en bilulykke på Jamaica i 2007.'
+    funFact: 'Blev et kæmpe posthumt hit efter Natasjas tragiske død i en bilulykke på Jamaica i 2007.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8f/0a/f5/8f0af5c5-8585-8793-304e-f6053acd3d00/mzaf_17424066172366585619.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/50/a0/c7/50a0c7bd-f7d4-cc8e-8ef8-5fd7779fa3ae/cover.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-43',
@@ -436,7 +510,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Rock',
-    funFact: 'Blev spillet i P3\'s KarriereKanonen og gjorde Johan Olsen og bandet landskendte fra den ene dag til den anden.'
+    funFact: 'Blev spillet i P3\'s KarriereKanonen og gjorde Johan Olsen og bandet landskendte fra den ene dag til den anden.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/db/7e/59/db7e596e-7d44-a2a6-7a94-8f40e803db84/mzaf_5190944786857188222.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/d2/39/71/d23971a1-23c7-4f67-844b-09b63267755a/cover.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-44',
@@ -456,7 +532,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'R&B/Hip Hop',
-    funFact: 'Trioens cover af Cheb Khaleds klassiker blev et verdensomspændende megahit.'
+    funFact: 'Trioens cover af Cheb Khaleds klassiker blev et verdensomspændende megahit.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5e/19/7e/5e197e66-a2d1-9aa3-b752-a85e351d3144/mzaf_16336981749396083578.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/a8/d4/d0/mzi.xceoaujn.jpg/600x600bb.jpg'
   },
 
   // ==================== DANSKE HITS (10'erne) ====================
@@ -468,7 +546,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Soul/Pop',
-    funFact: 'Den mest streamede danske sang nogensinde med over 2 milliarder afspilninger på Spotify og nr. 2 på Billboard Hot 100!'
+    funFact: 'Den mest streamede danske sang nogensinde med over 2 milliarder afspilninger på Spotify og nr. 2 på Billboard Hot 100!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/71/af/1571af0b-19e7-00a2-452d-8c146b88bab3/mzaf_1010696746274902629.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music69/v4/1f/57/08/1f57082e-ee7e-dcb7-a73e-ba1f3468211d/093624920496.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-47',
@@ -478,7 +558,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Post-punk/Rock',
-    funFact: 'Niels Brandt og barndomsvennerne vandt KarriereKanonen og erobrede Parken gentagne gange.'
+    funFact: 'Niels Brandt og barndomsvennerne vandt KarriereKanonen og erobrede Parken gentagne gange.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ba/a0/89/baa0893a-fb3f-5027-ae3a-4f0e29a7f50a/mzaf_16099996743136354665.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/df/4b/a2df4b0b-207b-fb12-fa2b-eaf38d7a9ccd/886446798240.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-48',
@@ -498,7 +580,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Metal/Rock',
-    funFact: 'Samarbejdet mellem Michael Poulsen og Magtens Korridorers Johan Olsen blev en massiv fællessang.'
+    funFact: 'Samarbejdet mellem Michael Poulsen og Magtens Korridorers Johan Olsen blev en massiv fællessang.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/75/21/de7521ed-a6a3-d9e0-64b6-6739ca7b95c1/mzaf_18102491485929391510.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/19/3a/e1/193ae10b-1c73-e16e-4014-1b9118f3d624/00602547805737.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-50',
@@ -508,7 +592,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Rap/Pop',
-    funFact: 'Kesis fængende melodier forvandlede Nørrebro-rapperen til en af Danmarks største popstjerner.'
+    funFact: 'Kesis fængende melodier forvandlede Nørrebro-rapperen til en af Danmarks største popstjerner.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/de/fe/ff/defeffe1-36a1-7927-fa18-a86c1eb49a58/mzaf_17357732751549167309.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/0e/50/78/0e507890-27d5-3aac-6b4e-0794c3f55b1a/886445276572.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-51',
@@ -518,7 +604,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Satire/Pop',
-    funFact: 'Malte Ebert skabte alter-egoet Gulddreng og dominerede de danske hitlister med guld og solbriller.'
+    funFact: 'Malte Ebert skabte alter-egoet Gulddreng og dominerede de danske hitlister med guld og solbriller.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/56/2d/eb/562debfe-d3da-11da-ddfa-945d1fc7adad/mzaf_15077721262021993415.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/46/0e/45/460e451c-acf2-69ce-a82e-94859072e171/886449555499.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-52',
@@ -528,7 +616,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Synth Rock',
-    funFact: 'Minds of 99s melankolske hymne fra albummet "Solkongen".'
+    funFact: 'Minds of 99s melankolske hymne fra albummet "Solkongen".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/94/11/54/941154f4-c7ba-5cb4-1f5f-cb503573c5d5/mzaf_2555674977047264339.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/b5/38/16/b5381633-dee2-596b-7d02-dbffbc4a5189/886446920948.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-53',
@@ -538,7 +628,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Pop/Funk',
-    funFact: 'Med falset-vokal og funkguitar blev sangen Christophers helt store popgennembrud.'
+    funFact: 'Med falset-vokal og funkguitar blev sangen Christophers helt store popgennembrud.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/45/99/48/45994879-3e97-1dc9-0625-00a2efce3347/mzaf_14034684024197263506.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/5a/a7/d1/5aa7d1bd-c136-09ca-9f31-1d5754d6c68e/825646328888.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-54',
@@ -570,7 +662,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '20s',
     genre: 'Pop/Folk',
-    funFact: 'Hyldest til Aarhus V og bodegaen Mucki Bar fra det monumentale album "Når sjælen kaster op".'
+    funFact: 'Hyldest til Aarhus V og bodegaen Mucki Bar fra det monumentale album "Når sjælen kaster op".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d2/ab/31/d2ab3133-f896-a2ed-6b96-07dec8e13145/mzaf_2955496750896154843.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/0a/76/88/0a7688d6-fb35-5258-f8fd-ad36d89842d1/886449836550.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-57',
@@ -590,7 +684,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '20s',
     genre: 'Indie Pop/Funk',
-    funFact: 'Vandt P3 Prisen for årets lytterhit og åbnede Orange Scene på Roskilde Festival.'
+    funFact: 'Vandt P3 Prisen for årets lytterhit og åbnede Orange Scene på Roskilde Festival.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/af/fa/77/affa77d3-0e1f-4828-1a77-5951ddacedef/mzaf_114101415101852586.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e5/7a/6c/e57a6c9e-0af0-486e-ecbb-a527c26f83fd/bigup13695170.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-59',
@@ -600,7 +696,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '20s',
     genre: 'Synthpop',
-    funFact: 'Brian Sivabalan skiftede mørk R&B ud med 80\'er-nostalgisk synthpop og fik årets største radiohit.'
+    funFact: 'Brian Sivabalan skiftede mørk R&B ud med 80\'er-nostalgisk synthpop og fik årets største radiohit.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8a/9b/fc/8a9bfc32-b029-52b4-1cd6-a7596bd82e77/mzaf_1078094567606124375.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c0/f9/ec/c0f9ec14-8c5a-f07a-a686-196cab15d368/886448579762.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-60',
@@ -622,7 +720,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Rock/Pop',
-    funFact: 'Paul McCartney skrev sangen for at trøste John Lennons søn Julian under forældrenes skilsmisse.'
+    funFact: 'Paul McCartney skrev sangen for at trøste John Lennons søn Julian under forældrenes skilsmisse.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/11/a9/7a/11a97ad1-5281-41b5-bef5-94c93a0083e4/mzaf_216068609330958223.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f2/98/fb/f298fb48-1e0e-6ad4-4cff-fb824b77f02e/15UMGIM59587.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-2',
@@ -632,7 +732,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Prog Rock/Opera',
-    funFact: 'Pladeselskabet mente først den var alt for lang (knap 6 minutter) til radioen, men den blev en af tidernes største sange.'
+    funFact: 'Pladeselskabet mente først den var alt for lang (knap 6 minutter) til radioen, men den blev en af tidernes største sange.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/fc/1e/17fc1eba-946d-84a9-710b-a0e88ea64209/mzaf_3049006317693088799.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8b/0a/ea/8b0aea60-6f4a-195b-5958-cdf459c2333b/602527644271.jpg/600x600bb.jpg'
   },
   {
     id: 'int-3',
@@ -642,7 +744,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Disco',
-    funFact: 'ABBAs eneste nr. 1 hit på den amerikanske Billboard Hot 100.'
+    funFact: 'ABBAs eneste nr. 1 hit på den amerikanske Billboard Hot 100.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ec/b1/63/ecb163bc-aff2-4dd2-d40b-c044f0b9fa4d/mzaf_4358783485405794088.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-4',
@@ -652,7 +756,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Disco',
-    funFact: 'Brugt af læger til at lære hjerte-lunge-redning, fordi sangens tempo (103 BPM) matcher den ideelle brystkompression.'
+    funFact: 'Brugt af læger til at lære hjerte-lunge-redning, fordi sangens tempo (103 BPM) matcher den ideelle brystkompression.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3f/26/77/3f2677d0-8077-c16a-7eea-7795fa614e0f/mzaf_14501202821130740263.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/6d/ed/e9/6dede96a-6c1b-c5bb-001b-e3039195bdbb/00602567067177.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-5',
@@ -662,7 +768,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Classic Rock',
-    funFact: 'Don Felder og Joe Walshs legendariske guitarsolo i slutningen tog flere dage at komponere og indspille perfekt.'
+    funFact: 'Don Felder og Joe Walshs legendariske guitarsolo i slutningen tog flere dage at komponere og indspille perfekt.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/30/06/1730066d-13fb-6803-0e52-46d4762b94e0/mzaf_8068080726527063383.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/88/16/2c/88162c3d-46db-8321-61f3-3a47404cfe76/075596050920.jpg/600x600bb.jpg'
   },
   {
     id: 'int-6',
@@ -672,7 +780,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Funk/Disco',
-    funFact: '"Do you remember, the 21st night of September?" - Datoen blev valgt simpelthen fordi det lød godt!'
+    funFact: '"Do you remember, the 21st night of September?" - Datoen blev valgt simpelthen fordi det lød godt!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/49/2d/44/492d441e-f0ce-5c3a-dcc6-3a892d2600f2/mzaf_2765278844043228646.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5c/8e/19/5c8e191d-b458-fc29-54ef-bd9367835044/886447618547.jpg/600x600bb.jpg'
   },
   {
     id: 'int-7',
@@ -682,7 +792,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Soft Rock',
-    funFact: 'Lennons fredshymne blev delvist inspireret af Yoko Onos poesi i hendes bog "Grapefruit".'
+    funFact: 'Lennons fredshymne blev delvist inspireret af Yoko Onos poesi i hendes bog "Grapefruit".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7d/4e/8c/7d4e8ced-a37b-fab9-c66a-f3b4d6f043cb/mzaf_1566428042492234227.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/21/e3/b0/21e3b048-c917-92c4-bd7d-ace44797b388/13UABIM52808.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-8',
@@ -692,7 +804,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Arena Rock',
-    funFact: 'Tramp-tramp-klap rytmen blev skabt af bandet og teknikere, der trampede på gamle trægulve i studiet.'
+    funFact: 'Tramp-tramp-klap rytmen blev skabt af bandet og teknikere, der trampede på gamle trægulve i studiet.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0a/a9/f3/0aa9f3af-4672-fb3b-42d8-6d56a9a4c69b/mzaf_16030082968131796908.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3a/25/81/3a258183-09c1-e6ee-b517-258288ca3d03/602527717487.jpg/600x600bb.jpg'
   },
   {
     id: 'int-9',
@@ -702,7 +816,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Pop Rock',
-    funFact: 'Stevie Nicks skrev sangen på 10 minutter i et lille rum under de turbulente indspilninger af albummet "Rumours".'
+    funFact: 'Stevie Nicks skrev sangen på 10 minutter i et lille rum under de turbulente indspilninger af albummet "Rumours".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b6/5a/4b/b65a4b6f-54dd-ee99-0b36-98e27d5b5dd8/mzaf_13813391014293209258.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/d2/48/f4/d248f4ae-a7e4-a48e-1588-6617de3e8d76/mzi.izeorbmm.jpg/600x600bb.jpg'
   },
   {
     id: 'int-10',
@@ -712,7 +828,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Rock/Soul',
-    funFact: 'Markerede Kongens store comeback og blev Elvis\' sidste amerikanske nr. 1 hit i sin levetid.'
+    funFact: 'Markerede Kongens store comeback og blev Elvis\' sidste amerikanske nr. 1 hit i sin levetid.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/69/80/35/69803593-60c5-51c3-572f-b7c3f0f0dc77/mzaf_9945991278826753290.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/10/53/1d/10531d93-d6d2-996d-516f-5ea58bc4dbfa/884977724691.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (80'erne) ====================
@@ -724,7 +842,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop/R&B',
-    funFact: 'Det var under opførelsen af denne sang på Motown 25 tv-showet i 1983, at Michael Jackson introducerede "moonwalk"-dansen for verden.'
+    funFact: 'Det var under opførelsen af denne sang på Motown 25 tv-showet i 1983, at Michael Jackson introducerede "moonwalk"-dansen for verden.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dc/bc/8a/dcbc8a3e-4ce1-c00d-cc02-eda2212053c7/mzaf_8347559338388601510.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/600x600bb.jpg'
   },
   {
     id: 'int-12',
@@ -734,7 +854,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Synthpop',
-    funFact: 'Den banebrydende blyantskitsede musikvideo tog over fire måneder at tegne i hånden billede for billede.'
+    funFact: 'Den banebrydende blyantskitsede musikvideo tog over fire måneder at tegne i hånden billede for billede.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f2/03/4f/f2034f41-707f-7111-bc63-e5d3cf7f2240/mzaf_17215043934336702540.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/c6/e1/c8/mzi.ixgzfcmc.jpg/600x600bb.jpg'
   },
   {
     id: 'int-13',
@@ -744,7 +866,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Hard Rock',
-    funFact: 'Jon Bon Jovi ville oprindeligt ikke have sangen med på albummet "Slippery When Wet", men guitaristen Richie Sambora overtalte ham.'
+    funFact: 'Jon Bon Jovi ville oprindeligt ikke have sangen med på albummet "Slippery When Wet", men guitaristen Richie Sambora overtalte ham.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/75/15/30/75153020-b7c4-7958-8907-4aa1b965dc24/mzaf_2377504467597068152.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/40/16/3e/40163e24-6985-b785-d4ea-cbae07d74812/06UMGIM05422.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-14',
@@ -754,7 +878,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Dance-pop',
-    funFact: 'Produceret af Nile Rodgers fra Chic og gjorde Madonna til et globalt mode- og popikon.'
+    funFact: 'Produceret af Nile Rodgers fra Chic og gjorde Madonna til et globalt mode- og popikon.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/7c/ee/537ceef4-ef8b-f822-2863-e754a404cd0b/mzaf_10337818103101697835.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8e/80/32/8e803264-c925-14dd-3412-2d7652c3df7b/mzi.wxptosaa.jpg/600x600bb.jpg'
   },
   {
     id: 'int-15',
@@ -764,7 +890,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Hard Rock',
-    funFact: 'Slash opfandt det berømte guitar-intro som en simpel fingerøvelse, som han oprindeligt syntes var fjollet.'
+    funFact: 'Slash opfandt det berømte guitar-intro som en simpel fingerøvelse, som han oprindeligt syntes var fjollet.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/94/da/44/94da447c-59c0-27a2-117a-a1ccab248140/mzaf_236029137659763971.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b4/4e/9c/b44e9c1c-54c4-0eab-544c-1c5d0933158a/20UMGIM52444.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-16',
@@ -774,7 +902,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop/Dance',
-    funFact: 'Vandt en Grammy og solgte millioner af eksemplarer med Whitneys uforlignelige vokalspændvidde.'
+    funFact: 'Vandt en Grammy og solgte millioner af eksemplarer med Whitneys uforlignelige vokalspændvidde.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7b/67/fd/7b67fd07-6a7a-0362-135c-878ac5799f2c/mzaf_11309521725869189721.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/86/b5/25/86b525b1-bff1-4bf6-6112-531251b3d672/dj.hthdmusj.jpg/600x600bb.jpg'
   },
   {
     id: 'int-17',
@@ -784,7 +914,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop/Dance',
-    funFact: 'Blev 20 år senere grundlaget for internettets største "Rickroll"-meme med milliarder af afspilninger.'
+    funFact: 'Blev 20 år senere grundlaget for internettets største "Rickroll"-meme med milliarder af afspilninger.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/62/ff/3a/62ff3abe-bc6d-a7d0-31b0-71cbec9aaa24/mzaf_13802296211720217737.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ce/6d/5b/ce6d5b48-8c36-b990-3b9c-81862fadb459/0859381157694.jpg/600x600bb.jpg'
   },
   {
     id: 'int-18',
@@ -794,7 +926,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Soft Rock',
-    funFact: 'Keyboardspiller David Paich havde aldrig sat fod i Afrika, da han komponerede sangen.'
+    funFact: 'Keyboardspiller David Paich havde aldrig sat fod i Afrika, da han komponerede sangen.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bb/3d/07/bb3d07a3-b3af-2c99-5c9f-eb72796268c2/mzaf_11871467005041854011.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/69/ce/d2/69ced240-07a7-2a04-bbab-2afbacf30809/074643772822.jpg/600x600bb.jpg'
   },
   {
     id: 'int-19',
@@ -804,7 +938,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Hard Rock',
-    funFact: 'Den svenske gruppe toppede hitlisterne i 25 lande med det ikoniske synth-riff.'
+    funFact: 'Den svenske gruppe toppede hitlisterne i 25 lande med det ikoniske synth-riff.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d3/5b/d9/d35bd9a3-d105-95d8-ba29-0f5c6b8e764b/mzaf_7609183394807520180.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/00/4d/a9/004da9d2-9b4f-99f4-d396-72ec786fb88c/696998575721.jpg/600x600bb.jpg'
   },
   {
     id: 'int-20',
@@ -814,7 +950,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop/Soul',
-    funFact: 'Det berømte saxofon-hook blev indspillet af adskillige saxofonister, før George Michael endelig fandt den rigtige lyd.'
+    funFact: 'Det berømte saxofon-hook blev indspillet af adskillige saxofonister, før George Michael endelig fandt den rigtige lyd.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7c/bb/d8/7cbbd80c-29a1-6142-d0f3-de33e8569a0e/mzaf_12978360432335063808.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/89/46/95/8946959a-e959-f22d-ced2-745feb799454/mzm.upagbaeg.jpg/600x600bb.jpg'
   },
   {
     id: 'int-21',
@@ -824,7 +962,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop',
-    funFact: 'Blev oprindeligt skrevet af en mand fra et mandligt perspektiv, men Cyndi ændrede det til en feministisk festsang.'
+    funFact: 'Blev oprindeligt skrevet af en mand fra et mandligt perspektiv, men Cyndi ændrede det til en feministisk festsang.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/1d/ed/951ded3d-4e31-1452-42b6-cc36070a2204/mzaf_10794841548233618528.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8a/8c/13/8a8c13e0-06af-1710-7b7d-ebec65fb8361/074643893022.jpg/600x600bb.jpg'
   },
   {
     id: 'int-22',
@@ -834,7 +974,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Pop',
-    funFact: 'Titlen kom fra en seddel Andrew Ridgeley havde efterladt til sine forældre, hvor han ved en fejl skrev "go" to gange.'
+    funFact: 'Titlen kom fra en seddel Andrew Ridgeley havde efterladt til sine forældre, hvor han ved en fejl skrev "go" to gange.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/35/99/9e/35999e3f-480b-158a-2149-fa8ff249f882/mzaf_10746700119453640305.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/bc/28/31/bc2831e9-2646-098a-96c4-adc2e2c901bb/dj.tefnkxmm.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (90'erne) ====================
@@ -846,7 +988,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Grunge',
-    funFact: 'Kurt Cobain troede "Teen Spirit" var en revolutionær sætning, uvidende om at det var en populær deodorant for teenagepiger!'
+    funFact: 'Kurt Cobain troede "Teen Spirit" var en revolutionær sætning, uvidende om at det var en populær deodorant for teenagepiger!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/65/49/4e/65494e02-b6d3-26d8-6b0c-9bd98dcf4d5d/mzaf_7665413316386155700.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/95/fd/b9/95fdb9b2-6d2b-92a6-97f2-51c1a6d77f1a/00602527874609.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-24',
@@ -856,7 +1000,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Teen Pop',
-    funFact: 'Produceret af svenske Max Martin i Cheiron Studios i Stockholm, der ændrede lyden af moderne pop for altid.'
+    funFact: 'Produceret af svenske Max Martin i Cheiron Studios i Stockholm, der ændrede lyden af moderne pop for altid.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/ef/e5/2aefe5c7-e83b-07b1-227e-117347aa3006/mzaf_11333878250757508664.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/51/73/28/5173280b-9b5e-c5e4-d3f8-a2612d044543/888880423368.jpg/600x600bb.jpg'
   },
   {
     id: 'int-25',
@@ -866,7 +1012,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Pop',
-    funFact: 'Selvom teksten ikke giver helt logisk mening (skrevet af svenskere med begrænset engelsk), blev det en af 90\'ernes største ballader.'
+    funFact: 'Selvom teksten ikke giver helt logisk mening (skrevet af svenskere med begrænset engelsk), blev det en af 90\'ernes største ballader.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/12/cd/f8/12cdf81c-f174-cd45-9a56-9b2388df9e63/mzaf_2642298639219088626.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5f/6b/e9/5f6be919-1b9e-30ef-45b7-cc27fc428fd5/012414167224.jpg/600x600bb.jpg'
   },
   {
     id: 'int-26',
@@ -876,7 +1024,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Girl Power Pop',
-    funFact: 'Den legendariske "zigazig-ah" sang blev skrevet og optaget på under en time i London.'
+    funFact: 'Den legendariske "zigazig-ah" sang blev skrevet og optaget på under en time i London.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/db/cb/c6/dbcbc688-8277-b365-8deb-1da3c30da079/mzaf_7842872759474974048.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e1/92/8f/e1928fcb-0204-ca19-597a-6edaf8e6ebc8/21UMGIM16233.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-27',
@@ -886,7 +1036,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Britpop',
-    funFact: 'Noel Gallagher navngav sangen efter George Harrisons soundtrack-album "Wonderwall Music" fra 1968.'
+    funFact: 'Noel Gallagher navngav sangen efter George Harrisons soundtrack-album "Wonderwall Music" fra 1968.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/16/93/ab16933c-6203-3db9-9da9-513ff1c8496d/mzaf_16993612140334549994.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/04/92/e0/0492e08b-cbcc-9969-9ad6-8f5a0888068c/5051961007107.jpg/600x600bb.jpg'
   },
   {
     id: 'int-28',
@@ -896,7 +1048,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Hip Hop',
-    funFact: 'Samplingen af Stevie Wonders "Pastime Paradise" krævede Stevies personlige godkendelse uden bandeord.'
+    funFact: 'Samplingen af Stevie Wonders "Pastime Paradise" krævede Stevies personlige godkendelse uden bandeord.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c1/28/9e/c1289efd-07f3-d33c-4f83-ee46496b131c/mzaf_1464096825618179366.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/23/0b/c2230b5f-e753-e9b0-c032-b9ea0713450f/016998513262.png/600x600bb.jpg'
   },
   {
     id: 'int-29',
@@ -906,7 +1060,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'R&B',
-    funFact: 'Gjorde ordet "scrub" til et verdensomspændende slangudtryk for en doven fyr uden ambitioner.'
+    funFact: 'Gjorde ordet "scrub" til et verdensomspændende slangudtryk for en doven fyr uden ambitioner.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c9/64/38/c964385e-f18a-fd99-638c-76d4f9bdd4e2/mzaf_4744709234124158764.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2d/19/0c/2d190ce6-a157-6364-b5b4-e9b00265d313/mzi.ucefobwj.jpg/600x600bb.jpg'
   },
   {
     id: 'int-30',
@@ -916,7 +1072,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Eurodance',
-    funFact: 'Den første sang til bevidst at bruge Auto-Tune som en markant robotagtig lydeffekt.'
+    funFact: 'Den første sang til bevidst at bruge Auto-Tune som en markant robotagtig lydeffekt.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9c/52/d8/9c52d83d-242e-abc4-68fc-273eeb8f0358/mzaf_10714034642820090237.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/bb/90/f3/bb90f392-b78d-f180-ba6b-f04d2d1e62fd/s05.kfnyrece.jpg/600x600bb.jpg'
   },
   {
     id: 'int-31',
@@ -926,7 +1084,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Latin Pop',
-    funFact: 'Lå nr. 1 i USA i 14 uger i træk, og dansekoreografien blev danset ved politiske konventer og skolefester verden over.'
+    funFact: 'Lå nr. 1 i USA i 14 uger i træk, og dansekoreografien blev danset ved politiske konventer og skolefester verden over.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b2/f0/2a/b2f02a99-3339-5625-9990-773271169fa3/mzaf_1478085364092991906.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/a1/2d/6a/a12d6a7b-6173-ed2e-9682-a30d245ed7fe/mzi.ndplymif.jpg/600x600bb.jpg'
   },
   {
     id: 'int-32',
@@ -936,7 +1096,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Ska/Alt Rock',
-    funFact: 'Gwen Stefani skrev sangen efter hendes syv år lange forhold til bassisten Tony Kanal gik i stykker.'
+    funFact: 'Gwen Stefani skrev sangen efter hendes syv år lange forhold til bassisten Tony Kanal gik i stykker.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/52/52/8752529c-0125-c053-6c2c-73d1646adff6/mzaf_5525794060908135243.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fe/0a/68/fe0a687a-537e-e902-0778-90465c118f77/00602547870575.rgb.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (00'erne) ====================
@@ -948,7 +1110,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Funk/Pop',
-    funFact: 'André 3000 synger den berømte linje "Shake it like a Polaroid picture", hvilket fik Polaroid til at minde folk om ikke at ryste billeder for hårdt!'
+    funFact: 'André 3000 synger den berømte linje "Shake it like a Polaroid picture", hvilket fik Polaroid til at minde folk om ikke at ryste billeder for hårdt!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7b/90/59/7b9059ba-a8f2-2540-5bbb-d63a178bd8ce/mzaf_1797078659976130902.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/71/ae/6a/71ae6a46-99a6-e9d8-d7f3-41c0f2df45c4/196872579123.jpg/600x600bb.jpg'
   },
   {
     id: 'int-34',
@@ -958,7 +1122,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'R&B/Pop',
-    funFact: 'Det ikoniske horn-sample stammer fra The Chi-Lites\' sang "Are You My Woman? (Tell Me So)" fra 1970.'
+    funFact: 'Det ikoniske horn-sample stammer fra The Chi-Lites\' sang "Are You My Woman? (Tell Me So)" fra 1970.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7a/7f/b3/7a7fb397-c707-f7a6-93be-1db3cd1c7fcb/mzaf_10719026518601275807.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/03/c5/d4/mzi.ldvrmhxt.jpg/600x600bb.jpg'
   },
   {
     id: 'int-35',
@@ -968,7 +1134,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Hip Hop',
-    funFact: 'Vandt som den første hiphop-sang nogensinde en Oscar for bedste originale sang til filmen "8 Mile".'
+    funFact: 'Vandt som den første hiphop-sang nogensinde en Oscar for bedste originale sang til filmen "8 Mile".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/13/5a/61/135a6154-8ca2-0523-1fa2-f4ac0ea9e1e7/mzaf_13242749689945681184.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/08/23/fc/0823fcd9-cb44-695b-32bf-b3bf51d9f800/00606949351229.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-36',
@@ -978,7 +1146,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Electropop',
-    funFact: 'Med "mum-mum-mum-mah" hooket blev Lady Gaga udråbt til verdens nye popdronning.'
+    funFact: 'Med "mum-mum-mum-mah" hooket blev Lady Gaga udråbt til verdens nye popdronning.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/a4/9f/21a49f2c-d648-e775-6f3c-0db03b858f92/mzaf_8474670769503861886.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/b2/70/78/b2707801-8460-5b10-db7b-35db1d549de6/00602517959408.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-37',
@@ -988,7 +1158,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Indie Rock',
-    funFact: 'Har tilbragt over 400 uger på den britiske singlehitliste, mere end nogen anden sang i historien!'
+    funFact: 'Har tilbragt over 400 uger på den britiske singlehitliste, mere end nogen anden sang i historien!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/a0/30/c3a03008-17c5-aa29-6c6a-5e757ccdbaa5/mzaf_6073120660767081787.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/64/9c/11649c80-2066-dba8-77a9-df7eecae26c1/17UM1IM06937.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-38',
@@ -998,7 +1170,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'R&B/Pop',
-    funFact: 'Sangen blev oprindeligt tilbudt Britney Spears, hvis pladeselskab dog afviste den!'
+    funFact: 'Sangen blev oprindeligt tilbudt Britney Spears, hvis pladeselskab dog afviste den!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7b/45/22/7b452241-882c-409b-3a9b-23306b14286a/mzaf_8588243939716013218.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2b/c0/81/2bc081c8-25f0-ba43-d451-587a54613778/16UMGIM59202.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-39',
@@ -1008,7 +1182,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Dance-pop',
-    funFact: 'Produceret af den franske stjerne-DJ David Guetta og blev den første sang til at sælge 6 millioner digitale kopier.'
+    funFact: 'Produceret af den franske stjerne-DJ David Guetta og blev den første sang til at sælge 6 millioner digitale kopier.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/5e/6a/885e6adb-f307-d849-a3e0-47280088b5a4/mzaf_12588254824919596992.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/42/fc/47/42fc4794-3c69-8c00-e528-1c7e92b5ac93/09UMGIM13833.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-40',
@@ -1018,7 +1194,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Alt Pop',
-    funFact: 'Titlen er spansk for "Længe leve livet", opkaldt efter et maleri af den mexicanske kunstner Frida Kahlo.'
+    funFact: 'Titlen er spansk for "Længe leve livet", opkaldt efter et maleri af den mexicanske kunstner Frida Kahlo.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/19/60/b0196060-7786-24c0-8c56-8f628fe89f52/mzaf_12479456646715449366.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/52/aa/85/52aa851f-15b7-6322-f91f-df84b15b7b19/190295978044.jpg/600x600bb.jpg'
   },
   {
     id: 'int-41',
@@ -1028,7 +1206,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'French House',
-    funFact: 'Den parisiske robot-duo revolutionerede house-musikken med vocoder og filtrerede disco-trommer.'
+    funFact: 'Den parisiske robot-duo revolutionerede house-musikken med vocoder og filtrerede disco-trommer.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/93/d8/5d93d83f-ad1e-da4d-1d79-9937bdff24ec/mzaf_14396932211949300852.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fd/4a/77/fd4a77db-0ebc-d043-41a2-f32fa1bb0fb4/dj.qrikkdwj.jpg/600x600bb.jpg'
   },
   {
     id: 'int-42',
@@ -1038,7 +1218,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Nu Metal',
-    funFact: 'Chester Benningtons følelsesladede omkvæd og Mike Shinodas rap gjorde albummet Hybrid Theory til en generationstræffer.'
+    funFact: 'Chester Benningtons følelsesladede omkvæd og Mike Shinodas rap gjorde albummet Hybrid Theory til en generationstræffer.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d9/33/34/d933341d-ba95-dc3b-11a3-34d6632dd62e/mzaf_10942671303595386057.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/53/a7/7f/53a77fab-c54c-a57b-8130-248fc12d0c80/093624948995.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (10'erne) ====================
@@ -1050,7 +1232,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Soul/Pop',
-    funFact: 'Skrevet dagen efter Adele slog op med sin kæreste; sangen indbragte 3 Grammy-priser.'
+    funFact: 'Skrevet dagen efter Adele slog op med sin kæreste; sangen indbragte 3 Grammy-priser.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4c/4f/03/4c4f032a-3d2b-853d-da81-996602355b42/mzaf_11625850023134180491.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/ca/25/ebca2596-cd1e-b295-91a3-771c868d0a79/191404113868.png/600x600bb.jpg'
   },
   {
     id: 'int-44',
@@ -1060,7 +1244,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Funk/Pop',
-    funFact: 'Lå som nummer 1 på Billboard Hot 100 i 14 uger i træk og har over 5 milliarder YouTube-visninger.'
+    funFact: 'Lå som nummer 1 på Billboard Hot 100 i 14 uger i træk og har over 5 milliarder YouTube-visninger.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b9/96/2c/b9962c79-3662-235c-e55d-6c4b41457499/mzaf_18075623088273148288.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7e/30/c5/7e30c572-aa47-5f7b-c6fd-42d50cd2c56d/886444959797.jpg/600x600bb.jpg'
   },
   {
     id: 'int-45',
@@ -1070,7 +1256,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'EDM/Country',
-    funFact: 'Da Avicii først spillede den med levende country-guitar på Ultra Music Festival, blev han buhet ud – før sangen blev et historisk globalt megahit!'
+    funFact: 'Da Avicii først spillede den med levende country-guitar på Ultra Music Festival, blev han buhet ud – før sangen blev et historisk globalt megahit!',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/68/1e/60/681e601f-e1f2-4ebb-37de-adf00bdf57b6/mzaf_8266263075137964740.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/18/5b/1e/185b1ef5-5d97-19d8-aebf-8e29e41874ef/13UAAIM59255.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-46',
@@ -1080,7 +1268,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Pop',
-    funFact: 'Ed Sheeran overvejede oprindeligt at give sangen til Rihanna, før han besluttede at beholde den selv.'
+    funFact: 'Ed Sheeran overvejede oprindeligt at give sangen til Rihanna, før han besluttede at beholde den selv.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/c7/4f/44c74f0d-72dc-6143-d4d0-ba14d661ca0d/mzaf_9566898362556366703.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/600x600bb.jpg'
   },
   {
     id: 'int-47',
@@ -1090,7 +1280,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Synthwave/Pop',
-    funFact: 'Blev kåret af Billboard som den største Hot 100-sang nogensinde, efter at have tilbragt over 90 uger på hitlisten.'
+    funFact: 'Blev kåret af Billboard som den største Hot 100-sang nogensinde, efter at have tilbragt over 90 uger på hitlisten.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/12/73/ca/1273ca46-233a-5331-189b-25ac1d656533/mzaf_976341070785891411.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/61/e7/3f/61e73f94-018d-5f50-50ec-8521952bc72e/20UM1IM11629.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-48',
@@ -1100,7 +1292,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Electropop/Alt',
-    funFact: 'Indspillet i broderen Finneas\' lille soveværelse i Los Angeles, og vandt både Årets Sang og Årets Indspilning til Grammy Awards.'
+    funFact: 'Indspillet i broderen Finneas\' lille soveværelse i Los Angeles, og vandt både Årets Sang og Årets Indspilning til Grammy Awards.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/87/1f/c3871f7e-3260-d615-1c66-5fdca2c3a48f/mzaf_10721331211699880949.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-49',
@@ -1110,7 +1304,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Pop',
-    funFact: 'Markerede Swifts fulde overgang fra countrystjerne til rendyrket global pop-dronning.'
+    funFact: 'Markerede Swifts fulde overgang fra countrystjerne til rendyrket global pop-dronning.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/d5/6d/11d56d4a-ce23-e793-8681-70dc4d35d931/mzaf_5886436202259848624.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a7/98/d8/a798d867-344d-2bf2-fbfe-d2d1412dcef8/14UMDIM03793.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-50',
@@ -1120,7 +1316,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Reggaeton/Latin',
-    funFact: 'Blev den mest sete video på YouTube i flere år og genstartede en global bølge af spansksproget pop.'
+    funFact: 'Blev den mest sete video på YouTube i flere år og genstartede en global bølge af spansksproget pop.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0d/cb/ec/0dcbec41-5e9e-bd09-7cdd-fdff44acdf78/mzaf_17345185466754008149.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e2/ef/f0/e2eff0bc-c51d-7de5-9280-6891ddcee71b/18UMGIM85289.rgb.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (20'erne) ====================
@@ -1132,7 +1330,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Nu-disco',
-    funFact: 'Fra albummet Future Nostalgia, der bragte 80\'er-disco tilbage på de globale dansegulve under nedlukningen.'
+    funFact: 'Fra albummet Future Nostalgia, der bragte 80\'er-disco tilbage på de globale dansegulve under nedlukningen.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/59/dc/4d/59dc4dda-93ff-8f1c-c536-f005f6ea6af5/mzaf_3066686759813252385.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/6c/11/d6/6c11d681-aa3a-d59e-4c2e-f77e181026ab/190295092665.jpg/600x600bb.jpg'
   },
   {
     id: 'int-52',
@@ -1142,7 +1342,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Synthpop/Indie',
-    funFact: 'Stemmen i introen er Harrys femårige gudbarn Ruby, der siger: "Come on, Harry, we wanna say goodnight to you!"'
+    funFact: 'Stemmen i introen er Harrys femårige gudbarn Ruby, der siger: "Come on, Harry, we wanna say goodnight to you!"',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/67/10/16/67101606-3869-ca44-6c03-e13d6322cb51/mzaf_1135399237022217274.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2a/19/fb/2a19fb85-2f70-9e44-f2a9-82abe679b88e/886449990061.jpg/600x600bb.jpg'
   },
   {
     id: 'int-53',
@@ -1152,7 +1354,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Disco-pop',
-    funFact: 'Satte rekord som den hurtigste sang til at nå 1 milliard afspilninger på Spotify nogensinde (kun 112 dage).'
+    funFact: 'Satte rekord som den hurtigste sang til at nå 1 milliard afspilninger på Spotify nogensinde (kun 112 dage).',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/68/9e/f7/689ef7fe-14fe-a846-c87f-7d3b2d6344b1/mzaf_4167137058064023087.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/8c/67/ff/8c67ff91-31c3-3fef-1884-ce3ec89f3af4/196589946874.jpg/600x600bb.jpg'
   },
   {
     id: 'int-54',
@@ -1162,7 +1366,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Pop/Funk',
-    funFact: 'Med linjen "That\'s that me espresso" blev sangen sommerens ubestridte globale soundtrack i 2024.'
+    funFact: 'Med linjen "That\'s that me espresso" blev sangen sommerens ubestridte globale soundtrack i 2024.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/4d/02/e94d0230-11ee-ef94-d2cf-a5d547bd73f4/mzaf_554140808559155562.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/e8/7b/57e87ba0-5057-9bb9-c247-ce7dbe426e89/24UMGIM55213.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-55',
@@ -1172,7 +1378,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Pop Rock',
-    funFact: 'Gik viralt på TikTok med Boones eksplosive vokalskift og røg direkte ind på de internationale hitlister.'
+    funFact: 'Gik viralt på TikTok med Boones eksplosive vokalskift og røg direkte ind på de internationale hitlister.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4d/d5/00/4dd5006f-ee02-c3f1-94db-0ed4b8dd68f1/mzaf_14250561294796027079.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/f4/92/54f49210-e260-b519-ebbd-f4f40ee710cd/054391342751.jpg/600x600bb.jpg'
   },
   {
     id: 'int-56',
@@ -1182,7 +1390,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Synthpop/Glitter',
-    funFact: 'Chappell Roans store gennembrudssang, hyldet for sin Kate Bush-inspirerede vokal og 80\'er-produktion.'
+    funFact: 'Chappell Roans store gennembrudssang, hyldet for sin Kate Bush-inspirerede vokal og 80\'er-produktion.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c3/6d/4f/c36d4f23-b87f-046d-7a0e-e3e05d180b2a/mzaf_17235999651335214399.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/29/a7/c4/29a7c478-351d-25eb-a116-3e68118cdab8/24UMGIM31246.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-57',
@@ -1192,7 +1402,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Power Pop/Ballad',
-    funFact: 'Den dengang 17-årige skuespillerinde slog alle tiders streamingrekorder på Spotify i debutsugen.'
+    funFact: 'Den dengang 17-årige skuespillerinde slog alle tiders streamingrekorder på Spotify i debutsugen.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/62/61/366261be-0996-d73d-de6f-03417867c800/mzaf_8201528327761821135.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/02/ed/8c/02ed8cab-c089-2fdd-7ce6-ab334a9a4e19/21UMGIM26093.rgb.jpg/600x600bb.jpg'
   },
 
   // ==================== NYE INTERNATIONALE HITS (batch) ====================
@@ -1204,7 +1416,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Rock',
-    funFact: 'Keith Richards drømte det berømte guitar-riff og indspillede det halvsovende på en kassettebåndoptager.'
+    funFact: 'Keith Richards drømte det berømte guitar-riff og indspillede det halvsovende på en kassettebåndoptager.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ee/4d/28/ee4d28cd-a465-1334-2863-efda9ea9669b/mzaf_8440807812349084607.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/6b/8c/5b/6b8c5bc2-cbf3-5d48-ac10-565dd728802b/13ABKIM00023.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-59',
@@ -1214,7 +1428,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Ballad',
-    funFact: 'Melodien er baseret på den franske romance "Plaisir d\'amour" fra 1784.'
+    funFact: 'Melodien er baseret på den franske romance "Plaisir d\'amour" fra 1784.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/11/23/69/112369f6-6645-e9ec-8019-e06e3efb160d/mzaf_14601922769880394709.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3e/63/93/3e6393fb-5fe2-1ef4-1c0d-6452919a351c/828768904824.jpg/600x600bb.jpg'
   },
   {
     id: 'int-60',
@@ -1224,7 +1440,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Pop/Rock',
-    funFact: 'Brian Wilson brugte den elektroniske theremin for at give sangen dens karakteristiske "vibrationer".'
+    funFact: 'Brian Wilson brugte den elektroniske theremin for at give sangen dens karakteristiske "vibrationer".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4f/a1/b2/4fa1b2fe-7f99-8a4c-72a9-0804c77f2b58/mzaf_7135940363914090298.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/94/62/6c/94626c44-4657-739e-e639-39ae55e6d2cc/13UABIM03827.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-61',
@@ -1234,7 +1452,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Soul',
-    funFact: 'Aretha vendte Otis Reddings sang på hovedet og gjorde den til en hymne for både borgerrets- og kvindebevægelsen.'
+    funFact: 'Aretha vendte Otis Reddings sang på hovedet og gjorde den til en hymne for både borgerrets- og kvindebevægelsen.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/74/40/997440f5-f543-165d-321a-5a64245a6c1c/mzaf_7740075940996149397.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d1/31/ee/d131eec4-614c-d661-b580-3dc32b8547e8/603497896622.jpg/600x600bb.jpg'
   },
   {
     id: 'int-62',
@@ -1244,7 +1464,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '60s',
     genre: 'Rock',
-    funFact: 'John Fogerty skrev protestsangen mod Vietnamkrigen på under 20 minutter.'
+    funFact: 'John Fogerty skrev protestsangen mod Vietnamkrigen på under 20 minutter.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/cf/9b/88cf9b97-7928-2224-fe4d-50a547f11108/mzaf_12339983999995871857.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/29/1b/da/291bda3c-1743-c65c-41a6-f22a88936136/14CMGIM00939.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-63',
@@ -1254,7 +1476,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Rock',
-    funFact: 'Bandet nægtede i årtier at udgive sangen som single for at få folk til at købe hele albummet.'
+    funFact: 'Bandet nægtede i årtier at udgive sangen som single for at få folk til at købe hele albummet.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/e9/c8/a2e9c8fb-e282-9e9d-b5f9-d44fadb07e1e/mzaf_13939222705716798166.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5c/15/9b/5c159b27-95ca-b9a7-84e3-28e795fffd39/dj.kvkrpptq.jpg/600x600bb.jpg'
   },
   {
     id: 'int-64',
@@ -1264,7 +1488,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '70s',
     genre: 'Art Rock',
-    funFact: 'Sangen blev indspillet i Berlin og handler om et par der kysser ved Berlinmuren.'
+    funFact: 'Sangen blev indspillet i Berlin og handler om et par der kysser ved Berlinmuren.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1f/f3/12/1ff3122a-eb3e-373d-d524-cfe00de9b19a/mzaf_8446634475827049231.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e2/65/b2/e265b2ae-48d5-9dd8-0251-6cd6c6c4eb53/190295842826.jpg/600x600bb.jpg'
   },
   {
     id: 'int-65',
@@ -1274,7 +1500,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Rock/Pop',
-    funFact: 'Prince skrev oprindeligt sangen som en country-duet med Stevie Nicks, som takkede nej.'
+    funFact: 'Prince skrev oprindeligt sangen som en country-duet med Stevie Nicks, som takkede nej.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/70/9b/4a709b41-3c29-626a-ca69-44aa907f4705/mzaf_14388295257133509788.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c1/b6/79/c1b679f5-d59d-1b3e-62ab-514de20f06c6/093624912002.jpg/600x600bb.jpg'
   },
   {
     id: 'int-66',
@@ -1284,7 +1512,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '80s',
     genre: 'Rock',
-    funFact: 'The Edges "uendelige" guitarlyd kom fra en dengang eksperimentel Infinite Guitar-prototype.'
+    funFact: 'The Edges "uendelige" guitarlyd kom fra en dengang eksperimentel Infinite Guitar-prototype.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/73/9f/b8/739fb89d-05fc-a158-d34d-578d07213262/mzaf_15599762317871907296.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/9a/48/54/9a485494-b969-aaf4-a916-07452ea69869/06UMGIM72507.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-67',
@@ -1294,7 +1524,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Alternative Rock',
-    funFact: 'Bandet kaldte den længe deres "Scott Walker-sang" og var i årevis trætte af at spille den live.'
+    funFact: 'Bandet kaldte den længe deres "Scott Walker-sang" og var i årevis trætte af at spille den live.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1f/18/e2/1f18e22b-264e-88f8-ee89-c196fa9abd7a/mzaf_14184372154331980897.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/28/7a/7c/287a7ca9-ed95-1a21-e3bb-4559a1a0ac0e/191404134351.png/600x600bb.jpg'
   },
   {
     id: 'int-68',
@@ -1304,7 +1536,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Alternative Rock',
-    funFact: 'Dolores O\'Riordan skrev protestsangen som reaktion på en IRA-bombe i Warrington i 1993.'
+    funFact: 'Dolores O\'Riordan skrev protestsangen som reaktion på en IRA-bombe i Warrington i 1993.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/35/bb/65/35bb6532-1abe-59e4-9ced-8bee2742ea24/mzaf_15102830936602294569.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a3/77/a3/a377a309-8e52-f787-2250-2b34d320bf7b/25UMGIM64146.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-69',
@@ -1314,7 +1548,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '90s',
     genre: 'Britpop',
-    funFact: 'Det er den første Oasis-single med Noel Gallagher på lead-vokal i stedet for broren Liam.'
+    funFact: 'Det er den første Oasis-single med Noel Gallagher på lead-vokal i stedet for broren Liam.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e7/0d/2c/e70d2c62-b10a-333e-7289-1032482a5242/mzaf_380233244515330166.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/34/2e/cb/342ecb17-ef19-816a-4ce5-e60b9ceec161/5051961073164.jpg/600x600bb.jpg'
   },
   {
     id: 'int-70',
@@ -1324,7 +1560,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Soul/R&B',
-    funFact: 'Sangen indbragte Amy Winehouse tre Grammyer og er baseret på en ægte samtale om afvænning.'
+    funFact: 'Sangen indbragte Amy Winehouse tre Grammyer og er baseret på en ægte samtale om afvænning.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c0/7f/37/c07f37f1-a8e1-b093-f643-9e3bae02589b/mzaf_10374144630525520706.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/5a/72/3f/5a723fec-965d-3483-89f8-d66b79f88419/15UMGIM24224.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-71',
@@ -1334,7 +1572,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '00s',
     genre: 'Soul/Electronic',
-    funFact: 'Den blev den første sang nogensinde til at nå #1 i UK udelukkende på baggrund af downloads.'
+    funFact: 'Den blev den første sang nogensinde til at nå #1 i UK udelukkende på baggrund af downloads.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ec/e1/4e/ece14e48-8c7b-ff66-7fe1-fa2af50cdc10/mzaf_15490780879090368893.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/fc/6e/1e/fc6e1e95-7f93-09d8-455e-2f24a537a71f/603497823703.jpg/600x600bb.jpg'
   },
   {
     id: 'int-72',
@@ -1344,7 +1584,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Soul/Pop',
-    funFact: 'Sangen fik verdens første 24-timers musikvideo med et nyt afsnit for hver time på døgnet.'
+    funFact: 'Sangen fik verdens første 24-timers musikvideo med et nyt afsnit for hver time på døgnet.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ed/a0/19/eda019cf-2794-66d1-208d-2e2e74c26c3d/mzaf_16469762943852039623.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/76/ff/5e/76ff5ee0-7ab4-2ac2-2598-486a9ccc06e1/886444516877.jpg/600x600bb.jpg'
   },
   {
     id: 'int-73',
@@ -1354,7 +1596,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Art Pop',
-    funFact: 'Lorde var kun 16 år, da den newzealandske sang toppede den amerikanske hitliste.'
+    funFact: 'Lorde var kun 16 år, da den newzealandske sang toppede den amerikanske hitliste.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4c/50/2e/4c502ee4-d63e-3f7c-11cc-61b2e0c92656/mzaf_4849324024240261165.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b9/e2/d0/b9e2d0af-8ce2-e078-d4e2-eccf24d7e206/12UMGIM55707.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-74',
@@ -1364,7 +1608,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '10s',
     genre: 'Pop/Ballad',
-    funFact: 'En duet-version med Beyoncé skubbede sangen til #1 lige før jul 2017.'
+    funFact: 'En duet-version med Beyoncé skubbede sangen til #1 lige før jul 2017.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c7/ba/bc/c7babc66-f598-aaa6-bcf6-307281795817/mzaf_16337361235117168274.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/600x600bb.jpg'
   },
   {
     id: 'int-75',
@@ -1374,7 +1620,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Pop/Rock',
-    funFact: 'Det blev Harry Styles\' første #1-single i USA som soloartist.'
+    funFact: 'Det blev Harry Styles\' første #1-single i USA som soloartist.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/25/54/81/255481c0-1ef2-c1bc-f3b3-ea2b1419c1f1/mzaf_5289557126888202047.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2b/c4/c9/2bc4c9d4-3bc6-ab13-3f71-df0b89b173de/886448022213.jpg/600x600bb.jpg'
   },
   {
     id: 'int-76',
@@ -1384,7 +1632,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Pop Punk',
-    funFact: 'Paramore fik efterfølgende medskrivningskredit på grund af ligheden med "Misery Business".'
+    funFact: 'Paramore fik efterfølgende medskrivningskredit på grund af ligheden med "Misery Business".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9f/bd/f1/9fbdf1ce-12d9-7440-1c1c-3fed40567619/mzaf_7303839465958373073.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/76/46/48/76464884-0e9c-1951-a3f6-ce02f74c2b19/21UMGIM26093.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-77',
@@ -1394,7 +1644,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'international',
     decade: '20s',
     genre: 'Synth Pop',
-    funFact: 'Den blev årets mest streamede sang på Spotify globalt i 2022.'
+    funFact: 'Den blev årets mest streamede sang på Spotify globalt i 2022.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/67/10/16/67101606-3869-ca44-6c03-e13d6322cb51/mzaf_1135399237022217274.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2a/19/fb/2a19fb85-2f70-9e44-f2a9-82abe679b88e/886449990061.jpg/600x600bb.jpg'
   },
 
   // ==================== NYE DANSKE HITS (batch) ====================
@@ -1406,7 +1658,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Rock',
-    funFact: 'En af TV-2\'s mest elskede sange om den stille, næsten-lykkelige hverdag.'
+    funFact: 'En af TV-2\'s mest elskede sange om den stille, næsten-lykkelige hverdag.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/27/99/f327998c-bf22-f98e-682a-b78130baaa03/mzaf_7493775830356053020.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d7/11/1a/d7111a6a-71a5-b99b-947d-04d70d891a21/884977901016.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-62',
@@ -1416,7 +1670,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Folk/Rock',
-    funFact: 'Et af de mest spillede danske numre nogensinde i dansk radio.'
+    funFact: 'Et af de mest spillede danske numre nogensinde i dansk radio.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e0/35/28/e035286f-a480-38b7-8250-82df564d4947/mzaf_921795216638624930.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/18/3a/ef/183aefb8-34fb-0957-73a7-490d77510106/842474127674.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-63',
@@ -1426,7 +1682,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '70s',
     genre: 'Pop',
-    funFact: 'Titelsangen fra den populære danske børnefilm af samme navn.'
+    funFact: 'Titelsangen fra den populære danske børnefilm af samme navn.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2b/63/4c/2b634cf1-ec41-7e72-2c89-3b0b2ad2c2e3/mzaf_1968384708364915341.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/8e/b6/63/mzi.ahdijzun.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-64',
@@ -1446,7 +1704,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '00s',
     genre: 'Pop/Hip-Hop',
-    funFact: 'Fra duoens gennembrudsalbum, der gjorde dem til et af Danmarks største popnavne.'
+    funFact: 'Fra duoens gennembrudsalbum, der gjorde dem til et af Danmarks største popnavne.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/83/81/d7/8381d7d7-9cfe-3f6e-2fb2-83c4fb459482/mzaf_3678842534882096198.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/63/11/a1/6311a1ba-3fb5-ccbd-5f87-d95b1915bc31/094637602652.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-66',
@@ -1456,7 +1716,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Pop',
-    funFact: 'En af Rasmus Seebachs mange listetoppere fra begyndelsen af 2010\'erne.'
+    funFact: 'En af Rasmus Seebachs mange listetoppere fra begyndelsen af 2010\'erne.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/05/5f/12/055f1243-a475-ee05-43d9-0ebeac70f0ca/mzaf_3545628763060630173.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b8/79/92/b87992fa-8889-5cd7-1111-c7c2c528b94f/00602567874072.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-67',
@@ -1466,7 +1728,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'R&B/Pop',
-    funFact: 'En af Burhan G\'s største soloballader, kendt for sin følelsesladede vokal.'
+    funFact: 'En af Burhan G\'s største soloballader, kendt for sin følelsesladede vokal.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/de/bd/16debd3f-16b4-3418-a8cd-bdccace8f12f/mzaf_9463735953732378917.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7a/16/c3/7a16c328-09e6-9d2e-a981-469c042185ff/196874263624.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-68',
@@ -1476,7 +1740,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Electropop',
-    funFact: 'MØ\'s internationale solohit, der fulgte op på det globale gennembrud "Lean On".'
+    funFact: 'MØ\'s internationale solohit, der fulgte op på det globale gennembrud "Lean On".',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/3e/fc/c33efcb7-ef5e-e6a0-13de-b37ef3206d5e/mzaf_3630485072795309194.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/00/0d/53000d01-0279-77b2-8c23-cd2b2f428bcb/dj.fnpykkzq.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-69',
@@ -1486,7 +1752,9 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '10s',
     genre: 'Pop',
-    funFact: 'Christophers debutsingle, der lancerede hans karriere som dansk popstjerne.'
+    funFact: 'Christophers debutsingle, der lancerede hans karriere som dansk popstjerne.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8f/68/a0/8f68a0f4-1557-5425-68df-4bca4452b860/mzaf_8059405843989263025.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8d/1f/ad/8d1fad30-88cf-5683-d596-cf8681e33fea/886447386330.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-70',
@@ -1516,6 +1784,8 @@ export const HITSTER_SONGS: Song[] = [
     category: 'danish',
     decade: '80s',
     genre: 'Pop/Rock',
-    funFact: 'En drømmende TV-2-klassiker om ung kærlighed, sat i et rumfærgs-scenarie.'
+    funFact: 'En drømmende TV-2-klassiker om ung kærlighed, sat i et rumfærgs-scenarie.',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/48/16/b1/4816b1ee-7513-7fa0-424f-5b75a6568d9b/mzaf_15382764623503483148.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/94/36/73/94367338-d68d-2ef0-ae5a-a209c2b05b7c/197189347603.jpg/600x600bb.jpg'
   }
 ];

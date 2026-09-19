@@ -1,5 +1,6 @@
 // Web Audio Synthesizer for instant, zero-dependency sound effects
 // and iTunes Search API integration for real 30-second music previews.
+import { Song } from '../types';
 
 class SoundEffectsService {
   private ctx: AudioContext | null = null;
@@ -190,7 +191,42 @@ class SoundEffectsService {
 export const sfx = new SoundEffectsService();
 
 // iTunes Preview Cache
-const previewCache = new Map<string, { previewUrl?: string; artworkUrl?: string }>();
+// Preview/artwork URLs are static per song, so once we've resolved a song we
+// never need to hit the iTunes Search API again. The cache is persisted to
+// localStorage (keyed + versioned) so it survives reloads — this is the main
+// defence against iTunes' ~20 req/min rate limit for repeat players.
+type PreviewEntry = { previewUrl?: string; artworkUrl?: string };
+
+const PREVIEW_CACHE_KEY = 'hitster.previewCache.v1';
+
+function loadPreviewCache(): Map<string, PreviewEntry> {
+  const map = new Map<string, PreviewEntry>();
+  if (typeof localStorage === 'undefined') return map;
+  try {
+    const raw = localStorage.getItem(PREVIEW_CACHE_KEY);
+    if (raw) {
+      const obj = JSON.parse(raw) as Record<string, PreviewEntry>;
+      for (const [k, v] of Object.entries(obj)) map.set(k, v);
+    }
+  } catch {
+    // ignore corrupt/unavailable storage — we just start with an empty cache
+  }
+  return map;
+}
+
+const previewCache = loadPreviewCache();
+
+function persistPreviewCache() {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    localStorage.setItem(
+      PREVIEW_CACHE_KEY,
+      JSON.stringify(Object.fromEntries(previewCache))
+    );
+  } catch {
+    // storage full or unavailable — the in-memory cache still works this session
+  }
+}
 
 // Shared query builder — used by both the in-app player and the offline
 // validation script (scripts/check-previews.ts) so matching stays identical.
@@ -202,9 +238,18 @@ export function buildItunesSearchUrl(artist: string, title: string): string {
 }
 
 export async function fetchSongAudioPreview(
-  artist: string,
-  title: string
-): Promise<{ previewUrl?: string; artworkUrl?: string }> {
+  song: Song
+): Promise<PreviewEntry> {
+  const { artist, title } = song;
+
+  // #2 Pre-baked URLs: if the catalog already carries a preview (baked in by
+  // scripts/check-previews.ts, or a hand-set customPreviewUrl), use it directly
+  // and never touch the network.
+  const bakedPreview = song.previewUrl || song.customPreviewUrl;
+  if (bakedPreview) {
+    return { previewUrl: bakedPreview, artworkUrl: song.artworkUrl };
+  }
+
   const cacheKey = `${artist.toLowerCase().trim()}_${title.toLowerCase().trim()}`;
   if (previewCache.has(cacheKey)) {
     return previewCache.get(cacheKey)!;
@@ -214,6 +259,9 @@ export async function fetchSongAudioPreview(
     const url = buildItunesSearchUrl(artist, title);
 
     const res = await fetch(url);
+    // 403/429 (and empty bodies) are how iTunes signals throttling. Don't cache
+    // those as "no preview" — return an empty result but leave the cache untouched
+    // so a later attempt can still resolve the song once the rate limit clears.
     if (!res.ok) throw new Error('Network response not ok');
     const data = await res.json();
 
@@ -229,13 +277,18 @@ export async function fetchSongAudioPreview(
 
       const result = { previewUrl, artworkUrl };
       previewCache.set(cacheKey, result);
+      persistPreviewCache();
       return result;
     }
-  } catch (err) {
-    console.warn('Could not fetch iTunes preview for:', artist, title, err);
-  }
 
-  const fallback = { previewUrl: undefined, artworkUrl: undefined };
-  previewCache.set(cacheKey, fallback);
-  return fallback;
+    // Definitive answer from iTunes: genuinely no match. Safe to cache.
+    const empty = { previewUrl: undefined, artworkUrl: undefined };
+    previewCache.set(cacheKey, empty);
+    persistPreviewCache();
+    return empty;
+  } catch (err) {
+    // Network error or throttling — transient, so do NOT persist a negative result.
+    console.warn('Could not fetch iTunes preview for:', artist, title, err);
+    return { previewUrl: undefined, artworkUrl: undefined };
+  }
 }
