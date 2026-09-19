@@ -28,6 +28,27 @@ npm run bake-songs    # skriver previewUrl + artworkUrl ind i src/data/songs.ts
 > `check-songs`/`prune-songs`/`bake-songs` kalder iTunes Search og skal køres fra et netværk der ikke er
 > blokeret (nogle CI/sandbox-IP'er får 403). Ved usikkert svar beholdes sangen (ingen sletning).
 
+## Admin: udvid kataloget (`/admin`)
+
+Et **lokalt** kurateringsværktøj til at vokse kataloget mod ~500 sange. Det er ikke linket
+nogen steder — du skal kende adressen:
+
+```bash
+npm run dev
+# åbn http://localhost:3000/admin
+```
+
+- Gennemgå kandidater fra `src/data/candidates.json` én ad gangen: afspil preview, redigér
+  felter, og **Tilføj / Afvis / Spring over**.
+- **Tilføj egen sang** manuelt med samme formular.
+- Godkendte sange skrives direkte ind i `src/data/songs.ts` (med preview + artwork bagt ind),
+  og beslutninger gemmes i `src/data/candidate-status.json` så afviste ikke dukker op igen.
+- Sange der allerede findes i kataloget filtreres automatisk fra.
+
+Skrive-API'et (`/api/admin/*`) findes **kun** under `npm run dev` (Vite-plugin i
+`scripts/adminServer.ts`). Produktionsbuildet er rent statisk uden skrive-adgang. Arbejdsgang:
+kuratér lokalt → `git commit` → deploy.
+
 ## CI/CD (GitHub Actions)
 
 - **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck, build.

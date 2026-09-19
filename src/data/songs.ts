@@ -1647,5 +1647,1385 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'En drømmende TV-2-klassiker om ung kærlighed, sat i et rumfærgs-scenarie.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/48/16/b1/4816b1ee-7513-7fa0-424f-5b75a6568d9b/mzaf_15382764623503483148.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/94/36/73/94367338-d68d-2ef0-ae5a-a209c2b05b7c/197189347603.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-78',
+    title: 'I Want to Hold Your Hand',
+    artist: 'The Beatles',
+    year: 1963,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/d4/84/99d48419-cbd2-4d45-ad5c-60a581ff126e/mzaf_10364932228692401724.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/2a/4a/e6/2a4ae63d-ada7-fa57-6f16-02eebcf72f95/18UMGIM29770.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-79',
+    title: 'Brown Eyed Girl',
+    artist: 'Van Morrison',
+    year: 1967,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b8/5e/01/b85e0137-21d0-a265-b2e1-40d3c67a5d94/mzaf_1618708767076233365.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/dd/0e/bc/dd0ebcee-9d50-fe99-4ef8-c0fb79932511/886445621334_Cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-80',
+    title: 'House of the Rising Sun',
+    artist: 'The Animals',
+    year: 1964,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a8/92/35/a8923560-5099-8443-e7f6-eabd3a04d11b/mzaf_3221556397685255466.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/83/3d/40/833d4083-c018-f1bf-5b30-707aa7c2557c/06PNDIM00281.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-81',
+    title: 'Sunny',
+    artist: 'Bobby Hebb',
+    year: 1966,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/c4/ef/66c4ef4e-ddd1-219f-2330-81d1d7839aad/mzaf_1443131102274626387.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/41/b6/4d/41b64d06-900a-da3c-aad7-0bd53b679fb4/00731454654326.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-82',
+    title: 'Bad Moon Rising',
+    artist: 'Creedence Clearwater Revival',
+    year: 1969,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/38/cc/0e/38cc0ecd-6362-406c-a436-cda02b1b2ec6/mzaf_14867378299499617461.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/88/16/20/881620df-9161-61e8-2295-99c6740871b8/00888072355972.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-83',
+    title: 'Let It Be',
+    artist: 'The Beatles',
+    year: 1970,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/60/76/fd/6076fd8f-422a-d5e3-7b02-5953bc93cfbd/mzaf_3945462995290301839.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ae/98/4c/ae984c7a-cd06-a7cd-e8bf-32cb15ba698d/00602567705475.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-84',
+    title: 'Your Song',
+    artist: 'Elton John',
+    year: 1970,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/f4/5e/85f45e08-8724-4144-54c0-d87f0ac42f51/mzaf_17953656609560449107.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/a9/52/e6/a952e6c5-a5e1-a56d-a6f4-b01ca42a4368/06UMGIM50695.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-85',
+    title: 'Waterloo',
+    artist: 'ABBA',
+    year: 1974,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/7c/00/c67c008a-125e-816b-d605-13029848a14d/mzaf_9917084468265042979.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-86',
+    title: 'I Will Survive',
+    artist: 'Gloria Gaynor',
+    year: 1978,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/40/66/e74066a0-d000-1896-cd2e-7b2bc97393ad/mzaf_6935563640938257821.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/33/12/df/3312dfbf-2cd2-e149-1ccb-9688e2a60980/00731454913720.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-87',
+    title: 'Le Freak',
+    artist: 'Chic',
+    year: 1978,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/76/18/dd/7618dd92-b61f-65c7-a1a5-6d08dc7d8b2d/mzaf_10536878235644314919.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/23/5b/b2/235bb2c3-abaa-22e2-753d-afa8b1806dfe/603497853588.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-88',
+    title: 'Another Brick in the Wall',
+    artist: 'Pink Floyd',
+    year: 1979,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8a/21/41/8a214193-f9e0-fbeb-aad5-6ca8b8420dbb/mzaf_2628810625325580575.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3e/17/ec/3e17ec6d-f980-c64f-19e0-a6fd8bbf0c10/886445635850.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-73',
+    title: 'Costa del Sol',
+    artist: 'C.V. Jørgensen',
+    year: 1980,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/39/9d/bc/399dbc80-ccd7-a524-a74e-e40e2c83f1bf/mzaf_14243119859227914670.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/49/9e/1f/mzi.tokafnxq.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-74',
+    title: 'Mr. Swing King',
+    artist: 'Gnags',
+    year: 1984,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c8/e2/0f/c8e20fe3-d776-eadb-5944-3b5fafb2dac2/mzaf_12029760503300040099.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/cc/4e/c7/mzi.dcvazvou.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-75',
+    title: 'Tusind Stykker',
+    artist: 'Anne Linnet',
+    year: 1985,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2e/e3/fd/2ee3fdf8-7785-42f2-f138-fae7715e8be9/mzaf_2020973985024214044.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/70/52/a9/mzi.hfbaqhwp.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-76',
+    title: 'Vågner i Natten',
+    artist: 'Dodo and the Dodos',
+    year: 1986,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d5/ca/2b/d5ca2b9b-dbb1-ccc5-1364-b8e0f98fa625/mzaf_12042483825653466755.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/ec/a3/2e/eca32ea8-9a7b-061f-bcdb-ef3fae50f6a6/dj.zghjdaro.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-77',
+    title: 'Magi i Luften',
+    artist: 'Halberg-Larsen',
+    year: 1986,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/21/9b/91/219b913b-068d-d62f-4541-9a9abc410669/mzaf_7440353935200807943.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a4/f6/49/a4f649b4-cf9b-6882-abe6-6fd9aaa819e7/886444546751.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-78',
+    title: 'Jeg Vil La\' Lyset Brænde',
+    artist: 'Ray Dee Ohh',
+    year: 1988,
+    category: 'danish',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/68/3e/22/683e227d-006b-fa5c-404d-2e0bc5c3d416/mzaf_13037965100376909276.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c8/72/14/c87214e8-433a-acce-a9c4-afdc0bb2250f/743216189427.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-89',
+    title: 'Video Killed the Radio Star',
+    artist: 'The Buggles',
+    year: 1979,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0f/8b/32/0f8b3276-4dbf-a6ff-9090-80a547a44127/mzaf_13268793385752250561.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/16/21/ea/1621eaf0-f7c8-c9e9-5eaf-e11a7ec87610/06UMGIM01037.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-90',
+    title: 'Under Pressure',
+    artist: 'Queen & David Bowie',
+    year: 1981,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/df/db/ce/dfdbce26-6165-3861-9675-81343b449f09/mzaf_15834163619916814950.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ce/91/ac/ce91ac8d-99d8-b82b-6431-bef658189b28/602527717579.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-91',
+    title: 'Tainted Love',
+    artist: 'Soft Cell',
+    year: 1981,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/24/21/ba/2421ba35-1d77-9a2b-2e6e-d83af784eec3/mzaf_12069175805349111010.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/70/ff/8c/70ff8c59-95dc-5444-fd3b-81204d0477e5/00600753223598.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-92',
+    title: 'Beat It',
+    artist: 'Michael Jackson',
+    year: 1982,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/88/cd/46/88cd46bd-dba7-1dc2-a63b-e8c111ac4fc3/mzaf_4042555053237612653.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-93',
+    title: 'Thriller',
+    artist: 'Michael Jackson',
+    year: 1982,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/58/8c/cb/588ccb9a-ab79-4a38-43b5-d4c24ea42859/mzaf_2083607504726567992.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-94',
+    title: 'Every Breath You Take',
+    artist: 'The Police',
+    year: 1983,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6c/b4/79/6cb47947-0860-8788-95b1-a2b0a908f342/mzaf_4654925634744235278.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/42/b7/db/42b7dbe1-d13f-c600-5b78-daa57c5d0f08/06UMGIM50761.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-95',
+    title: 'Sweet Dreams (Are Made of This)',
+    artist: 'Eurythmics',
+    year: 1983,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/e3/8a/86e38af3-8863-973c-1c55-9f8187125741/mzaf_11175782400808341439.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f2/4c/c2/f24cc223-f889-c8a3-ebbc-8ce458438580/mzi.zbvljpxb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-96',
+    title: 'When Doves Cry',
+    artist: 'Prince',
+    year: 1984,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0f/d3/ae/0fd3ae2b-542d-170e-f148-f4d08949a006/mzaf_2606432863197016679.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/00/17/f2/0017f24f-e580-b77a-71a8-1bc7b75881bf/603497822065.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-97',
+    title: 'Money for Nothing',
+    artist: 'Dire Straits',
+    year: 1985,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/fd/63/85fd6319-5f49-c4f9-7db3-12be17b8401b/mzaf_1182225046852189413.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/c3/91/ff/c391ff50-caba-db8a-2387-6c906d2ca65c/mzi.gyijrdqr.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-98',
+    title: 'Faith',
+    artist: 'George Michael',
+    year: 1987,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a5/a0/b9/a5a0b9b5-25c0-eea4-aff5-e653eb2144a5/mzaf_12972342335011969375.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/47/55/0c/47550cd6-7ef5-bf86-c194-c7695d63c759/dj.xuditatj.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-99',
+    title: 'Push It',
+    artist: 'Salt-N-Pepa',
+    year: 1987,
+    category: 'international',
+    decade: '80s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a2/09/ea/a209eaca-ce8d-f097-7c85-2e7a5d6d8c9f/mzaf_16500338799738350758.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/71/14/f9/7114f9b5-630e-a488-8199-31658b70d1df/888003320291.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-79',
+    title: 'Vi Maler Byen Rød',
+    artist: 'Birthe Kjær',
+    year: 1998,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8f/fb/d6/8ffbd6cb-700f-fcfc-6865-be66a2b3f63f/mzaf_2347878681060983755.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1f/0d/dd/1f0ddda8-574b-3786-70e7-03a8f311a848/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-80',
+    title: 'Waterline',
+    artist: 'Dizzy Mizz Lizzy',
+    year: 1994,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8f/35/3a/8f353a89-4fa0-697c-705b-582128dff429/mzaf_8567974527321998746.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/09/8f/eb/098feb49-7731-a033-fa0b-fd97368eb6d7/886446855899.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-81',
+    title: 'Silverflame',
+    artist: 'Dizzy Mizz Lizzy',
+    year: 1994,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/04/2f/c8/042fc800-101e-b871-2770-3719df7a0b55/mzaf_16205609417124642513.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/09/8f/eb/098feb49-7731-a033-fa0b-fd97368eb6d7/886446855899.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-100',
+    title: 'Losing My Religion',
+    artist: 'R.E.M.',
+    year: 1991,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/06/ee/70/06ee70ca-c0f6-783c-1935-e0be0f3228d4/mzaf_1437283987200939868.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/d4/9c/f6/d49cf63f-a412-5737-9392-1576c297b475/00888072396272.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-101',
+    title: 'Enter Sandman',
+    artist: 'Metallica',
+    year: 1991,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/8a/fc/538afc1c-b9cd-24ab-b401-2fa8c81abc46/mzaf_3160131754964321707.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2e/94/95/2e9495d7-dfe3-ddc8-87ef-6ef797a60218/850007452056.png/600x600bb.jpg'
+  },
+  {
+    id: 'int-102',
+    title: 'Under the Bridge',
+    artist: 'Red Hot Chili Peppers',
+    year: 1991,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ff/5e/6c/ff5e6c34-4b2c-fa5b-232c-194183e5310f/mzaf_18293543166089220451.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c9/c8/b2/c9c8b20d-42b8-a2a6-1678-54b997e845f5/093624931973.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-103',
+    title: 'November Rain',
+    artist: 'Guns N\' Roses',
+    year: 1992,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/67/6b/0c/676b0cc6-2f6e-555a-b4f1-a514ab21adb4/mzaf_10772491023997849447.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/6a/e2/1f/6ae21fa9-c897-3be1-2967-50eefae22b93/06UMGIM05041.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-104',
+    title: 'I Will Always Love You',
+    artist: 'Whitney Houston',
+    year: 1992,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/d2/1a/03d21aca-c69e-09af-03ef-118004e68ab5/mzaf_17408932698913708736.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/82/f3/e9/82f3e968-8174-c5eb-7fc5-36384d050129/dj.mdauihuy.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-105',
+    title: 'Loser',
+    artist: 'Beck',
+    year: 1994,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/e6/ec/87e6ec2d-9802-62e6-887e-5732a6182cf6/mzaf_2989360577881139213.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/a5/a8/35a5a83a-7a68-2390-c069-6bee759f047a/00075021017924.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-106',
+    title: 'Genie in a Bottle',
+    artist: 'Christina Aguilera',
+    year: 1999,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/63/7c/e9637c84-3cbe-ad95-a5be-b6962ed54e08/mzaf_11300153256112368673.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/6b/25/9b/6b259bc3-3e53-4339-80b0-5b50131c8901/888880771674.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-107',
+    title: 'Livin\' la Vida Loca',
+    artist: 'Ricky Martin',
+    year: 1999,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/a7/cb/08a7cb6d-0618-3c01-6b80-2b92aaca7406/mzaf_15654413058067067771.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/3c/ed/ab3cedd0-03a6-0802-ec42-2f48c4eb118c/074646989128.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-108',
+    title: 'My Name Is',
+    artist: 'Eminem',
+    year: 1999,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2b/9c/7a/2b9c7afe-e995-98dc-d6ed-a58c2ff00e55/mzaf_10156670260921994139.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/27/79/d5/2779d529-ff10-c15d-1c50-08cd46dd1237/06UMGIM17625.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-109',
+    title: 'Torn',
+    artist: 'Natalie Imbruglia',
+    year: 1997,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/96/be/3b/96be3b9e-035d-3d29-ad16-796ea4495968/mzaf_17099026484635430619.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/11/5d/f1/115df15e-e05f-b0f1-ae66-3ad2c5e969b4/mzi.ihaejhxb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-110',
+    title: 'Nothing Compares 2 U',
+    artist: 'Sinéad O\'Connor',
+    year: 1990,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1f/ea/d0/1fead06e-6edf-4415-61a9-f1a2cd7bd4aa/mzaf_8555394426401719010.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/fa/19/3f/fa193fc7-f9cf-c84e-c7ef-77b2fceb3a3e/5054526647565.png/600x600bb.jpg'
+  },
+  {
+    id: 'int-111',
+    title: 'Vogue',
+    artist: 'Madonna',
+    year: 1990,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/35/ab/23/35ab2302-3f06-a322-e306-e86ecf6e6999/mzaf_7353725739896737621.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/32/fd/6e/32fd6e25-da2b-10e9-df38-2923c01b6c9b/dj.jaxugjvp.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-82',
+    title: 'Så Længe Jeg Lever',
+    artist: 'John Mogensen',
+    year: 1974,
+    category: 'danish',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview128/v4/fb/cd/79/fbcd79ec-02f5-829c-65c9-e84aaaf35464/mzaf_7861993621777295424.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/17/b9/e6/17b9e62e-4c7e-433a-a06c-e6ce34228c9d/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-83',
+    title: 'Danser med Drenge',
+    artist: 'Danser med Drenge',
+    year: 1993,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/44/76/2f/44762f21-1901-bdb1-2eeb-21dfb3abd64e/mzaf_3383318354794849015.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music1/v4/96/65/bc/9665bcc5-1364-cb91-e297-9fd8acfbc32c/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-112',
+    title: 'no woman no cry',
+    artist: 'bob markey',
+    year: 1974,
+    category: 'international',
+    decade: '70s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/b9/1c/d0b91cf2-8116-a90b-896b-f2c7fe72ef24/mzaf_15788893504265171765.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/04/d2/c3/04d2c304-5a8f-a82f-eded-7d3b1d01f5c6/06UMGIM04340.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-113',
+    title: 'My Generation',
+    artist: 'The Who',
+    year: 1965,
+    category: 'international',
+    decade: '60s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/82/cf/db/82cfdbf1-7310-bbaa-2154-cab5d9aab7cd/mzaf_13586515265429806134.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/7b/89/7c/7b897cef-0ec3-34ed-184f-ffec8655cbbd/16UMGIM66112.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-114',
+    title: 'The Sign',
+    artist: 'Ace of Base',
+    year: 1993,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/19/b9/d119b93d-68df-38a5-dca1-0c331da912e1/mzaf_3053126459974434770.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/14/ea/87/14ea87fa-fc85-4b1f-472f-43c3e694ec8c/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-115',
+    title: 'Rhythm Is a Dancer',
+    artist: 'Snap!',
+    year: 1992,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/1e/5d/6a1e5d59-95b3-0e69-e339-251283063d0f/mzaf_17499744920370195381.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b8/65/41/b865413a-d80a-96af-f042-a82e4aa36ac1/4050538293401.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-116',
+    title: 'What Is Love',
+    artist: 'Haddaway',
+    year: 1993,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/89/ea/52/89ea5203-802f-2158-614c-8c7d5cedd3df/mzaf_13828661315018209252.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/88/ec/43/88ec43e7-3321-6664-835b-73243625f668/4250282801123.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-117',
+    title: 'Cotton Eye Joe',
+    artist: 'Rednex',
+    year: 1994,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/c0/fd/8dc0fd9d-67a3-71f7-f46e-48fd0aa1a639/mzaf_9868878036209029706.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/a0/7e/dc/mzi.bvturdqb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-118',
+    title: 'Blue (Da Ba Dee)',
+    artist: 'Eiffel 65',
+    year: 1999,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/2a/4f/5c2a4f09-ac01-be90-d6b2-a0b94bd82b7e/mzaf_3916619128344794117.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a9/ec/b3/a9ecb373-0ea0-4117-9a68-03f513bae597/mzi.iwxdpjun.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-119',
+    title: 'Around the World',
+    artist: 'Daft Punk',
+    year: 1997,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1a/0d/dc/1a0ddc60-0cb0-5481-abd1-b1b1d8b92c7a/mzaf_14895857175025523567.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/34/8d/c7/348dc71c-d75e-9baf-671a-994e9e74b018/dj.pimdxdmf.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-120',
+    title: 'Sandstorm',
+    artist: 'Darude',
+    year: 1999,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/18/93/41189355-9033-e6e4-d7ce-97a7515e7aa9/mzaf_17924145138458674060.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/01/a1/c8/mzi.tqopjuka.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-121',
+    title: 'Freed from Desire',
+    artist: 'Gala',
+    year: 1996,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8a/a6/ed/8aa6edd7-c6b8-a99a-d5ee-d092e1460e9d/mzaf_12498017299340318780.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/70/a3/33/70a333a9-29d8-bfde-fe2d-79d2a9a72518/mzi.hroawrfd.tif/600x600bb.jpg'
+  },
+  {
+    id: 'int-122',
+    title: 'In da Club',
+    artist: '50 Cent',
+    year: 2003,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6e/6a/04/6e6a0436-3bd4-1f71-02df-6bcffe76e636/mzaf_3291234595362168142.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/6e/56/af/6e56af83-bdff-56c2-7c6a-b30cd0d356ce/06UMGIM08757.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-123',
+    title: 'Crazy in Love',
+    artist: 'Beyoncé',
+    year: 2003,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7a/7f/b3/7a7fb397-c707-f7a6-93be-1db3cd1c7fcb/mzaf_10719026518601275807.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/03/c5/d4/mzi.ldvrmhxt.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-124',
+    title: 'Seven Nation Army',
+    artist: 'The White Stripes',
+    year: 2003,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/2d/58/fe2d587f-6344-3fb3-43f7-d318a6253dcc/mzaf_16825320951570507954.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/07/25/09/0725098a-09f4-f240-e551-94384a590371/886448799009.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-125',
+    title: 'Toxic',
+    artist: 'Britney Spears',
+    year: 2004,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ae/c4/7f/aec47f56-842d-49b4-558b-7a7523fd6728/mzaf_6693111381462300599.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/38/8b/7a/388b7a8f-10ff-a4e0-7624-65e29ac6a793/828765374828.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-126',
+    title: 'Yeah!',
+    artist: 'Usher',
+    year: 2004,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/94/52/3c/94523c88-f5f9-16f4-dbd7-f284ca168048/mzaf_7184891920196479048.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/02/c6/e1/02c6e1cd-8d57-97b4-6ef1-77d2be004509/mzi.sjrqsmrq.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-127',
+    title: 'Hey There Delilah',
+    artist: 'Plain White T\'s',
+    year: 2006,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c5/2d/c5/c52dc5be-1c0b-25c0-4458-bd255aed6a15/mzaf_15950647949647568451.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2d/40/cf/2d40cf09-7b42-3d84-8527-2d10b46edafd/16CMGIM00746.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-128',
+    title: 'Chasing Cars',
+    artist: 'Snow Patrol',
+    year: 2006,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/dc/fe/bfdcfeb4-7fde-c148-bf2d-f82d0f1e8096/mzaf_15850382492018725787.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/c4/25/bf/c425bf7c-f3d8-6baf-7397-40868971f77f/06UMGIM43473.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-129',
+    title: 'SexyBack',
+    artist: 'Justin Timberlake',
+    year: 2006,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1a/f4/7b/1af47ba3-a363-5716-4dd9-6aea4fe35e3f/mzaf_13609262275263691829.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4c/44/30/4c4430dd-150b-d393-ec70-4894975f4b16/888880422095.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-130',
+    title: 'Umbrella',
+    artist: 'Rihanna',
+    year: 2007,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7b/45/22/7b452241-882c-409b-3a9b-23306b14286a/mzaf_8588243939716013218.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2b/c0/81/2bc081c8-25f0-ba43-d451-587a54613778/16UMGIM59202.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-131',
+    title: 'Chasing Pavements',
+    artist: 'Adele',
+    year: 2008,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f1/63/f2/f163f211-8515-f558-78a7-75162a5920d8/mzaf_2148959813925099998.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/8c/5c/b5/8c5cb579-818d-b7cd-cb9f-f16fb72427d5/191404094266.png/600x600bb.jpg'
+  },
+  {
+    id: 'int-132',
+    title: 'Use Somebody',
+    artist: 'Kings of Leon',
+    year: 2008,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/23/1d/b3/231db3c5-a99c-3fba-5d3b-f6e9cdbeb841/mzaf_12581310710694950303.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/74/25/4c/74254c8b-e03d-44e8-304d-4cde508b8cfb/dj.swemfdrr.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-133',
+    title: 'Halo',
+    artist: 'Beyoncé',
+    year: 2008,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bc/cf/16/bccf164e-fa68-11c2-5e03-f87ca8e6e637/mzaf_13683091017583481694.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/0f/55/350f55da-2104-162a-5872-cb35fef30410/mzi.morbeoaw.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-134',
+    title: 'Empire State of Mind',
+    artist: 'Jay-Z & Alicia Keys',
+    year: 2009,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/bc/cb/aebccb04-d478-ec54-db5c-584cb98d837d/mzaf_9745470800380850630.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/17/4a/a7/174aa7ea-0116-6240-1187-1efb51552833/00602527586502.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-84',
+    title: 'Lækker',
+    artist: 'Nik & Jay',
+    year: 2008,
+    category: 'danish',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/83/81/d7/8381d7d7-9cfe-3f6e-2fb2-83c4fb459482/mzaf_3678842534882096198.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/63/11/a1/6311a1ba-3fb5-ccbd-5f87-d95b1915bc31/094637602652.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-135',
+    title: 'Someone Like You',
+    artist: 'Adele',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/08/22/2e/08222e25-43f5-20e6-a442-b8127ac83368/mzaf_1689070223363740216.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/ca/25/ebca2596-cd1e-b295-91a3-771c868d0a79/191404113868.png/600x600bb.jpg'
+  },
+  {
+    id: 'int-136',
+    title: 'Price Tag',
+    artist: 'Jessie J',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/2f/30/032f3031-ca60-9967-b82c-1c9d2fb2b1c3/mzaf_7409978316038357876.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/dc/89/29/dc8929b6-ba5b-0b95-d32f-5f711f598b58/11UMGIM02262.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-137',
+    title: 'Party Rock Anthem',
+    artist: 'LMFAO',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/63/a1/fe63a1b8-091f-9d45-594f-bb982166297f/mzaf_8877172162075707701.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/21/d9/07/21d9076e-a52c-4f94-5176-011a9ec878e7/11UMGIM14032.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-138',
+    title: 'Moves like Jagger',
+    artist: 'Maroon 5',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1a/e8/be/1ae8bea8-8962-8168-80d5-65bf3b1478ba/mzaf_471500839444486606.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/61/53/15/61531592-3e8b-1e85-b434-73a991d8143c/14UMGIM27067.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-139',
+    title: 'Somebody That I Used to Know',
+    artist: 'Gotye',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/63/85/4a6385ef-b80a-5e40-0bf2-245fa5b3dc52/mzaf_1146936378720252898.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b3/8a/98/b38a9867-2a9c-de2f-2d80-c624fb2200ec/11UMGIM19347.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-140',
+    title: 'Call Me Maybe',
+    artist: 'Carly Rae Jepsen',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5e/0b/c4/5e0bc4b4-51fb-c992-4953-8cc13ecfb773/mzaf_4904797060238555261.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/14/54/19/145419b2-96f6-fc9e-3110-fbdc78022df6/12UMGIM48177.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-141',
+    title: 'Gangnam Style',
+    artist: 'PSY',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/00/53/c6/0053c6f7-6342-7a3d-37c5-60b896948bdb/mzaf_10727579274479911915.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7c/52/87/7c5287bc-818f-55ed-e607-08b052963632/12UMGIM50914.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-142',
+    title: 'We Are Young',
+    artist: 'fun.',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/63/a9/ed/63a9ede2-1823-d75f-7ae3-061b91790395/mzaf_17932545875589323048.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/b2/df/a3/b2dfa32c-ea54-7983-0da1-6964e60a1bd7/dj.aqphuayl.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-143',
+    title: 'Thrift Shop',
+    artist: 'Macklemore & Ryan Lewis',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ce/5c/aa/ce5caa72-ff73-221e-cc83-295c23bce434/mzaf_8353999015135739287.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/44/40/83/44408300-636f-8cae-d508-9dd96db48cea/707541528191.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-144',
+    title: 'Get Lucky',
+    artist: 'Daft Punk',
+    year: 2013,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/57/a5/85/57a585aa-f1bc-7619-881b-f8a04a5541d5/mzaf_6906185026678279401.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e8/43/5f/e8435ffa-b6b9-b171-40ab-4ff3959ab661/886443919266.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-145',
+    title: 'Blurred Lines',
+    artist: 'Robin Thicke',
+    year: 2013,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/7a/74/8d7a7475-5ab4-68c3-7a70-ba111d8358df/mzaf_18355636855815173576.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/9f/b1/b9/9fb1b976-bec0-1964-053d-001fed83a720/13UAAIM09929.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-146',
+    title: 'All of Me',
+    artist: 'John Legend',
+    year: 2013,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ff/94/6c/ff946ca7-e49a-fdf8-ea5b-11e6f56a0417/mzaf_17369156110722174773.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/22/71/b9/2271b906-85b3-06ee-e611-489b91df0b73/886444160742.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-147',
+    title: 'Thinking Out Loud',
+    artist: 'Ed Sheeran',
+    year: 2014,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/78/a5/f2/78a5f25e-ad1b-718d-82ad-b82e676c1855/mzaf_6133970271589343093.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2d/36/f9/2d36f9a7-2c3e-ce0f-7fb6-036feecb221f/825646974450.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-148',
+    title: 'Hello',
+    artist: 'Adele',
+    year: 2015,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/7e/9d/107e9dc0-c13b-eace-2486-84a3c694b075/mzaf_6267923862748965591.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/08/8c/24/088c2405-2e33-801b-5c38-e967f2c01e69/191404113974.png/600x600bb.jpg'
+  },
+  {
+    id: 'int-149',
+    title: 'Can\'t Feel My Face',
+    artist: 'The Weeknd',
+    year: 2015,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e0/4d/65/e04d6546-d5ae-28bf-51fa-e4e54d737c2f/mzaf_17329746342766146939.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/30/05/1e/30051e57-a63a-3acc-4b30-42568293f5f7/15UMGIM36514.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-150',
+    title: 'Hotline Bling',
+    artist: 'Drake',
+    year: 2015,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/73/56/5c/73565c27-16d4-1f8a-ec12-77616e3ca05d/mzaf_9178247693050174633.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f2/0d/8b/f20d8bff-a927-ae98-6784-20a1f51cb23e/16UMGIM27642.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-151',
+    title: 'Cheap Thrills',
+    artist: 'Sia',
+    year: 2016,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/89/73/fb/8973fb2c-5417-e56b-30f1-bf5035bb46a2/mzaf_5922398524297774212.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/bc/13/27/bc13275c-8b26-802d-771b-d15ae00fb530/mzm.hvpwjsvi.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-152',
+    title: 'Closer',
+    artist: 'The Chainsmokers ft. Halsey',
+    year: 2016,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bd/f9/b9/bdf9b9b2-eaa4-4461-6079-aaacc6df7316/mzaf_17327312786932455493.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/41/f8/38/41f8380b-9b56-d5d4-31f7-a6411c0c9aaa/886446102054.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-153',
+    title: 'Despacito',
+    artist: 'Luis Fonsi & Daddy Yankee',
+    year: 2017,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/01/55/6f/01556f75-ea92-0267-c6d4-09ee6fd8ff26/mzaf_15962911936959580358.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/11/d6/58/11d658ed-2ee0-31bb-da65-3377b879f7fe/00602557543537.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-154',
+    title: 'Someone You Loved',
+    artist: 'Lewis Capaldi',
+    year: 2019,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/c8/17/e5c817e2-7830-091f-8686-d6276d5beaeb/mzaf_5586826958480073790.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/92/d7/8f/92d78fb1-df3d-049e-c81d-7022808b151f/19UMGIM02973.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-85',
+    title: 'Lean On',
+    artist: 'Major Lazer & DJ Snake ft. MØ',
+    year: 2015,
+    category: 'danish',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/cf/4f/9f/cf4f9f22-a272-72ae-6873-52a23afc0b98/mzaf_10354636981390731246.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/29/a7/3f/29a73f03-a1b5-c8f0-0df7-8dfe107bf929/653738300326_Cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-86',
+    title: 'Mama Said',
+    artist: 'Lukas Graham',
+    year: 2013,
+    category: 'danish',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cf/d1/db/cfd1dbb9-321a-ab90-da37-b29679a1f109/mzaf_12099054444687301675.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music69/v4/1f/57/08/1f57082e-ee7e-dcb7-a73e-ba1f3468211d/093624920496.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-155',
+    title: 'Dance Monkey',
+    artist: 'Tones and I',
+    year: 2019,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/43/1a/32/431a3203-7e62-c7b1-0377-824aded16096/mzaf_7471896698419931094.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/87/ed/42/87ed4279-d8d7-840f-90b5-2bffe34699ef/075679839237.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-156',
+    title: 'Stay',
+    artist: 'The Kid LAROI & Justin Bieber',
+    year: 2021,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/4a/84/d74a84d5-9afa-761e-b632-baab55c2a23b/mzaf_11865500880477235553.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-157',
+    title: 'Heat Waves',
+    artist: 'Glass Animals',
+    year: 2020,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a3/4c/b9/a34cb911-40fc-5f0c-e862-14bd171a77aa/mzaf_384792072030970151.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/8b/77/da8b7731-6f4f-eacf-5e74-8b23389eefa1/20UMGIM03371.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-158',
+    title: 'Die with a Smile',
+    artist: 'Lady Gaga & Bruno Mars',
+    year: 2024,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/11/ae/f2/11aef294-f57c-bab9-c9fc-529162984e62/24UMGIM85348.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-87',
+    title: 'Joanna',
+    artist: 'Kim Larsen',
+    year: 1994,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f6/ee/21/f6ee2186-2ba4-267b-5157-e89b80b1b7af/mzaf_13849823395160240490.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/d0/59/2f/d0592f92-6099-7c22-ffea-0534ac15e750/724347737350.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-88',
+    title: 'Movie klip',
+    artist: 'Nephew',
+    year: 2004,
+    category: 'danish',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a1/66/d5/a166d5c6-1724-70b9-8d90-98950a83ef78/mzaf_2560095064096787481.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/e5/50/07/e55007cc-57d0-a116-db22-32a6fb2e87e4/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-89',
+    title: 'Hjertestarter',
+    artist: 'Nephew',
+    year: 2006,
+    category: 'danish',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b8/90/b9/b890b983-9ce5-81ee-62c7-9747c21b0dcd/mzaf_9138616797569987601.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music2/v4/f4/8a/8b/f48a8bdf-0e14-823f-4006-aa11febdb4bd/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-90',
+    title: 'Superliga',
+    artist: 'Nephew',
+    year: 2004,
+    category: 'danish',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/46/41/13/46411397-9740-b678-431f-3e3ef765fe04/mzaf_6157319744116110513.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/e5/50/07/e55007cc-57d0-a116-db22-32a6fb2e87e4/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-91',
+    title: 'Ensom',
+    artist: 'Medina',
+    year: 2011,
+    category: 'danish',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/28/d9/04/28d9040b-fc39-371c-8511-4fa20bdd149d/mzaf_6263224384933379665.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/c9/e9/69/c9e969f9-5641-6230-59d4-b59c0aeda566/12UMGIM45177.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-92',
+    title: 'Velkommen Til',
+    artist: 'Medina',
+    year: 2011,
+    category: 'danish',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/77/61/a8/7761a8a6-609c-6b4d-c61d-b3e0fe5816fe/mzaf_17418921889545652929.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/c9/e9/69/c9e969f9-5641-6230-59d4-b59c0aeda566/12UMGIM45177.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'dk-93',
+    title: 'Der Står et Billede af Dig på Mit Bord',
+    artist: 'Rollo & King',
+    year: 2001,
+    category: 'danish',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2d/25/eb/2d25eb87-3dc4-742b-b944-934122d604e2/mzaf_13658317226329212484.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e1/95/df/e195dff8-ab9b-63ae-9cdb-2c069fa43c45/cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-159',
+    title: 'Sweet Dreams',
+    artist: 'La Bouche',
+    year: 1994,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/38/b4/27/38b4276a-2c91-04ef-91ac-6daf6f1da8d5/mzaf_1369015179669181373.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b5/05/5f/b5055fdc-603f-c221-e638-2b02dd3aa374/886444522168.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-160',
+    title: 'Mr. Vain',
+    artist: 'Culture Beat',
+    year: 1993,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a9/45/66/a9456645-8db6-81d1-4eb3-bbd68018d258/mzaf_16304234407853947250.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e0/1d/08/e01d0889-6a71-6ee3-2d73-93ad352b1621/mzi.ytgznrel.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-161',
+    title: 'No Limit',
+    artist: '2 Unlimited',
+    year: 1993,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0c/95/4a/0c954a6c-460b-93af-cb29-2297473daf9c/mzaf_17883674619305657774.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/b7/9e/9a/b79e9ae3-8927-c3ca-5f46-c745beb0367b/8718723129497.png/600x600bb.jpg'
+  },
+  {
+    id: 'dk-94',
+    title: 'Turn Back Time',
+    artist: 'Aqua',
+    year: 1998,
+    category: 'danish',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/af/91/7f/af917f7d-2d15-4266-3c0c-d95029164046/mzaf_4456840393305483101.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/e0/d0/42e0d00a-b4da-3590-b3b2-6decf900184d/06UMGIM39320.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-162',
+    title: 'Show Me Love',
+    artist: 'Robin S',
+    year: 1993,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3d/9b/60/3d9b6006-4a60-7604-bb1b-f515518d9ec8/mzaf_5260090549366773808.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8f/fc/e8/8ffce812-173c-5d0d-a264-07f81247c212/mzi.cdsdlqei.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-163',
+    title: 'Everybody (Backstreet\'s Back)',
+    artist: 'Backstreet Boys',
+    year: 1997,
+    category: 'international',
+    decade: '90s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d1/82/02/d1820294-fe9c-5efe-be63-392477ab50b5/mzaf_13533494848412286991.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/59/00/53/59005338-772d-2dd7-e2ff-674484629337/012414158925.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-164',
+    title: 'Bye Bye Bye',
+    artist: 'NSYNC',
+    year: 2000,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/a8/c2/6aa8c264-c7f8-5db7-4b52-808abf96156d/mzaf_15046152716316545247.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/36/22/d6/3622d665-873c-57b8-392b-971292e6086f/012414170224.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-165',
+    title: 'Oops!... I Did It Again',
+    artist: 'Britney Spears',
+    year: 2000,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d8/fa/77/d8fa770b-a342-c0e9-9af2-8807c8e236b8/mzaf_16428789446546576226.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d5/9d/97/d59d9769-1369-854f-1681-4901a6d8361b/012414170422.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-166',
+    title: 'Beautiful Day',
+    artist: 'U2',
+    year: 2000,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/29/ec/84/29ec846c-769f-91f2-5e28-768fa9de514b/mzaf_17613297004823866094.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/05/78/89/0578893b-9dac-d88a-ee9b-3c42ac40b6a0/17UMGIM95495.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-167',
+    title: 'Drops of Jupiter',
+    artist: 'Train',
+    year: 2001,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/ac/9d/66ac9dde-e1b8-0f0e-f62c-d1da58197639/mzaf_3991580136101746704.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/1c/22/ae/1c22ae8d-a7e7-cfc5-c2c8-ef5b38c9fa03/5099706988823.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-168',
+    title: 'Fallin\'',
+    artist: 'Alicia Keys',
+    year: 2001,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/39/22/91/392291b5-39f1-8189-3a9b-924361e70776/mzaf_5017281125172140671.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/bb/4d/55/bb4d552c-04d8-29ba-1b41-6ff8bcd199a5/808132000222.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-169',
+    title: 'Complicated',
+    artist: 'Avril Lavigne',
+    year: 2002,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d5/82/55/d58255cd-4bd1-c339-1584-591e9d1305ee/mzaf_14546367220838781682.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/2c/f3/322cf324-9ea1-3962-865a-f4f9bf83764d/888880191069.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-170',
+    title: 'Feel Good Inc.',
+    artist: 'Gorillaz',
+    year: 2005,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9a/a7/90/9aa790e3-651e-9674-26ac-14aba4d3b8d1/mzaf_10454527198707970464.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/1c/0f/81/1c0f818a-e458-dd84-6f1b-ccbdf5fe14d6/825646291045.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-171',
+    title: 'American idiot',
+    artist: 'Green Day',
+    year: 2004,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/f1/d0/86f1d039-f2d6-2f5b-b34b-2b63504fa6d0/mzaf_3363059623415356317.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/0e/17/f0/0e17f011-aadf-d4d1-1c7e-b61ce39f968b/093624947301.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-172',
+    title: 'Fix You',
+    artist: 'Coldplay',
+    year: 2005,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/42/e3/e542e340-a45c-695e-e0b8-6155e222ebc0/mzaf_14955746616030397665.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/0c/82/48/0c8248a8-4a5b-d30d-8056-f32d650d2fc9/190295978068.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-173',
+    title: 'Bad Romance',
+    artist: 'Lady Gaga',
+    year: 2009,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/54/f0/1b54f0b7-db6a-1a40-6af8-4ae4650d8d6d/mzaf_2782647211171496826.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/1f/25/c4/1f25c4bf-7f7a-ff26-8769-20ab6052dadf/09UMGIM40719.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-174',
+    title: 'TiK ToK',
+    artist: 'Kesha',
+    year: 2009,
+    category: 'international',
+    decade: '00s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ca/c4/5d/cac45d18-3920-16ab-33b9-5b85cc5e394b/mzaf_18125601085374059686.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/92/d2/a7/92d2a780-3aa9-8b58-b753-62e4175dd2ec/884977451856.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-175',
+    title: 'Firework',
+    artist: 'Katy Perry',
+    year: 2010,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ab/27/3b/ab273b22-1eb1-dd49-5332-5ef70c35683b/mzaf_4912325324633099647.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/c8/d3/42/c8d342af-26d9-3ec2-c511-e1eaf860e299/13UABIM57787.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-176',
+    title: 'Grenade',
+    artist: 'Bruno Mars',
+    year: 2010,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/56/70/01/567001be-26a3-6c61-cfe2-8184800dc347/mzaf_12349500431513219850.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/52/b1/45/52b1452b-229e-78db-231b-7b43fa0077cc/075679956491.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-177',
+    title: 'Just the Way You Are',
+    artist: 'Bruno Mars',
+    year: 2010,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/04/c9/ee/04c9eeea-24ca-2198-17ea-c1c1436cb953/mzaf_16637738980836746910.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/52/b1/45/52b1452b-229e-78db-231b-7b43fa0077cc/075679956491.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-178',
+    title: 'Titanium',
+    artist: 'David Guetta ft. Sia',
+    year: 2011,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/dd/8f/45dd8ffc-0164-1f70-c53d-bf91a1d80b1a/mzaf_3092057092144618662.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/99/b4/7b/99b47bd8-2b22-e1ef-2e60-c5147f27a861/dj.thrvmjqj.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-179',
+    title: 'Locked Out of Heaven',
+    artist: 'Bruno Mars',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d5/05/04/d5050434-1278-6b8e-9cd8-6261ea319fd1/mzaf_9746689865251353718.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e0/a4/7c/e0a47c6f-005a-9f9f-ce29-8e858e2bcfcb/075679957283.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-180',
+    title: 'Radioactive',
+    artist: 'Imagine Dragons',
+    year: 2012,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/77/70/88/777088e9-60a1-c459-bfa5-6e66f2fd2695/mzaf_7685408661765681881.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-181',
+    title: 'Counting Stars',
+    artist: 'OneRepublic',
+    year: 2013,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/db/7f/b0db7fbe-f8ff-1f67-fe72-ca8185ffbca2/mzaf_15298650366584767800.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/25/46/a7/2546a71a-b2bb-b4c9-4c52-a4daa3ae23ca/13UMGIM15076.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-182',
+    title: 'Sugar',
+    artist: 'Maroon 5',
+    year: 2014,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1b/3f/68/1b3f68e0-3c42-f367-cd0f-e46c746e0668/mzaf_15052021441666328650.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b7/25/76/b72576f1-072e-3da2-60d5-2724a9bccf4a/14UMGIM31673.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-183',
+    title: 'Love Yourself',
+    artist: 'Justin Bieber',
+    year: 2015,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b6/fc/58/b6fc5860-ee45-7966-3e22-d6445acc933e/mzaf_1716189482689106429.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/75/11/84/751184b0-77df-1eff-bb20-dac03247425d/15UMGIM59808.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-184',
+    title: 'Sorry',
+    artist: 'Justin Bieber',
+    year: 2015,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/66/eb/29/66eb29c0-c2f9-d9df-8af3-3bf2562c9d7c/mzaf_4099789285264521999.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/75/11/84/751184b0-77df-1eff-bb20-dac03247425d/15UMGIM59808.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-185',
+    title: 'Havana',
+    artist: 'Camila Cabello',
+    year: 2017,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7d/42/fe/7d42fe40-78b9-c546-861e-bda5788bba4e/mzaf_7434858341023410545.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/85/28/70/85287029-19b9-cbe3-d1ab-300781875bf4/886446870298.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-186',
+    title: 'rockstar',
+    artist: 'Post Malone ft. 21 Savage',
+    year: 2017,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/37/94/223794d5-e415-e646-a1c6-a52f178f9c82/mzaf_4256851832513251175.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/55/9f/fb/559ffb75-3c00-abd6-7b1f-8b6b1518b173/18UMGIM22101.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-187',
+    title: 'Believer',
+    artist: 'Imagine Dragons',
+    year: 2017,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c0/3f/36/c03f367a-b66b-fd0a-a54c-30f8250c4410/mzaf_12768434238801682952.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/7a/b8/117ab805-6811-8929-18b9-0fad7baf0c25/17UMGIM98210.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-188',
+    title: 'Dynamite',
+    artist: 'BTS',
+    year: 2020,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/cf/fd/63cffd1b-1f32-0d6b-afba-d445b91271bc/mzaf_9755088333292945190.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2b/f6/82/2bf682ab-f6c5-a82e-d204-306faede272e/198704579318_Cover.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-189',
+    title: 'Save Your Tears',
+    artist: 'The Weeknd',
+    year: 2020,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8b/38/17/8b3817e4-c0e9-7e02-2654-3e2ecee93603/mzaf_18415642125637540903.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/83/3a/f7/833af71b-2e0c-3303-24f5-8f5c546c073b/20UMGIM21167.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-190',
+    title: 'Peaches',
+    artist: 'Justin Bieber',
+    year: 2021,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c9/6d/b1/c96db138-df15-d3d1-ef9d-98ef9d350960/mzaf_9411021956242812289.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e0/92/da/e092da2d-9f6d-11dc-7843-2021e95a2b61/21UMGIM17518.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-191',
+    title: 'Birds of a Feather',
+    artist: 'Billie Eilish',
+    year: 2024,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/31/d3/3431d34e-847f-5d66-df83-0bce688d997e/mzaf_18106743962423782018.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-192',
+    title: 'I Had Some Help',
+    artist: 'Post Malone ft. Morgan Wallen',
+    year: 2024,
+    category: 'international',
+    decade: '20s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1f/70/04/1f7004b7-414e-a89c-0148-abdd38981be8/mzaf_10246855408392712577.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/84/df/b9/84dfb96b-27c8-4d40-4780-b65ff22790e4/24UMGIM50612.rgb.jpg/600x600bb.jpg'
+  },
+  {
+    id: 'int-193',
+    title: 'Riptide',
+    artist: 'Vance Joy',
+    year: 2013,
+    category: 'international',
+    decade: '10s',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1e/de/ea/1edeea50-c0f4-9d95-f0b8-b23a1af561db/mzaf_6343110017276582270.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7a/1c/65/7a1c6571-34e9-bb77-32be-90c72ba003c0/075679920355.jpg/600x600bb.jpg'
   }
 ];
