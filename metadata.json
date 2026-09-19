@@ -1,0 +1,6 @@
+{
+  "name": "Hitster Musik Quiz",
+  "description": "Gæt årstal og placér internationale og danske hits på din tidslinje i denne Hitster spilclone.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

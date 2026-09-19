@@ -1,0 +1,79 @@
+name: Deploy to Simply
+
+on:
+  # Hæng af CI: deploy kører først når CI er grøn på main (ikke parallelt med CI).
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:          # tillader manuel kørsel fra GitHub UI
+
+# Kun én deploy ad gangen, så to samtidige pushes ikke slås om IIS-sitet.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Deploy kun når den udløsende CI-kørsel lykkedes (workflow_dispatch har ingen
+    # workflow_run-kontekst, så den lukkes også igennem).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: windows-latest
+    environment: production     # binder til GitHub Environment "production"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Deploy præcis den commit CI validerede (ikke bare tip of main).
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Vite bygger den statiske SPA til ./dist (inkl. public/web.config).
+      - name: Build
+        run: npm run build
+
+      # Synkronisér dist/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes
+      # direkte, fordi Simplys WMSVC-brugere kun har contentPath-rettigheder på
+      # deres eget site. Statisk site → ingen dotnet publish, ingen app pool-restart.
+      - name: Deploy to Simply via Web Deploy
+        shell: pwsh
+        env:
+          WEBDEPLOY_URL: ${{ secrets.SIMPLY_WEBDEPLOY_URL }}
+          WEBDEPLOY_SITE: ${{ secrets.SIMPLY_WEBDEPLOY_SITE }}
+          WEBDEPLOY_USERNAME: ${{ secrets.SIMPLY_WEBDEPLOY_USERNAME }}
+          WEBDEPLOY_PASSWORD: ${{ secrets.SIMPLY_WEBDEPLOY_PASSWORD }}
+        run: |
+          $msdeploy = "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          if (-not (Test-Path $msdeploy)) {
+            $msdeploy = "${env:ProgramFiles(x86)}\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          }
+          if (-not (Test-Path $msdeploy)) {
+            Write-Error "msdeploy.exe not found on the runner"
+            exit 1
+          }
+
+          # Byg hvert argument som én samlet streng (PowerShells komma-split
+          # kolliderer ellers med msdeploys komma-separerede provider-settings).
+          $source = "-source:contentPath=$PWD\dist"
+          $dest = "-dest:contentPath=$($env:WEBDEPLOY_SITE),computerName=https://$($env:WEBDEPLOY_URL):8172/msdeploy.axd?site=$($env:WEBDEPLOY_SITE),userName=$($env:WEBDEPLOY_USERNAME),password=$($env:WEBDEPLOY_PASSWORD),authType=Basic"
+
+          & $msdeploy `
+            -verb:sync `
+            $source `
+            $dest `
+            -allowUntrusted `
+            -enableRule:AppOffline
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "msdeploy failed with exit code $LASTEXITCODE"
+            exit $LASTEXITCODE
+          }
