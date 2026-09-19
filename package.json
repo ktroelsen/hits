@@ -10,7 +10,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "check-songs": "tsx scripts/check-previews.ts",
-    "prune-songs": "tsx scripts/check-previews.ts --prune"
+    "prune-songs": "tsx scripts/check-previews.ts --prune",
+    "bake-songs": "tsx scripts/check-previews.ts --bake"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

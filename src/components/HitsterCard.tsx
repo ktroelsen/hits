@@ -63,7 +63,7 @@ export function HitsterCard({
     }
 
     // Direct snippet playback fallback
-    fetchSongAudioPreview(song.artist, song.title).then((res) => {
+    fetchSongAudioPreview(song).then((res) => {
       if (res.previewUrl) {
         if (!audioRef.current) {
           audioRef.current = new Audio(res.previewUrl);

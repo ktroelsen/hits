@@ -48,7 +48,7 @@ export function TurntablePlayer({
     setIsLoading(true);
     setCurrentTime(0);
 
-    fetchSongAudioPreview(currentSong.artist, currentSong.title).then((res) => {
+    fetchSongAudioPreview(currentSong).then((res) => {
       if (isCancelled) return;
       setIsLoading(false);
       setPreviewUrl(res.previewUrl || null);

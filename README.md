@@ -2,7 +2,9 @@
 
 En Hitster-inspireret musik-gættequiz bygget som en statisk **React + TypeScript + Vite**-app.
 Gæt årstal og placér danske og internationale hits på tidslinjen. 30-sekunders lydklip hentes
-live fra iTunes Search API (ingen API-nøgle nødvendig), lydeffekter genereres i browseren.
+fra iTunes Search API (ingen API-nøgle nødvendig), lydeffekter genereres i browseren.
+Previews kan bages ind i sang-dataene på forhånd (`npm run bake-songs`), så appen laver
+nul runtime-kald til Apple; ellers hentes de live og caches i browseren (localStorage).
 
 ## Kør lokalt
 
@@ -20,9 +22,10 @@ npm run build         # bygger den statiske app til ./dist
 npm run lint          # tsc --noEmit (typecheck)
 npm run check-songs   # tjekker alle sange mod iTunes (OK/MANGLER)
 npm run prune-songs   # fjerner sange uden iTunes-preview fra src/data/songs.ts
+npm run bake-songs    # skriver previewUrl + artworkUrl ind i src/data/songs.ts
 ```
 
-> `check-songs`/`prune-songs` kalder iTunes Search og skal køres fra et netværk der ikke er
+> `check-songs`/`prune-songs`/`bake-songs` kalder iTunes Search og skal køres fra et netværk der ikke er
 > blokeret (nogle CI/sandbox-IP'er får 403). Ved usikkert svar beholdes sangen (ingen sletning).
 
 ## CI/CD (GitHub Actions)
