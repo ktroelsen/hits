@@ -73,17 +73,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Shu-bi-duas kærlige hyldest til menneskets bedste ven, en golden retriever.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/a1/76/12a17645-1c89-24c3-f6dc-73a9e71a6c31/mzaf_18145741039398385909.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a5/b1/f0/a5b1f0b1-8b04-7e3d-928f-624f5bfb7eca/5712192290484.png/600x600bb.jpg'
-  },
-  {
-    id: 'dk-7',
-    title: 'Katten På Vejen',
-    artist: 'Otto Brandenburg',
-    year: 1960,
-    category: 'danish',
-    decade: '60s',
-    genre: 'Schlager',
-    funFact: 'Otto Brandenburg var Danmarks første ægte teenageidol og rock\'n\'roll-stjerne.'
-  },
+  },
   {
     id: 'dk-8',
     title: 'Dansevise',
@@ -193,27 +183,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Peter A.G.s ikoniske dansetrin og gaderock gjorde sangen til et nationalsymbol for Aarhus.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/6c/c7/a96cc737-7dea-f17d-fbd0-b9f9dad2fb1b/mzaf_6249988094622620631.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f4/ec/fa/f4ecfa70-71db-ae56-4a19-e71870197a2c/743212617320.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-17',
-    title: 'Elsk Mig I Nat',
-    artist: 'Rocazino',
-    year: 1982,
-    category: 'danish',
-    decade: '80s',
-    genre: 'Synthpop',
-    funFact: 'Ulla Cold sang sig direkte ind i hjerterne på hele Danmark med dette synth-drevne megahit.'
-  },
-  {
-    id: 'dk-18',
-    title: 'Sig Du Ka\' Li\' Mig',
-    artist: 'Tøsedrengene',
-    year: 1982,
-    category: 'danish',
-    decade: '80s',
-    genre: 'Reggae/Pop',
-    funFact: 'Duet mellem Anne Dorte Michelsen og Maria Bramsen med et af 80\'ernes mest fængende omkvæd.'
-  },
+  },
   {
     id: 'dk-19',
     title: 'Kærligheden Kalder',
@@ -249,17 +219,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'En hyldest til hospitalsskibet Jutlandia som sejlede til Korea under Koreakrigen i 1951.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/14/7d/56/147d568a-feba-22ff-8691-636226154d67/mzaf_11303113183451116274.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e6/20/93/e6209354-7c45-7b3f-741a-6bd5dbeeaef2/5099995583457_1499x1499_274dpi.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-22',
-    title: 'Re-Sepp-Ten',
-    artist: 'VM Holdet (Dodo and the Dodos)',
-    year: 1986,
-    category: 'danish',
-    decade: '80s',
-    genre: 'Fodboldslager',
-    funFact: '"Vi er røde, vi er hvide" blev skrevet af Henrik Bødtcher og Jarl Friis-Mikkelsen til VM i Mexico \'86.'
-  },
+  },
   {
     id: 'dk-23',
     title: 'Vilde Kaniner',
@@ -357,17 +317,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Åbningsnummeret på Riskin\' It All med Stig Pedersens berømte to-strengede raketbas.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/6a/22/04/6a220484-104e-e1cc-1721-7e412d847ff9/mzaf_6098319173575522659.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/3c/e1/ba/mzi.exzplspy.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-31',
-    title: 'Han Tog Et Nattog',
-    artist: 'Souvenirs',
-    year: 1994,
-    category: 'danish',
-    decade: '90s',
-    genre: 'Pop',
-    funFact: 'Sofie Bonde og Nils Torp skabte denne muntre, jyske landevejsklassiker.'
-  },
+  },
   {
     id: 'dk-32',
     title: 'Doctor Jones',
@@ -513,17 +463,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Blev spillet i P3\'s KarriereKanonen og gjorde Johan Olsen og bandet landskendte fra den ene dag til den anden.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/db/7e/59/db7e596e-7d44-a2a6-7a94-8f40e803db84/mzaf_5190944786857188222.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/d2/39/71/d23971a1-23c7-4f67-844b-09b63267755a/cover.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-44',
-    title: 'Malene',
-    artist: 'Sys Bjerre',
-    year: 2008,
-    category: 'danish',
-    decade: '00s',
-    genre: 'Pop/Vise',
-    funFact: 'Hævnsangen hvor Sys klipper ekskærestens tøj i stykker og hælder tabs i hans akvarie.'
-  },
+  },
   {
     id: 'dk-45',
     title: 'Aïcha',
@@ -561,17 +501,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Niels Brandt og barndomsvennerne vandt KarriereKanonen og erobrede Parken gentagne gange.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ba/a0/89/baa0893a-fb3f-5027-ae3a-4f0e29a7f50a/mzaf_16099996743136354665.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/df/4b/a2df4b0b-207b-fb12-fa2b-eaf38d7a9ccd/886446798240.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-48',
-    title: 'C\'est La Vie',
-    artist: 'Gilli',
-    year: 2015,
-    category: 'danish',
-    decade: '10s',
-    genre: 'Urban/Afrobeat',
-    funFact: 'Startede bølgen af den nye britiske og afrobeat-inspirerede gaderap i Danmark.'
-  },
+  },
   {
     id: 'dk-49',
     title: 'For Evigt',
@@ -631,29 +561,9 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Med falset-vokal og funkguitar blev sangen Christophers helt store popgennembrud.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/45/99/48/45994879-3e97-1dc9-0625-00a2efce3347/mzaf_14034684024197263506.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/5a/a7/d1/5aa7d1bd-c136-09ca-9f31-1d5754d6c68e/825646328888.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-54',
-    title: 'Tættere På Himlen',
-    artist: 'Burhan G ft. Nik & Jay',
-    year: 2010,
-    category: 'danish',
-    decade: '10s',
-    genre: 'R&B/Pop',
-    funFact: 'Det romantiske samarbejde mellem Danmarks R&B-stjerne og Nik & Jay røg direkte til tops.'
-  },
+  },
 
-  // ==================== DANSKE HITS (20'erne) ====================
-  {
-    id: 'dk-55',
-    title: 'Stor Mand',
-    artist: 'Tobias Rahim & Andreas Odbjerg',
-    year: 2021,
-    category: 'danish',
-    decade: '20s',
-    genre: 'Pop',
-    funFact: 'Blev et af de største danske radiohits i nyere historie og vandt utallige priser.'
-  },
+  // ==================== DANSKE HITS (20'erne) ====================
   {
     id: 'dk-56',
     title: 'Mucki Bar',
@@ -665,17 +575,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Hyldest til Aarhus V og bodegaen Mucki Bar fra det monumentale album "Når sjælen kaster op".',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d2/ab/31/d2ab3133-f896-a2ed-6b96-07dec8e13145/mzaf_2955496750896154843.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/0a/76/88/0a7688d6-fb35-5258-f8fd-ad36d89842d1/886449836550.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-57',
-    title: 'I Morgen Er Der Også En Dag',
-    artist: 'Andreas Odbjerg',
-    year: 2021,
-    category: 'danish',
-    decade: '20s',
-    genre: 'Pop',
-    funFact: 'En trøstende hymne om håb og menneskelighed sunget med Odbjergs karakteristiske vokal.'
-  },
+  },
   {
     id: 'dk-58',
     title: 'Juice',
@@ -699,17 +599,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Brian Sivabalan skiftede mørk R&B ud med 80\'er-nostalgisk synthpop og fik årets største radiohit.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8a/9b/fc/8a9bfc32-b029-52b4-1cd6-a7596bd82e77/mzaf_1078094567606124375.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c0/f9/ec/c0f9ec14-8c5a-f07a-a686-196cab15d368/886448579762.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-60',
-    title: 'Drøm Mig Væk',
-    artist: 'D1MA',
-    year: 2022,
-    category: 'danish',
-    decade: '20s',
-    genre: 'Hip Hop/Club',
-    funFact: 'Den maskerede artist slog igennem med en unik kombination af hård rap og eurodance-beats.'
-  },
+  },
 
   // ==================== INTERNATIONALE HITS (60'erne & 70'erne) ====================
   {
@@ -1685,17 +1575,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Titelsangen fra den populære danske børnefilm af samme navn.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2b/63/4c/2b634cf1-ec41-7e72-2c89-3b0b2ad2c2e3/mzaf_1968384708364915341.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/8e/b6/63/mzi.ahdijzun.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-64',
-    title: 'Danser i måneskin',
-    artist: 'Gnags',
-    year: 1984,
-    category: 'danish',
-    decade: '80s',
-    genre: 'Rock',
-    funFact: 'Peter A.G.\'s tekst om at danse i måneskin er blevet et fast indslag til danske fester.'
-  },
+  },
   {
     id: 'dk-65',
     title: 'Kommer igen',
@@ -1755,27 +1635,7 @@ export const HITSTER_SONGS: Song[] = [
     funFact: 'Christophers debutsingle, der lancerede hans karriere som dansk popstjerne.',
     previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8f/68/a0/8f68a0f4-1557-5425-68df-4bca4452b860/mzaf_8059405843989263025.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8d/1f/ad/8d1fad30-88cf-5683-d596-cf8681e33fea/886447386330.jpg/600x600bb.jpg'
-  },
-  {
-    id: 'dk-70',
-    title: 'Det er knald eller fald',
-    artist: 'The Minds of 99',
-    year: 2018,
-    category: 'danish',
-    decade: '10s',
-    genre: 'Indie Rock',
-    funFact: 'Bandet fyldte senere Parken to gange i træk som det første danske rockband uden opvarmning.'
-  },
-  {
-    id: 'dk-71',
-    title: 'Ikk\' mere tvivl',
-    artist: 'Andreas Odbjerg',
-    year: 2020,
-    category: 'danish',
-    decade: '20s',
-    genre: 'Pop',
-    funFact: 'Gennembrudssangen der gjorde Andreas Odbjerg til et af dansktoppens største nye navne.'
-  },
+  },
   {
     id: 'dk-72',
     title: 'De første kærester på månen',
