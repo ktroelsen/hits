@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Navbar } from './components/Navbar';
 import { TurntablePlayer } from './components/TurntablePlayer';
 import { TimelineView } from './components/TimelineView';
 import { PlayerBar } from './components/PlayerBar';
@@ -442,15 +441,6 @@ export default function App() {
 
   return (
     <div className="min-h-dvh md:h-dvh bg-slate-950 text-slate-100 flex flex-col md:overflow-hidden selection:bg-pink-500 selection:text-white">
-      {/* Top Navigation */}
-      <Navbar
-        settings={settings}
-        onOpenSettings={() => setIsSetupOpen(true)}
-        onOpenRules={() => setIsRulesOpen(true)}
-        onOpenSongCatalog={() => setIsCatalogOpen(true)}
-        onRestartCurrentGame={() => initializeGame()}
-      />
-
       {/* Main Content Area */}
       <main className="md:flex-1 md:min-h-0 max-w-7xl w-full mx-auto px-3 sm:px-4 py-2 flex flex-col gap-2">
         {settings.mode === 'dj' ? (
@@ -468,8 +458,6 @@ export default function App() {
               players={players}
               activePlayerIndex={activePlayerIndex}
               settings={settings}
-              canUseTokens={phase === 'listening'}
-              onUseToken={handleUseToken}
             />
 
             {/* Timeline View (the game board / spilleplade) — hero directly below standings */}

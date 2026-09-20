@@ -224,101 +224,79 @@ export function TimelineView({
         ))}
       </div>
 
-      {/* Guess controls (year tags + input) + confirm — below the board */}
+      {/* Guess controls (year tags + input) + confirm — all on one bar below the board */}
       {isPlacingPhase && (
-        <div className="shrink-0 flex flex-col gap-2">
-          <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-wrap items-center gap-x-2 gap-y-1.5 shadow-inner">
-            <div className="flex items-center gap-1.5 mr-1">
-              <Calendar className="w-4 h-4 text-pink-400" />
-              <span className="text-xs font-bold text-slate-200">Gæt årstal:</span>
-            </div>
-
-            {/* Quick Decade tags */}
-            {DECADES.map((dec) => {
-              const isSelected =
-                currentNumericYear >= dec.year - 5 && currentNumericYear <= dec.year + 4;
-              return (
-                <button
-                  key={dec.label}
-                  type="button"
-                  onClick={() => handleYearChange(dec.year)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold font-mono border transition-all ${
-                    isSelected
-                      ? 'bg-pink-600 border-pink-500 text-white shadow-md shadow-pink-500/20'
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                  }`}
-                >
-                  {dec.label}
-                </button>
-              );
-            })}
-
-            {/* Stepper + exact year input */}
-            <div className="flex items-center gap-2 ml-auto">
-              <button
-                type="button"
-                onClick={() => handleYearChange(currentNumericYear - 1)}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-                title="1 år tilbage"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-
-              <div className="relative">
-                <input
-                  type="number"
-                  min="1960"
-                  max="2026"
-                  value={yearGuessInput || currentNumericYear.toString()}
-                  onChange={(e) => handleYearChange(parseInt(e.target.value, 10) || 1990)}
-                  className="w-24 text-center text-lg font-black font-mono text-amber-300 bg-slate-900 border-2 border-amber-500/40 focus:border-amber-400 rounded-xl py-1 px-2 shadow-inner focus:outline-none"
-                />
-                <span className="absolute -top-2 right-2 px-1 text-[9px] font-bold bg-amber-500 text-slate-950 rounded">
-                  ÅR
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleYearChange(currentNumericYear + 1)}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-                title="1 år frem"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
+        <div className="shrink-0 p-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-wrap items-center gap-x-2 gap-y-1.5 shadow-inner">
+          <div className="flex items-center gap-1.5 mr-1">
+            <Calendar className="w-4 h-4 text-pink-400" />
+            <span className="text-xs font-bold text-slate-200">Gæt årstal:</span>
           </div>
 
-          {/* Decision confirmation bar */}
-          <div className="p-2.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 animate-in fade-in">
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <span className="text-xs font-bold text-slate-300">
-                {selectedIndex !== null ? (
-                  <span className="flex items-center gap-1.5 text-pink-400">
-                    <Check className="w-4 h-4" />
-                    Valgt placering:{' '}
-                    <strong className="text-white font-mono bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
-                      {slots[selectedIndex]?.label}
-                    </strong>
-                  </span>
-                ) : (
-                  <span className="text-slate-400">
-                    Vælg et årstal eller klik på et felt på spillepladen...
-                  </span>
-                )}
+          {/* Quick Decade tags */}
+          {DECADES.map((dec) => {
+            const isSelected =
+              currentNumericYear >= dec.year - 5 && currentNumericYear <= dec.year + 4;
+            return (
+              <button
+                key={dec.label}
+                type="button"
+                onClick={() => handleYearChange(dec.year)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold font-mono border transition-all ${
+                  isSelected
+                    ? 'bg-pink-600 border-pink-500 text-white shadow-md shadow-pink-500/20'
+                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                }`}
+              >
+                {dec.label}
+              </button>
+            );
+          })}
+
+          {/* Stepper + exact year input */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleYearChange(currentNumericYear - 1)}
+              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+              title="1 år tilbage"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+
+            <div className="relative">
+              <input
+                type="number"
+                min="1960"
+                max="2026"
+                value={yearGuessInput || currentNumericYear.toString()}
+                onChange={(e) => handleYearChange(parseInt(e.target.value, 10) || 1990)}
+                className="w-20 text-center text-lg font-black font-mono text-amber-300 bg-slate-900 border-2 border-amber-500/40 focus:border-amber-400 rounded-xl py-1 px-2 shadow-inner focus:outline-none"
+              />
+              <span className="absolute -top-2 right-2 px-1 text-[9px] font-bold bg-amber-500 text-slate-950 rounded">
+                ÅR
               </span>
             </div>
 
             <button
-              id="confirm-placement-btn"
-              onClick={onConfirmPlacement}
-              disabled={selectedIndex === null}
-              className="w-full sm:w-auto px-6 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
+              type="button"
+              onClick={() => handleYearChange(currentNumericYear + 1)}
+              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+              title="1 år frem"
             >
-              <span>Afslør & Tjek Placering</span>
-              <ArrowRight className="w-4 h-4" />
+              <Plus className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Reveal & check placement */}
+          <button
+            id="confirm-placement-btn"
+            onClick={onConfirmPlacement}
+            disabled={selectedIndex === null}
+            className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
+          >
+            <span>Afslør &amp; Tjek Placering</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       )}
 

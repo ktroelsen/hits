@@ -1,35 +1,22 @@
-import { Coins, Sparkles, User, RefreshCw, Trophy } from 'lucide-react';
+import { Coins } from 'lucide-react';
 import { Player, GameSettings } from '../types';
 
 interface PlayerBarProps {
   players: Player[];
   activePlayerIndex: number;
   settings: GameSettings;
-  canUseTokens: boolean;
-  onUseToken: (action: 'skip' | 'hint') => void;
-  onSelectPlayer?: (index: number) => void;
 }
 
 export function PlayerBar({
   players,
   activePlayerIndex,
   settings,
-  canUseTokens,
-  onUseToken,
 }: PlayerBarProps) {
-  const activePlayer = players[activePlayerIndex];
-
   return (
     <div id="player-bar" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-2.5 backdrop-blur-md">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
         {/* Players / Teams List */}
         <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 w-full sm:w-auto">
-          {/* Shared timeline badge */}
-          <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/70 border border-slate-800 text-[11px] font-semibold text-slate-300 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-pink-500" />
-            <span>Fælles Tidslinje</span>
-          </div>
-
           {players.map((player, idx) => {
             const isActive = idx === activePlayerIndex;
             const cardCount = player.score ?? player.timeline.length;
@@ -90,23 +77,6 @@ export function PlayerBar({
               </div>
             );
           })}
-        </div>
-
-        {/* Active Player Actions & Token Use */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            id="use-token-skip-btn"
-            onClick={() => onUseToken('skip')}
-            disabled={!canUseTokens || activePlayer.tokens <= 0}
-            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-40 disabled:pointer-events-none border border-slate-700 transition-colors"
-            title="Brug 1 Hitster-token på at skifte sangen ud"
-          >
-            <RefreshCw className="w-3.5 h-3.5 text-pink-400" />
-            <span>Skift sang</span>
-            <span className="text-[10px] bg-amber-500/20 text-amber-300 px-1 rounded font-mono border border-amber-500/30">
-              -1 🪙
-            </span>
-          </button>
         </div>
       </div>
     </div>
