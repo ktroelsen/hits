@@ -45,7 +45,7 @@ export function TimelineSlot({
             ? 'bg-amber-950/80 text-amber-300 border-2 border-dashed border-amber-400 animate-bounce'
             : 'bg-slate-900/30 text-slate-700 border border-slate-800 pointer-events-none'
         }`}
-        style={{ width: expanded ? '68px' : '30px', height: '144px' }}
+        style={{ width: expanded ? '68px' : '30px', height: '128px' }}
       >
         {/* Indicator icon */}
         {isSelected ? (

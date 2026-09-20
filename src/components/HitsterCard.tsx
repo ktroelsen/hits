@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Pause, CheckCircle2, XCircle } from 'lucide-react';
+import { Play, Pause, CheckCircle2, XCircle } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview } from '../services/audioService';
 
@@ -85,7 +85,7 @@ export function HitsterCard({
   return (
     <div
       id={`hitster-card-${song.id}`}
-      className={`relative w-24 sm:w-28 h-36 overflow-hidden rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
+      className={`relative w-24 sm:w-28 h-32 overflow-hidden rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
         status === 'correct'
           ? 'ring-4 ring-emerald-500/80 border-emerald-400 bg-emerald-950/40'
           : status === 'wrong'
@@ -117,8 +117,24 @@ export function HitsterCard({
           </span>
         </div>
 
-        {/* Right side: Claimed by team / starter card badge (flag/globe now shown on the disc) */}
+        {/* Right side: Play button + claimed-by / starter badge */}
         <div className="flex flex-col items-end gap-1">
+          <button
+            onClick={handlePlayCard}
+            className={`flex items-center justify-center w-7 h-7 rounded-full border transition-colors shadow ${
+              isPlayingAudio
+                ? 'bg-pink-600 border-pink-400 text-white ring-2 ring-pink-500/40'
+                : 'bg-slate-950/70 border-slate-600/70 text-white hover:bg-pink-950/70 hover:border-pink-500/60'
+            }`}
+            title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
+          >
+            {isPlayingAudio ? (
+              <Pause className="w-3.5 h-3.5 fill-current" />
+            ) : (
+              <Play className="w-3.5 h-3.5 ml-0.5 fill-current" />
+            )}
+          </button>
+
           {claimedBy ? (
             <div
               className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border shadow-xs"
@@ -147,54 +163,29 @@ export function HitsterCard({
         </div>
       </div>
 
-      {/* Center: Vinyl disc mini art or music icon */}
-      <div className="relative z-10 my-auto flex flex-col items-center justify-center">
-        <div className="relative w-9 h-9 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-          {/* Concentric lines */}
-          <div className="absolute inset-1.5 rounded-full border border-slate-800 pointer-events-none" />
-          <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
-          </div>
-
-          {/* Quick Play Button on Card */}
-          <button
-            onClick={handlePlayCard}
-            className={`absolute inset-0 rounded-full bg-slate-950/60 hover:bg-slate-950/40 flex items-center justify-center text-white transition-opacity backdrop-blur-xs ${
-              isPlayingAudio ? 'opacity-100 ring-2 ring-pink-500' : 'opacity-90 group-hover:opacity-100'
-            }`}
-            title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
-          >
-            {isPlayingAudio ? (
-              <Pause className="w-5 h-5 text-pink-400 fill-current" />
-            ) : (
-              <span className="text-base leading-none" aria-label={song.category === 'danish' ? 'Dansk hit' : 'Internationalt hit'}>
-                {song.category === 'danish' ? '🇩🇰' : '🌍'}
-              </span>
-            )}
-          </button>
+      {/* Optional result badge (only when a status is set, e.g. in modals) */}
+      {(status === 'correct' || status === 'wrong') && (
+        <div className="relative z-10 flex justify-center">
+          {status === 'correct' ? (
+            <div className="flex items-center gap-1 text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Korrekt!</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-rose-400 text-xs font-bold bg-rose-950/80 px-2 py-0.5 rounded-full border border-rose-500/40">
+              <XCircle className="w-3.5 h-3.5" />
+              <span>Forkert</span>
+            </div>
+          )}
         </div>
+      )}
 
-        {status === 'correct' && (
-          <div className="flex items-center gap-1 mt-2 text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Korrekt!</span>
-          </div>
-        )}
-
-        {status === 'wrong' && (
-          <div className="flex items-center gap-1 mt-2 text-rose-400 text-xs font-bold bg-rose-950/80 px-2 py-0.5 rounded-full border border-rose-500/40">
-            <XCircle className="w-3.5 h-3.5" />
-            <span>Forkert</span>
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Info: Title & Artist */}
+      {/* Bottom Info: Title & Artist — gets the room freed by removing the disc */}
       <div className="relative z-10 mt-auto pt-1.5 border-t border-slate-800/80">
-        <h4 className="font-bold text-white text-xs line-clamp-1 group-hover:text-pink-300 transition-colors">
+        <h4 className="font-bold text-white text-sm leading-snug line-clamp-2 group-hover:text-pink-300 transition-colors">
           {song.title}
         </h4>
-        <p className="text-slate-300 text-[11px] line-clamp-1 font-medium">
+        <p className="text-slate-300 text-xs line-clamp-1 font-medium mt-0.5">
           {song.artist}
         </p>
       </div>
