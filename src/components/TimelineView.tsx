@@ -320,7 +320,7 @@ export function TimelineView({
                 max="2026"
                 value={yearGuessInput || currentNumericYear.toString()}
                 onChange={(e) => handleYearChange(parseInt(e.target.value, 10) || 1990)}
-                className="w-20 text-center text-lg font-black font-mono text-amber-300 bg-slate-900 border-2 border-amber-500/40 focus:border-amber-400 rounded-xl py-1 px-2 shadow-inner focus:outline-none"
+                className="w-20 text-center text-lg font-black font-mono text-amber-300 bg-slate-900 border-2 border-amber-500/40 focus:border-amber-400 rounded-xl py-1 px-2 shadow-inner focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <span className="absolute -top-2 right-2 px-1 text-[9px] font-bold bg-amber-500 text-slate-950 rounded">
                 ÅR
