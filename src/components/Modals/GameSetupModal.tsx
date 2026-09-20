@@ -163,16 +163,15 @@ export function GameSetupModal({
 
               <button
                 type="button"
-                onClick={() => setMode('party')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                  mode === 'party'
-                    ? 'bg-amber-950/40 border-amber-500 ring-2 ring-amber-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                disabled
+                title="Kommer snart"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🥳 Fest / Holdkamp</span>
-                  {mode === 'party' && <Check className="w-4 h-4 text-amber-400" />}
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-amber-500/30 shrink-0">
+                    Kommer snart
+                  </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
                   Pass-and-play for 2+ hold. Skift tur ved DJ-pulten og stjæl kort fra modstanderne!
@@ -181,16 +180,15 @@ export function GameSetupModal({
 
               <button
                 type="button"
-                onClick={() => setMode('dj')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                  mode === 'dj'
-                    ? 'bg-cyan-950/40 border-cyan-500 ring-2 ring-cyan-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                disabled
+                title="Kommer snart"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🎧 Digital DJ Hjælper</span>
-                  {mode === 'dj' && <Check className="w-4 h-4 text-cyan-400" />}
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-cyan-500/30 shrink-0">
+                    Kommer snart
+                  </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
                   Brug appen som DJ til jeres fysiske Hitster brætspilskort eller fri musikquiz!
