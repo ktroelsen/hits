@@ -172,7 +172,7 @@ export function TimelineView({
 
       {/* THE GAME BOARD — cards flow onto multiple rows, no scrollbar (hero) */}
       <div
-        className="w-full md:flex-1 md:min-h-0 md:overflow-y-auto no-scrollbar py-1 px-1 flex flex-wrap items-center justify-center content-center gap-2"
+        className="w-full md:flex-1 md:min-h-0 md:overflow-y-auto no-scrollbar py-1 px-1 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1"
       >
         {/* Slot 0 (Before first card) */}
         <TimelineSlot
@@ -188,7 +188,7 @@ export function TimelineView({
 
         {/* Existing Cards & subsequent slots on shared timeline */}
         {timeline.map((entry, idx) => (
-          <div key={`${entry.song.id}-${idx}`} className="flex items-center gap-2 shrink-0">
+          <div key={`${entry.song.id}-${idx}`} className="flex items-center gap-1 shrink-0">
             {/* Song Card on Timeline - plays preview natively on the card */}
             <HitsterCard
               song={entry.song}
