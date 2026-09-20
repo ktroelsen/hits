@@ -201,24 +201,6 @@ export default function App() {
     setGameStarted(false);
   }, []);
 
-  // Start a fresh game from the start screen, using a catalog-picked song as the
-  // first mystery (so "Vælg til quiz" / play from the library enters the game).
-  const beginGameWithSong = useCallback(
-    (song: Song) => {
-      initializeGame();
-      setCurrentSong(song);
-      setPhase('listening');
-      setSelectedSlotIndex(null);
-      setYearGuessInput('');
-      setLastPlacementResult(null);
-      setAutoPlayArmed(true);
-      setIsCatalogOpen(false);
-      setGameStarted(true);
-      sfx.playNeedleDrop();
-    },
-    [initializeGame]
-  );
-
   const activePlayer = players[activePlayerIndex] || players[0];
 
   // Calculate the correct slot index for mystery song relative to the shared timeline
@@ -416,18 +398,6 @@ export default function App() {
     sfx.playFlip();
   };
 
-  // Select a specific song from the song library as the active quiz challenge
-  const handleSelectQuizSong = (song: Song) => {
-    setCurrentSong(song);
-    setPhase('listening');
-    setSelectedSlotIndex(null);
-    setYearGuessInput('');
-    setLastPlacementResult(null);
-    setIsCatalogOpen(false);
-    setAutoPlayArmed(true);
-    sfx.playNeedleDrop();
-  };
-
   // Mark a song as "missing music" — hide it from play now and across reloads.
   // Permanent deletion from songs.ts is done later via `npm run prune-songs`.
   const handleMarkMissingMusic = (song: Song) => {
@@ -491,7 +461,6 @@ export default function App() {
         <SongCatalogModal
           isOpen={isCatalogOpen}
           onClose={() => setIsCatalogOpen(false)}
-          onSelectAsQuizSong={beginGameWithSong}
           onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
           removedTick={removedTick}
         />
@@ -581,9 +550,6 @@ export default function App() {
       <SongCatalogModal
         isOpen={isCatalogOpen}
         onClose={() => setIsCatalogOpen(false)}
-        onSelectAsQuizSong={(s) => {
-          handleSelectQuizSong(s);
-        }}
         onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
         removedTick={removedTick}
       />

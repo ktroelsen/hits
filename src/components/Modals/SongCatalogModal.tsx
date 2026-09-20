@@ -8,7 +8,6 @@ import { Song } from '../../types';
 interface SongCatalogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectAsQuizSong?: (song: Song) => void;
   onMarkMissingMusic?: (song: Song) => void;
   removedTick?: number;
 }
@@ -16,7 +15,6 @@ interface SongCatalogModalProps {
 export function SongCatalogModal({
   isOpen,
   onClose,
-  onSelectAsQuizSong,
   onMarkMissingMusic,
   removedTick = 0,
 }: SongCatalogModalProps) {
@@ -98,7 +96,7 @@ export function SongCatalogModal({
               Hitster Sangbibliotek ({activeSongs.length} sange)
             </h3>
             <p className="text-xs text-slate-400">
-              Søg og vælg en bestemt sang til gætteleg eller lyt til uddrag
+              Søg i biblioteket og lyt til 30-sekunders uddrag
             </p>
           </div>
 
@@ -186,16 +184,6 @@ export function SongCatalogModal({
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0 ml-auto">
-                  {onSelectAsQuizSong && (
-                    <button
-                      onClick={() => onSelectAsQuizSong(song)}
-                      className="px-3 py-1.5 rounded-xl bg-pink-600/20 hover:bg-pink-600 text-pink-300 hover:text-white border border-pink-500/40 transition-all text-xs font-bold"
-                      title="Vælg denne sang som aktiv quiz-sang hvor I gætter årstallet"
-                    >
-                      Vælg til quiz
-                    </button>
-                  )}
-
                   <button
                     onClick={() => togglePreview(song)}
                     className={`p-2 rounded-xl transition-all ${
