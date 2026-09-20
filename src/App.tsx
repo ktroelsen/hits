@@ -42,6 +42,33 @@ const DEFAULT_PLAYERS: Player[] = [
   },
 ];
 
+// Draw a mystery song whose year is NOT already on the timeline, so no two cards
+// ever share a year. Pops colliding songs off the deck; if the deck runs dry it
+// rebuilds from `pool` (excluding already-used ids and taken years). Only if no
+// unique-year song exists at all does it fall back to any unused song.
+function pickMysterySong(
+  deck: Song[],
+  takenYears: Set<number>,
+  pool: Song[],
+  usedIds: Set<string>,
+): { song: Song | null; deck: Song[] } {
+  const d = [...deck];
+  while (d.length) {
+    const s = d.pop()!;
+    if (!takenYears.has(s.year)) return { song: s, deck: d };
+  }
+  const fresh = pool
+    .filter((s) => !usedIds.has(s.id) && !takenYears.has(s.year))
+    .sort(() => Math.random() - 0.5);
+  if (fresh.length) {
+    const s = fresh.pop()!;
+    return { song: s, deck: fresh };
+  }
+  const any = pool.filter((s) => !usedIds.has(s.id)).sort(() => Math.random() - 0.5);
+  const s = any.pop() ?? null;
+  return { song: s, deck: any };
+}
+
 export default function App() {
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [players, setPlayers] = useState<Player[]>(DEFAULT_PLAYERS);
@@ -133,13 +160,20 @@ export default function App() {
         timeline: [],
       }));
 
-      // Draw first mystery song for active player
-      const firstMystery = shuffled.pop() || null;
+      // Draw first mystery song for active player (year must differ from starter)
+      const takenYears = new Set(initialSharedTimeline.map((e) => e.song.year));
+      const usedIds = new Set(initialSharedTimeline.map((e) => e.song.id));
+      const { song: firstMystery, deck: deckAfterDraw } = pickMysterySong(
+        shuffled,
+        takenYears,
+        filtered,
+        usedIds,
+      );
 
       setSettings(activeSettings);
       setPlayers(updatedPlayers);
       setSharedTimeline(initialSharedTimeline);
-      setAvailableDeck(shuffled);
+      setAvailableDeck(deckAfterDraw);
       setCurrentSong(firstMystery);
       setActivePlayerIndex(0);
       setPhase('listening');
@@ -282,19 +316,16 @@ export default function App() {
 
   // Move to next turn
   const handleNextTurn = () => {
-    // Draw next song
-    let nextDeck = [...availableDeck];
-    if (nextDeck.length === 0) {
-      // Reshuffle all songs that aren't currently on the shared timeline
-      const usedIds = new Set<string>();
-      sharedTimeline.forEach((entry) => usedIds.add(entry.song.id));
-      if (currentSong) usedIds.add(currentSong.id);
-
-      const remaining = eligibleSongs.filter((s) => !usedIds.has(s.id));
-      nextDeck = [...remaining].sort(() => Math.random() - 0.5);
-    }
-
-    const nextMystery = nextDeck.pop() || null;
+    // Draw next song whose year is not already on the timeline
+    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+    if (currentSong) usedIds.add(currentSong.id);
+    const { song: nextMystery, deck: nextDeck } = pickMysterySong(
+      availableDeck,
+      takenYears,
+      eligibleSongs,
+      usedIds,
+    );
     const nextPlayerIndex = (activePlayerIndex + 1) % players.length;
 
     setAvailableDeck(nextDeck);
@@ -315,11 +346,15 @@ export default function App() {
 
     if (action === 'skip') {
       sfx.playToken();
-      let nextDeck = [...availableDeck];
-      if (nextDeck.length === 0) {
-        nextDeck = [...eligibleSongs].sort(() => Math.random() - 0.5);
-      }
-      const newMystery = nextDeck.pop() || null;
+      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+      const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+      if (currentSong) usedIds.add(currentSong.id);
+      const { song: newMystery, deck: nextDeck } = pickMysterySong(
+        availableDeck,
+        takenYears,
+        eligibleSongs,
+        usedIds,
+      );
 
       // Deduct 1 token
       setPlayers((prev) =>
@@ -336,13 +371,17 @@ export default function App() {
     }
   };
 
-  // Draw a new random song for current turn
+  // Draw a new random song for current turn (unique year vs the timeline)
   const handleDrawRandomSong = () => {
-    let nextDeck = [...availableDeck];
-    if (nextDeck.length === 0) {
-      nextDeck = [...eligibleSongs].sort(() => Math.random() - 0.5);
-    }
-    const newMystery = nextDeck.pop() || null;
+    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+    if (currentSong) usedIds.add(currentSong.id);
+    const { song: newMystery, deck: nextDeck } = pickMysterySong(
+      availableDeck,
+      takenYears,
+      eligibleSongs,
+      usedIds,
+    );
     setAvailableDeck(nextDeck);
     setCurrentSong(newMystery);
     setPhase('listening');
@@ -379,11 +418,12 @@ export default function App() {
           settings.categoryFilter === 'all' || s.category === settings.categoryFilter;
         return matchCat && settings.decades.includes(s.decade);
       });
+      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
       const usedIds = new Set<string>(sharedTimeline.map((e) => e.song.id));
-      const remaining = pool.filter((s) => !usedIds.has(s.id) && s.id !== song.id);
-      const shuffled = [...remaining].sort(() => Math.random() - 0.5);
-      setAvailableDeck(shuffled);
-      setCurrentSong(shuffled.pop() || null);
+      usedIds.add(song.id);
+      const { song: fresh, deck: freshDeck } = pickMysterySong([], takenYears, pool, usedIds);
+      setAvailableDeck(freshDeck);
+      setCurrentSong(fresh);
       setPhase('listening');
       setSelectedSlotIndex(null);
       setYearGuessInput('');
