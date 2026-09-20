@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Check,
   X,
@@ -7,6 +7,8 @@ import {
   Calendar,
   Minus,
   Plus,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from '../types';
 import { HitsterCard } from './HitsterCard';
@@ -52,6 +54,28 @@ export function TimelineView({
 }: TimelineViewProps) {
   // Active numeric year state for the stepper / tags
   const currentNumericYear = parseInt(yearGuessInput, 10) || 1995;
+
+  // Board zoom — lets players scale the cards up/down when many are on the board.
+  const [boardZoom, setBoardZoom] = useState<number>(() => {
+    try {
+      const v = parseFloat(localStorage.getItem('hitster-board-zoom') || '');
+      return v >= 0.5 && v <= 1.5 ? v : 1;
+    } catch {
+      return 1;
+    }
+  });
+
+  const changeZoom = (delta: number) => {
+    setBoardZoom((z) => {
+      const next = Math.min(1.5, Math.max(0.5, Math.round((z + delta) * 10) / 10));
+      try {
+        localStorage.setItem('hitster-board-zoom', String(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
 
   // Auto-select corresponding slot if none is selected yet
   useEffect(() => {
@@ -168,11 +192,36 @@ export function TimelineView({
             {activePlayer.name}'s tur
           </span>
         </h3>
+
+        {/* Board zoom controls */}
+        <div className="ml-auto flex items-center gap-1">
+          <button
+            onClick={() => changeZoom(-0.1)}
+            disabled={boardZoom <= 0.5}
+            title="Zoom ud"
+            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+          >
+            <ZoomOut className="w-4 h-4" />
+          </button>
+          <span className="text-[11px] font-mono font-semibold text-slate-400 w-9 text-center tabular-nums">
+            {Math.round(boardZoom * 100)}%
+          </span>
+          <button
+            onClick={() => changeZoom(0.1)}
+            disabled={boardZoom >= 1.5}
+            title="Zoom ind"
+            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+          >
+            <ZoomIn className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* THE GAME BOARD — cards flow onto multiple rows, no scrollbar (hero) */}
+      <div className="w-full md:flex-1 md:min-h-0 md:overflow-y-auto no-scrollbar">
       <div
-        className="w-full md:flex-1 md:min-h-0 md:overflow-y-auto no-scrollbar py-1 px-1 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1"
+        style={{ zoom: boardZoom }}
+        className="w-full py-1 px-1 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1"
       >
         {/* Slot 0 (Before first card) */}
         <TimelineSlot
@@ -222,6 +271,7 @@ export function TimelineView({
             />
           </div>
         ))}
+      </div>
       </div>
 
       {/* Guess controls (year tags + input) + confirm — all on one bar below the board */}
