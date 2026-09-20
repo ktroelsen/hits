@@ -504,6 +504,8 @@ export default function App() {
               onConfirmPlacement={handleConfirmPlacement}
               onNextTurn={handleNextTurn}
               onPlaySong={handlePlaySongInTurntable}
+              songStarted={autoPlayArmed}
+              onStartSong={() => setAutoPlayArmed(true)}
               yearGuessInput={yearGuessInput}
               onYearGuessChange={setYearGuessInput}
               lastPlacementResult={lastPlacementResult}

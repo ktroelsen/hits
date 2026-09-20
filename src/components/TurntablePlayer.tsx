@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, ListMusic, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview, sfx } from '../services/audioService';
 
@@ -361,19 +361,6 @@ export function TurntablePlayer({
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
-
-              {/* Choose specific song button */}
-              {onOpenSongPicker && (
-                <button
-                  id="pick-song-btn"
-                  onClick={onOpenSongPicker}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-800/90 hover:bg-pink-950/70 text-slate-300 hover:text-pink-300 border border-slate-700 hover:border-pink-500/50 transition-colors text-xs font-bold"
-                  title="Vælg en specifik sang fra det fulde sangkatalog"
-                >
-                  <ListMusic className="w-4 h-4 text-pink-400" />
-                  <span className="hidden sm:inline">Vælg sang</span>
-                </button>
-              )}
 
               {/* Draw new random song button */}
               {onDrawRandomSong && (

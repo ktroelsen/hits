@@ -9,6 +9,7 @@ import {
   Plus,
   ZoomIn,
   ZoomOut,
+  Play,
 } from 'lucide-react';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from '../types';
 import { HitsterCard } from './HitsterCard';
@@ -26,6 +27,8 @@ interface TimelineViewProps {
   onConfirmPlacement: () => void;
   onNextTurn: () => void;
   onPlaySong: (song: Song) => void;
+  songStarted: boolean;
+  onStartSong: () => void;
   yearGuessInput: string;
   onYearGuessChange: (val: string) => void;
   lastPlacementResult: {
@@ -48,6 +51,8 @@ export function TimelineView({
   onConfirmPlacement,
   onNextTurn,
   onPlaySong,
+  songStarted,
+  onStartSong,
   yearGuessInput,
   onYearGuessChange,
   lastPlacementResult,
@@ -337,16 +342,27 @@ export function TimelineView({
             </button>
           </div>
 
-          {/* Reveal & check placement */}
-          <button
-            id="confirm-placement-btn"
-            onClick={onConfirmPlacement}
-            disabled={selectedIndex === null}
-            className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
-          >
-            <span>Afslør &amp; Tjek Placering</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {/* First press starts the song; afterwards it reveals & checks the placement */}
+          {songStarted ? (
+            <button
+              id="confirm-placement-btn"
+              onClick={onConfirmPlacement}
+              disabled={selectedIndex === null}
+              className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Afslør &amp; Tjek Placering</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              id="start-song-btn"
+              onClick={onStartSong}
+              className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Start spillet</span>
+            </button>
+          )}
         </div>
       )}
 
