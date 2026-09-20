@@ -201,6 +201,24 @@ export default function App() {
     setGameStarted(false);
   }, []);
 
+  // Start a fresh game from the start screen, using a catalog-picked song as the
+  // first mystery (so "Vælg til quiz" / play from the library enters the game).
+  const beginGameWithSong = useCallback(
+    (song: Song) => {
+      initializeGame();
+      setCurrentSong(song);
+      setPhase('listening');
+      setSelectedSlotIndex(null);
+      setYearGuessInput('');
+      setLastPlacementResult(null);
+      setAutoPlayArmed(true);
+      setIsCatalogOpen(false);
+      setGameStarted(true);
+      sfx.playNeedleDrop();
+    },
+    [initializeGame]
+  );
+
   const activePlayer = players[activePlayerIndex] || players[0];
 
   // Calculate the correct slot index for mystery song relative to the shared timeline
@@ -473,11 +491,8 @@ export default function App() {
         <SongCatalogModal
           isOpen={isCatalogOpen}
           onClose={() => setIsCatalogOpen(false)}
-          onPlaySong={(s) => {
-            setIsCatalogOpen(false);
-            handlePlaySongInTurntable(s);
-          }}
-          onSelectAsQuizSong={(s) => handleSelectQuizSong(s)}
+          onPlaySong={beginGameWithSong}
+          onSelectAsQuizSong={beginGameWithSong}
           onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
           removedTick={removedTick}
         />
