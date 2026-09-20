@@ -29,7 +29,7 @@ export function StartScreen({
         </div>
 
         <h1 className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-display tracking-wider">
-          HITSTER
+          HITS
         </h1>
         <p className="mt-3 text-slate-300 text-base sm:text-lg font-medium">
           Gæt årstal & byg jeres fælles tidslinje

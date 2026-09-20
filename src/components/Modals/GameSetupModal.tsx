@@ -101,7 +101,7 @@ export function GameSetupModal({
             </div>
             <div>
               <h3 className="text-xl font-black text-white font-display">
-                Hitster Spilindstillinger
+                HITS Spilindstillinger
               </h3>
               <p className="text-xs text-slate-400">
                 Vælg spiltype, hold og sangkategorier
@@ -135,7 +135,7 @@ export function GameSetupModal({
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-bold text-sm text-white">🏆 Klassisk Hitster</span>
+                  <span className="font-bold text-sm text-white">🏆 Klassisk HITS</span>
                   {mode === 'timeline' && <Check className="w-4 h-4 text-pink-400" />}
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
@@ -191,7 +191,7 @@ export function GameSetupModal({
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
-                  Brug appen som DJ til jeres fysiske Hitster brætspilskort eller fri musikquiz!
+                  Brug appen som DJ til jeres fysiske HITS brætspilskort eller fri musikquiz!
                 </p>
               </button>
             </div>
@@ -278,7 +278,7 @@ export function GameSetupModal({
             <div className="grid grid-cols-3 gap-2.5">
               {[
                 { count: 5, label: '5 kort', sub: 'Hurtigt spil (10-15 min)' },
-                { count: 10, label: '10 kort', sub: 'Klassisk Hitster (20-30 min)' },
+                { count: 10, label: '10 kort', sub: 'Klassisk HITS (20-30 min)' },
                 { count: 15, label: '15 kort', sub: 'Maraton (45+ min)' },
               ].map((opt) => (
                 <button

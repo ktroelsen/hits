@@ -373,7 +373,7 @@ export function TimelineView({
                 {lastPlacementResult.isCorrect ? 'Rigtig placering!' : 'Øv, forkert placering!'}
                 {lastPlacementResult.yearBonus && (
                   <span className="text-[11px] bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                    <Coins className="w-3 h-3" /> +1 Hitster Token for præcist årstal ({mysterySong?.year})!
+                    <Coins className="w-3 h-3" /> +1 HITS Token for præcist årstal ({mysterySong?.year})!
                   </span>
                 )}
               </h4>

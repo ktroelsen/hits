@@ -201,7 +201,7 @@ export function TurntablePlayer({
               >
                 {!isRevealed && (
                   <div className="text-[9px] font-black text-white tracking-widest text-center uppercase drop-shadow">
-                    HITSTER
+                    HITS
                   </div>
                 )}
                 {/* Spindle hole */}
@@ -245,7 +245,7 @@ export function TurntablePlayer({
               id="toggle-blind-mode-btn"
               onClick={() => setBlindMode(!blindMode)}
               className="text-xs flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700"
-              title="I Hitster gætter man ud fra lyden alene! Skjul eller vis titlen"
+              title="I HITS gætter man ud fra lyden alene! Skjul eller vis titlen"
             >
               {blindMode ? (
                 <>

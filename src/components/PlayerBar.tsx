@@ -82,7 +82,7 @@ export function PlayerBar({
                 {/* Token Count */}
                 <div
                   className="flex items-center gap-1 ml-1 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-bold font-mono"
-                  title="Hitster Tokens (kan bruges til at skifte sang)"
+                  title="HITS Tokens (kan bruges til at skifte sang)"
                 >
                   <Coins className="w-3.5 h-3.5 text-amber-400" />
                   <span>{player.tokens}</span>

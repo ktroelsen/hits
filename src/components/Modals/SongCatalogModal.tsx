@@ -93,7 +93,7 @@ export function SongCatalogModal({
           <div>
             <h3 className="text-xl font-black text-white font-display flex items-center gap-2">
               <Disc className="w-5 h-5 text-pink-400" />
-              Hitster Sangbibliotek ({activeSongs.length} sange)
+              HITS Sangbibliotek ({activeSongs.length} sange)
             </h3>
             <p className="text-xs text-slate-400">
               Søg i biblioteket og lyt til 30-sekunders uddrag
