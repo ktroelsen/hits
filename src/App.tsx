@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Navbar } from './components/Navbar';
+import { useState, useMemo, useCallback } from 'react';
 import { TurntablePlayer } from './components/TurntablePlayer';
 import { TimelineView } from './components/TimelineView';
 import { PlayerBar } from './components/PlayerBar';
+import { StartScreen } from './components/StartScreen';
 import { DJCompanionMode } from './components/DJCompanionMode';
 import { GameSetupModal } from './components/Modals/GameSetupModal';
 import { RulesModal } from './components/Modals/RulesModal';
@@ -42,10 +42,45 @@ const DEFAULT_PLAYERS: Player[] = [
   },
 ];
 
+// Draw a mystery song whose year is NOT already on the timeline, so no two cards
+// ever share a year. Pops colliding songs off the deck; if the deck runs dry it
+// rebuilds from `pool` (excluding already-used ids and taken years). Only if no
+// unique-year song exists at all does it fall back to any unused song.
+function pickMysterySong(
+  deck: Song[],
+  takenYears: Set<number>,
+  pool: Song[],
+  usedIds: Set<string>,
+): { song: Song | null; deck: Song[] } {
+  const d = [...deck];
+  while (d.length) {
+    const s = d.pop()!;
+    if (!takenYears.has(s.year)) return { song: s, deck: d };
+  }
+  const fresh = pool
+    .filter((s) => !usedIds.has(s.id) && !takenYears.has(s.year))
+    .sort(() => Math.random() - 0.5);
+  if (fresh.length) {
+    const s = fresh.pop()!;
+    return { song: s, deck: fresh };
+  }
+  const any = pool.filter((s) => !usedIds.has(s.id)).sort(() => Math.random() - 0.5);
+  const s = any.pop() ?? null;
+  return { song: s, deck: any };
+}
+
 export default function App() {
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [players, setPlayers] = useState<Player[]>(DEFAULT_PLAYERS);
   const [activePlayerIndex, setActivePlayerIndex] = useState(0);
+
+  // Whether the player has left the start screen and is in an active game
+  const [gameStarted, setGameStarted] = useState(false);
+
+  // Auto-play stays disarmed for the very first mystery song after starting a
+  // game, so nothing plays until the player chooses to — leaving room to listen
+  // to the start card first. It arms on the first user-driven song change.
+  const [autoPlayArmed, setAutoPlayArmed] = useState(false);
 
   // Shared Timeline played jointly by Hold 1 and Hold 2
   const [sharedTimeline, setSharedTimeline] = useState<TimelineEntry[]>([]);
@@ -125,13 +160,20 @@ export default function App() {
         timeline: [],
       }));
 
-      // Draw first mystery song for active player
-      const firstMystery = shuffled.pop() || null;
+      // Draw first mystery song for active player (year must differ from starter)
+      const takenYears = new Set(initialSharedTimeline.map((e) => e.song.year));
+      const usedIds = new Set(initialSharedTimeline.map((e) => e.song.id));
+      const { song: firstMystery, deck: deckAfterDraw } = pickMysterySong(
+        shuffled,
+        takenYears,
+        filtered,
+        usedIds,
+      );
 
       setSettings(activeSettings);
       setPlayers(updatedPlayers);
       setSharedTimeline(initialSharedTimeline);
-      setAvailableDeck(shuffled);
+      setAvailableDeck(deckAfterDraw);
       setCurrentSong(firstMystery);
       setActivePlayerIndex(0);
       setPhase('listening');
@@ -140,15 +182,23 @@ export default function App() {
       setLastPlacementResult(null);
       setWinner(null);
       setIsVictoryOpen(false);
+      setAutoPlayArmed(false); // First mystery song does not auto-play
 
       sfx.playFlip();
     },
     [settings, players]
   );
 
-  // Initial mount: start game
-  useEffect(() => {
+  // Begin a fresh game from the start screen and reveal the game board
+  const startGame = useCallback(() => {
     initializeGame();
+    setGameStarted(true);
+  }, [initializeGame]);
+
+  // Leave the current game and return to the start screen (choose what to play)
+  const exitToStart = useCallback(() => {
+    setIsVictoryOpen(false);
+    setGameStarted(false);
   }, []);
 
   const activePlayer = players[activePlayerIndex] || players[0];
@@ -272,19 +322,16 @@ export default function App() {
 
   // Move to next turn
   const handleNextTurn = () => {
-    // Draw next song
-    let nextDeck = [...availableDeck];
-    if (nextDeck.length === 0) {
-      // Reshuffle all songs that aren't currently on the shared timeline
-      const usedIds = new Set<string>();
-      sharedTimeline.forEach((entry) => usedIds.add(entry.song.id));
-      if (currentSong) usedIds.add(currentSong.id);
-
-      const remaining = eligibleSongs.filter((s) => !usedIds.has(s.id));
-      nextDeck = [...remaining].sort(() => Math.random() - 0.5);
-    }
-
-    const nextMystery = nextDeck.pop() || null;
+    // Draw next song whose year is not already on the timeline
+    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+    if (currentSong) usedIds.add(currentSong.id);
+    const { song: nextMystery, deck: nextDeck } = pickMysterySong(
+      availableDeck,
+      takenYears,
+      eligibleSongs,
+      usedIds,
+    );
     const nextPlayerIndex = (activePlayerIndex + 1) % players.length;
 
     setAvailableDeck(nextDeck);
@@ -294,6 +341,7 @@ export default function App() {
     setSelectedSlotIndex(null);
     setYearGuessInput('');
     setLastPlacementResult(null);
+    setAutoPlayArmed(true); // Subsequent turns follow the auto-play setting
 
     sfx.playFlip();
   };
@@ -304,11 +352,15 @@ export default function App() {
 
     if (action === 'skip') {
       sfx.playToken();
-      let nextDeck = [...availableDeck];
-      if (nextDeck.length === 0) {
-        nextDeck = [...eligibleSongs].sort(() => Math.random() - 0.5);
-      }
-      const newMystery = nextDeck.pop() || null;
+      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+      const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+      if (currentSong) usedIds.add(currentSong.id);
+      const { song: newMystery, deck: nextDeck } = pickMysterySong(
+        availableDeck,
+        takenYears,
+        eligibleSongs,
+        usedIds,
+      );
 
       // Deduct 1 token
       setPlayers((prev) =>
@@ -321,34 +373,29 @@ export default function App() {
       setCurrentSong(newMystery);
       setSelectedSlotIndex(null);
       setYearGuessInput('');
+      setAutoPlayArmed(true);
     }
   };
 
-  // Draw a new random song for current turn
+  // Draw a new random song for current turn (unique year vs the timeline)
   const handleDrawRandomSong = () => {
-    let nextDeck = [...availableDeck];
-    if (nextDeck.length === 0) {
-      nextDeck = [...eligibleSongs].sort(() => Math.random() - 0.5);
-    }
-    const newMystery = nextDeck.pop() || null;
+    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
+    if (currentSong) usedIds.add(currentSong.id);
+    const { song: newMystery, deck: nextDeck } = pickMysterySong(
+      availableDeck,
+      takenYears,
+      eligibleSongs,
+      usedIds,
+    );
     setAvailableDeck(nextDeck);
     setCurrentSong(newMystery);
     setPhase('listening');
     setSelectedSlotIndex(null);
     setYearGuessInput('');
     setLastPlacementResult(null);
+    setAutoPlayArmed(true);
     sfx.playFlip();
-  };
-
-  // Select a specific song from the song library as the active quiz challenge
-  const handleSelectQuizSong = (song: Song) => {
-    setCurrentSong(song);
-    setPhase('listening');
-    setSelectedSlotIndex(null);
-    setYearGuessInput('');
-    setLastPlacementResult(null);
-    setIsCatalogOpen(false);
-    sfx.playNeedleDrop();
   };
 
   // Mark a song as "missing music" — hide it from play now and across reloads.
@@ -365,11 +412,12 @@ export default function App() {
           settings.categoryFilter === 'all' || s.category === settings.categoryFilter;
         return matchCat && settings.decades.includes(s.decade);
       });
+      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
       const usedIds = new Set<string>(sharedTimeline.map((e) => e.song.id));
-      const remaining = pool.filter((s) => !usedIds.has(s.id) && s.id !== song.id);
-      const shuffled = [...remaining].sort(() => Math.random() - 0.5);
-      setAvailableDeck(shuffled);
-      setCurrentSong(shuffled.pop() || null);
+      usedIds.add(song.id);
+      const { song: fresh, deck: freshDeck } = pickMysterySong([], takenYears, pool, usedIds);
+      setAvailableDeck(freshDeck);
+      setCurrentSong(fresh);
       setPhase('listening');
       setSelectedSlotIndex(null);
       setYearGuessInput('');
@@ -383,22 +431,47 @@ export default function App() {
     setPhase('listening');
     setSelectedSlotIndex(null);
     setLastPlacementResult(null);
+    setAutoPlayArmed(true);
     sfx.playNeedleDrop();
   };
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-pink-500 selection:text-white pb-16">
-      {/* Top Navigation */}
-      <Navbar
-        settings={settings}
-        onOpenSettings={() => setIsSetupOpen(true)}
-        onOpenRules={() => setIsRulesOpen(true)}
-        onOpenSongCatalog={() => setIsCatalogOpen(true)}
-        onRestartCurrentGame={() => initializeGame()}
-      />
+  // Start screen: shown before a game begins
+  if (!gameStarted) {
+    return (
+      <div className="min-h-dvh bg-slate-950 text-slate-100 selection:bg-pink-500 selection:text-white">
+        <StartScreen
+          settings={settings}
+          onStart={startGame}
+          onOpenSettings={() => setIsSetupOpen(true)}
+          onOpenRules={() => setIsRulesOpen(true)}
+          onOpenCatalog={() => setIsCatalogOpen(true)}
+        />
 
+        <GameSetupModal
+          isOpen={isSetupOpen}
+          onClose={() => setIsSetupOpen(false)}
+          currentSettings={settings}
+          currentPlayers={players}
+          onStartGame={(newSettings, newPlayers) => {
+            initializeGame(newSettings, newPlayers);
+            setGameStarted(true);
+          }}
+        />
+        <RulesModal isOpen={isRulesOpen} onClose={() => setIsRulesOpen(false)} />
+        <SongCatalogModal
+          isOpen={isCatalogOpen}
+          onClose={() => setIsCatalogOpen(false)}
+          onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
+          removedTick={removedTick}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-dvh md:h-dvh bg-slate-950 text-slate-100 flex flex-col md:overflow-hidden selection:bg-pink-500 selection:text-white">
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="md:flex-1 md:min-h-0 max-w-7xl w-full mx-auto px-3 sm:px-4 py-2 flex flex-col gap-2">
         {settings.mode === 'dj' ? (
           // Standalone DJ Companion & Physical Boardgame Scanner Mode
           <DJCompanionMode
@@ -409,26 +482,16 @@ export default function App() {
         ) : (
           // Main Hitster Timeline Game
           <>
-            {/* Player Bar & Tokens */}
+            {/* Player Bar & Tokens — standings, prominent at top */}
             <PlayerBar
               players={players}
               activePlayerIndex={activePlayerIndex}
               settings={settings}
-              canUseTokens={phase === 'listening'}
-              onUseToken={handleUseToken}
+              onExitGame={exitToStart}
             />
 
-            {/* Turntable Vinyl Player (DJ Deck) */}
-            <TurntablePlayer
-              currentSong={currentSong}
-              isRevealed={phase === 'revealed'}
-              autoPlay={settings.autoPlayAudio}
-              onOpenSongPicker={() => setIsCatalogOpen(true)}
-              onDrawRandomSong={handleDrawRandomSong}
-              onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
-            />
-
-            {/* Timeline View (Cards & Interactive Slots on the Shared Timeline) */}
+            {/* Timeline View (the game board / spilleplade) — hero directly below standings */}
+            <div className="md:flex-1 md:min-h-0 flex">
             <TimelineView
               timeline={sharedTimeline}
               activePlayer={activePlayer}
@@ -441,9 +504,22 @@ export default function App() {
               onConfirmPlacement={handleConfirmPlacement}
               onNextTurn={handleNextTurn}
               onPlaySong={handlePlaySongInTurntable}
+              songStarted={autoPlayArmed}
+              onStartSong={() => setAutoPlayArmed(true)}
               yearGuessInput={yearGuessInput}
               onYearGuessChange={setYearGuessInput}
               lastPlacementResult={lastPlacementResult}
+            />
+            </div>
+
+            {/* Turntable Vinyl Player (DJ Deck) — compact controls at the bottom */}
+            <TurntablePlayer
+              currentSong={currentSong}
+              isRevealed={phase === 'revealed'}
+              autoPlay={settings.autoPlayAudio && autoPlayArmed}
+              onOpenSongPicker={() => setIsCatalogOpen(true)}
+              onDrawRandomSong={handleDrawRandomSong}
+              onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
             />
           </>
         )}
@@ -469,19 +545,13 @@ export default function App() {
         isOpen={isVictoryOpen}
         winner={winner}
         onRestart={() => initializeGame()}
+        onExit={exitToStart}
         onPlaySong={handlePlaySongInTurntable}
       />
 
       <SongCatalogModal
         isOpen={isCatalogOpen}
         onClose={() => setIsCatalogOpen(false)}
-        onPlaySong={(s) => {
-          setIsCatalogOpen(false);
-          handlePlaySongInTurntable(s);
-        }}
-        onSelectAsQuizSong={(s) => {
-          handleSelectQuizSong(s);
-        }}
         onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
         removedTick={removedTick}
       />

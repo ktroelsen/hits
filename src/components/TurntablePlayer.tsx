@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, ListMusic, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview, sfx } from '../services/audioService';
 
@@ -150,7 +150,7 @@ export function TurntablePlayer({
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div id="turntable-player" className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+    <div id="turntable-player" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2.5 md:p-3 shadow-2xl relative overflow-hidden backdrop-blur-md">
       {/* Background neon ambient lights */}
       <div className="absolute -top-20 -left-20 w-48 h-48 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -163,10 +163,10 @@ export function TurntablePlayer({
         preload="auto"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 items-center">
         {/* Left: Vinyl Turntable Graphic with Tone Arm */}
-        <div className="md:col-span-4 flex flex-col items-center justify-center">
-          <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center">
+        <div className="hidden lg:flex md:col-span-2 flex-col items-center justify-center">
+          <div className="relative w-24 h-24 flex items-center justify-center">
             {/* Turntable Platter Base */}
             <div className="absolute inset-0 rounded-full bg-slate-950/80 border-4 border-slate-800 shadow-inner flex items-center justify-center">
               {/* Slipmat dots */}
@@ -175,7 +175,7 @@ export function TurntablePlayer({
 
             {/* Vinyl Record */}
             <div
-              className={`relative w-36 h-36 sm:w-40 sm:h-40 rounded-full shadow-2xl flex items-center justify-center transition-transform ${
+              className={`relative w-20 h-20 rounded-full shadow-2xl flex items-center justify-center transition-transform ${
                 isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''
               }`}
               style={{
@@ -191,8 +191,8 @@ export function TurntablePlayer({
               <div className="absolute inset-10 rounded-full border border-slate-700/20 pointer-events-none" />
 
               {/* Vinyl Center Label (Sticker) */}
-              <div 
-                className="w-16 h-16 rounded-full border-2 border-slate-900 flex items-center justify-center relative overflow-hidden shadow-md"
+              <div
+                className="w-10 h-10 rounded-full border-2 border-slate-900 flex items-center justify-center relative overflow-hidden shadow-md"
                 style={{
                   background: isRevealed && artworkUrl 
                     ? `url(${artworkUrl}) center/cover no-repeat` 
@@ -201,7 +201,7 @@ export function TurntablePlayer({
               >
                 {!isRevealed && (
                   <div className="text-[9px] font-black text-white tracking-widest text-center uppercase drop-shadow">
-                    HITSTER
+                    HITS
                   </div>
                 )}
                 {/* Spindle hole */}
@@ -210,39 +210,23 @@ export function TurntablePlayer({
             </div>
 
             {/* Tone Arm Graphic */}
-            <div 
-              className={`absolute top-2 right-2 w-8 h-28 origin-top-right transition-transform duration-700 pointer-events-none ${
+            <div
+              className={`absolute top-1 right-1 w-6 h-20 origin-top-right transition-transform duration-700 pointer-events-none ${
                 isPlaying ? 'rotate-[22deg]' : 'rotate-0'
               }`}
             >
               {/* Pivot */}
-              <div className="w-4 h-4 rounded-full bg-slate-400 border border-slate-200 shadow ml-auto" />
+              <div className="w-3 h-3 rounded-full bg-slate-400 border border-slate-200 shadow ml-auto" />
               {/* Arm Rod */}
-              <div className="w-1 h-20 bg-gradient-to-b from-slate-400 via-slate-300 to-slate-400 mx-auto rounded-full -mt-1 shadow-sm" />
+              <div className="w-1 h-14 bg-gradient-to-b from-slate-400 via-slate-300 to-slate-400 mx-auto rounded-full -mt-1 shadow-sm" />
               {/* Cartridge head */}
-              <div className="w-3 h-5 bg-pink-500 rounded-sm mx-auto shadow -mt-1 border border-pink-400" />
+              <div className="w-2.5 h-4 bg-pink-500 rounded-sm mx-auto shadow -mt-1 border border-pink-400" />
             </div>
-          </div>
-
-          {/* Equalizer Waveform Indicator */}
-          <div className="flex items-center gap-1 mt-3 h-5">
-            {[40, 75, 100, 60, 90, 45, 80, 55, 30].map((height, i) => (
-              <span
-                key={i}
-                className={`w-1 rounded-full bg-gradient-to-t from-pink-500 to-amber-400 transition-all duration-150 ${
-                  isPlaying ? 'animate-pulse' : 'h-1.5 opacity-30'
-                }`}
-                style={{
-                  height: isPlaying ? `${Math.max(6, (height * (progressPercent + 20)) % 22)}px` : '4px',
-                  animationDelay: `${i * 90}ms`,
-                }}
-              />
-            ))}
           </div>
         </div>
 
         {/* Center & Right: Player Controls, Song Metadata & Timeline Helpers */}
-        <div className="md:col-span-8 flex flex-col justify-between space-y-4">
+        <div className="md:col-span-12 lg:col-span-10 flex flex-col justify-between space-y-1.5">
           {/* Header Row: Category Badge & Blind Mode Toggle */}
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
@@ -261,7 +245,7 @@ export function TurntablePlayer({
               id="toggle-blind-mode-btn"
               onClick={() => setBlindMode(!blindMode)}
               className="text-xs flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700"
-              title="I Hitster gætter man ud fra lyden alene! Skjul eller vis titlen"
+              title="I HITS gætter man ud fra lyden alene! Skjul eller vis titlen"
             >
               {blindMode ? (
                 <>
@@ -278,62 +262,46 @@ export function TurntablePlayer({
           </div>
 
           {/* Song Info (Blurred or Hidden if Blind Mode and not revealed) */}
-          <div className="min-h-[64px] flex flex-col justify-center">
+          <div className="min-h-[30px] flex flex-col justify-center">
             {isRevealed ? (
-              <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="flex items-baseline gap-3">
-                  <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-display">
-                    {currentSong?.title}
-                  </h3>
-                  <span className="text-xl sm:text-2xl font-extrabold text-amber-400 bg-amber-400/10 px-3 py-0.5 rounded-lg border border-amber-400/30">
-                    {currentSong?.year}
-                  </span>
-                </div>
-                <p className="text-slate-300 text-base font-medium mt-0.5">
-                  {currentSong?.artist}
-                </p>
-              </div>
-            ) : blindMode ? (
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl sm:text-2xl font-black text-slate-300 tracking-wide font-display">
-                    🎵 Mysterie Sang
-                  </span>
-                  <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">
-                    Årstal skjult: ????
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-                  Lyt til musikken og gæt, hvor på din tidslinje den passer ind!
-                </p>
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-display">
+              <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-baseline gap-2 flex-wrap">
+                <h3 className="text-lg sm:text-xl font-black text-white tracking-tight font-display">
                   {currentSong?.title}
                 </h3>
-                <p className="text-slate-300 text-sm font-medium">
+                <span className="text-base sm:text-lg font-extrabold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-lg border border-amber-400/30">
+                  {currentSong?.year}
+                </span>
+                <span className="text-slate-300 text-sm font-medium">
+                  {currentSong?.artist}
+                </span>
+              </div>
+            ) : blindMode ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-lg sm:text-xl font-black text-slate-300 tracking-wide font-display">
+                  🎵 Mysterie Sang
+                </span>
+                <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">
+                  Årstal skjult: ????
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight font-display">
+                  {currentSong?.title}
+                </h3>
+                <span className="text-slate-300 text-sm font-medium">
                   {currentSong?.artist} • <span className="text-amber-400 font-bold">Årstal: ????</span>
-                </p>
+                </span>
               </div>
             )}
           </div>
 
           {/* Audio Scrubber / Progress Bar */}
-          <div className="space-y-1.5">
-            <div className="w-full bg-slate-800/80 rounded-full h-2.5 overflow-hidden relative cursor-pointer group">
-              <div
-                className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 h-full rounded-full transition-all duration-150"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-[11px] font-mono text-slate-400">
-              <span>{Math.floor(currentTime)}s</span>
-              <span className="text-slate-500">
-                {isLoading ? 'Henter 30s lydklip...' : previewUrl ? '30 sek. forhåndsvisning' : 'Lyd forhåndsvisning ikke tilgængelig'}
-              </span>
-              <span>30s</span>
-            </div>
+          <div className="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden relative cursor-pointer group">
+            <div
+              className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 h-full rounded-full transition-all duration-150"
+              style={{ width: `${progressPercent}%` }}
+            />
           </div>
 
           {/* Missing-music warning: iTunes returned no preview for this song */}
@@ -358,14 +326,14 @@ export function TurntablePlayer({
           )}
 
           {/* Action & Transport Controls */}
-          <div className="flex items-center justify-between flex-wrap gap-3 pt-1">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
               {/* Play / Pause Main Button */}
               <button
                 id="play-pause-btn"
                 onClick={togglePlay}
                 disabled={isLoading}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 shadow-lg ${
+                className={`flex items-center gap-2 px-5 py-2 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 shadow-lg ${
                   isPlaying
                     ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-4 ring-amber-500/20'
                     : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white ring-4 ring-pink-500/20 hover:scale-[1.02]'
@@ -394,25 +362,12 @@ export function TurntablePlayer({
                 <RotateCcw className="w-4 h-4" />
               </button>
 
-              {/* Choose specific song button */}
-              {onOpenSongPicker && (
-                <button
-                  id="pick-song-btn"
-                  onClick={onOpenSongPicker}
-                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-2xl bg-slate-800/90 hover:bg-pink-950/70 text-slate-300 hover:text-pink-300 border border-slate-700 hover:border-pink-500/50 transition-colors text-xs font-bold"
-                  title="Vælg en specifik sang fra det fulde sangkatalog"
-                >
-                  <ListMusic className="w-4 h-4 text-pink-400" />
-                  <span className="hidden sm:inline">Vælg sang</span>
-                </button>
-              )}
-
               {/* Draw new random song button */}
               {onDrawRandomSong && (
                 <button
                   id="draw-random-song-btn"
                   onClick={onDrawRandomSong}
-                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-2xl bg-slate-800/90 hover:bg-purple-950/70 text-slate-300 hover:text-purple-300 border border-slate-700 hover:border-purple-500/50 transition-colors text-xs font-bold"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-800/90 hover:bg-purple-950/70 text-slate-300 hover:text-purple-300 border border-slate-700 hover:border-purple-500/50 transition-colors text-xs font-bold"
                   title="Træk en ny tilfældig sang"
                 >
                   <Shuffle className="w-4 h-4 text-purple-400" />

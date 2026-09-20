@@ -54,7 +54,7 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
           </div>
           <div>
             <h2 className="text-lg font-bold text-white font-display">
-              Hitster DJ Companion & Fri Quiz
+              HITS DJ Companion & Fri Quiz
             </h2>
             <p className="text-xs text-slate-400">
               Træk et sangkort, spil sangen for dine venner, og afslør årstallet når I er klar!

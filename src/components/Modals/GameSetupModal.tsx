@@ -101,7 +101,7 @@ export function GameSetupModal({
             </div>
             <div>
               <h3 className="text-xl font-black text-white font-display">
-                Hitster Spilindstillinger
+                HITS Spilindstillinger
               </h3>
               <p className="text-xs text-slate-400">
                 Vælg spiltype, hold og sangkategorier
@@ -135,7 +135,7 @@ export function GameSetupModal({
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-bold text-sm text-white">🏆 Klassisk Hitster</span>
+                  <span className="font-bold text-sm text-white">🏆 Klassisk HITS</span>
                   {mode === 'timeline' && <Check className="w-4 h-4 text-pink-400" />}
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
@@ -163,16 +163,15 @@ export function GameSetupModal({
 
               <button
                 type="button"
-                onClick={() => setMode('party')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                  mode === 'party'
-                    ? 'bg-amber-950/40 border-amber-500 ring-2 ring-amber-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                disabled
+                title="Kommer snart"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🥳 Fest / Holdkamp</span>
-                  {mode === 'party' && <Check className="w-4 h-4 text-amber-400" />}
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-amber-500/30 shrink-0">
+                    Kommer snart
+                  </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
                   Pass-and-play for 2+ hold. Skift tur ved DJ-pulten og stjæl kort fra modstanderne!
@@ -181,19 +180,18 @@ export function GameSetupModal({
 
               <button
                 type="button"
-                onClick={() => setMode('dj')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                  mode === 'dj'
-                    ? 'bg-cyan-950/40 border-cyan-500 ring-2 ring-cyan-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                disabled
+                title="Kommer snart"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🎧 Digital DJ Hjælper</span>
-                  {mode === 'dj' && <Check className="w-4 h-4 text-cyan-400" />}
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-cyan-500/30 shrink-0">
+                    Kommer snart
+                  </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
-                  Brug appen som DJ til jeres fysiske Hitster brætspilskort eller fri musikquiz!
+                  Brug appen som DJ til jeres fysiske HITS brætspilskort eller fri musikquiz!
                 </p>
               </button>
             </div>
@@ -280,7 +278,7 @@ export function GameSetupModal({
             <div className="grid grid-cols-3 gap-2.5">
               {[
                 { count: 5, label: '5 kort', sub: 'Hurtigt spil (10-15 min)' },
-                { count: 10, label: '10 kort', sub: 'Klassisk Hitster (20-30 min)' },
+                { count: 10, label: '10 kort', sub: 'Klassisk HITS (20-30 min)' },
                 { count: 15, label: '15 kort', sub: 'Maraton (45+ min)' },
               ].map((opt) => (
                 <button
