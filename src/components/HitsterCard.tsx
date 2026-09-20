@@ -98,43 +98,38 @@ export function HitsterCard({
       {/* Background vinyl texture sheen */}
       <div className="absolute inset-0 rounded-2xl bg-slate-900/30 backdrop-blur-sm pointer-events-none" />
 
-      {/* Top Bar: Year & Origin Flag */}
-      <div className="relative z-10 flex items-start justify-between">
-        <div className="flex flex-col">
-          {isRevealed ? (
-            <div className="flex items-center gap-1.5">
-              <span className="text-lg sm:text-xl font-black text-white tracking-tight drop-shadow font-display">
-                {song.year}
-              </span>
-            </div>
-          ) : (
-            <div className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
-              ????
-            </div>
-          )}
-          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded mt-0.5 w-fit ${decadeStyle.badge}`}>
+      {/* Play / pause — fixed in the card's top-right corner */}
+      <button
+        onClick={handlePlayCard}
+        className={`absolute top-1.5 right-1.5 z-20 flex items-center justify-center w-7 h-7 rounded-full border transition-colors shadow ${
+          isPlayingAudio
+            ? 'bg-pink-600 border-pink-400 text-white ring-2 ring-pink-500/40'
+            : 'bg-slate-950/80 border-slate-600/70 text-white hover:bg-pink-950/80 hover:border-pink-500/60'
+        }`}
+        title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
+      >
+        {isPlayingAudio ? (
+          <Pause className="w-3.5 h-3.5 fill-current" />
+        ) : (
+          <Play className="w-3.5 h-3.5 ml-0.5 fill-current" />
+        )}
+      </button>
+
+      {/* Top: Year + decade & owner badges (kept clear of the play button) */}
+      <div className="relative z-10 pr-8">
+        {isRevealed ? (
+          <span className="text-lg sm:text-xl font-black text-white tracking-tight drop-shadow font-display">
+            {song.year}
+          </span>
+        ) : (
+          <span className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
+            ????
+          </span>
+        )}
+        <div className="flex flex-wrap items-center gap-1 mt-0.5">
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${decadeStyle.badge}`}>
             {song.decade}
           </span>
-        </div>
-
-        {/* Right side: Play button + claimed-by / starter badge */}
-        <div className="flex flex-col items-end gap-1">
-          <button
-            onClick={handlePlayCard}
-            className={`flex items-center justify-center w-7 h-7 rounded-full border transition-colors shadow ${
-              isPlayingAudio
-                ? 'bg-pink-600 border-pink-400 text-white ring-2 ring-pink-500/40'
-                : 'bg-slate-950/70 border-slate-600/70 text-white hover:bg-pink-950/70 hover:border-pink-500/60'
-            }`}
-            title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
-          >
-            {isPlayingAudio ? (
-              <Pause className="w-3.5 h-3.5 fill-current" />
-            ) : (
-              <Play className="w-3.5 h-3.5 ml-0.5 fill-current" />
-            )}
-          </button>
-
           {claimedBy ? (
             <div
               className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border shadow-xs"
@@ -149,7 +144,7 @@ export function HitsterCard({
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: claimedBy.color }}
               />
-              <span className="truncate max-w-[65px]">{claimedBy.name}</span>
+              <span className="truncate max-w-[60px]">{claimedBy.name}</span>
             </div>
           ) : isRevealed ? (
             <div
