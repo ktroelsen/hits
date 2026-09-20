@@ -86,7 +86,7 @@ export function TimelineView({
   useEffect(() => {
     if (selectedIndex === null && (phase === 'listening' || phase === 'placed' || phase === 'draw')) {
       const initialSlot = getSlotFromYear(currentNumericYear);
-      onSelectSlot(initialSlot);
+      if (!isDeadSlot(initialSlot)) onSelectSlot(initialSlot);
     }
   }, [selectedIndex, phase, currentNumericYear]);
 
@@ -122,6 +122,16 @@ export function TimelineView({
     slots.push({ index: i, label, minYear, maxYear });
   }
 
+  // A slot is "dead" when no unused year can ever land in it — e.g. between two
+  // cards whose years are consecutive (2015 & 2016), since card years are unique.
+  const isDeadSlot = (i: number): boolean => {
+    const s = slots[i];
+    if (!s || timeline.length === 0) return false;
+    if (i === 0) return s.maxYear <= 1960; // no year below the first card
+    if (i === timelineLength) return s.minYear >= 2026; // no year above the last card
+    return s.maxYear - s.minYear < 2; // no integer strictly between the neighbours
+  };
+
   // Determine slot index from a numeric year on the shared timeline
   const getSlotFromYear = (year: number): number => {
     if (timeline.length === 0) return 0;
@@ -141,13 +151,14 @@ export function TimelineView({
     const clampedYear = Math.max(1960, Math.min(2026, newYear));
     onYearGuessChange(clampedYear.toString());
 
-    // Auto-select the corresponding slot on the timeline
+    // Auto-select the corresponding slot, unless it's an impossible (dead) slot
     const targetSlot = getSlotFromYear(clampedYear);
-    onSelectSlot(targetSlot);
+    if (!isDeadSlot(targetSlot)) onSelectSlot(targetSlot);
   };
 
   // When user clicks a slot on the timeline
   const handleSlotClick = (slotIdx: number) => {
+    if (isDeadSlot(slotIdx)) return; // impossible slot — not selectable
     onSelectSlot(slotIdx);
     const slot = slots[slotIdx];
     if (slot) {
@@ -233,6 +244,7 @@ export function TimelineView({
           index={0}
           label={slots[0]?.label || 'Første'}
           isPlacing={isPlacingPhase}
+          isImpossible={isDeadSlot(0)}
           isSelected={selectedIndex === 0}
           isCorrect={isRevealedPhase && lastPlacementResult?.isCorrect && lastPlacementResult.chosenIndex === 0}
           isWrongChoice={isRevealedPhase && !lastPlacementResult?.isCorrect && lastPlacementResult?.chosenIndex === 0}
@@ -256,6 +268,7 @@ export function TimelineView({
               index={idx + 1}
               label={slots[idx + 1]?.label || ''}
               isPlacing={isPlacingPhase}
+              isImpossible={isDeadSlot(idx + 1)}
               isSelected={selectedIndex === idx + 1}
               isCorrect={
                 isRevealedPhase &&
@@ -347,7 +360,7 @@ export function TimelineView({
             <button
               id="confirm-placement-btn"
               onClick={onConfirmPlacement}
-              disabled={selectedIndex === null}
+              disabled={selectedIndex === null || isDeadSlot(selectedIndex)}
               className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
             >
               <span>Afslør &amp; Tjek Placering</span>
