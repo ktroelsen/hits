@@ -195,6 +195,12 @@ export default function App() {
     setGameStarted(true);
   }, [initializeGame]);
 
+  // Leave the current game and return to the start screen (choose what to play)
+  const exitToStart = useCallback(() => {
+    setIsVictoryOpen(false);
+    setGameStarted(false);
+  }, []);
+
   const activePlayer = players[activePlayerIndex] || players[0];
 
   // Calculate the correct slot index for mystery song relative to the shared timeline
@@ -498,6 +504,7 @@ export default function App() {
               players={players}
               activePlayerIndex={activePlayerIndex}
               settings={settings}
+              onExitGame={exitToStart}
             />
 
             {/* Timeline View (the game board / spilleplade) — hero directly below standings */}
@@ -553,6 +560,7 @@ export default function App() {
         isOpen={isVictoryOpen}
         winner={winner}
         onRestart={() => initializeGame()}
+        onExit={exitToStart}
         onPlaySong={handlePlaySongInTurntable}
       />
 

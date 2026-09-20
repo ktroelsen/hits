@@ -1,22 +1,35 @@
-import { Coins } from 'lucide-react';
+import { Coins, LogOut } from 'lucide-react';
 import { Player, GameSettings } from '../types';
 
 interface PlayerBarProps {
   players: Player[];
   activePlayerIndex: number;
   settings: GameSettings;
+  onExitGame: () => void;
 }
 
 export function PlayerBar({
   players,
   activePlayerIndex,
   settings,
+  onExitGame,
 }: PlayerBarProps) {
   return (
     <div id="player-bar" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-2.5 backdrop-blur-md">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        {/* Exit to the start screen (choose what to play) */}
+        <button
+          id="exit-game-btn"
+          onClick={onExitGame}
+          title="Afslut spillet og vælg et nyt"
+          className="flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/70 text-slate-300 hover:text-rose-300 border border-slate-700 hover:border-rose-500/50 transition-colors text-xs font-bold"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden sm:inline">Afslut spillet</span>
+        </button>
+
         {/* Players / Teams List */}
-        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 w-full sm:w-auto">
+        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 flex-1">
           {players.map((player, idx) => {
             const isActive = idx === activePlayerIndex;
             const cardCount = player.score ?? player.timeline.length;
