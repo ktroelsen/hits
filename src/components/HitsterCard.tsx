@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, Sparkles, CheckCircle2, XCircle } from 'lucide-react';
+import { Pause, CheckCircle2, XCircle } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview } from '../services/audioService';
 
@@ -85,7 +85,7 @@ export function HitsterCard({
   return (
     <div
       id={`hitster-card-${song.id}`}
-      className={`relative w-24 sm:w-28 h-28 rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
+      className={`relative w-24 sm:w-28 h-36 overflow-hidden rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
         status === 'correct'
           ? 'ring-4 ring-emerald-500/80 border-emerald-400 bg-emerald-950/40'
           : status === 'wrong'
@@ -117,15 +117,8 @@ export function HitsterCard({
           </span>
         </div>
 
-        {/* Right side: Claimed by team / starter card badge & Flag */}
+        {/* Right side: Claimed by team / starter card badge (flag/globe now shown on the disc) */}
         <div className="flex flex-col items-end gap-1">
-          <span
-            className="text-sm px-1.5 py-0.5 rounded-lg bg-slate-950/60 border border-slate-700/60 shadow-sm"
-            title={song.category === 'danish' ? 'Dansk hit' : 'Internationalt hit'}
-          >
-            {song.category === 'danish' ? '🇩🇰' : '🌍'}
-          </span>
-
           {claimedBy ? (
             <div
               className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border shadow-xs"
@@ -156,10 +149,10 @@ export function HitsterCard({
 
       {/* Center: Vinyl disc mini art or music icon */}
       <div className="relative z-10 my-auto flex flex-col items-center justify-center">
-        <div className="relative w-11 h-11 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+        <div className="relative w-9 h-9 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
           {/* Concentric lines */}
           <div className="absolute inset-1.5 rounded-full border border-slate-800 pointer-events-none" />
-          <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
+          <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
             <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
           </div>
 
@@ -174,7 +167,9 @@ export function HitsterCard({
             {isPlayingAudio ? (
               <Pause className="w-5 h-5 text-pink-400 fill-current" />
             ) : (
-              <Play className="w-5 h-5 text-white ml-0.5 fill-current" />
+              <span className="text-base leading-none" aria-label={song.category === 'danish' ? 'Dansk hit' : 'Internationalt hit'}>
+                {song.category === 'danish' ? '🇩🇰' : '🌍'}
+              </span>
             )}
           </button>
         </div>
