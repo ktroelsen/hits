@@ -491,7 +491,6 @@ export default function App() {
         <SongCatalogModal
           isOpen={isCatalogOpen}
           onClose={() => setIsCatalogOpen(false)}
-          onPlaySong={beginGameWithSong}
           onSelectAsQuizSong={beginGameWithSong}
           onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
           removedTick={removedTick}
@@ -582,10 +581,6 @@ export default function App() {
       <SongCatalogModal
         isOpen={isCatalogOpen}
         onClose={() => setIsCatalogOpen(false)}
-        onPlaySong={(s) => {
-          setIsCatalogOpen(false);
-          handlePlaySongInTurntable(s);
-        }}
         onSelectAsQuizSong={(s) => {
           handleSelectQuizSong(s);
         }}

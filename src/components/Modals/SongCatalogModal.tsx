@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
-import { X, Search, Play, Disc, Trash2, ClipboardCopy } from 'lucide-react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { X, Search, Play, Pause, Disc, Trash2, ClipboardCopy } from 'lucide-react';
 import { getActiveSongs } from '../../services/songsService';
 import { getRemovedIds, clearRemoved } from '../../services/removalStore';
+import { fetchSongAudioPreview } from '../../services/audioService';
 import { Song } from '../../types';
 
 interface SongCatalogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPlaySong: (song: Song) => void;
   onSelectAsQuizSong?: (song: Song) => void;
   onMarkMissingMusic?: (song: Song) => void;
   removedTick?: number;
@@ -16,7 +16,6 @@ interface SongCatalogModalProps {
 export function SongCatalogModal({
   isOpen,
   onClose,
-  onPlaySong,
   onSelectAsQuizSong,
   onMarkMissingMusic,
   removedTick = 0,
@@ -25,6 +24,42 @@ export function SongCatalogModal({
   const [category, setCategory] = useState<'all' | 'danish' | 'international'>('all');
   const [decade, setDecade] = useState<string>('all');
   const [localTick, setLocalTick] = useState(0);
+
+  // Inline 30s preview playback (auditions a song without leaving the library)
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const stopPreview = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setPlayingId(null);
+  }, []);
+
+  // Stop audio when the modal closes or unmounts.
+  useEffect(() => {
+    if (!isOpen) stopPreview();
+    return () => stopPreview();
+  }, [isOpen, stopPreview]);
+
+  const togglePreview = useCallback(
+    (song: Song) => {
+      if (playingId === song.id) {
+        stopPreview();
+        return;
+      }
+      stopPreview();
+      fetchSongAudioPreview(song).then((res) => {
+        if (!res.previewUrl) return;
+        const audio = new Audio(res.previewUrl);
+        audioRef.current = audio;
+        audio.onended = () => setPlayingId(null);
+        audio.play().then(() => setPlayingId(song.id)).catch(() => setPlayingId(null));
+      });
+    },
+    [playingId, stopPreview]
+  );
 
   const activeSongs = useMemo(() => getActiveSongs(), [removedTick, localTick]);
   const removedIds = useMemo(() => [...getRemovedIds()], [removedTick, localTick]);
@@ -162,11 +197,19 @@ export function SongCatalogModal({
                   )}
 
                   <button
-                    onClick={() => onPlaySong(song)}
-                    className="p-2 rounded-xl bg-slate-800 hover:bg-purple-600 text-slate-300 hover:text-white transition-all"
-                    title="Spil forhåndsvisning"
+                    onClick={() => togglePreview(song)}
+                    className={`p-2 rounded-xl transition-all ${
+                      playingId === song.id
+                        ? 'bg-pink-600 text-white ring-2 ring-pink-500/40'
+                        : 'bg-slate-800 hover:bg-purple-600 text-slate-300 hover:text-white'
+                    }`}
+                    title={playingId === song.id ? 'Pause forhåndsvisning' : 'Spil forhåndsvisning'}
                   >
-                    <Play className="w-4 h-4 fill-current" />
+                    {playingId === song.id ? (
+                      <Pause className="w-4 h-4 fill-current" />
+                    ) : (
+                      <Play className="w-4 h-4 fill-current" />
+                    )}
                   </button>
 
                   {onMarkMissingMusic && (
