@@ -401,7 +401,7 @@ export const HITSTER_SONGS: Song[] = [
     decade: '00s',
     genre: 'Eurodance',
     funFact: 'Lina Rafn og Paw Lagermann fik et kæmpe europæisk hit, der toppede som nr. 2 i Storbritannien.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e5/b7/c9/e5b7c966-dbc3-3afb-3812-ab39f84b4b40/mzaf_7641446057397988408.plus.aac.p.m4a',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b5/23/fc/b523fc54-df95-c5e7-2bbd-5589daf732d1/mzaf_11854411282517303417.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Features/56/33/6c/dj.jxfztwuc.tif/600x600bb.jpg'
   },
   {
@@ -437,8 +437,8 @@ export const HITSTER_SONGS: Song[] = [
     decade: '00s',
     genre: 'Indie Pop',
     funFact: 'Det jyske band fra Silkeborg brød igennem i England og sang med overskuds-energi.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/Music2/v4/ec/dc/31/ecdc3121-8da3-c43b-a043-1631185612a9/mzaf_78513333501753083.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/dc/04/90/mzi.xwfzytnn.tif/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/7a/ec/64/7aec64bb-dbbe-94b1-c2ff-e7b5a6789d9f/mzaf_8135154864561591093.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music/v4/5c/85/0e/5c850e9f-b2cd-5066-3662-98838fece98c/888003970410.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-42',
@@ -523,7 +523,7 @@ export const HITSTER_SONGS: Song[] = [
     decade: '10s',
     genre: 'Rap/Pop',
     funFact: 'Kesis fængende melodier forvandlede Nørrebro-rapperen til en af Danmarks største popstjerner.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/de/fe/ff/defeffe1-36a1-7927-fa18-a86c1eb49a58/mzaf_17357732751549167309.plus.aac.p.m4a',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2d/42/3c/2d423c25-e2d6-f474-207f-17ec39ba0451/mzaf_3478988995339289109.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/0e/50/78/0e507890-27d5-3aac-6b4e-0794c3f55b1a/886445276572.jpg/600x600bb.jpg'
   },
   {
@@ -573,7 +573,7 @@ export const HITSTER_SONGS: Song[] = [
     decade: '20s',
     genre: 'Pop/Folk',
     funFact: 'Hyldest til Aarhus V og bodegaen Mucki Bar fra det monumentale album "Når sjælen kaster op".',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d2/ab/31/d2ab3133-f896-a2ed-6b96-07dec8e13145/mzaf_2955496750896154843.plus.aac.p.m4a',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/97/d5/7097d58f-15cc-1d96-c878-452480ee7ef9/mzaf_8785889358278149457.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/0a/76/88/0a7688d6-fb35-5258-f8fd-ad36d89842d1/886449836550.jpg/600x600bb.jpg'
   },
   {
@@ -611,8 +611,8 @@ export const HITSTER_SONGS: Song[] = [
     decade: '60s',
     genre: 'Rock/Pop',
     funFact: 'Paul McCartney skrev sangen for at trøste John Lennons søn Julian under forældrenes skilsmisse.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/11/a9/7a/11a97ad1-5281-41b5-bef5-94c93a0083e4/mzaf_216068609330958223.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f2/98/fb/f298fb48-1e0e-6ad4-4cff-fb824b77f02e/15UMGIM59587.rgb.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3d/08/f5/3d08f5d7-1e0a-99d9-1085-d50ecc972bb9/mzaf_1689604474306790314.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/a6/8b/65/a68b657c-cac6-68e6-3bde-b79d58fbc795/18UMGIM30762.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-2',
@@ -865,8 +865,8 @@ export const HITSTER_SONGS: Song[] = [
     decade: '80s',
     genre: 'Pop',
     funFact: 'Titlen kom fra en seddel Andrew Ridgeley havde efterladt til sine forældre, hvor han ved en fejl skrev "go" to gange.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/35/99/9e/35999e3f-480b-158a-2149-fa8ff249f882/mzaf_10746700119453640305.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/bc/28/31/bc2831e9-2646-098a-96c4-adc2e2c901bb/dj.tefnkxmm.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/59/d0/df/59d0df1f-b9b0-c1f0-d27e-ad59ee9fe1fa/mzaf_15629855503092199047.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/ee/49/ac/ee49accc-78bd-bcdb-1aff-c40c1ac3ccc4/074643959520.jpg/600x600bb.jpg'
   },
 
   // ==================== INTERNATIONALE HITS (90'erne) ====================
@@ -1609,8 +1609,8 @@ export const HITSTER_SONGS: Song[] = [
     decade: '10s',
     genre: 'R&B/Pop',
     funFact: 'En af Burhan G\'s største soloballader, kendt for sin følelsesladede vokal.',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/16/de/bd/16debd3f-16b4-3418-a8cd-bdccace8f12f/mzaf_9463735953732378917.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7a/16/c3/7a16c328-09e6-9d2e-a981-469c042185ff/196874263624.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/12/45/40/1245402d-803d-c2d3-0eec-afac316f22f3/mzaf_16626998367697493052.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music62/v4/55/46/c8/5546c853-9b4a-083e-4e93-b204c6a53785/cover.jpg/600x600bb.jpg'
   },
   {
     id: 'dk-68',
@@ -2575,8 +2575,8 @@ export const HITSTER_SONGS: Song[] = [
     year: 2021,
     category: 'international',
     decade: '20s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/4a/84/d74a84d5-9afa-761e-b632-baab55c2a23b/mzaf_11865500880477235553.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/25/9a/1c/259a1c5d-c59b-ce1f-8279-c0e644dc2b9e/mzaf_3677842867275398060.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a8/3a/22/a83a22f7-af18-7ef6-a7de-74816c532a44/886449475421.jpg/600x600bb.jpg'
   },
   {
     id: 'int-157',
@@ -2715,7 +2715,7 @@ export const HITSTER_SONGS: Song[] = [
     year: 1993,
     category: 'international',
     decade: '90s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3d/9b/60/3d9b6006-4a60-7604-bb1b-f515518d9ec8/mzaf_5260090549366773808.plus.aac.p.m4a',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/80/2d/df802df9-5ef8-ceff-9525-d2635bdcd01c/mzaf_12123587685204224481.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8f/fc/e8/8ffce812-173c-5d0d-a264-07f81247c212/mzi.cdsdlqei.jpg/600x600bb.jpg'
   },
   {
@@ -2805,8 +2805,8 @@ export const HITSTER_SONGS: Song[] = [
     year: 2004,
     category: 'international',
     decade: '00s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/f1/d0/86f1d039-f2d6-2f5b-b34b-2b63504fa6d0/mzaf_3363059623415356317.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/0e/17/f0/0e17f011-aadf-d4d1-1c7e-b61ce39f968b/093624947301.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/88/0e/86/880e8601-689a-2897-8123-8fc8b8bee173/mzaf_8647183671722331768.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/cc/bc/62/ccbc62da-6368-4516-f293-6e343b37f721/9624_300dpi.jpg/600x600bb.jpg'
   },
   {
     id: 'int-172',
@@ -3145,8 +3145,8 @@ export const HITSTER_SONGS: Song[] = [
     year: 1966,
     category: 'international',
     decade: '60s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/3a/6a/033a6aa2-a1a3-f152-39a4-f81a7caf9016/mzaf_14802682071847773132.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/60/24/3f/60243f7b-9f17-f16b-d230-ae5ab692ce76/dj.ialhcmsq.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a0/68/0e/a0680e95-f7a6-2e70-b1c3-0cf69edf22d5/mzaf_13705371680645994642.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d3/10/fb/d310fbca-90ae-3911-4fff-667fa7830f1a/dj.hqvvfwtf.jpg/600x600bb.jpg'
   },
   {
     id: 'int-206',
@@ -3235,8 +3235,8 @@ export const HITSTER_SONGS: Song[] = [
     year: 1968,
     category: 'international',
     decade: '60s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/32/a8/9532a81f-da90-bc0d-0ae2-acd12a312527/mzaf_2594578376859699098.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/03/30/2f/03302f7a-3bba-084a-3ed9-c9ac018fadfd/886447698341.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/dc/34/a1/dc34a184-84c0-fc47-712a-bb1ac83dec72/mzaf_4775604353249705315.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/1c/3c/09/1c3c0934-8ae5-fc87-2647-e104057d41f4/074640952920.jpg/600x600bb.jpg'
   },
   {
     id: 'int-215',
@@ -3485,8 +3485,8 @@ export const HITSTER_SONGS: Song[] = [
     year: 1998,
     category: 'international',
     decade: '90s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/35/46/67/354667bc-3076-693f-747b-40cee75f59ee/mzaf_5514066817462614673.plus.aac.p.m4a',
-    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bd/ee/4e/bdee4e1e-08d4-0caa-c4e0-bfa2aaee294e/06UMGIM24697.rgb.jpg/600x600bb.jpg'
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8c/07/79/8c077990-73a0-03d5-1496-ea0b401fcf9a/mzaf_15063041399657411735.plus.aac.p.m4a',
+    artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1e/2f/98/1e2f98c2-3fa6-9601-9825-6a6d19a99cf3/06UMGIM07033.rgb.jpg/600x600bb.jpg'
   },
   {
     id: 'int-240',
@@ -3555,7 +3555,7 @@ export const HITSTER_SONGS: Song[] = [
     year: 2011,
     category: 'danish',
     decade: '10s',
-    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ad/e2/4f/ade24f33-5da7-dab7-c173-a287509cc009/mzaf_13054321955347438506.plus.aac.p.m4a',
+    previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0e/79/0f/0e790fb4-c275-0287-d28a-e8129b2739ce/mzaf_16204089550046706955.plus.aac.p.m4a',
     artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/a2/89/7e/a2897eac-41f0-6872-d378-bde4e0a5c00a/00602567998570.rgb.jpg/600x600bb.jpg'
   },
   {
