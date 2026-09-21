@@ -40,6 +40,7 @@ export function GameSetupModal({
   const [targetCards, setTargetCards] = useState<number>(currentSettings.targetCards);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'danish' | 'international'>(currentSettings.categoryFilter);
   const [decades, setDecades] = useState<Decade[]>(currentSettings.decades);
+  const [uniqueYearsOnly, setUniqueYearsOnly] = useState<boolean>(currentSettings.uniqueYearsOnly);
   const [players, setPlayers] = useState<Player[]>(currentPlayers);
   const [newPlayerName, setNewPlayerName] = useState('');
 
@@ -82,6 +83,7 @@ export function GameSetupModal({
       targetCards,
       categoryFilter,
       decades,
+      uniqueYearsOnly,
     };
     onStartGame(updatedSettings, players);
     onClose();
@@ -354,6 +356,40 @@ export function GameSetupModal({
               >
                 <Plus className="w-4 h-4" />
                 <span>Tilføj</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 6. Årstal */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+              6. Årstal
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setUniqueYearsOnly(true)}
+                className={`p-3 rounded-xl border text-center transition-all ${
+                  uniqueYearsOnly
+                    ? 'bg-purple-600 text-white border-purple-500 font-bold shadow-md'
+                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <span className="text-xs sm:text-sm block">Kun unikke år</span>
+                <span className="text-[10px] opacity-80 block mt-0.5">Hvert årstal højst én gang</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setUniqueYearsOnly(false)}
+                className={`p-3 rounded-xl border text-center transition-all ${
+                  !uniqueYearsOnly
+                    ? 'bg-purple-600 text-white border-purple-500 font-bold shadow-md'
+                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <span className="text-xs sm:text-sm block">Sange kan have samme år</span>
+                <span className="text-[10px] opacity-80 block mt-0.5">Årstal kan gå igen</span>
               </button>
             </div>
           </div>
