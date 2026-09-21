@@ -46,6 +46,7 @@ export interface GameSettings {
   autoPlayAudio: boolean;
   enableSoundEffects: boolean;
   expertTolerance: number; // 0 = exact year, 1 = +/- 1 year
+  uniqueYearsOnly: boolean; // false allows multiple songs from the same year on the timeline
 }
 
 export type TurnPhase = 

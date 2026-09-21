@@ -21,6 +21,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   autoPlayAudio: true,
   enableSoundEffects: true,
   expertTolerance: 0,
+  uniqueYearsOnly: true,
 };
 
 const DEFAULT_PLAYERS: Player[] = [
@@ -160,8 +161,11 @@ export default function App() {
         timeline: [],
       }));
 
-      // Draw first mystery song for active player (year must differ from starter)
-      const takenYears = new Set(initialSharedTimeline.map((e) => e.song.year));
+      // Draw first mystery song for active player (year must differ from starter,
+      // unless the setting allows duplicate years on the timeline)
+      const takenYears = activeSettings.uniqueYearsOnly
+        ? new Set(initialSharedTimeline.map((e) => e.song.year))
+        : new Set<number>();
       const usedIds = new Set(initialSharedTimeline.map((e) => e.song.id));
       const { song: firstMystery, deck: deckAfterDraw } = pickMysterySong(
         shuffled,
@@ -322,8 +326,10 @@ export default function App() {
 
   // Move to next turn
   const handleNextTurn = () => {
-    // Draw next song whose year is not already on the timeline
-    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    // Draw next song whose year is not already on the timeline (unless duplicates are allowed)
+    const takenYears = settings.uniqueYearsOnly
+      ? new Set(sharedTimeline.map((e) => e.song.year))
+      : new Set<number>();
     const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
     if (currentSong) usedIds.add(currentSong.id);
     const { song: nextMystery, deck: nextDeck } = pickMysterySong(
@@ -352,7 +358,9 @@ export default function App() {
 
     if (action === 'skip') {
       sfx.playToken();
-      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+      const takenYears = settings.uniqueYearsOnly
+        ? new Set(sharedTimeline.map((e) => e.song.year))
+        : new Set<number>();
       const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
       if (currentSong) usedIds.add(currentSong.id);
       const { song: newMystery, deck: nextDeck } = pickMysterySong(
@@ -377,9 +385,11 @@ export default function App() {
     }
   };
 
-  // Draw a new random song for current turn (unique year vs the timeline)
+  // Draw a new random song for current turn (unique year vs the timeline, unless disabled)
   const handleDrawRandomSong = () => {
-    const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+    const takenYears = settings.uniqueYearsOnly
+      ? new Set(sharedTimeline.map((e) => e.song.year))
+      : new Set<number>();
     const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
     if (currentSong) usedIds.add(currentSong.id);
     const { song: newMystery, deck: nextDeck } = pickMysterySong(
@@ -412,7 +422,9 @@ export default function App() {
           settings.categoryFilter === 'all' || s.category === settings.categoryFilter;
         return matchCat && settings.decades.includes(s.decade);
       });
-      const takenYears = new Set(sharedTimeline.map((e) => e.song.year));
+      const takenYears = settings.uniqueYearsOnly
+        ? new Set(sharedTimeline.map((e) => e.song.year))
+        : new Set<number>();
       const usedIds = new Set<string>(sharedTimeline.map((e) => e.song.id));
       usedIds.add(song.id);
       const { song: fresh, deck: freshDeck } = pickMysterySong([], takenYears, pool, usedIds);
