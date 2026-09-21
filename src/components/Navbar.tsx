@@ -40,7 +40,7 @@ export function Navbar({
       case 'expert': return '🎯 Ekspert';
       case 'party': return '🥳 Fest';
       case 'dj': return '🎧 DJ Mode';
-      default: return 'Hitster';
+      default: return 'HITS';
     }
   };
 
@@ -60,7 +60,7 @@ export function Navbar({
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-display tracking-wider">
-                HITSTER
+                HITS
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-300 border border-pink-500/20 hidden sm:inline-block">
                 DK & INT

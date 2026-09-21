@@ -1,15 +1,15 @@
-import { Trophy, Sparkles, RotateCcw, Music, Play, Check } from 'lucide-react';
+import { Trophy, Sparkles, RotateCcw, Play, LogOut } from 'lucide-react';
 import { Player, Song } from '../../types';
-import { sfx } from '../../services/audioService';
 
 interface VictoryModalProps {
   isOpen: boolean;
   winner: Player | null;
   onRestart: () => void;
+  onExit: () => void;
   onPlaySong: (song: Song) => void;
 }
 
-export function VictoryModal({ isOpen, winner, onRestart, onPlaySong }: VictoryModalProps) {
+export function VictoryModal({ isOpen, winner, onRestart, onExit, onPlaySong }: VictoryModalProps) {
   if (!isOpen || !winner) return null;
 
   return (
@@ -83,13 +83,23 @@ export function VictoryModal({ isOpen, winner, onRestart, onPlaySong }: VictoryM
             Tak for et fantastisk spil!
           </span>
 
-          <button
-            onClick={onRestart}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:scale-105 text-white font-bold text-sm tracking-wide shadow-lg shadow-pink-500/25 transition-all"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Spil et nyt spil</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onExit}
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm tracking-wide border border-slate-700 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Afslut</span>
+            </button>
+
+            <button
+              onClick={onRestart}
+              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:scale-105 text-white font-bold text-sm tracking-wide shadow-lg shadow-pink-500/25 transition-all"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Spil et nyt spil</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
