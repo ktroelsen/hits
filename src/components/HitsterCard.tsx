@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, CheckCircle2, XCircle } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview } from '../services/audioService';
+import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 
 interface HitsterCardProps {
   song: Song;
@@ -36,10 +37,12 @@ export function HitsterCard({
 }: HitsterCardProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const detachFadeRef = useRef<(() => void) | null>(null);
   const decadeStyle = DECADE_COLORS[song.decade] || DECADE_COLORS['80s'];
 
   useEffect(() => {
     return () => {
+      detachFadeRef.current?.();
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -52,7 +55,7 @@ export function HitsterCard({
 
     // If already playing, pause it
     if (audioRef.current && isPlayingAudio) {
-      audioRef.current.pause();
+      fadeOutAndPause(audioRef.current);
       setIsPlayingAudio(false);
       return;
     }
@@ -67,10 +70,12 @@ export function HitsterCard({
       if (res.previewUrl) {
         if (!audioRef.current) {
           audioRef.current = new Audio(res.previewUrl);
+          detachFadeRef.current = attachFadeEnvelope(audioRef.current);
         } else {
           audioRef.current.src = res.previewUrl;
         }
         audioRef.current.currentTime = 0;
+        resetFade(audioRef.current);
         audioRef.current.play().then(() => {
           setIsPlayingAudio(true);
         }).catch(() => {
