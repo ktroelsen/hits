@@ -14,3 +14,7 @@ coverage/
 *.db
 *.db-shm
 *.db-wal
+# built frontend (copied in at deploy time), runtime DB, and publish output
+server/wwwroot/
+server/App_Data/
+publish/

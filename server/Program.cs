@@ -6,10 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// SQLite path: configurable so production can point at a persistent, writable folder
-// outside the deploy target (see appsettings + deploy notes). Defaults to a local file.
+// SQLite path. Defaults to App_Data/hits.db under the content root; the deploy keeps
+// App_Data across releases (msdeploy -skip) so game/catalog data survives redeploys.
+// Override with ConnectionStrings__Default to point at any persistent, writable path.
+var dataDir = Path.Combine(builder.Environment.ContentRootPath, "App_Data");
+Directory.CreateDirectory(dataDir);
 var connectionString = builder.Configuration.GetConnectionString("Default")
-    ?? "Data Source=hits.db";
+    ?? $"Data Source={Path.Combine(dataDir, "hits.db")}";
 
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(connectionString));
 builder.Services.AddSignalR();
@@ -34,6 +37,12 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
     app.UseCors(DevCors);
+
+// Serve the built React frontend from wwwroot (populated by the deploy: dist → wwwroot).
+// In production this makes the whole app one self-contained .NET site — frontend, API
+// and SignalR hub under one origin, so no proxy or CORS is needed live.
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 // ---- Song catalog API (issue 10) ----
 var songs = app.MapGroup("/api/songs");
@@ -85,6 +94,10 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 // ---- Online game API (issue 8) ----
 app.MapGameEndpoints();
 app.MapHub<GameHub>("/gameHub");
+
+// SPA fallback: client-side routes (/game, /game/{code}, /admin) return index.html.
+// Runs after the API and hub are mapped, so it never shadows them.
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

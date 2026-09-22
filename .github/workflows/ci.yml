@@ -26,14 +26,22 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
       - name: Install
         run: npm ci
 
       - name: Typecheck (lint)
         run: npm run lint
 
-      - name: Build
+      - name: Build frontend
         run: npm run build
+
+      - name: Build backend
+        run: dotnet build server/Hits.Api.csproj -c Release
 
       - name: Upload build artifact
         if: always()

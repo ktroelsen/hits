@@ -65,11 +65,27 @@ backend-API'et der ejer kataloget.
 
 ## CI/CD (GitHub Actions)
 
-- **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck, build.
-- **`.github/workflows/deploy.yml`** — hænger af CI via `workflow_run`; bygger og synkroniserer
-  `dist/` til Simply.com (IIS) via Web Deploy. Statisk site, ingen server-runtime.
+- **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck,
+  frontend-build og `dotnet build` af backenden.
+- **`.github/workflows/deploy.yml`** — hænger af CI via `workflow_run`; bygger frontend ind i
+  `server/wwwroot`, kører `dotnet publish -r win-x64 --self-contained`, og synkroniserer
+  `publish/` til Simply.com (IIS) via Web Deploy. Den ene .NET-app serverer frontend + API +
+  SignalR-hub. `App_Data/` (SQLite-databasen) skippes ved sync, så data overlever redeploys.
 - **`.github/workflows/claude.yml`** — skriv `@claude` i et issue eller en PR-kommentar for at få
   Claude til at foreslå/lave ændringer.
+
+### Produktions-arkitektur
+
+Deployet er **self-contained**: `dotnet publish` bundter .NET-runtimen, så Simplys Windows/IIS
+ikke behøver .NET installeret. Appen kører i et app pool (ASP.NET Core Module, in-process) og
+serverer:
+
+- det byggede React-frontend fra `wwwroot` (med SPA-fallback til `index.html`),
+- katalog-API'et (`/api/songs`) og spil-API'et (`/api/games`),
+- SignalR-hubben (`/gameHub`).
+
+SQLite-filen ligger i `App_Data/hits.db` (skrivbar, bevaret på tværs af deploys). Vil du hellere
+lægge den et andet persistent sted, så sæt `ConnectionStrings__Default` i miljøet/`appsettings`.
 
 ### Nødvendige GitHub Secrets
 
