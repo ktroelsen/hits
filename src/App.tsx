@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { TurntablePlayer } from './components/TurntablePlayer';
 import { TimelineView } from './components/TimelineView';
 import { PlayerBar } from './components/PlayerBar';
@@ -8,7 +8,7 @@ import { GameSetupModal } from './components/Modals/GameSetupModal';
 import { RulesModal } from './components/Modals/RulesModal';
 import { VictoryModal } from './components/Modals/VictoryModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
-import { getActiveSongs } from './services/songsService';
+import { getActiveSongs, loadCatalog } from './services/songsService';
 import { markRemoved } from './services/removalStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
 import { sfx } from './services/audioService';
@@ -110,6 +110,14 @@ export default function App() {
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
+
+  // Load the catalog from the backend (issue 10) once at startup. On success we bump
+  // removedTick so any song list already computed from the bundled fallback recomputes.
+  useEffect(() => {
+    loadCatalog().then((ok) => {
+      if (ok) setRemovedTick((t) => t + 1);
+    });
+  }, []);
 
   // Filter available songs according to settings (excluding removed songs)
   const eligibleSongs = useMemo(() => {

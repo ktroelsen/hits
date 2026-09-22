@@ -7,3 +7,14 @@ coverage/
 .env*
 !.env.example
 .claude/
+
+# .NET backend (server/)
+[Bb]in/
+[Oo]bj/
+*.db
+*.db-shm
+*.db-wal
+# built frontend (copied in at deploy time), runtime DB, and publish output
+server/wwwroot/
+server/App_Data/
+publish/

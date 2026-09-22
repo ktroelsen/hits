@@ -34,16 +34,31 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
       - name: Install
         run: npm ci
 
-      # Vite bygger den statiske SPA til ./dist (inkl. public/web.config).
-      - name: Build
-        run: npm run build
+      # Byg den statiske SPA og læg den i backendens wwwroot, så den ene .NET-app
+      # serverer både frontend, API og SignalR-hub (self-contained site).
+      - name: Build frontend into wwwroot
+        run: |
+          npm run build
+          Remove-Item -Recurse -Force server/wwwroot -ErrorAction SilentlyContinue
+          Copy-Item -Recurse dist server/wwwroot
+        shell: pwsh
 
-      # Synkronisér dist/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes
-      # direkte, fordi Simplys WMSVC-brugere kun har contentPath-rettigheder på
-      # deres eget site. Statisk site → ingen dotnet publish, ingen app pool-restart.
+      # Publish self-contained (win-x64), så Simply ikke behøver .NET-runtime installeret.
+      - name: Publish backend (self-contained)
+        run: dotnet publish server/Hits.Api.csproj -c Release -r win-x64 --self-contained -o publish
+
+      # Synkronisér publish/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes
+      # direkte, fordi Simplys WMSVC-brugere kun har contentPath-rettigheder på deres
+      # eget site. AppOffline stopper .NET-appen så de låste exe/dll'er kan udskiftes;
+      # App_Data (SQLite-databasen) skippes, så game/katalog-data overlever redeploys.
       - name: Deploy to Simply via Web Deploy
         shell: pwsh
         env:
@@ -63,7 +78,7 @@ jobs:
 
           # Byg hvert argument som én samlet streng (PowerShells komma-split
           # kolliderer ellers med msdeploys komma-separerede provider-settings).
-          $source = "-source:contentPath=$PWD\dist"
+          $source = "-source:contentPath=$PWD\publish"
           $dest = "-dest:contentPath=$($env:WEBDEPLOY_SITE),computerName=https://$($env:WEBDEPLOY_URL):8172/msdeploy.axd?site=$($env:WEBDEPLOY_SITE),userName=$($env:WEBDEPLOY_USERNAME),password=$($env:WEBDEPLOY_PASSWORD),authType=Basic"
 
           & $msdeploy `
@@ -71,7 +86,9 @@ jobs:
             $source `
             $dest `
             -allowUntrusted `
-            -enableRule:AppOffline
+            -enableRule:AppOffline `
+            -skip:objectName=dirPath,absolutePath=".*App_Data.*" `
+            -skip:objectName=filePath,absolutePath=".*App_Data.*"
 
           if ($LASTEXITCODE -ne 0) {
             Write-Error "msdeploy failed with exit code $LASTEXITCODE"
