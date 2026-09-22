@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "check-songs": "tsx scripts/check-previews.ts",
     "prune-songs": "tsx scripts/check-previews.ts --prune",
-    "bake-songs": "tsx scripts/check-previews.ts --bake"
+    "bake-songs": "tsx scripts/check-previews.ts --bake",
+    "export-songs": "tsx scripts/exportSongs.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

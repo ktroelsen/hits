@@ -8,9 +8,17 @@ nul runtime-kald til Apple; ellers hentes de live og caches i browseren (localSt
 
 ## Kør lokalt
 
-**Forudsætning:** Node.js 20+
+**Forudsætning:** Node.js 20+ og .NET 10 SDK (til backend).
+
+Sangkataloget ligger nu i en **backend-database** (SQLite via ASP.NET Core, se
+`server/`). Frontend henter kataloget fra `GET /api/songs`; hvis backend ikke kører,
+falder appen tilbage til den bundlede `src/data/songs.ts`.
 
 ```bash
+# Terminal 1 — backend (API + SQLite på http://localhost:5099)
+cd server && dotnet run
+
+# Terminal 2 — frontend (Vite proxyer /api/* til backend)
 npm ci
 npm run dev      # http://localhost:3000
 ```
@@ -20,10 +28,14 @@ Andre scripts:
 ```bash
 npm run build         # bygger den statiske app til ./dist
 npm run lint          # tsc --noEmit (typecheck)
+npm run export-songs  # skriver src/data/songs.ts → server/seed/songs.json (DB-seed)
 npm run check-songs   # tjekker alle sange mod iTunes (OK/MANGLER)
 npm run prune-songs   # fjerner sange uden iTunes-preview fra src/data/songs.ts
 npm run bake-songs    # skriver previewUrl + artworkUrl ind i src/data/songs.ts
 ```
+
+Første gang backend starter, seedes de 273 sange fra `server/seed/songs.json` ind i
+SQLite. Derefter er databasen sandheden — tilføj/slet sange via `/admin` eller API'et.
 
 > `check-songs`/`prune-songs`/`bake-songs` kalder iTunes Search og skal køres fra et netværk der ikke er
 > blokeret (nogle CI/sandbox-IP'er får 403). Ved usikkert svar beholdes sangen (ingen sletning).
@@ -34,20 +46,22 @@ Et **lokalt** kurateringsværktøj til at vokse kataloget mod ~500 sange. Det er
 nogen steder — du skal kende adressen:
 
 ```bash
-npm run dev
+cd server && dotnet run   # backend skal køre — admin skriver til databasen
+npm run dev               # i en anden terminal
 # åbn http://localhost:3000/admin
 ```
 
 - Gennemgå kandidater fra `src/data/candidates.json` én ad gangen: afspil preview, redigér
   felter, og **Tilføj / Afvis / Spring over**.
 - **Tilføj egen sang** manuelt med samme formular.
-- Godkendte sange skrives direkte ind i `src/data/songs.ts` (med preview + artwork bagt ind),
-  og beslutninger gemmes i `src/data/candidate-status.json` så afviste ikke dukker op igen.
+- Godkendte sange skrives direkte til **backend-databasen** via `POST /api/songs` (med preview
+  + artwork), og er live med det samme — ingen commit eller deploy nødvendig. Beslutninger
+  gemmes lokalt i `src/data/candidate-status.json` så afviste ikke dukker op igen.
 - Sange der allerede findes i kataloget filtreres automatisk fra.
 
-Skrive-API'et (`/api/admin/*`) findes **kun** under `npm run dev` (Vite-plugin i
-`scripts/adminServer.ts`). Produktionsbuildet er rent statisk uden skrive-adgang. Arbejdsgang:
-kuratér lokalt → `git commit` → deploy.
+Admin-pluginnet (`/api/admin/*` i `scripts/adminServer.ts`) findes **kun** under `npm run dev`
+og videresender skrivninger til backend-API'et. Selve produktions-frontenden er statisk; det er
+backend-API'et der ejer kataloget.
 
 ## CI/CD (GitHub Actions)
 

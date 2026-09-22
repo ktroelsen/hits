@@ -6,3 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# .NET backend (server/)
+[Bb]in/
+[Oo]bj/
+*.db
+*.db-shm
+*.db-wal

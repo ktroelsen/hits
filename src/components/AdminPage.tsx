@@ -3,9 +3,10 @@ import { fetchSongAudioPreview } from '../services/audioService';
 import { SongCategory } from '../types';
 
 // Local-only curation tool (route: /admin). Reads the candidate pool and writes
-// approved songs straight into src/data/songs.ts via the Vite dev API in
-// scripts/adminServer.ts. It ONLY works under `npm run dev`; the deployed static
-// site has no write API. Workflow: curate here → git commit → deploy.
+// approved songs to the backend catalog database via the Vite dev API in
+// scripts/adminServer.ts (which POSTs to the .NET API → SQLite). It ONLY works
+// under `npm run dev` with the backend running; songs added here appear
+// everywhere immediately, no redeploy needed (issue 10).
 
 const GOAL = 500;
 const API = '/api/admin';
@@ -72,16 +73,19 @@ export function AdminPage() {
   const loadState = useCallback(async () => {
     try {
       const res = await fetch(`${API}/state`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error || `HTTP ${res.status}`);
+      }
       const data: AdminState = await res.json();
       setState(data);
       setQueue(data.candidates);
       if (data.candidates.length > 0) setDraft(draftFromCandidate(data.candidates[0]));
       setError(null);
-    } catch {
+    } catch (e) {
       setError(
-        'Kunne ikke nå admin-API\'et. Denne side virker kun lokalt via "npm run dev" — ' +
-          'produktion er en ren statisk app uden skrive-adgang.',
+        `${(e as Error).message} — admin virker kun lokalt via "npm run dev" med backend kørende ` +
+          '(cd server && dotnet run).',
       );
     }
   }, []);
@@ -246,8 +250,8 @@ export function AdminPage() {
             🎛️ Sang-admin <span className="text-slate-500 text-base font-normal">(kun lokalt)</span>
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            Auditionér kandidater og vælg hvilke der ryger i kataloget. Godkendte sange skrives
-            direkte i <code className="text-pink-400">songs.ts</code> — husk at committe bagefter.
+            Auditionér kandidater og vælg hvilke der ryger i kataloget. Godkendte sange gemmes
+            direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
           </p>
         </header>
 
@@ -378,7 +382,7 @@ export function AdminPage() {
             </section>
 
             <p className="mt-6 text-center text-xs text-slate-600">
-              Efter en session: <code className="text-slate-400">git add -A &amp;&amp; git commit</code> og deploy.
+              Ændringer gemmes direkte i databasen — ingen commit eller deploy nødvendig.
             </p>
           </>
         )}
