@@ -81,14 +81,19 @@ jobs:
           $source = "-source:contentPath=$PWD\publish"
           $dest = "-dest:contentPath=$($env:WEBDEPLOY_SITE),computerName=https://$($env:WEBDEPLOY_URL):8172/msdeploy.axd?site=$($env:WEBDEPLOY_SITE),userName=$($env:WEBDEPLOY_USERNAME),password=$($env:WEBDEPLOY_PASSWORD),authType=Basic"
 
+          # Single-quoted so PowerShell passes each -skip as one literal argument
+          # (no embedded double quotes, which msdeploy rejects as a bad argument).
+          $skipDir = '-skip:objectName=dirPath,absolutePath=.*App_Data.*'
+          $skipFile = '-skip:objectName=filePath,absolutePath=.*App_Data.*'
+
           & $msdeploy `
             -verb:sync `
             $source `
             $dest `
             -allowUntrusted `
             -enableRule:AppOffline `
-            -skip:objectName=dirPath,absolutePath=".*App_Data.*" `
-            -skip:objectName=filePath,absolutePath=".*App_Data.*"
+            $skipDir `
+            $skipFile
 
           if ($LASTEXITCODE -ne 0) {
             Write-Error "msdeploy failed with exit code $LASTEXITCODE"
