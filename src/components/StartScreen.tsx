@@ -1,4 +1,4 @@
-import { Disc, Play, Settings, HelpCircle, ListMusic } from 'lucide-react';
+import { Disc, Play, Settings, HelpCircle, ListMusic, Users } from 'lucide-react';
 import { GameSettings } from '../types';
 
 interface StartScreenProps {
@@ -43,7 +43,7 @@ export function StartScreen({
           • Mål: {settings.targetCards} sange
         </p>
 
-        {/* Primary start button */}
+        {/* Primary start button — classic, single-device HITS */}
         <button
           id="start-game-btn"
           onClick={onStart}
@@ -52,6 +52,23 @@ export function StartScreen({
           <Play className="w-6 h-6 fill-current" />
           Start spil
         </button>
+        <p className="mt-2 text-slate-400 text-sm">
+          Klassisk HITS · alle spiller på denne enhed
+        </p>
+
+        {/* Online multiplayer — each player on their own phone */}
+        <button
+          onClick={() => {
+            window.location.href = '/game';
+          }}
+          className="mt-5 w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-lg tracking-wide uppercase border border-cyan-500/50 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 hover:scale-[1.02] transition-all"
+        >
+          <Users className="w-6 h-6 text-cyan-400" />
+          Online spil
+        </button>
+        <p className="mt-2 text-slate-400 text-sm">
+          Spil sammen på hver jeres telefon med en kode
+        </p>
 
         {/* Secondary actions */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">

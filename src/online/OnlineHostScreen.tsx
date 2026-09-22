@@ -217,11 +217,11 @@ export function OnlineHostScreen() {
             </div>
             <button
               onClick={() => {
-                setCode(null);
+                window.location.href = '/';
               }}
               className="mt-6 rounded-lg bg-pink-600 px-6 py-3 font-bold hover:bg-pink-500"
             >
-              Nyt spil
+              Tilbage til forsiden
             </button>
           </section>
         )}
