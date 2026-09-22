@@ -21,7 +21,7 @@ public static class RoundStatus
 public class Game
 {
     public string Id { get; set; } = default!;
-    public string Code { get; set; } = default!;         // 8-digit join code
+    public string Code { get; set; } = default!;         // 4-digit join code
     public string Status { get; set; } = GameStatus.Lobby;
     public DateTime CreatedAt { get; set; }
     public int CurrentRound { get; set; }                // 0 until the first round starts
