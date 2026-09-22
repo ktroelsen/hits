@@ -22,7 +22,7 @@ export function RulesModal({ isOpen, onClose }: RulesModalProps) {
             </div>
             <div>
               <h3 className="text-xl font-black text-white font-display">
-                Sådan spiller du Hitster
+                Sådan spiller du HITS
               </h3>
               <p className="text-xs text-slate-400">
                 Det ultimative musik- og tidslinjespil
@@ -92,10 +92,10 @@ export function RulesModal({ isOpen, onClose }: RulesModalProps) {
             <div>
               <h4 className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
                 <Coins className="w-4 h-4 text-amber-400" />
-                Hitster-tokens (Mønter)
+                HITS-tokens (Mønter)
               </h4>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Du starter med 2 Hitster-tokens. Du kan bruge 1 token til at <strong>skifte sang</strong> hvis du er helt på bar bund. Gætter du det nøjagtige årstal i Ekspert-mode, vinder du en ekstra token!
+                Du starter med 2 HITS-tokens. Du kan bruge 1 token til at <strong>skifte sang</strong> hvis du er helt på bar bund. Gætter du det nøjagtige årstal i Ekspert-mode, vinder du en ekstra token!
               </p>
             </div>
           </div>

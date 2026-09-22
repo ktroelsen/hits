@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, Sparkles, CheckCircle2, XCircle } from 'lucide-react';
+import { Play, Pause, CheckCircle2, XCircle } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview } from '../services/audioService';
 
@@ -85,7 +85,7 @@ export function HitsterCard({
   return (
     <div
       id={`hitster-card-${song.id}`}
-      className={`relative w-44 sm:w-48 h-64 sm:h-72 rounded-2xl p-4 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
+      className={`relative w-24 sm:w-28 h-32 overflow-hidden rounded-2xl p-2 flex flex-col justify-between select-none shadow-xl transition-all duration-300 transform group hover:-translate-y-1.5 hover:shadow-2xl border ${
         status === 'correct'
           ? 'ring-4 ring-emerald-500/80 border-emerald-400 bg-emerald-950/40'
           : status === 'wrong'
@@ -98,34 +98,38 @@ export function HitsterCard({
       {/* Background vinyl texture sheen */}
       <div className="absolute inset-0 rounded-2xl bg-slate-900/30 backdrop-blur-sm pointer-events-none" />
 
-      {/* Top Bar: Year & Origin Flag */}
-      <div className="relative z-10 flex items-start justify-between">
-        <div className="flex flex-col">
-          {isRevealed ? (
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow font-display">
-                {song.year}
-              </span>
-            </div>
-          ) : (
-            <div className="text-xl sm:text-2xl font-black text-slate-400 font-mono tracking-widest">
-              ????
-            </div>
-          )}
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded mt-0.5 w-fit ${decadeStyle.badge}`}>
+      {/* Play / pause — fixed in the card's top-right corner */}
+      <button
+        onClick={handlePlayCard}
+        className={`absolute top-1.5 right-1.5 z-20 flex items-center justify-center w-7 h-7 rounded-full border transition-colors shadow ${
+          isPlayingAudio
+            ? 'bg-pink-600 border-pink-400 text-white ring-2 ring-pink-500/40'
+            : 'bg-slate-950/80 border-slate-600/70 text-white hover:bg-pink-950/80 hover:border-pink-500/60'
+        }`}
+        title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
+      >
+        {isPlayingAudio ? (
+          <Pause className="w-3.5 h-3.5 fill-current" />
+        ) : (
+          <Play className="w-3.5 h-3.5 ml-0.5 fill-current" />
+        )}
+      </button>
+
+      {/* Top: Year + decade & owner badges (kept clear of the play button) */}
+      <div className="relative z-10 pr-8">
+        {isRevealed ? (
+          <span className="text-lg sm:text-xl font-black text-white tracking-tight drop-shadow font-display">
+            {song.year}
+          </span>
+        ) : (
+          <span className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
+            ????
+          </span>
+        )}
+        <div className="flex flex-wrap items-center gap-1 mt-0.5">
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${decadeStyle.badge}`}>
             {song.decade}
           </span>
-        </div>
-
-        {/* Right side: Claimed by team / starter card badge & Flag */}
-        <div className="flex flex-col items-end gap-1">
-          <span
-            className="text-lg px-2 py-0.5 rounded-lg bg-slate-950/60 border border-slate-700/60 shadow-sm"
-            title={song.category === 'danish' ? 'Dansk hit' : 'Internationalt hit'}
-          >
-            {song.category === 'danish' ? '🇩🇰' : '🌍'}
-          </span>
-
           {claimedBy ? (
             <div
               className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border shadow-xs"
@@ -140,7 +144,7 @@ export function HitsterCard({
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: claimedBy.color }}
               />
-              <span className="truncate max-w-[65px]">{claimedBy.name}</span>
+              <span className="truncate max-w-[60px]">{claimedBy.name}</span>
             </div>
           ) : isRevealed ? (
             <div
@@ -154,59 +158,31 @@ export function HitsterCard({
         </div>
       </div>
 
-      {/* Center: Vinyl disc mini art or music icon */}
-      <div className="relative z-10 my-auto flex flex-col items-center justify-center">
-        <div className="relative w-16 h-16 rounded-full bg-slate-950 border-2 border-slate-700/80 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-          {/* Concentric lines */}
-          <div className="absolute inset-2 rounded-full border border-slate-800 pointer-events-none" />
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center">
-            <div className="w-2 h-2 rounded-full bg-slate-950" />
-          </div>
-
-          {/* Quick Play Button on Card */}
-          <button
-            onClick={handlePlayCard}
-            className={`absolute inset-0 rounded-full bg-slate-950/70 hover:bg-slate-950/40 flex items-center justify-center text-white transition-opacity backdrop-blur-xs ${
-              isPlayingAudio ? 'opacity-100 ring-2 ring-pink-500' : 'opacity-0 group-hover:opacity-100'
-            }`}
-            title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
-          >
-            {isPlayingAudio ? (
-              <Pause className="w-5 h-5 text-pink-400 fill-current" />
-            ) : (
-              <Play className="w-5 h-5 text-white ml-0.5 fill-current" />
-            )}
-          </button>
+      {/* Optional result badge (only when a status is set, e.g. in modals) */}
+      {(status === 'correct' || status === 'wrong') && (
+        <div className="relative z-10 flex justify-center">
+          {status === 'correct' ? (
+            <div className="flex items-center gap-1 text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Korrekt!</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-rose-400 text-xs font-bold bg-rose-950/80 px-2 py-0.5 rounded-full border border-rose-500/40">
+              <XCircle className="w-3.5 h-3.5" />
+              <span>Forkert</span>
+            </div>
+          )}
         </div>
+      )}
 
-        {status === 'correct' && (
-          <div className="flex items-center gap-1 mt-2 text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Korrekt!</span>
-          </div>
-        )}
-
-        {status === 'wrong' && (
-          <div className="flex items-center gap-1 mt-2 text-rose-400 text-xs font-bold bg-rose-950/80 px-2 py-0.5 rounded-full border border-rose-500/40">
-            <XCircle className="w-3.5 h-3.5" />
-            <span>Forkert</span>
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Info: Title, Artist & Trivia snippet */}
-      <div className="relative z-10 mt-auto pt-2 border-t border-slate-800/80">
-        <h4 className="font-bold text-white text-sm line-clamp-1 group-hover:text-pink-300 transition-colors">
+      {/* Bottom Info: Title & Artist — gets the room freed by removing the disc */}
+      <div className="relative z-10 mt-auto pt-1.5 border-t border-slate-800/80">
+        <h4 className="font-bold text-white text-sm leading-snug line-clamp-2 group-hover:text-pink-300 transition-colors">
           {song.title}
         </h4>
-        <p className="text-slate-300 text-xs line-clamp-1 font-medium">
+        <p className="text-slate-300 text-xs line-clamp-1 font-medium mt-0.5">
           {song.artist}
         </p>
-        {song.funFact && (
-          <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-tight italic">
-            "{song.funFact}"
-          </p>
-        )}
       </div>
     </div>
   );
