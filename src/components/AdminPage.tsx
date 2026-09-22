@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback, type InputHTMLAttributes } from 'react';
 import { fetchSongAudioPreview } from '../services/audioService';
 import { SongCategory } from '../types';
+import { AdminCatalog } from './AdminCatalog';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
@@ -19,11 +20,16 @@ function readKey(): string {
   }
 }
 
-function adminFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  return fetch(`${API}${path}`, {
+// fetch with the admin key header, for any admin-protected endpoint
+function keyedFetch(url: string, init: RequestInit = {}): Promise<Response> {
+  return fetch(url, {
     ...init,
     headers: { 'Content-Type': 'application/json', 'X-Admin-Key': readKey(), ...init.headers },
   });
+}
+
+function adminFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  return keyedFetch(`${API}${path}`, init);
 }
 
 interface Candidate {
@@ -85,6 +91,7 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
+  const [tab, setTab] = useState<'candidates' | 'catalog'>('candidates');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const loadState = useCallback(async () => {
@@ -113,6 +120,13 @@ export function AdminPage() {
   useEffect(() => {
     loadState();
   }, [loadState]);
+
+  const loadCounts = useCallback(async () => {
+    const res = await adminFetch('/state').catch(() => null);
+    if (!res?.ok) return;
+    const data: AdminState = await res.json();
+    setState((s) => (s ? { ...s, counts: data.counts } : data));
+  }, []);
 
   const stopAudio = useCallback(() => {
     if (audioRef.current) {
@@ -321,6 +335,29 @@ export function AdminPage() {
               </div>
             </section>
 
+            <div className="mb-4 flex gap-1 rounded-xl bg-slate-900 p-1 ring-1 ring-slate-800">
+              {[
+                { id: 'candidates' as const, label: `Kandidater (${remaining})` },
+                { id: 'catalog' as const, label: `Katalog (${total})` },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    stopAudio();
+                    setTab(t.id);
+                  }}
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+                    tab === t.id ? 'bg-pink-600 text-white' : 'text-slate-400 hover:bg-slate-800'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {tab === 'catalog' && <AdminCatalog request={keyedFetch} onChanged={loadCounts} />}
+
+            {tab === 'candidates' && (
             <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="font-bold">
@@ -420,6 +457,7 @@ export function AdminPage() {
                 </p>
               )}
             </section>
+            )}
 
             <p className="mt-6 text-center text-xs text-slate-600">
               Ændringer gemmes direkte i databasen — ingen commit eller deploy nødvendig.
