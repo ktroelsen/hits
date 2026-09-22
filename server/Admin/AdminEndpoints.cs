@@ -122,7 +122,7 @@ public static class AdminEndpoints
     static string? Blank(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 
     // Mirrors decadeForYear in scripts/songsFile.ts.
-    static string DecadeForYear(int year) => year switch
+    internal static string DecadeForYear(int year) => year switch
     {
         < 1970 => "60s",
         < 1980 => "70s",
