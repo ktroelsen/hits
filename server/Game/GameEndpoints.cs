@@ -185,11 +185,21 @@ public static class GameEndpoints
 
     private static async Task<string> GenerateUniqueCodeAsync(AppDbContext db)
     {
+        // 4-digit codes are few (10.000), so a code held by a finished or stale game is
+        // reused: the old game's code gets a suffix so the unique index still holds.
+        var staleBefore = DateTime.UtcNow.AddHours(-12);
         var rng = Random.Shared;
-        for (var attempt = 0; attempt < 20; attempt++)
+        for (var attempt = 0; attempt < 50; attempt++)
         {
-            var code = rng.Next(0, 100_000_000).ToString("D8");
-            if (!await db.Games.AnyAsync(g => g.Code == code)) return code;
+            var code = rng.Next(0, 10_000).ToString("D4");
+            var existing = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+            if (existing is null) return code;
+            if (existing.Status == GameStatus.Finished || existing.CreatedAt < staleBefore)
+            {
+                existing.Code = $"{code}-{existing.Id[..8]}";
+                await db.SaveChangesAsync();
+                return code;
+            }
         }
         throw new InvalidOperationException("Kunne ikke generere en unik spilkode.");
     }
