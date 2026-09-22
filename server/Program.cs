@@ -12,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
     ?? "Data Source=hits.db";
 
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(connectionString));
+builder.Services.AddSignalR();
+builder.Services.AddScoped<GameBroadcaster>();
 
 // Allow the statically-hosted frontend (dev on :3000) to call the API cross-origin.
 const string DevCors = "dev-frontend";
@@ -82,6 +84,7 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 
 // ---- Online game API (issue 8) ----
 app.MapGameEndpoints();
+app.MapHub<GameHub>("/gameHub");
 
 app.Run();
 

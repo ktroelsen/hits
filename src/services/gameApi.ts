@@ -1,6 +1,7 @@
 // Typed client for the online game API (issue 8). Same-origin in production; in dev
-// Vite proxies /api/games to the .NET backend. See vite.config.ts.
+// Vite proxies /api/games and /gameHub to the .NET backend. See vite.config.ts.
 import { useEffect, useRef, useState } from 'react';
+import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 
 export type GameStatus = 'lobby' | 'playing' | 'revealed' | 'finished';
 export type RoundStatus = 'playing' | 'revealed';
@@ -84,36 +85,62 @@ export const gameApi = {
   state: (code: string) => req<GameState>(`/${code}`),
 };
 
-// Polls GET /api/games/{code} on an interval. Fase 3 will replace this with a
-// SignalR subscription; components consume the same GameState either way.
-export function useGameState(code: string | null, intervalMs = 1500) {
+// Subscribes to live game state over SignalR (/gameHub): the server pushes the full
+// GameState to everyone in the game's group after every change. If the hub can't be
+// reached, it transparently falls back to polling GET /api/games/{code}.
+export function useGameState(code: string | null, pollMs = 1500) {
   const [state, setState] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const active = useRef(true);
 
   useEffect(() => {
     if (!code) return;
-    active.current = true;
-    let timer: number;
-    const tick = async () => {
-      try {
-        const s = await gameApi.state(code);
-        if (active.current) {
-          setState(s);
-          setError(null);
+    let disposed = false;
+    let pollTimer: number | undefined;
+
+    const startPolling = () => {
+      const tick = async () => {
+        try {
+          const s = await gameApi.state(code);
+          if (!disposed) {
+            setState(s);
+            setError(null);
+          }
+        } catch (e) {
+          if (!disposed) setError((e as Error).message);
+        } finally {
+          if (!disposed) pollTimer = window.setTimeout(tick, pollMs);
         }
-      } catch (e) {
-        if (active.current) setError((e as Error).message);
-      } finally {
-        if (active.current) timer = window.setTimeout(tick, intervalMs);
+      };
+      tick();
+    };
+
+    const connection = new HubConnectionBuilder()
+      .withUrl('/gameHub')
+      .withAutomaticReconnect()
+      .build();
+
+    connection.on('state', (s: GameState) => {
+      if (!disposed) {
+        setState(s);
+        setError(null);
       }
-    };
-    tick();
+    });
+    connection.onreconnected(() => connection.invoke('JoinGame', code).catch(() => {}));
+
+    connection
+      .start()
+      .then(() => connection.invoke('JoinGame', code))
+      .catch(() => {
+        // Hub unavailable — fall back to polling so the game still works.
+        if (!disposed) startPolling();
+      });
+
     return () => {
-      active.current = false;
-      window.clearTimeout(timer);
+      disposed = true;
+      if (pollTimer) window.clearTimeout(pollTimer);
+      if (connection.state !== HubConnectionState.Disconnected) connection.stop();
     };
-  }, [code, intervalMs]);
+  }, [code, pollMs]);
 
   return { state, error };
 }

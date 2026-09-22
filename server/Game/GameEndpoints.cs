@@ -44,7 +44,7 @@ public static class GameEndpoints
         });
 
         // Player joins by code with a name.
-        games.MapPost("/{code}/join", async (string code, JoinRequest req, AppDbContext db) =>
+        games.MapPost("/{code}/join", async (string code, JoinRequest req, AppDbContext db, GameBroadcaster bc) =>
         {
             var game = await db.Games.Include(g => g.Players).FirstOrDefaultAsync(g => g.Code == code);
             if (game is null) return Results.NotFound("Spil ikke fundet.");
@@ -65,11 +65,12 @@ public static class GameEndpoints
             };
             db.Players.Add(player);
             await db.SaveChangesAsync();
+            await bc.BroadcastAsync(db, code);
             return Results.Ok(new { id = player.Id, name = player.Name, color = player.Color });
         });
 
         // Host starts the game → first round.
-        games.MapPost("/{code}/start", async (string code, AppDbContext db) =>
+        games.MapPost("/{code}/start", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
             var game = await db.Games.Include(g => g.Players).FirstOrDefaultAsync(g => g.Code == code);
             if (game is null) return Results.NotFound();
@@ -77,11 +78,12 @@ public static class GameEndpoints
             if (game.Players.Count == 0) return Results.BadRequest("Ingen spillere har joinet endnu.");
             await StartNextRoundAsync(game, db);
             await db.SaveChangesAsync();
+            await bc.BroadcastAsync(db, code);
             return Results.Ok();
         });
 
         // Player submits their placement + year for the current round.
-        games.MapPost("/{code}/answer", async (string code, AnswerRequest req, AppDbContext db) =>
+        games.MapPost("/{code}/answer", async (string code, AnswerRequest req, AppDbContext db, GameBroadcaster bc) =>
         {
             var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
             if (game is null) return Results.NotFound();
@@ -107,11 +109,12 @@ public static class GameEndpoints
                 SubmittedAt = DateTime.UtcNow,
             });
             await db.SaveChangesAsync();
+            await bc.BroadcastAsync(db, code);
             return Results.Ok();
         });
 
         // Host reveals the current round: score every answer, update the timeline.
-        games.MapPost("/{code}/reveal", async (string code, AppDbContext db) =>
+        games.MapPost("/{code}/reveal", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
             var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
             if (game is null) return Results.NotFound();
@@ -123,7 +126,7 @@ public static class GameEndpoints
             var song = await db.Songs.FindAsync(round.SongId);
             if (song is null) return Results.Problem("Rundens sang findes ikke i kataloget.");
 
-            var timeline = await BuildTimelineAsync(game, db); // revealed songs so far (year-sorted)
+            var timeline = await GameStateBuilder.BuildTimelineAsync(game, db); // revealed songs so far
             var correctIndex = CorrectIndexFor(song.Year, timeline);
             round.CorrectIndex = correctIndex;
 
@@ -142,11 +145,12 @@ public static class GameEndpoints
             round.Status = RoundStatus.Revealed;
             game.Status = GameStatus.Revealed;
             await db.SaveChangesAsync();
+            await bc.BroadcastAsync(db, code);
             return Results.Ok();
         });
 
         // Host advances to the next round, or finishes the game.
-        games.MapPost("/{code}/next", async (string code, AppDbContext db) =>
+        games.MapPost("/{code}/next", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
             var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
             if (game is null) return Results.NotFound();
@@ -157,68 +161,21 @@ public static class GameEndpoints
             {
                 game.Status = GameStatus.Finished;
                 await db.SaveChangesAsync();
+                await bc.BroadcastAsync(db, code);
                 return Results.Ok(new { finished = true });
             }
             await StartNextRoundAsync(game, db);
             await db.SaveChangesAsync();
+            await bc.BroadcastAsync(db, code);
             return Results.Ok(new { finished = false });
         });
 
-        // Full state for the main screen and players. Hides the round song's identity
-        // (title/artist/year) until the round is revealed — only audio is exposed.
+        // Full state for the main screen and players (also used by SignalR). Hides the
+        // round song's identity until the round is revealed — only audio is exposed.
         games.MapGet("/{code}", async (string code, AppDbContext db) =>
         {
-            var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
-            if (game is null) return Results.NotFound();
-
-            var players = await db.Players
-                .Where(p => p.GameId == game.Id)
-                .OrderByDescending(p => p.Score).ThenBy(p => p.JoinedAt)
-                .Select(p => new { p.Id, p.Name, p.Color, p.Score })
-                .ToListAsync();
-
-            var timeline = await BuildTimelineAsync(game, db);
-
-            object? roundDto = null;
-            if (game.CurrentRound > 0)
-            {
-                var round = await db.Rounds.FirstOrDefaultAsync(r => r.GameId == game.Id && r.Number == game.CurrentRound);
-                if (round is not null)
-                {
-                    var song = await db.Songs.FindAsync(round.SongId);
-                    var answers = await db.Answers.Where(a => a.RoundId == round.Id).ToListAsync();
-                    var revealed = round.Status == RoundStatus.Revealed;
-                    roundDto = new
-                    {
-                        number = round.Number,
-                        status = round.Status,
-                        audioUrl = song?.PreviewUrl ?? song?.CustomPreviewUrl,
-                        answeredPlayerIds = answers.Select(a => a.PlayerId).ToList(),
-                        correctIndex = revealed ? round.CorrectIndex : null,
-                        song = revealed && song is not null
-                            ? new { song.Id, song.Title, song.Artist, song.Year, song.PreviewUrl, song.ArtworkUrl }
-                            : null,
-                        results = revealed
-                            ? answers.Select(a => new
-                            {
-                                a.PlayerId, a.InsertIndex, a.GuessedYear,
-                                a.PlacementCorrect, a.YearCorrect, a.Points,
-                            }).ToList<object>()
-                            : new List<object>(),
-                    };
-                }
-            }
-
-            return Results.Ok(new
-            {
-                code = game.Code,
-                status = game.Status,
-                currentRound = game.CurrentRound,
-                targetRounds = game.TargetRounds,
-                players,
-                timeline = timeline.Select(s => new { s.Id, s.Title, s.Artist, s.Year, s.ArtworkUrl }),
-                round = roundDto,
-            });
+            var state = await GameStateBuilder.BuildAsync(db, code);
+            return state is null ? Results.NotFound() : Results.Ok(state);
         });
     }
 
@@ -245,18 +202,6 @@ public static class GameEndpoints
             var j = rng.Next(i + 1);
             (list[i], list[j]) = (list[j], list[i]);
         }
-    }
-
-    // The shared timeline = songs from already-revealed rounds, sorted ascending by year.
-    private static async Task<List<Song>> BuildTimelineAsync(Game game, AppDbContext db)
-    {
-        var revealedSongIds = await db.Rounds
-            .Where(r => r.GameId == game.Id && r.Status == RoundStatus.Revealed)
-            .Select(r => r.SongId)
-            .ToListAsync();
-        if (revealedSongIds.Count == 0) return new();
-        var songs = await db.Songs.Where(s => revealedSongIds.Contains(s.Id)).ToListAsync();
-        return songs.OrderBy(s => s.Year).ToList();
     }
 
     // Correct insertion index into a year-sorted timeline: the number of songs with a
