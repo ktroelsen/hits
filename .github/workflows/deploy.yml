@@ -51,9 +51,11 @@ jobs:
           Copy-Item -Recurse dist server/wwwroot
         shell: pwsh
 
-      # Publish self-contained (win-x64), så Simply ikke behøver .NET-runtime installeret.
+      # Publish self-contained for win-x86, så Simply ikke behøver .NET-runtime installeret.
+      # x86 fordi Simplys app pool kører 32-bit (Enable 32-Bit Applications = True);
+      # en x64-host giver ellers HTTP 500.32 "Failed to load .NET Core host".
       - name: Publish backend (self-contained)
-        run: dotnet publish server/Hits.Api.csproj -c Release -r win-x64 --self-contained -o publish
+        run: dotnet publish server/Hits.Api.csproj -c Release -r win-x86 --self-contained -o publish
 
       # Synkronisér publish/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes
       # direkte, fordi Simplys WMSVC-brugere kun har contentPath-rettigheder på deres
