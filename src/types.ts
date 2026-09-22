@@ -18,7 +18,7 @@ export interface Song {
   artworkUrl?: string;
 }
 
-export type GameMode = 'timeline' | 'expert' | 'party' | 'quick' | 'dj';
+export type GameMode = 'timeline' | 'expert' | 'party' | 'quick' | 'dj' | 'solo';
 
 export interface TimelineEntry {
   song: Song;

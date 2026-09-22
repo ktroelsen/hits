@@ -1,9 +1,11 @@
-import { Disc, Play, Settings, HelpCircle, ListMusic, Users } from 'lucide-react';
+import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users } from 'lucide-react';
 import { GameSettings } from '../types';
 
 interface StartScreenProps {
   settings: GameSettings;
+  highscore: number;
   onStart: () => void;
+  onStartSolo: () => void;
   onOpenSettings: () => void;
   onOpenRules: () => void;
   onOpenCatalog: () => void;
@@ -11,7 +13,9 @@ interface StartScreenProps {
 
 export function StartScreen({
   settings,
+  highscore,
   onStart,
+  onStartSolo,
   onOpenSettings,
   onOpenRules,
   onOpenCatalog,
@@ -54,6 +58,24 @@ export function StartScreen({
         </button>
         <p className="mt-2 text-slate-400 text-sm">
           Klassisk HITS · alle spiller på denne enhed
+        </p>
+
+        {/* Single player — lives + highscore */}
+        <button
+          id="start-solo-btn"
+          onClick={onStartSolo}
+          className="mt-5 w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-lg tracking-wide uppercase border border-rose-500/50 hover:border-rose-400 shadow-lg shadow-rose-500/10 hover:scale-[1.02] transition-all"
+        >
+          <Heart className="w-6 h-6 text-rose-400 fill-rose-400" />
+          Single player
+        </button>
+        <p className="mt-2 text-slate-400 text-sm">
+          Spil alene · én fejl og du er ude
+          {highscore > 0 && (
+            <>
+              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscore}</span>
+            </>
+          )}
         </p>
 
         {/* Online multiplayer — each player on their own phone */}
