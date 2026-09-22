@@ -42,11 +42,13 @@ SQLite. Derefter er databasen sandheden — tilføj/slet sange via `/admin` elle
 
 ## Admin: udvid kataloget (`/admin`)
 
-Et **lokalt** kurateringsværktøj til at vokse kataloget mod ~500 sange. Det er ikke linket
-nogen steder — du skal kende adressen:
+Et kurateringsværktøj til at vokse kataloget mod ~500 sange. Det er ikke linket nogen steder —
+du skal kende adressen. Det virker både **lokalt** og på det **deployede site**
+(`https://<site>/admin`), fordi API'et (`/api/admin/*`) nu ligger i .NET-backenden
+(`server/Admin/AdminEndpoints.cs`).
 
 ```bash
-cd server && dotnet run   # backend skal køre — admin skriver til databasen
+cd server && dotnet run   # backend
 npm run dev               # i en anden terminal
 # åbn http://localhost:3000/admin
 ```
@@ -54,14 +56,16 @@ npm run dev               # i en anden terminal
 - Gennemgå kandidater fra `src/data/candidates.json` én ad gangen: afspil preview, redigér
   felter, og **Tilføj / Afvis / Spring over**.
 - **Tilføj egen sang** manuelt med samme formular.
-- Godkendte sange skrives direkte til **backend-databasen** via `POST /api/songs` (med preview
-  + artwork), og er live med det samme — ingen commit eller deploy nødvendig. Beslutninger
-  gemmes lokalt i `src/data/candidate-status.json` så afviste ikke dukker op igen.
+- Godkendte sange skrives direkte til **databasen** og er live med det samme.
+- Beslutninger (godkendt/afvist) gemmes i `App_Data/candidate-status.json` på serveren
+  (overlever deploys); første gang startes der fra `src/data/candidate-status.json`.
 - Sange der allerede findes i kataloget filtreres automatisk fra.
 
-Admin-pluginnet (`/api/admin/*` i `scripts/adminServer.ts`) findes **kun** under `npm run dev`
-og videresender skrivninger til backend-API'et. Selve produktions-frontenden er statisk; det er
-backend-API'et der ejer kataloget.
+**Adgang:** admin og skrivende katalog-endpoints (`POST/PUT/DELETE /api/songs`) kræver en
+admin-nøgle i headeren `X-Admin-Key`. Siden beder om nøglen og husker den i browseren.
+Nøglen sættes som konfiguration `Admin:Key` (env `Admin__Key`); i deployet kommer den fra
+GitHub-secret'en **`ADMIN_KEY`**. Uden nøgle er admin åben under `Development` og slået fra
+i produktion.
 
 ## CI/CD (GitHub Actions)
 
