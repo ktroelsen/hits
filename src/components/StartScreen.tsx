@@ -44,7 +44,10 @@ export function StartScreen({
             : settings.categoryFilter === 'danish'
             ? '🇩🇰 Kun danske'
             : '🌍 Kun internationale'}{' '}
-          • Mål: {settings.targetCards} sange
+          • Mål:{' '}
+          {settings.winCondition === 'time'
+            ? `flest kort på ${settings.timeLimitMinutes} min`
+            : `${settings.targetCards} sange`}
         </p>
 
         {/* Primary start button — classic, single-device HITS */}

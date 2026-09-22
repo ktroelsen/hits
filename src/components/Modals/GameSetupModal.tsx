@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { X, Play, Users, Disc, Filter, Sparkles, Check, Plus, Trash2 } from 'lucide-react';
-import { GameMode, GameSettings, Player, Decade } from '../../types';
+import { X, Play, Users, Disc, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
+import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 
 interface GameSetupModalProps {
   isOpen: boolean;
@@ -38,6 +38,8 @@ export function GameSetupModal({
 }: GameSetupModalProps) {
   const [mode, setMode] = useState<GameMode>(currentSettings.mode);
   const [targetCards, setTargetCards] = useState<number>(currentSettings.targetCards);
+  const [winCondition, setWinCondition] = useState<WinCondition>(currentSettings.winCondition ?? 'cards');
+  const [timeLimitMinutes, setTimeLimitMinutes] = useState<number>(currentSettings.timeLimitMinutes ?? 10);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'danish' | 'international'>(currentSettings.categoryFilter);
   const [decades, setDecades] = useState<Decade[]>(currentSettings.decades);
   const [uniqueYearsOnly, setUniqueYearsOnly] = useState<boolean>(currentSettings.uniqueYearsOnly);
@@ -81,6 +83,8 @@ export function GameSetupModal({
       ...currentSettings,
       mode,
       targetCards,
+      winCondition,
+      timeLimitMinutes,
       categoryFilter,
       decades,
       uniqueYearsOnly,
@@ -141,7 +145,9 @@ export function GameSetupModal({
                   {mode === 'timeline' && <Check className="w-4 h-4 text-pink-400" />}
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
-                  Holdene dyster på samme fælles tidslinje! Placér sangene kronologisk. Første hold til {targetCards} hits vinder!
+                  Holdene dyster på samme fælles tidslinje! Placér sangene kronologisk. {winCondition === 'time'
+                    ? `Flest hits efter ${timeLimitMinutes} min vinder!`
+                    : `Første hold til ${targetCards} hits vinder!`}
                 </p>
               </button>
 
@@ -290,12 +296,60 @@ export function GameSetupModal({
             </div>
           </div>
 
-          {/* 4. Mål: Antal kort for at vinde (not used in solo) */}
+          {/* 4. Mål: antal kort eller på tid (not used in solo) */}
           {mode !== 'solo' && (
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              4. Mål: Antal kort for at vinde
+              4. Mål: Hvordan vinder man?
             </label>
+            <div className="grid grid-cols-2 gap-2.5 mb-2.5">
+              {[
+                { value: 'cards' as const, icon: <Trophy className="w-4 h-4 text-amber-400" />, label: 'Antal kort', sub: 'Første hold til et antal kort vinder' },
+                { value: 'time' as const, icon: <Clock className="w-4 h-4 text-cyan-400" />, label: 'På tid', sub: 'Flest kort når tiden løber ud vinder' },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setWinCondition(opt.value)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    winCondition === opt.value
+                      ? 'bg-slate-800 border-pink-500 ring-2 ring-pink-500/20'
+                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  <span className="flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-bold text-sm text-white">
+                      {opt.icon} {opt.label}
+                    </span>
+                    {winCondition === opt.value && <Check className="w-4 h-4 text-pink-400" />}
+                  </span>
+                  <span className="text-[11px] text-slate-400 block mt-0.5">{opt.sub}</span>
+                </button>
+              ))}
+            </div>
+            {winCondition === 'time' ? (
+            <div className="grid grid-cols-3 gap-2.5">
+              {[
+                { min: 5, label: '5 min', sub: 'Lynrunde' },
+                { min: 10, label: '10 min', sub: 'Kort spil' },
+                { min: 15, label: '15 min', sub: 'Klassisk' },
+              ].map((opt) => (
+                <button
+                  key={opt.min}
+                  type="button"
+                  onClick={() => setTimeLimitMinutes(opt.min)}
+                  className={`p-3 rounded-xl border text-center transition-all ${
+                    timeLimitMinutes === opt.min
+                      ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md'
+                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  <span className="text-sm block">{opt.label}</span>
+                  <span className="text-[10px] opacity-75 block mt-0.5">{opt.sub}</span>
+                </button>
+              ))}
+            </div>
+            ) : (
             <div className="grid grid-cols-3 gap-2.5">
               {[
                 { count: 5, label: '5 kort', sub: 'Hurtigt spil (10-15 min)' },
@@ -317,6 +371,7 @@ export function GameSetupModal({
                 </button>
               ))}
             </div>
+            )}
           </div>
           )}
 

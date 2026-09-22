@@ -18,6 +18,8 @@ import { sfx } from './services/audioService';
 const DEFAULT_SETTINGS: GameSettings = {
   mode: 'timeline',
   targetCards: 10,
+  winCondition: 'cards',
+  timeLimitMinutes: 10,
   categoryFilter: 'all',
   decades: ['60s', '70s', '80s', '90s', '00s', '10s', '20s'],
   autoPlayAudio: true,
@@ -126,6 +128,10 @@ export default function App() {
 
   // Solo mode state
   const [lives, setLives] = useState(SOLO_STARTING_LIVES);
+
+  // Timed team games: when the game ends (ms timestamp) and the live seconds left
+  const [gameEndsAt, setGameEndsAt] = useState<number | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
   const [highscore, setHighscore] = useState(() => getHighscore());
   const [isGameOverOpen, setIsGameOverOpen] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
@@ -230,6 +236,14 @@ export default function App() {
       setSoloGameOverPending(false);
       setAutoPlayArmed(false); // First mystery song does not auto-play
 
+      if (!isSolo && activeSettings.winCondition === 'time') {
+        setGameEndsAt(Date.now() + activeSettings.timeLimitMinutes * 60 * 1000);
+        setRemainingSeconds(activeSettings.timeLimitMinutes * 60);
+      } else {
+        setGameEndsAt(null);
+        setRemainingSeconds(null);
+      }
+
       sfx.playFlip();
     },
     [settings, players]
@@ -246,10 +260,40 @@ export default function App() {
     setIsVictoryOpen(false);
     setIsGameOverOpen(false);
     setGameStarted(false);
+    setGameEndsAt(null);
+    setRemainingSeconds(null);
   }, []);
+
+  // Countdown for timed games. Stops at 0; the current turn is then played out and
+  // the winner is announced on the next "Næste tur" (see handleNextTurn).
+  useEffect(() => {
+    if (gameEndsAt === null) return;
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((gameEndsAt - Date.now()) / 1000));
+      setRemainingSeconds(left);
+      if (left === 0) window.clearInterval(interval);
+    };
+    const interval = window.setInterval(tick, 1000);
+    tick();
+    return () => window.clearInterval(interval);
+  }, [gameEndsAt]);
 
   const activePlayer = players[activePlayerIndex] || players[0];
   const isSolo = settings.mode === 'solo';
+  const isTimed = gameEndsAt !== null;
+  const timeUp = isTimed && remainingSeconds === 0;
+
+  // End a timed game: the team with the most cards wins (tokens break ties)
+  const endTimedGame = () => {
+    const [top] = [...players].sort(
+      (a, b) => b.timeline.length - a.timeline.length || b.tokens - a.tokens,
+    );
+    setGameEndsAt(null);
+    setPhase('game_over');
+    sfx.playVictory();
+    setWinner(top ?? null);
+    setIsVictoryOpen(true);
+  };
 
   // End a solo game: save the score as highscore if it is a new record. The
   // revealed card stays on screen so the player can see the correct year; the
@@ -374,7 +418,7 @@ export default function App() {
 
       if (isSolo) {
         if (yearBonus) setLives((l) => l + 1);
-      } else if (newPersonalTimeline.length >= settings.targetCards) {
+      } else if (!isTimed && newPersonalTimeline.length >= settings.targetCards) {
         // Victory condition (first team to collect targetCards)
         setTimeout(() => {
           sfx.playVictory();
@@ -399,6 +443,12 @@ export default function App() {
     // Solo: the player has seen the correct year — now show the result
     if (soloGameOverPending) {
       showSoloGameOver();
+      return;
+    }
+
+    // Timed game: time ran out during this turn — announce the winner
+    if (timeUp) {
+      endTimedGame();
       return;
     }
 
@@ -592,6 +642,7 @@ export default function App() {
               activePlayerIndex={activePlayerIndex}
               settings={settings}
               lives={lives}
+              remainingSeconds={remainingSeconds}
               highscore={highscore}
               onExitGame={exitToStart}
             />
@@ -609,7 +660,7 @@ export default function App() {
               onSelectSlot={(idx) => setSelectedSlotIndex(idx)}
               onConfirmPlacement={handleConfirmPlacement}
               onNextTurn={handleNextTurn}
-              nextTurnLabel={soloGameOverPending ? 'Se resultat' : undefined}
+              nextTurnLabel={soloGameOverPending ? 'Se resultat' : timeUp ? 'Se vinderen' : undefined}
               onPlaySong={handlePlaySongInTurntable}
               songStarted={autoPlayArmed}
               onStartSong={() => setAutoPlayArmed(true)}
