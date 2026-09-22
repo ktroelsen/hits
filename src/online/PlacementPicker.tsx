@@ -24,6 +24,14 @@ export function PlacementPicker({
 
   const slots = Array.from({ length: timeline.length + 1 }, (_, i) => i);
 
+  // Typing a year auto-selects the matching slot (before/after/between), like the
+  // single-device game — the insert index is how many timeline songs are older.
+  const onYearChange = (v: string) => {
+    setYear(v);
+    const y = parseInt(v.trim(), 10);
+    if (Number.isFinite(y)) setSlot(timeline.filter((s) => s.year < y).length);
+  };
+
   const submit = () => {
     if (slot === null) return;
     const y = parseInt(year.trim(), 10);
@@ -59,7 +67,7 @@ export function PlacementPicker({
           inputMode="numeric"
           value={year}
           disabled={disabled}
-          onChange={(e) => setYear(e.target.value)}
+          onChange={(e) => onYearChange(e.target.value)}
           placeholder="fx 1994"
           className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500 disabled:opacity-40"
         />
