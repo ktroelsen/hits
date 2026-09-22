@@ -26,6 +26,7 @@ interface TimelineViewProps {
   onSelectSlot: (index: number) => void;
   onConfirmPlacement: () => void;
   onNextTurn: () => void;
+  nextTurnLabel?: string;
   onPlaySong: (song: Song) => void;
   songStarted: boolean;
   onStartSong: () => void;
@@ -50,6 +51,7 @@ export function TimelineView({
   onSelectSlot,
   onConfirmPlacement,
   onNextTurn,
+  nextTurnLabel,
   onPlaySong,
   songStarted,
   onStartSong,
@@ -419,7 +421,7 @@ export function TimelineView({
             onClick={onNextTurn}
             className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase border border-slate-700 transition-all flex items-center justify-center gap-2 shrink-0 shadow"
           >
-            <span>Næste Tur</span>
+            <span>{nextTurnLabel ?? 'Næste Tur'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
