@@ -1,5 +1,10 @@
 import { useCallback, useState } from 'react';
+import { attachFadeEnvelope } from '../services/audioFade';
 import { gameApi, useGameState, StatePlayer } from '../services/gameApi';
+import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
+
+// Callback ref: applies the fade envelope to each round's <audio> element.
+const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
 
 // Main "big screen" for the online game (route /game). The host creates the game,
 // players join by code on their own phones, and this screen plays each song and
@@ -29,10 +34,15 @@ export function OnlineHostScreen() {
   });
 
   const round = state?.round ?? null;
+  const overlay = useRevealOverlay(state);
+
   const joinUrl = code ? `${window.location.origin}/game/${code}` : '';
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
+      {overlay.visible && state && round && (
+        <RevealOverlay round={round} players={state.players} onClose={overlay.close} />
+      )}
       <div className="mx-auto max-w-3xl">
         <header className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold">🎵 Hits — Online</h1>
@@ -103,6 +113,7 @@ export function OnlineHostScreen() {
             {round.audioUrl ? (
               <audio
                 key={round.number}
+                ref={fadeAudioRef}
                 src={round.audioUrl}
                 controls
                 autoPlay

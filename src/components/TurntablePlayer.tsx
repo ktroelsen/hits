@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
 import { Song } from '../types';
 import { fetchSongAudioPreview, sfx } from '../services/audioService';
+import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 
 interface TurntablePlayerProps {
   currentSong: Song | null;
@@ -33,6 +34,13 @@ export function TurntablePlayer({
   const [blindMode, setBlindMode] = useState(true); // Hide title & artist until placed by default
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const volumeRef = useRef(volume);
+  volumeRef.current = volume;
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    return attachFadeEnvelope(audioRef.current, () => volumeRef.current);
+  }, []);
 
   // Load preview when currentSong changes
   useEffect(() => {
@@ -57,6 +65,7 @@ export function TurntablePlayer({
       if (autoPlay && res.previewUrl && audioRef.current) {
         audioRef.current.src = res.previewUrl;
         audioRef.current.currentTime = 0;
+        resetFade(audioRef.current);
         audioRef.current.play().then(() => {
           setIsPlaying(true);
           sfx.playNeedleDrop();
@@ -70,7 +79,7 @@ export function TurntablePlayer({
     return () => {
       isCancelled = true;
       if (audioRef.current) {
-        audioRef.current.pause();
+        fadeOutAndPause(audioRef.current);
       }
     };
   }, [currentSong, autoPlay]);
@@ -80,7 +89,7 @@ export function TurntablePlayer({
     if (!audioRef.current) return;
 
     if (isPlaying) {
-      audioRef.current.pause();
+      fadeOutAndPause(audioRef.current);
       setIsPlaying(false);
     } else {
       sfx.playNeedleDrop();
@@ -90,6 +99,7 @@ export function TurntablePlayer({
         if (audioRef.current.src !== previewUrl) {
           audioRef.current.src = previewUrl;
         }
+        resetFade(audioRef.current);
         audioRef.current.play().then(() => {
           setIsPlaying(true);
         }).catch(() => {
@@ -104,6 +114,7 @@ export function TurntablePlayer({
     audioRef.current.currentTime = 0;
     setCurrentTime(0);
     if (!isPlaying) {
+      resetFade(audioRef.current);
       audioRef.current.play().then(() => setIsPlaying(true));
     }
   };
@@ -125,9 +136,6 @@ export function TurntablePlayer({
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setVolume(val);
-    if (audioRef.current) {
-      audioRef.current.volume = val;
-    }
     if (val > 0 && isMuted) {
       setIsMuted(false);
     }

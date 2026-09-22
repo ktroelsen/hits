@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
+import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 
 interface JoinedPlayer {
   id: string;
@@ -25,6 +26,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   const [joinError, setJoinError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const { state } = useGameState(player ? code : null);
+  const overlay = useRevealOverlay(state);
 
   const join = useCallback(async () => {
     if (!name.trim()) return;
@@ -93,6 +95,14 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
 
   return (
     <Shell>
+      {overlay.visible && state && round && (
+        <RevealOverlay
+          round={round}
+          players={state.players}
+          highlightPlayerId={player.id}
+          onClose={overlay.close}
+        />
+      )}
       <div className="flex items-center justify-between">
         <span className="font-semibold" style={{ color: player.color }}>
           {player.name}
