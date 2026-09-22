@@ -7,9 +7,11 @@ import { DJCompanionMode } from './components/DJCompanionMode';
 import { GameSetupModal } from './components/Modals/GameSetupModal';
 import { RulesModal } from './components/Modals/RulesModal';
 import { VictoryModal } from './components/Modals/VictoryModal';
+import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { getActiveSongs, loadCatalog } from './services/songsService';
 import { markRemoved } from './services/removalStore';
+import { getHighscore, submitScore } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
 import { sfx } from './services/audioService';
 
@@ -42,6 +44,20 @@ const DEFAULT_PLAYERS: Player[] = [
     score: 0,
   },
 ];
+
+// Single-player (solo) mode: start with this many lives. An exact year guess on a
+// correct placement earns a life; a wrong placement costs one, and a wrong
+// placement with no lives left ends the game.
+const SOLO_STARTING_LIVES = 0;
+
+const SOLO_PLAYER: Player = {
+  id: 'solo',
+  name: 'Dig',
+  color: '#ec4899',
+  tokens: 0,
+  timeline: [],
+  score: 0,
+};
 
 // Draw a mystery song whose year is NOT already on the timeline, so no two cards
 // ever share a year. Pops colliding songs off the deck; if the deck runs dry it
@@ -108,6 +124,12 @@ export default function App() {
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [winner, setWinner] = useState<Player | null>(null);
 
+  // Solo mode state
+  const [lives, setLives] = useState(SOLO_STARTING_LIVES);
+  const [highscore, setHighscore] = useState(() => getHighscore());
+  const [isGameOverOpen, setIsGameOverOpen] = useState(false);
+  const [isNewRecord, setIsNewRecord] = useState(false);
+
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
 
@@ -134,7 +156,14 @@ export default function App() {
   const initializeGame = useCallback(
     (newSettings?: GameSettings, newPlayers?: Player[]) => {
       const activeSettings = newSettings || settings;
-      const configuredPlayers = newPlayers || players;
+      const isSolo = activeSettings.mode === 'solo';
+      // Solo always plays with one player; team modes never keep the solo player.
+      const teamPlayers = (newPlayers || players).filter((p) => p.id !== SOLO_PLAYER.id);
+      const configuredPlayers = isSolo
+        ? [SOLO_PLAYER]
+        : teamPlayers.length
+        ? teamPlayers
+        : DEFAULT_PLAYERS;
 
       // Filter and shuffle
       const filtered = getActiveSongs().filter((s) => {
@@ -164,7 +193,7 @@ export default function App() {
       // Reset team scores, tokens, and personal claimed lists
       const updatedPlayers: Player[] = configuredPlayers.map((p) => ({
         ...p,
-        tokens: 2,
+        tokens: isSolo ? 0 : 2,
         score: 0,
         timeline: [],
       }));
@@ -194,6 +223,9 @@ export default function App() {
       setLastPlacementResult(null);
       setWinner(null);
       setIsVictoryOpen(false);
+      setLives(SOLO_STARTING_LIVES);
+      setIsGameOverOpen(false);
+      setIsNewRecord(false);
       setAutoPlayArmed(false); // First mystery song does not auto-play
 
       sfx.playFlip();
@@ -203,17 +235,31 @@ export default function App() {
 
   // Begin a fresh game from the start screen and reveal the game board
   const startGame = useCallback(() => {
-    initializeGame();
+    initializeGame(settings.mode === 'solo' ? { ...settings, mode: 'timeline' } : undefined);
     setGameStarted(true);
-  }, [initializeGame]);
+  }, [initializeGame, settings]);
 
   // Leave the current game and return to the start screen (choose what to play)
   const exitToStart = useCallback(() => {
     setIsVictoryOpen(false);
+    setIsGameOverOpen(false);
     setGameStarted(false);
   }, []);
 
   const activePlayer = players[activePlayerIndex] || players[0];
+  const isSolo = settings.mode === 'solo';
+
+  // End a solo game: save the score as highscore if it is a new record.
+  const endSoloGame = (finalScore: number) => {
+    const record = submitScore(finalScore);
+    setIsNewRecord(record);
+    setHighscore(getHighscore());
+    setPhase('game_over');
+    setTimeout(() => {
+      if (record) sfx.playVictory();
+      setIsGameOverOpen(true);
+    }, 1200);
+  };
 
   // Calculate the correct slot index for mystery song relative to the shared timeline
   const computeCorrectSlotIndex = (song: Song, timeline: TimelineEntry[]): number => {
@@ -295,8 +341,9 @@ export default function App() {
       );
       setSharedTimeline(newSharedTimeline);
 
-      const bonusTokens = yearBonus ? 1 : 0;
-      if (bonusTokens > 0) {
+      // Solo: an exact year earns a life instead of a token
+      const bonusTokens = yearBonus && !isSolo ? 1 : 0;
+      if (yearBonus) {
         setTimeout(() => sfx.playToken(), 600);
       }
 
@@ -319,8 +366,10 @@ export default function App() {
 
       setPlayers(updatedPlayers);
 
-      // Check victory condition (first team to collect targetCards)
-      if (newPersonalTimeline.length >= settings.targetCards) {
+      if (isSolo) {
+        if (yearBonus) setLives((l) => l + 1);
+      } else if (newPersonalTimeline.length >= settings.targetCards) {
+        // Victory condition (first team to collect targetCards)
         setTimeout(() => {
           sfx.playVictory();
           setWinner(updatedPlayers[activePlayerIndex]);
@@ -329,6 +378,13 @@ export default function App() {
       }
     } else {
       sfx.playError();
+      if (isSolo) {
+        if (lives <= 0) {
+          endSoloGame(activePlayer.score);
+        } else {
+          setLives(lives - 1);
+        }
+      }
     }
   };
 
@@ -347,6 +403,12 @@ export default function App() {
       usedIds,
     );
     const nextPlayerIndex = (activePlayerIndex + 1) % players.length;
+
+    // Solo: running out of songs ends the game
+    if (isSolo && !nextMystery) {
+      endSoloGame(activePlayer.score);
+      return;
+    }
 
     setAvailableDeck(nextDeck);
     setCurrentSong(nextMystery);
@@ -461,7 +523,12 @@ export default function App() {
       <div className="min-h-dvh bg-slate-950 text-slate-100 selection:bg-pink-500 selection:text-white">
         <StartScreen
           settings={settings}
+          highscore={highscore}
           onStart={startGame}
+          onStartSolo={() => {
+            initializeGame({ ...settings, mode: 'solo' });
+            setGameStarted(true);
+          }}
           onOpenSettings={() => setIsSetupOpen(true)}
           onOpenRules={() => setIsRulesOpen(true)}
           onOpenCatalog={() => setIsCatalogOpen(true)}
@@ -507,6 +574,8 @@ export default function App() {
               players={players}
               activePlayerIndex={activePlayerIndex}
               settings={settings}
+              lives={lives}
+              highscore={highscore}
               onExitGame={exitToStart}
             />
 
@@ -537,8 +606,8 @@ export default function App() {
               currentSong={currentSong}
               isRevealed={phase === 'revealed'}
               autoPlay={settings.autoPlayAudio && autoPlayArmed}
-              onOpenSongPicker={() => setIsCatalogOpen(true)}
-              onDrawRandomSong={handleDrawRandomSong}
+              onOpenSongPicker={isSolo ? undefined : () => setIsCatalogOpen(true)}
+              onDrawRandomSong={isSolo ? undefined : handleDrawRandomSong}
               onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
             />
           </>
@@ -567,6 +636,15 @@ export default function App() {
         onRestart={() => initializeGame()}
         onExit={exitToStart}
         onPlaySong={handlePlaySongInTurntable}
+      />
+
+      <GameOverModal
+        isOpen={isGameOverOpen}
+        score={activePlayer.score}
+        highscore={highscore}
+        isNewRecord={isNewRecord}
+        onRestart={() => initializeGame()}
+        onExit={exitToStart}
       />
 
       <SongCatalogModal

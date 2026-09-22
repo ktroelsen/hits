@@ -112,6 +112,9 @@ export function RulesModal({ isOpen, onClose }: RulesModalProps) {
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                 Den første spiller eller hold, der samler <strong>10 korrekte sange</strong> i kronologisk rækkefølge på deres tidslinje, vinder spillet!
               </p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <strong>Single player:</strong> Du starter uden liv. Hver rigtig placering giver 1 point, og rammer du også det præcise årstal, får du <strong>et liv</strong>. En forkert placering koster et liv — gætter du forkert uden flere liv, er spillet slut. Slå din highscore!
+              </p>
             </div>
           </div>
         </div>

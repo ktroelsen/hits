@@ -1,10 +1,12 @@
-import { Coins, LogOut } from 'lucide-react';
+import { Coins, Heart, LogOut, Trophy } from 'lucide-react';
 import { Player, GameSettings } from '../types';
 
 interface PlayerBarProps {
   players: Player[];
   activePlayerIndex: number;
   settings: GameSettings;
+  lives: number;
+  highscore: number;
   onExitGame: () => void;
 }
 
@@ -12,6 +14,8 @@ export function PlayerBar({
   players,
   activePlayerIndex,
   settings,
+  lives,
+  highscore,
   onExitGame,
 }: PlayerBarProps) {
   return (
@@ -28,7 +32,27 @@ export function PlayerBar({
           <span className="hidden sm:inline">Afslut spillet</span>
         </button>
 
-        {/* Players / Teams List */}
+        {settings.mode === 'solo' ? (
+          // Solo: lives, score and highscore instead of teams/tokens
+          <div className="flex items-center gap-3 sm:gap-5 flex-1 flex-wrap">
+            <div className="flex items-center gap-1" title={`${lives} liv tilbage`}>
+              {lives > 0 ? (
+                Array.from({ length: lives }).map((_, i) => (
+                  <Heart key={i} className="w-5 h-5 text-rose-500 fill-rose-500" />
+                ))
+              ) : (
+                <span className="text-xs font-bold text-rose-300">Sidste chance!</span>
+              )}
+            </div>
+            <span className="text-sm font-bold text-slate-300">
+              Score: <span className="font-black text-white font-mono">{players[0]?.score ?? 0}</span>
+            </span>
+            <span className="flex items-center gap-1 text-sm font-bold text-amber-300">
+              <Trophy className="w-4 h-4" />
+              <span className="font-black font-mono">{highscore}</span>
+            </span>
+          </div>
+        ) : (
         <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 flex-1">
           {players.map((player, idx) => {
             const isActive = idx === activePlayerIndex;
@@ -91,6 +115,7 @@ export function PlayerBar({
             );
           })}
         </div>
+        )}
       </div>
     </div>
   );

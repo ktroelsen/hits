@@ -165,6 +165,24 @@ export function GameSetupModal({
 
               <button
                 type="button"
+                onClick={() => setMode('solo')}
+                className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
+                  mode === 'solo'
+                    ? 'bg-rose-950/40 border-rose-500 ring-2 ring-rose-500/20'
+                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-bold text-sm text-white">❤️ Single player</span>
+                  {mode === 'solo' && <Check className="w-4 h-4 text-rose-400" />}
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Spil alene uden liv. Præcist årstal giver et liv, forkert placering koster et — eller slutter spillet. Slå din highscore!
+                </p>
+              </button>
+
+              <button
+                type="button"
                 disabled
                 title="Kommer snart"
                 className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
@@ -272,7 +290,8 @@ export function GameSetupModal({
             </div>
           </div>
 
-          {/* 4. Mål: Antal kort for at vinde */}
+          {/* 4. Mål: Antal kort for at vinde (not used in solo) */}
+          {mode !== 'solo' && (
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
               4. Mål: Antal kort for at vinde
@@ -299,8 +318,10 @@ export function GameSetupModal({
               ))}
             </div>
           </div>
+          )}
 
-          {/* 5. Spillere / Hold */}
+          {/* 5. Spillere / Hold (not used in solo) */}
+          {mode !== 'solo' && (
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
               5. Hold & Spillere ({players.length})
@@ -359,6 +380,7 @@ export function GameSetupModal({
               </button>
             </div>
           </div>
+          )}
 
           {/* 6. Årstal */}
           <div>
