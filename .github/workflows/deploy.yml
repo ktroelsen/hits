@@ -57,6 +57,19 @@ jobs:
       - name: Publish backend (self-contained)
         run: dotnet publish server/Hits.Api.csproj -c Release -r win-x86 --self-contained -o publish
 
+      # Admin-nøglen til /admin (secret ADMIN_KEY) lægges i appsettings.Production.json,
+      # så den ikke står i repoet. Uden secret er /admin slået fra i produktion (503).
+      - name: Configure admin key
+        shell: pwsh
+        env:
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+        run: |
+          if ($env:ADMIN_KEY) {
+            @{ Admin = @{ Key = $env:ADMIN_KEY } } | ConvertTo-Json | Set-Content publish/appsettings.Production.json -Encoding utf8
+          } else {
+            Write-Warning "ADMIN_KEY secret not set; /admin will be disabled in production."
+          }
+
       # Synkronisér publish/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes
       # direkte, fordi Simplys WMSVC-brugere kun har contentPath-rettigheder på deres
       # eget site. AppOffline stopper .NET-appen så de låste exe/dll'er kan udskiftes;

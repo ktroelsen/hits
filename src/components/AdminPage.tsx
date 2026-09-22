@@ -2,14 +2,29 @@ import { useEffect, useRef, useState, useCallback, type InputHTMLAttributes } fr
 import { fetchSongAudioPreview } from '../services/audioService';
 import { SongCategory } from '../types';
 
-// Local-only curation tool (route: /admin). Reads the candidate pool and writes
-// approved songs to the backend catalog database via the Vite dev API in
-// scripts/adminServer.ts (which POSTs to the .NET API → SQLite). It ONLY works
-// under `npm run dev` with the backend running; songs added here appear
-// everywhere immediately, no redeploy needed (issue 10).
+// Curation tool (route: /admin). Reads the candidate pool and writes approved songs
+// to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
+// Works both locally and on the deployed site; requests carry the admin key
+// (X-Admin-Key), which the user enters once and is remembered in localStorage.
 
 const GOAL = 500;
 const API = '/api/admin';
+const KEY_STORAGE = 'hits-admin-key';
+
+function readKey(): string {
+  try {
+    return localStorage.getItem(KEY_STORAGE) || '';
+  } catch {
+    return '';
+  }
+}
+
+function adminFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  return fetch(`${API}${path}`, {
+    ...init,
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Key': readKey(), ...init.headers },
+  });
+}
 
 interface Candidate {
   id: string;
@@ -68,11 +83,19 @@ export function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [needsKey, setNeedsKey] = useState(false);
+  const [keyInput, setKeyInput] = useState('');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const loadState = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/state`);
+      const res = await adminFetch('/state');
+      if (res.status === 401) {
+        setNeedsKey(true);
+        setError(readKey() ? 'Forkert admin-nøgle.' : null);
+        return;
+      }
+      setNeedsKey(false);
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         throw new Error(body?.error || `HTTP ${res.status}`);
@@ -83,10 +106,7 @@ export function AdminPage() {
       if (data.candidates.length > 0) setDraft(draftFromCandidate(data.candidates[0]));
       setError(null);
     } catch (e) {
-      setError(
-        `${(e as Error).message} — admin virker kun lokalt via "npm run dev" med backend kørende ` +
-          '(cd server && dotnet run).',
-      );
+      setError(`${(e as Error).message} — kunne ikke nå admin-API'et (kører backenden?).`);
     }
   }, []);
 
@@ -157,9 +177,8 @@ export function AdminPage() {
         url = res.previewUrl;
         artwork = res.artworkUrl;
       }
-      const res = await fetch(`${API}/approve`, {
+      const res = await adminFetch('/approve', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           candidateId: draft.candidateId,
           title: draft.title.trim(),
@@ -214,9 +233,8 @@ export function AdminPage() {
     }
     setBusy(true);
     try {
-      await fetch(`${API}/reject`, {
+      await adminFetch('/reject', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ candidateId: draft.candidateId }),
       });
       setState((s) => (s ? { ...s, decided: { ...s.decided, rejected: s.decided.rejected + 1 } } : s));
@@ -247,13 +265,35 @@ export function AdminPage() {
       <div className="mx-auto max-w-2xl">
         <header className="mb-6">
           <h1 className="text-2xl font-extrabold">
-            🎛️ Sang-admin <span className="text-slate-500 text-base font-normal">(kun lokalt)</span>
+            🎛️ Sang-admin
           </h1>
           <p className="mt-1 text-sm text-slate-400">
             Auditionér kandidater og vælg hvilke der ryger i kataloget. Godkendte sange gemmes
             direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
           </p>
         </header>
+
+        {needsKey && (
+          <form
+            className="mb-4 flex gap-2 rounded-xl bg-slate-900 p-4 ring-1 ring-slate-800"
+            onSubmit={(e) => {
+              e.preventDefault();
+              try {
+                localStorage.setItem(KEY_STORAGE, keyInput.trim());
+              } catch {}
+              loadState();
+            }}
+          >
+            <input
+              type="password"
+              placeholder="Admin-nøgle"
+              className="flex-1 rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+              value={keyInput}
+              onChange={(e) => setKeyInput(e.target.value)}
+            />
+            <button className="rounded-lg bg-pink-600 px-4 py-2 font-semibold hover:bg-pink-500">Log ind</button>
+          </form>
+        )}
 
         {error && (
           <div className="rounded-xl bg-amber-950/60 p-4 text-amber-200 ring-1 ring-amber-800">{error}</div>

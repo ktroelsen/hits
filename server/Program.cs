@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Hits.Api.Admin;
 using Hits.Api.Data;
 using Hits.Api.Gameplay;
 using Hits.Api.Models;
@@ -62,7 +63,7 @@ songs.MapPost("/", async (Song song, AppDbContext db) =>
     db.Songs.Add(song);
     await db.SaveChangesAsync();
     return Results.Created($"/api/songs/{song.Id}", song);
-});
+}).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
 
 songs.MapPut("/{id}", async (string id, Song input, AppDbContext db) =>
 {
@@ -80,7 +81,7 @@ songs.MapPut("/{id}", async (string id, Song input, AppDbContext db) =>
     song.ArtworkUrl = input.ArtworkUrl;
     await db.SaveChangesAsync();
     return Results.Ok(song);
-});
+}).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
 
 songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 {
@@ -89,7 +90,10 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
     db.Songs.Remove(song);
     await db.SaveChangesAsync();
     return Results.NoContent();
-});
+}).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
+
+// ---- Admin curation API (/admin) ----
+app.MapAdminEndpoints();
 
 // ---- Online game API (issue 8) ----
 app.MapGameEndpoints();

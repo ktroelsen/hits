@@ -14,4 +14,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.*" />
   </ItemGroup>
 
+  <!-- Ship the admin candidate pool + initial decisions with the app (read by Admin/AdminEndpoints.cs). -->
+  <ItemGroup>
+    <Content Include="..\src\data\candidates.json;..\src\data\candidate-status.json" Link="seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
