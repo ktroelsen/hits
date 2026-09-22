@@ -129,6 +129,7 @@ export default function App() {
   const [highscore, setHighscore] = useState(() => getHighscore());
   const [isGameOverOpen, setIsGameOverOpen] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
+  const [soloGameOverPending, setSoloGameOverPending] = useState(false);
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
@@ -226,6 +227,7 @@ export default function App() {
       setLives(SOLO_STARTING_LIVES);
       setIsGameOverOpen(false);
       setIsNewRecord(false);
+      setSoloGameOverPending(false);
       setAutoPlayArmed(false); // First mystery song does not auto-play
 
       sfx.playFlip();
@@ -249,16 +251,20 @@ export default function App() {
   const activePlayer = players[activePlayerIndex] || players[0];
   const isSolo = settings.mode === 'solo';
 
-  // End a solo game: save the score as highscore if it is a new record.
+  // End a solo game: save the score as highscore if it is a new record. The
+  // revealed card stays on screen so the player can see the correct year; the
+  // game over modal opens when they press "Se resultat" (see handleNextTurn).
   const endSoloGame = (finalScore: number) => {
     const record = submitScore(finalScore);
     setIsNewRecord(record);
     setHighscore(getHighscore());
+    setSoloGameOverPending(true);
+  };
+
+  const showSoloGameOver = () => {
     setPhase('game_over');
-    setTimeout(() => {
-      if (record) sfx.playVictory();
-      setIsGameOverOpen(true);
-    }, 1200);
+    if (isNewRecord) sfx.playVictory();
+    setIsGameOverOpen(true);
   };
 
   // Calculate the correct slot index for mystery song relative to the shared timeline
@@ -390,6 +396,12 @@ export default function App() {
 
   // Move to next turn
   const handleNextTurn = () => {
+    // Solo: the player has seen the correct year — now show the result
+    if (soloGameOverPending) {
+      showSoloGameOver();
+      return;
+    }
+
     // Draw next song whose year is not already on the timeline (unless duplicates are allowed)
     const takenYears = settings.uniqueYearsOnly
       ? new Set(sharedTimeline.map((e) => e.song.year))
@@ -406,7 +418,12 @@ export default function App() {
 
     // Solo: running out of songs ends the game
     if (isSolo && !nextMystery) {
-      endSoloGame(activePlayer.score);
+      const record = submitScore(activePlayer.score);
+      setIsNewRecord(record);
+      setHighscore(getHighscore());
+      setPhase('game_over');
+      if (record) sfx.playVictory();
+      setIsGameOverOpen(true);
       return;
     }
 
@@ -592,6 +609,7 @@ export default function App() {
               onSelectSlot={(idx) => setSelectedSlotIndex(idx)}
               onConfirmPlacement={handleConfirmPlacement}
               onNextTurn={handleNextTurn}
+              nextTurnLabel={soloGameOverPending ? 'Se resultat' : undefined}
               onPlaySong={handlePlaySongInTurntable}
               songStarted={autoPlayArmed}
               onStartSong={() => setAutoPlayArmed(true)}
