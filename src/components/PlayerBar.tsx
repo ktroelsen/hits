@@ -1,4 +1,4 @@
-import { Coins, Heart, LogOut, Trophy } from 'lucide-react';
+import { Clock, Coins, Heart, LogOut, Trophy } from 'lucide-react';
 import { Player, GameSettings } from '../types';
 
 interface PlayerBarProps {
@@ -6,6 +6,7 @@ interface PlayerBarProps {
   activePlayerIndex: number;
   settings: GameSettings;
   lives: number;
+  remainingSeconds: number | null; // timed team games; null otherwise
   highscore: number;
   onExitGame: () => void;
 }
@@ -15,6 +16,7 @@ export function PlayerBar({
   activePlayerIndex,
   settings,
   lives,
+  remainingSeconds,
   highscore,
   onExitGame,
 }: PlayerBarProps) {
@@ -31,6 +33,8 @@ export function PlayerBar({
           <LogOut className="w-4 h-4" />
           <span className="hidden sm:inline">Afslut spillet</span>
         </button>
+
+        {remainingSeconds !== null && <Countdown seconds={remainingSeconds} />}
 
         {settings.mode === 'solo' ? (
           // Solo: lives, score and highscore instead of teams/tokens
@@ -57,6 +61,7 @@ export function PlayerBar({
           {players.map((player, idx) => {
             const isActive = idx === activePlayerIndex;
             const cardCount = player.score ?? player.timeline.length;
+            const isTimed = remainingSeconds !== null;
             const progressPercent = Math.min(100, (cardCount / settings.targetCards) * 100);
 
             return (
@@ -88,17 +93,21 @@ export function PlayerBar({
                       </span>
                     )}
                   </div>
-                  {/* Progress bar towards target cards */}
+                  {/* Progress bar towards target cards (timed games just show the count) */}
                   <div className="flex items-center gap-2 text-slate-400 font-mono">
+                    {!isTimed && (
                     <div className="w-20 h-2 bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-pink-500 to-amber-400 transition-all duration-300"
                         style={{ width: `${progressPercent}%` }}
                       />
                     </div>
+                    )}
                     <span className="text-sm font-black text-white">
                       {cardCount}
-                      <span className="text-[11px] font-bold text-slate-500">/{settings.targetCards}</span>
+                      <span className="text-[11px] font-bold text-slate-500">
+                        {isTimed ? ' kort' : `/${settings.targetCards}`}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -117,6 +126,25 @@ export function PlayerBar({
         </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function Countdown({ seconds }: { seconds: number }) {
+  const m = Math.floor(seconds / 60);
+  const s = String(seconds % 60).padStart(2, '0');
+  const urgent = seconds <= 30;
+  return (
+    <div
+      title="Tid tilbage — flest kort når tiden løber ud vinder"
+      className={`flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-xl border font-mono font-black text-sm ${
+        urgent
+          ? 'bg-rose-950/70 border-rose-500/60 text-rose-300 animate-pulse'
+          : 'bg-slate-800 border-slate-700 text-cyan-300'
+      }`}
+    >
+      <Clock className="w-4 h-4" />
+      {seconds === 0 ? 'Sidste tur!' : `${m}:${s}`}
     </div>
   );
 }
