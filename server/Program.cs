@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Hits.Api.Data;
+using Hits.Api.Gameplay;
 using Hits.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,6 +79,9 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
+
+// ---- Online game API (issue 8) ----
+app.MapGameEndpoints();
 
 app.Run();
 
