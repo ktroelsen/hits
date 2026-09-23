@@ -1,23 +1,55 @@
-// Persists the best single-player (solo) score in this browser.
+// Shared single-player (solo) highscore list, stored in the backend database.
+// The player's last used name is remembered in this browser to prefill the form.
 
-const STORAGE_KEY = 'hitster:soloHighscore';
+export interface HighscoreEntry {
+  id: string;
+  name: string;
+  score: number;
+  createdAt: string;
+}
 
-export function getHighscore(): number {
+const NAME_KEY = 'hitster:soloName';
+export const MAX_NAME_LENGTH = 20;
+
+// Returns the top list, best first. Empty on network/server errors.
+export async function fetchHighscores(): Promise<HighscoreEntry[]> {
   try {
-    const n = parseInt(localStorage.getItem(STORAGE_KEY) ?? '', 10);
-    return Number.isFinite(n) && n > 0 ? n : 0;
-  } catch {
-    return 0;
+    const res = await fetch('/api/highscores');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.error('Kunne ikke hente highscores', err);
+    return [];
   }
 }
 
-// Stores `score` if it beats the saved highscore. Returns true on a new record.
-export function submitScore(score: number): boolean {
-  if (score <= getHighscore()) return false;
+// Saves a score and returns the updated top list. Throws on failure.
+export async function postHighscore(name: string, score: number): Promise<HighscoreEntry[]> {
+  const res = await fetch('/api/highscores', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, score }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(body || `HTTP ${res.status}`);
+  }
+  saveName(name);
+  return res.json();
+}
+
+export function getSavedName(): string {
   try {
-    localStorage.setItem(STORAGE_KEY, String(score));
+    return localStorage.getItem(NAME_KEY) ?? '';
+  } catch {
+    return '';
+  }
+}
+
+function saveName(name: string): void {
+  try {
+    localStorage.setItem(NAME_KEY, name);
   } catch {
     // ignore write failures
   }
-  return true;
 }

@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Player> Players => Set<Player>();
     public DbSet<Round> Rounds => Set<Round>();
     public DbSet<Answer> Answers => Set<Answer>();
+    public DbSet<SoloScore> SoloScores => Set<SoloScore>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,6 +50,14 @@ public class AppDbContext : DbContext
             e.Property(a => a.Id).ValueGeneratedNever();
             // One answer per player per round.
             e.HasIndex(a => new { a.RoundId, a.PlayerId }).IsUnique();
+        });
+
+        modelBuilder.Entity<SoloScore>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Id).ValueGeneratedNever();
+            e.Property(s => s.Name).HasMaxLength(20);
+            e.HasIndex(s => s.Score);
         });
     }
 }
