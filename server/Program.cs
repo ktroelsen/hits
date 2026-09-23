@@ -99,6 +99,9 @@ app.MapAdminEndpoints();
 app.MapGameEndpoints();
 app.MapHub<GameHub>("/gameHub");
 
+// ---- Shared single-player highscores ----
+app.MapHighscoreEndpoints();
+
 // SPA fallback: client-side routes (/game, /game/{code}, /admin) return index.html.
 // Runs after the API and hub are mapped, so it never shadows them.
 app.MapFallbackToFile("index.html");

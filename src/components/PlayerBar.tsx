@@ -1,5 +1,6 @@
 import { Clock, Coins, Heart, LogOut, Trophy } from 'lucide-react';
 import { Player, GameSettings } from '../types';
+import type { HighscoreEntry } from '../services/highscoreStore';
 
 interface PlayerBarProps {
   players: Player[];
@@ -7,7 +8,7 @@ interface PlayerBarProps {
   settings: GameSettings;
   lives: number;
   remainingSeconds: number | null; // timed team games; null otherwise
-  highscore: number;
+  highscore: HighscoreEntry | null;
   onExitGame: () => void;
 }
 
@@ -53,7 +54,8 @@ export function PlayerBar({
             </span>
             <span className="flex items-center gap-1 text-sm font-bold text-amber-300">
               <Trophy className="w-4 h-4" />
-              <span className="font-black font-mono">{highscore}</span>
+              <span className="font-black font-mono">{highscore?.score ?? 0}</span>
+              {highscore && <span className="text-xs text-amber-300/80">({highscore.name})</span>}
             </span>
           </div>
         ) : (

@@ -11,7 +11,7 @@ import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { getActiveSongs, loadCatalog } from './services/songsService';
 import { markRemoved } from './services/removalStore';
-import { getHighscore, submitScore } from './services/highscoreStore';
+import { fetchHighscores, postHighscore, HighscoreEntry } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
 import { sfx } from './services/audioService';
 
@@ -132,13 +132,18 @@ export default function App() {
   // Timed team games: when the game ends (ms timestamp) and the live seconds left
   const [gameEndsAt, setGameEndsAt] = useState<number | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
-  const [highscore, setHighscore] = useState(() => getHighscore());
+  const [highscore, setHighscore] = useState<HighscoreEntry | null>(null);
   const [isGameOverOpen, setIsGameOverOpen] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [soloGameOverPending, setSoloGameOverPending] = useState(false);
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
+
+  // Load the shared solo highscore (best entry) once at startup.
+  useEffect(() => {
+    fetchHighscores().then((list) => setHighscore(list[0] ?? null));
+  }, []);
 
   // Load the catalog from the backend (issue 10) once at startup. On success we bump
   // removedTick so any song list already computed from the bundled fallback recomputes.
@@ -295,13 +300,19 @@ export default function App() {
     setIsVictoryOpen(true);
   };
 
-  // End a solo game: save the score as highscore if it is a new record. The
-  // revealed card stays on screen so the player can see the correct year; the
-  // game over modal opens when they press "Se resultat" (see handleNextTurn).
+  const isRecordScore = (score: number) => score > (highscore?.score ?? 0);
+
+  // Saves a new record under the player's name (from the game over modal).
+  const submitHighscore = async (name: string) => {
+    const list = await postHighscore(name, activePlayer.score);
+    setHighscore(list[0] ?? null);
+  };
+
+  // End a solo game: flag a new record (the player enters their name in the game
+  // over modal). The revealed card stays on screen so the player can see the
+  // correct year; the modal opens when they press "Se resultat" (see handleNextTurn).
   const endSoloGame = (finalScore: number) => {
-    const record = submitScore(finalScore);
-    setIsNewRecord(record);
-    setHighscore(getHighscore());
+    setIsNewRecord(isRecordScore(finalScore));
     setSoloGameOverPending(true);
   };
 
@@ -468,9 +479,8 @@ export default function App() {
 
     // Solo: running out of songs ends the game
     if (isSolo && !nextMystery) {
-      const record = submitScore(activePlayer.score);
+      const record = isRecordScore(activePlayer.score);
       setIsNewRecord(record);
-      setHighscore(getHighscore());
       setPhase('game_over');
       if (record) sfx.playVictory();
       setIsGameOverOpen(true);
@@ -712,6 +722,7 @@ export default function App() {
         score={activePlayer.score}
         highscore={highscore}
         isNewRecord={isNewRecord}
+        onSubmitName={submitHighscore}
         onRestart={() => initializeGame()}
         onExit={exitToStart}
       />

@@ -23,6 +23,7 @@ export default defineConfig(() => {
         '/api/songs': { target: 'http://localhost:5099', changeOrigin: true },
         '/api/admin': { target: 'http://localhost:5099', changeOrigin: true },
         '/api/games': { target: 'http://localhost:5099', changeOrigin: true },
+        '/api/highscores': { target: 'http://localhost:5099', changeOrigin: true },
         '/gameHub': { target: 'http://localhost:5099', ws: true, changeOrigin: true },
       },
     },

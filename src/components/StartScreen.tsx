@@ -1,9 +1,10 @@
 import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users } from 'lucide-react';
 import { GameSettings } from '../types';
+import type { HighscoreEntry } from '../services/highscoreStore';
 
 interface StartScreenProps {
   settings: GameSettings;
-  highscore: number;
+  highscore: HighscoreEntry | null;
   onStart: () => void;
   onStartSolo: () => void;
   onOpenSettings: () => void;
@@ -74,9 +75,9 @@ export function StartScreen({
         </button>
         <p className="mt-2 text-slate-400 text-sm">
           Spil alene · én fejl og du er ude
-          {highscore > 0 && (
+          {highscore && (
             <>
-              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscore}</span>
+              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscore.score} ({highscore.name})</span>
             </>
           )}
         </p>
