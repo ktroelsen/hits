@@ -11,7 +11,7 @@ import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { getActiveSongs, loadCatalog } from './services/songsService';
 import { markRemoved } from './services/removalStore';
-import { getHighscore, submitScore } from './services/highscoreStore';
+import { getHighscore, getHighscoreName, saveHighscoreName, submitScore } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
 import { sfx } from './services/audioService';
 
@@ -133,6 +133,7 @@ export default function App() {
   const [gameEndsAt, setGameEndsAt] = useState<number | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
   const [highscore, setHighscore] = useState(() => getHighscore());
+  const [highscoreName, setHighscoreNameState] = useState(() => getHighscoreName());
   const [isGameOverOpen, setIsGameOverOpen] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [soloGameOverPending, setSoloGameOverPending] = useState(false);
@@ -302,7 +303,13 @@ export default function App() {
     const record = submitScore(finalScore);
     setIsNewRecord(record);
     setHighscore(getHighscore());
+    setHighscoreNameState(getHighscoreName());
     setSoloGameOverPending(true);
+  };
+
+  const handleSaveHighscoreName = (name: string) => {
+    saveHighscoreName(name);
+    setHighscoreNameState(getHighscoreName());
   };
 
   const showSoloGameOver = () => {
@@ -471,6 +478,7 @@ export default function App() {
       const record = submitScore(activePlayer.score);
       setIsNewRecord(record);
       setHighscore(getHighscore());
+      setHighscoreNameState(getHighscoreName());
       setPhase('game_over');
       if (record) sfx.playVictory();
       setIsGameOverOpen(true);
@@ -591,6 +599,7 @@ export default function App() {
         <StartScreen
           settings={settings}
           highscore={highscore}
+          highscoreName={highscoreName}
           onStart={startGame}
           onStartSolo={() => {
             initializeGame({ ...settings, mode: 'solo' });
@@ -644,6 +653,7 @@ export default function App() {
               lives={lives}
               remainingSeconds={remainingSeconds}
               highscore={highscore}
+              highscoreName={highscoreName}
               onExitGame={exitToStart}
             />
 
@@ -711,7 +721,9 @@ export default function App() {
         isOpen={isGameOverOpen}
         score={activePlayer.score}
         highscore={highscore}
+        highscoreName={highscoreName}
         isNewRecord={isNewRecord}
+        onSaveName={handleSaveHighscoreName}
         onRestart={() => initializeGame()}
         onExit={exitToStart}
       />

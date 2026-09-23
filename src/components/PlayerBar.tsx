@@ -8,6 +8,7 @@ interface PlayerBarProps {
   lives: number;
   remainingSeconds: number | null; // timed team games; null otherwise
   highscore: number;
+  highscoreName: string;
   onExitGame: () => void;
 }
 
@@ -18,6 +19,7 @@ export function PlayerBar({
   lives,
   remainingSeconds,
   highscore,
+  highscoreName,
   onExitGame,
 }: PlayerBarProps) {
   return (
@@ -51,9 +53,17 @@ export function PlayerBar({
             <span className="text-sm font-bold text-slate-300">
               Score: <span className="font-black text-white font-mono">{players[0]?.score ?? 0}</span>
             </span>
-            <span className="flex items-center gap-1 text-sm font-bold text-amber-300">
+            <span
+              className="flex items-center gap-1 text-sm font-bold text-amber-300"
+              title={highscoreName ? `Rekord: ${highscoreName}` : undefined}
+            >
               <Trophy className="w-4 h-4" />
               <span className="font-black font-mono">{highscore}</span>
+              {highscoreName && (
+                <span className="hidden sm:inline text-xs font-bold text-amber-300/80">
+                  ({highscoreName})
+                </span>
+              )}
             </span>
           </div>
         ) : (

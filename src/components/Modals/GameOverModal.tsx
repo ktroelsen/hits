@@ -1,10 +1,13 @@
-import { HeartCrack, Trophy, RotateCcw, LogOut } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { HeartCrack, Trophy, RotateCcw, LogOut, Check } from 'lucide-react';
 
 interface GameOverModalProps {
   isOpen: boolean;
   score: number;
   highscore: number;
+  highscoreName: string;
   isNewRecord: boolean;
+  onSaveName: (name: string) => void;
   onRestart: () => void;
   onExit: () => void;
 }
@@ -14,11 +17,27 @@ export function GameOverModal({
   isOpen,
   score,
   highscore,
+  highscoreName,
   isNewRecord,
+  onSaveName,
   onRestart,
   onExit,
 }: GameOverModalProps) {
+  const [name, setName] = useState('');
+
+  // Reset the input each time a new game-over screen is shown.
+  useEffect(() => {
+    if (isOpen) setName('');
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  const showNameForm = isNewRecord && !highscoreName;
+
+  const submitName = () => {
+    if (!name.trim()) return;
+    onSaveName(name);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-300">
@@ -54,8 +73,40 @@ export function GameOverModal({
             <div className="p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30">
               <div className="text-xs font-bold uppercase tracking-wider text-amber-300">Highscore</div>
               <div className="text-4xl font-black text-amber-400 font-mono mt-1">{highscore}</div>
+              {highscoreName && (
+                <div className="text-xs font-bold text-amber-300/80 mt-1 truncate">{highscoreName}</div>
+              )}
             </div>
           </div>
+
+          {showNameForm && (
+            <div className="mt-4 p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30">
+              <label htmlFor="highscore-name" className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                Indtast dit navn til highscoren
+              </label>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  id="highscore-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && submitName()}
+                  maxLength={20}
+                  autoFocus
+                  placeholder="Dit navn"
+                  className="flex-1 min-w-0 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm font-bold placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                />
+                <button
+                  onClick={submitName}
+                  disabled={!name.trim()}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 font-bold text-sm transition-colors"
+                >
+                  <Check className="w-4 h-4" />
+                  Gem
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="relative z-10 mt-6 pt-4 border-t border-slate-800 flex items-center justify-center gap-2 flex-wrap">

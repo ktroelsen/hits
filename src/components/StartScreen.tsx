@@ -4,6 +4,7 @@ import { GameSettings } from '../types';
 interface StartScreenProps {
   settings: GameSettings;
   highscore: number;
+  highscoreName: string;
   onStart: () => void;
   onStartSolo: () => void;
   onOpenSettings: () => void;
@@ -14,6 +15,7 @@ interface StartScreenProps {
 export function StartScreen({
   settings,
   highscore,
+  highscoreName,
   onStart,
   onStartSolo,
   onOpenSettings,
@@ -76,7 +78,10 @@ export function StartScreen({
           Spil alene · én fejl og du er ude
           {highscore > 0 && (
             <>
-              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscore}</span>
+              {' '}· <span className="text-amber-300 font-bold">
+                Highscore: {highscore}
+                {highscoreName && ` (${highscoreName})`}
+              </span>
             </>
           )}
         </p>
