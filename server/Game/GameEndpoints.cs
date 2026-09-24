@@ -20,12 +20,13 @@ public static class GameEndpoints
     {
         var games = app.MapGroup("/api/games");
 
-        // Host creates a game (lobby). Builds a shuffled deck from the catalog.
-        games.MapPost("/", async (CreateGameRequest? req, AppDbContext db) =>
+        // Host creates a game (lobby). The deck follows the host's play session order,
+        // so songs the host has already heard in earlier games come last.
+        games.MapPost("/", async (CreateGameRequest? req, HttpContext http, AppDbContext db) =>
         {
-            var songIds = await db.Songs.Select(s => s.Id).ToListAsync();
+            var session = await PlaySessionStore.GetOrCreateAsync(http, db);
+            var songIds = PlaySessionStore.DeckOrder(session);
             if (songIds.Count == 0) return Results.Problem("Kataloget er tomt.");
-            Shuffle(songIds);
 
             var game = new Game
             {
@@ -37,6 +38,7 @@ public static class GameEndpoints
                 TargetRounds = Math.Clamp(req?.TargetRounds ?? 10, 1, songIds.Count),
                 DeckJson = JsonSerializer.Serialize(songIds),
                 DeckPosition = 0,
+                HostSessionId = session.Id,
             };
             db.Games.Add(game);
             await db.SaveChangesAsync();
@@ -204,26 +206,20 @@ public static class GameEndpoints
         throw new InvalidOperationException("Kunne ikke generere en unik spilkode.");
     }
 
-    private static void Shuffle<T>(IList<T> list)
-    {
-        var rng = Random.Shared;
-        for (var i = list.Count - 1; i > 0; i--)
-        {
-            var j = rng.Next(i + 1);
-            (list[i], list[j]) = (list[j], list[i]);
-        }
-    }
-
     // Correct insertion index into a year-sorted timeline: the number of songs with a
     // strictly earlier year. An empty timeline always yields 0 (first card is free).
     private static int CorrectIndexFor(int year, List<Song> timeline)
         => timeline.Count(s => s.Year < year);
 
-    // Draws the next deck song and opens a new playing round.
+    // Draws the next deck song and opens a new playing round. The song is marked
+    // played in the host's play session (if it hasn't been cleaned up).
     private static async Task StartNextRoundAsync(Game game, AppDbContext db)
     {
         var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
         var songId = deck[game.DeckPosition];
+        if (game.HostSessionId is not null &&
+            await db.PlaySessions.FindAsync(game.HostSessionId) is { } session)
+            PlaySessionStore.MarkPlayed(session, new[] { songId });
         game.DeckPosition++;
         game.CurrentRound++;
         game.Status = GameStatus.Playing;

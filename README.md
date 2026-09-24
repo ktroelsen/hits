@@ -40,6 +40,16 @@ SQLite. Derefter er databasen sandheden — tilføj/slet sange via `/admin` elle
 > `check-songs`/`prune-songs`/`bake-songs` kalder iTunes Search og skal køres fra et netværk der ikke er
 > blokeret (nogle CI/sandbox-IP'er får 403). Ved usikkert svar beholdes sangen (ingen sletning).
 
+## Ingen gentagelser på tværs af spil
+
+Hver browser får en session-cookie (`hits_session`), der peger på en række i tabellen
+`PlaySessions` med en tilfældig rækkefølge af hele kataloget og de sange, der er spillet.
+Alle spiltyper (tidslinje, solo, DJ og online-værtens deck) trækker sange i den rækkefølge
+og springer spillede sange over. Sange der springes over pga. et årstal der allerede ligger
+på tidslinjen, forbliver uspillede og kommer igen i næste gennemløb. Når alle sange er
+spillet, blandes der på ny. Sessioner der ikke er brugt i 2 timer slettes automatisk
+(`server/Game/PlaySessionCleanupService.cs`, kører ved opstart og hvert 15. minut).
+
 ## Admin: udvid kataloget (`/admin`)
 
 Et kurateringsværktøj til at vokse kataloget mod ~500 sange. Det er ikke linket nogen steder —

@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Round> Rounds => Set<Round>();
     public DbSet<Answer> Answers => Set<Answer>();
     public DbSet<SoloScore> SoloScores => Set<SoloScore>();
+    public DbSet<PlaySession> PlaySessions => Set<PlaySession>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,6 +59,13 @@ public class AppDbContext : DbContext
             e.Property(s => s.Id).ValueGeneratedNever();
             e.Property(s => s.Name).HasMaxLength(20);
             e.HasIndex(s => s.Score);
+        });
+
+        modelBuilder.Entity<PlaySession>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Id).ValueGeneratedNever();
+            e.HasIndex(s => s.LastSeenAt);
         });
     }
 }

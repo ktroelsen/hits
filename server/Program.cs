@@ -18,13 +18,15 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(connectionString));
 builder.Services.AddSignalR();
 builder.Services.AddScoped<GameBroadcaster>();
+builder.Services.AddHostedService<PlaySessionCleanupService>();
 
 // Allow the statically-hosted frontend (dev on :3000) to call the API cross-origin.
 const string DevCors = "dev-frontend";
 builder.Services.AddCors(o => o.AddPolicy(DevCors, p => p
     .WithOrigins("http://localhost:3000", "http://localhost:5173")
     .AllowAnyHeader()
-    .AllowAnyMethod()));
+    .AllowAnyMethod()
+    .AllowCredentials())); // play session cookie (hits_session)
 
 var app = builder.Build();
 
@@ -101,6 +103,9 @@ app.MapHub<GameHub>("/gameHub");
 
 // ---- Shared single-player highscores ----
 app.MapHighscoreEndpoints();
+
+// ---- Per-browser song order (no repeats across games) ----
+app.MapPlaySessionEndpoints();
 
 // SPA fallback: client-side routes (/game, /game/{code}, /admin) return index.html.
 // Runs after the API and hub are mapped, so it never shadows them.

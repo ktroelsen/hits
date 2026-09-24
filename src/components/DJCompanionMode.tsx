@@ -4,6 +4,7 @@ import { Song, GameSettings } from '../types';
 import { TurntablePlayer } from './TurntablePlayer';
 import { HitsterCard } from './HitsterCard';
 import { sfx } from '../services/audioService';
+import { markPlayed, orderSongs } from '../services/playSession';
 
 interface DJCompanionModeProps {
   songs: Song[];
@@ -16,9 +17,9 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
   const [isRevealed, setIsRevealed] = useState(false);
   const [deck, setDeck] = useState<Song[]>([]);
 
-  // Initialize randomized deck
+  // Deck in play session order (songs not heard yet in this browser first)
   useEffect(() => {
-    const shuffled = [...songs].sort(() => Math.random() - 0.5);
+    const shuffled = orderSongs(songs);
     setDeck(shuffled);
     setCurrentIndex(0);
     setIsRevealed(false);
@@ -26,14 +27,18 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
 
   const currentSong = deck[currentIndex] || null;
 
+  useEffect(() => {
+    if (currentSong) markPlayed(currentSong);
+  }, [currentSong]);
+
   const handleNextCard = () => {
     sfx.playFlip();
     setIsRevealed(false);
     if (currentIndex + 1 < deck.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Reshuffle deck
-      const shuffled = [...songs].sort(() => Math.random() - 0.5);
+      // Start over in the (updated) session order
+      const shuffled = orderSongs(songs);
       setDeck(shuffled);
       setCurrentIndex(0);
     }
