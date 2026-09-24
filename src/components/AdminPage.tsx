@@ -93,6 +93,8 @@ export function AdminPage() {
   const [keyInput, setKeyInput] = useState('');
   const [tab, setTab] = useState<'candidates' | 'catalog'>('candidates');
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const auditionToken = useRef(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const loadState = useCallback(async () => {
     try {
@@ -129,23 +131,44 @@ export function AdminPage() {
   }, []);
 
   const stopAudio = useCallback(() => {
+    // Invalidate any in-flight audition so a late fetch can't start playback.
+    auditionToken.current++;
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
     }
+    setIsPlaying(false);
   }, []);
 
+  useEffect(() => stopAudio, [stopAudio]);
+
   const audition = useCallback(async () => {
+    if (isPlaying) {
+      stopAudio();
+      return;
+    }
     stopAudio();
+    const token = auditionToken.current;
     setPreview({ loading: true, tried: false });
     const res = await fetchSongAudioPreview({ artist: draft.artist, title: draft.title });
+    if (token !== auditionToken.current) return;
     setPreview({ url: res.previewUrl, artwork: res.artworkUrl, loading: false, tried: true });
     if (res.previewUrl) {
       const audio = new Audio(res.previewUrl);
       audioRef.current = audio;
-      audio.play().catch(() => {});
+      audio.addEventListener('ended', () => {
+        if (audioRef.current === audio) stopAudio();
+      });
+      audio
+        .play()
+        .then(() => {
+          if (audioRef.current === audio) setIsPlaying(true);
+        })
+        .catch(() => {
+          if (audioRef.current === audio) stopAudio();
+        });
     }
-  }, [draft.artist, draft.title, stopAudio]);
+  }, [draft.artist, draft.title, isPlaying, stopAudio]);
 
   const advance = useCallback(
     (decidedId?: string) => {
@@ -228,6 +251,7 @@ export function AdminPage() {
           : s,
       );
       if (manualMode) {
+        stopAudio();
         setDraft(emptyDraft());
         setPreview({ loading: false, tried: false });
       } else {
@@ -238,7 +262,7 @@ export function AdminPage() {
     } finally {
       setBusy(false);
     }
-  }, [draft, preview, manualMode, advance]);
+  }, [draft, preview, manualMode, advance, stopAudio]);
 
   const reject = useCallback(async () => {
     if (!draft.candidateId) {
@@ -409,10 +433,10 @@ export function AdminPage() {
               <div className="mt-4 flex items-center gap-3">
                 <button
                   onClick={audition}
-                  disabled={busy || !draft.title || !draft.artist}
+                  disabled={!isPlaying && (busy || preview.loading || !draft.title || !draft.artist)}
                   className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-600 disabled:opacity-40"
                 >
-                  {preview.loading ? 'Henter…' : '▶ Afspil preview'}
+                  {preview.loading ? 'Henter…' : isPlaying ? '■ Stop preview' : '▶ Afspil preview'}
                 </button>
                 {preview.tried && !preview.url && (
                   <span className="text-sm text-amber-400">Ingen preview fundet hos iTunes</span>
