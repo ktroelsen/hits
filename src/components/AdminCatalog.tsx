@@ -3,8 +3,9 @@ import { fetchSongAudioPreview } from '../services/audioService';
 import { Song, SongCategory } from '../types';
 
 // "Katalog" tab on /admin: every song in the database, with search, preview,
-// edit and delete. Reads GET /api/songs and writes via PUT/DELETE /api/songs/{id}
-// (both require the admin key, which `request` adds).
+// edit, delete and active toggle. Reads GET /api/songs and writes via PUT/DELETE
+// /api/songs/{id} and POST /api/songs/active (all require the admin key, which
+// `request` adds). Only active songs are dealt into games.
 
 type Request = (url: string, init?: RequestInit) => Promise<Response>;
 
@@ -31,6 +32,8 @@ const REFRESH_URL = '/api/admin/previews/refresh';
 const formatTime = (iso: string) =>
   new Date(iso).toLocaleString('da-DK', { dateStyle: 'short', timeStyle: 'short' });
 
+const isActive = (s: Song) => s.active !== false;
+
 const inputCls =
   'w-full rounded-lg bg-slate-800 px-2 py-1.5 text-sm text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500';
 
@@ -38,6 +41,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [songs, setSongs] = useState<Song[] | null>(null);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<'all' | SongCategory>('all');
+  const [status, setStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [editing, setEditing] = useState<Song | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -123,12 +127,37 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
     return (songs ?? []).filter(
       (s) =>
         (category === 'all' || s.category === category) &&
+        (status === 'all' || (status === 'active') === isActive(s)) &&
         (!q ||
           s.title.toLowerCase().includes(q) ||
           s.artist.toLowerCase().includes(q) ||
           String(s.year).includes(q)),
     );
-  }, [songs, query, category]);
+  }, [songs, query, category, status]);
+
+  const activeCount = useMemo(() => (songs ?? []).filter(isActive).length, [songs]);
+
+  const setActive = async (targets: Song[], active: boolean) => {
+    const ids = targets.filter((s) => isActive(s) !== active).map((s) => s.id);
+    if (ids.length === 0) return;
+    if (ids.length > 1 && !window.confirm(`${active ? 'Aktivér' : 'Deaktivér'} ${ids.length} sange?`)) return;
+    setBusy(true);
+    try {
+      const res = await request('/api/songs/active', {
+        method: 'POST',
+        body: JSON.stringify({ ids, active }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const changed = new Set(ids);
+      setSongs((list) => list?.map((s) => (changed.has(s.id) ? { ...s, active } : s)) ?? null);
+      setError(null);
+      onChanged?.();
+    } catch (e) {
+      setError(`Kunne ikke ændre aktiv-status: ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const togglePlay = async (song: Song) => {
     audioRef.current?.pause();
@@ -228,14 +257,39 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
           <option value="danish">🇩🇰 Danske</option>
           <option value="international">🌍 Internationale</option>
         </select>
+        <select
+          className={`${inputCls} w-auto py-2`}
+          value={status}
+          onChange={(e) => setStatus(e.target.value as 'all' | 'active' | 'inactive')}
+        >
+          <option value="all">Aktive og inaktive</option>
+          <option value="active">Kun aktive</option>
+          <option value="inactive">Kun inaktive</option>
+        </select>
       </div>
 
       {error && <p className="mb-3 text-sm text-amber-400">{error}</p>}
       {!songs && !error && <p className="text-sm text-slate-400">Henter katalog…</p>}
       {songs && (
-        <p className="mb-2 text-xs text-slate-500">
-          Viser {filtered.length} af {songs.length} sange
-        </p>
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <p className="flex-1">
+            Viser {filtered.length} af {songs.length} sange · {activeCount} aktive i spillene
+          </p>
+          <button
+            onClick={() => setActive(filtered, true)}
+            disabled={busy || filtered.every(isActive)}
+            className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+          >
+            Aktivér viste
+          </button>
+          <button
+            onClick={() => setActive(filtered, false)}
+            disabled={busy || !filtered.some(isActive)}
+            className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+          >
+            Deaktivér viste
+          </button>
+        </div>
       )}
 
       <ul className="divide-y divide-slate-800">
@@ -302,7 +356,15 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
               </div>
             </li>
           ) : (
-            <li key={song.id} className="flex items-center gap-3 py-2">
+            <li key={song.id} className={`flex items-center gap-3 py-2 ${isActive(song) ? '' : 'opacity-50'}`}>
+              <input
+                type="checkbox"
+                checked={isActive(song)}
+                onChange={(e) => setActive([song], e.target.checked)}
+                disabled={busy}
+                title={isActive(song) ? 'Aktiv — spilles i spillene' : 'Inaktiv — spilles ikke'}
+                className="h-4 w-4 shrink-0 cursor-pointer accent-emerald-500"
+              />
               <button
                 onClick={() => togglePlay(song)}
                 title="Afspil preview"

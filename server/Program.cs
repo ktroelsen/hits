@@ -91,6 +91,16 @@ songs.MapPut("/{id}", async (string id, Song input, AppDbContext db) =>
     return Results.Ok(song);
 }).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
 
+// Marks songs active/inactive in bulk. Only active songs are dealt into games.
+songs.MapPost("/active", async (SetActiveRequest body, AppDbContext db) =>
+{
+    var ids = body.Ids ?? new();
+    var changed = await db.Songs
+        .Where(s => ids.Contains(s.Id))
+        .ExecuteUpdateAsync(u => u.SetProperty(s => s.Active, body.Active));
+    return Results.Ok(new { changed });
+}).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
+
 songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 {
     var song = await db.Songs.FindAsync(id);
@@ -139,3 +149,5 @@ static async Task SeedSongsAsync(AppDbContext db, IWebHostEnvironment env, ILogg
     await db.SaveChangesAsync();
     logger.LogInformation("Seeded {Count} songs into SQLite.", seeded.Count);
 }
+
+record SetActiveRequest(List<string>? Ids, bool Active);

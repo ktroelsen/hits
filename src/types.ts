@@ -16,6 +16,8 @@ export interface Song {
   // When present, the app plays these directly and never calls Apple at runtime.
   previewUrl?: string;
   artworkUrl?: string;
+  // Toggled in /admin; only active songs are played. Missing (bundled fallback) = active.
+  active?: boolean;
 }
 
 export type GameMode = 'timeline' | 'expert' | 'party' | 'quick' | 'dj' | 'solo';

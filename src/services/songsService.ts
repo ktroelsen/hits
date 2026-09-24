@@ -32,11 +32,10 @@ export async function loadCatalog(): Promise<boolean> {
   }
 }
 
-// The full catalog minus songs the user marked as "missing music" this session.
-// Use this everywhere songs are drawn into play so marked songs disappear
-// immediately (and stay gone across reloads via localStorage).
+// The songs marked active in /admin, minus songs the user marked as "missing music"
+// this session. Use this everywhere songs are drawn into play so inactive and marked
+// songs never come up (marks stay across reloads via localStorage).
 export function getActiveSongs(): Song[] {
   const removed = getRemovedIds();
-  if (removed.size === 0) return catalog;
-  return catalog.filter((s) => !removed.has(s.id));
+  return catalog.filter((s) => s.active !== false && !removed.has(s.id));
 }

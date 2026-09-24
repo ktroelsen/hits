@@ -16,4 +16,6 @@ public class Song
     public string? CustomPreviewUrl { get; set; }
     public string? PreviewUrl { get; set; }
     public string? ArtworkUrl { get; set; }
+    // Only active songs are dealt into games; inactive ones stay in the catalog (toggled in /admin).
+    public bool Active { get; set; } = true;
 }

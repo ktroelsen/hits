@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Hits.Api.Gameplay;
 
 // Per-browser song order so consecutive games don't repeat songs. The hits_session
-// cookie points at a PlaySession row holding a shuffled order of the whole catalog and
+// cookie points at a PlaySession row holding a shuffled order of the active songs and
 // the ids played so far. Games draw unplayed songs in that order; songs skipped (e.g.
 // a year already on the timeline) stay unplayed and come up again in the next pass.
 // When every song has been played, the order is reshuffled. Idle sessions are deleted
@@ -41,7 +41,7 @@ public static class PlaySessionStore
     public static async Task<PlaySession> GetOrCreateAsync(HttpContext http, AppDbContext db)
     {
         var now = DateTime.UtcNow;
-        var catalogIds = await db.Songs.Select(s => s.Id).ToListAsync();
+        var catalogIds = await db.Songs.Where(s => s.Active).Select(s => s.Id).ToListAsync();
 
         PlaySession? session = null;
         if (http.Request.Cookies.TryGetValue(CookieName, out var id) && !string.IsNullOrEmpty(id))
