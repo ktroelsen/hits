@@ -2888,5 +2888,1732 @@
     "year": 1980,
     "category": "danish",
     "note": "Verificér årstal"
+  },
+  {
+    "id": "c-410",
+    "title": "Re-Sepp-Ten",
+    "artist": "Landsholdet & Dodo Gad",
+    "year": 1986,
+    "category": "danish",
+    "note": "Fodboldsang – VM 1986"
+  },
+  {
+    "id": "c-411",
+    "title": "En for Alle",
+    "artist": "Rocazino",
+    "year": 1988,
+    "category": "danish",
+    "note": "Fodboldsang – EM 1988"
+  },
+  {
+    "id": "c-412",
+    "title": "Stjerneskud (Når Lysene Tændes i Parken)",
+    "artist": "The Savage Rose",
+    "year": 1989,
+    "category": "danish",
+    "note": "Fodboldsang – DBU 100 år"
+  },
+  {
+    "id": "c-413",
+    "title": "Big Boys in Red and White",
+    "artist": "Big Fat Snake",
+    "year": 1996,
+    "category": "danish",
+    "note": "Fodboldsang – EM 1996"
+  },
+  {
+    "id": "c-414",
+    "title": "Vi Vil Ha' Sejren i Land",
+    "artist": "Dodo & The Dodos",
+    "year": 1998,
+    "category": "danish",
+    "note": "Fodboldsang – VM 1998"
+  },
+  {
+    "id": "c-415",
+    "title": "All We Need Is Love",
+    "artist": "Det Brune Punktum",
+    "year": 2000,
+    "category": "danish",
+    "note": "Fodboldsang – EM 2000"
+  },
+  {
+    "id": "c-416",
+    "title": "Danmarks Drenge",
+    "artist": "Søren Poppe & Sofie Lassen-Kahlke",
+    "year": 2002,
+    "category": "danish",
+    "note": "Fodboldsang – VM 2002"
+  },
+  {
+    "id": "c-417",
+    "title": "Hvor' Vi Fra?",
+    "artist": "Birthe Kjær, B-Boys & Safri Duo",
+    "year": 2004,
+    "category": "danish",
+    "note": "Fodboldsang – EM 2004"
+  },
+  {
+    "id": "c-418",
+    "title": "The Danish Way to Rock",
+    "artist": "Nephew",
+    "year": 2010,
+    "category": "danish",
+    "note": "Fodboldsang – VM 2010"
+  },
+  {
+    "id": "c-419",
+    "title": "Vi Vandt i Dag",
+    "artist": "Nik & Jay",
+    "year": 2012,
+    "category": "danish",
+    "note": "Fodboldsang – EM 2012"
+  },
+  {
+    "id": "c-420",
+    "title": "Hele Danmark Op at Stå",
+    "artist": "Thomas Helmig",
+    "year": 2018,
+    "category": "danish",
+    "note": "Fodboldsang – VM 2018"
+  },
+  {
+    "id": "c-421",
+    "title": "Danish Dynamite",
+    "artist": "Alphabeat",
+    "year": 2021,
+    "category": "danish",
+    "note": "Fodboldsang – EM 2020"
+  },
+  {
+    "id": "c-422",
+    "title": "Helt Sikker",
+    "artist": "Gulddreng",
+    "year": 2021,
+    "category": "danish",
+    "note": "Fodboldsang – EM 2020"
+  },
+  {
+    "id": "c-423",
+    "title": "Skulder ved Skulder",
+    "artist": "Burhan G, Ankerstjerne, Nicolai Seebach & Jarl Friis-Mikkelsen",
+    "year": 2022,
+    "category": "danish",
+    "note": "Fodboldsang – VM 2022"
+  },
+  {
+    "id": "c-424",
+    "title": "Skibet Skal Sejle i Nat",
+    "artist": "Birthe Wilke & Gustav Winckler",
+    "year": 1957,
+    "category": "danish",
+    "note": "MGP-vinder 1957"
+  },
+  {
+    "id": "c-425",
+    "title": "Boom Boom",
+    "artist": "Mabel",
+    "year": 1978,
+    "category": "danish",
+    "note": "MGP-vinder 1978"
+  },
+  {
+    "id": "c-426",
+    "title": "Disco Tango",
+    "artist": "Tommy Seebach",
+    "year": 1979,
+    "category": "danish",
+    "note": "MGP-vinder 1979"
+  },
+  {
+    "id": "c-427",
+    "title": "Tænker Altid på Dig",
+    "artist": "Bamses Venner",
+    "year": 1980,
+    "category": "danish",
+    "note": "MGP-vinder 1980"
+  },
+  {
+    "id": "c-428",
+    "title": "Krøller eller Ej",
+    "artist": "Tommy Seebach & Debbie Cameron",
+    "year": 1981,
+    "category": "danish",
+    "note": "MGP-vinder 1981"
+  },
+  {
+    "id": "c-429",
+    "title": "Video-Video",
+    "artist": "Brixx",
+    "year": 1982,
+    "category": "danish",
+    "note": "MGP-vinder 1982"
+  },
+  {
+    "id": "c-430",
+    "title": "Kloden Drejer",
+    "artist": "Gry Johansen",
+    "year": 1983,
+    "category": "danish",
+    "note": "MGP-vinder 1983"
+  },
+  {
+    "id": "c-431",
+    "title": "Det' Lige Det",
+    "artist": "Hot Eyes",
+    "year": 1984,
+    "category": "danish",
+    "note": "MGP-vinder 1984"
+  },
+  {
+    "id": "c-432",
+    "title": "Sku' Du Spørg' fra No'en?",
+    "artist": "Hot Eyes",
+    "year": 1985,
+    "category": "danish",
+    "note": "MGP-vinder 1985"
+  },
+  {
+    "id": "c-433",
+    "title": "Du Er Fuld af Løgn",
+    "artist": "Lise Haavik",
+    "year": 1986,
+    "category": "danish",
+    "note": "MGP-vinder 1986"
+  },
+  {
+    "id": "c-434",
+    "title": "En Lille Melodi",
+    "artist": "Bandjo & Anne-Cathrine Herdorf",
+    "year": 1987,
+    "category": "danish",
+    "note": "MGP-vinder 1987"
+  },
+  {
+    "id": "c-435",
+    "title": "Ka' Du Se Hva' Jeg Sa'?",
+    "artist": "Hot Eyes",
+    "year": 1988,
+    "category": "danish",
+    "note": "MGP-vinder 1988"
+  },
+  {
+    "id": "c-437",
+    "title": "Hallo Hallo",
+    "artist": "Lonnie Devantier",
+    "year": 1990,
+    "category": "danish",
+    "note": "MGP-vinder 1990"
+  },
+  {
+    "id": "c-438",
+    "title": "Lige Der Hvor Hjertet Slår",
+    "artist": "Anders Frandsen",
+    "year": 1991,
+    "category": "danish",
+    "note": "MGP-vinder 1991"
+  },
+  {
+    "id": "c-439",
+    "title": "Alt Det Som Ingen Ser",
+    "artist": "Kenny Lübcke & Lotte Nilsson",
+    "year": 1992,
+    "category": "danish",
+    "note": "MGP-vinder 1992"
+  },
+  {
+    "id": "c-440",
+    "title": "Under Stjernerne på Himlen",
+    "artist": "Seebach Band",
+    "year": 1993,
+    "category": "danish",
+    "note": "MGP-vinder 1993"
+  },
+  {
+    "id": "c-441",
+    "title": "Fra Mols til Skagen",
+    "artist": "Aud Wilken",
+    "year": 1995,
+    "category": "danish",
+    "note": "MGP-vinder 1995"
+  },
+  {
+    "id": "c-442",
+    "title": "Stemmen i Mit Liv",
+    "artist": "Kølig Kaj",
+    "year": 1997,
+    "category": "danish",
+    "note": "MGP-vinder 1997"
+  },
+  {
+    "id": "c-443",
+    "title": "This Time I Mean It",
+    "artist": "Michael Teschl & Trine Jepsen",
+    "year": 1999,
+    "category": "danish",
+    "note": "MGP-vinder 1999"
+  },
+  {
+    "id": "c-444",
+    "title": "Never Ever Let You Go",
+    "artist": "Rollo & King",
+    "year": 2001,
+    "category": "danish",
+    "note": "MGP-vinder 2001"
+  },
+  {
+    "id": "c-445",
+    "title": "Twist of Love",
+    "artist": "Sidsel Ben Semmane",
+    "year": 2006,
+    "category": "danish",
+    "note": "MGP-vinder 2006"
+  },
+  {
+    "id": "c-446",
+    "title": "Drama Queen",
+    "artist": "DQ",
+    "year": 2007,
+    "category": "danish",
+    "note": "MGP-vinder 2007"
+  },
+  {
+    "id": "c-447",
+    "title": "All Night Long",
+    "artist": "Simon Mathew",
+    "year": 2008,
+    "category": "danish",
+    "note": "MGP-vinder 2008"
+  },
+  {
+    "id": "c-448",
+    "title": "Believe Again",
+    "artist": "Brinck",
+    "year": 2009,
+    "category": "danish",
+    "note": "MGP-vinder 2009"
+  },
+  {
+    "id": "c-449",
+    "title": "In a Moment Like This",
+    "artist": "Chanée & N'evergreen",
+    "year": 2010,
+    "category": "danish",
+    "note": "MGP-vinder 2010"
+  },
+  {
+    "id": "c-450",
+    "title": "New Tomorrow",
+    "artist": "A Friend in London",
+    "year": 2011,
+    "category": "danish",
+    "note": "MGP-vinder 2011"
+  },
+  {
+    "id": "c-451",
+    "title": "Only Teardrops",
+    "artist": "Emmelie de Forest",
+    "year": 2013,
+    "category": "danish",
+    "note": "MGP- og Eurovision-vinder 2013"
+  },
+  {
+    "id": "c-452",
+    "title": "Cliché Love Song",
+    "artist": "Basim",
+    "year": 2014,
+    "category": "danish",
+    "note": "MGP-vinder 2014"
+  },
+  {
+    "id": "c-453",
+    "title": "Soldiers of Love",
+    "artist": "Lighthouse X",
+    "year": 2016,
+    "category": "danish",
+    "note": "MGP-vinder 2016"
+  },
+  {
+    "id": "c-454",
+    "title": "Higher Ground",
+    "artist": "Rasmussen",
+    "year": 2018,
+    "category": "danish",
+    "note": "MGP-vinder 2018"
+  },
+  {
+    "id": "c-455",
+    "title": "Love Is Forever",
+    "artist": "Leonora",
+    "year": 2019,
+    "category": "danish",
+    "note": "MGP-vinder 2019"
+  },
+  {
+    "id": "c-456",
+    "title": "Øve Os på Hinanden",
+    "artist": "Fyr og Flamme",
+    "year": 2021,
+    "category": "danish",
+    "note": "MGP-vinder 2021"
+  },
+  {
+    "id": "c-457",
+    "title": "The Show",
+    "artist": "Reddi",
+    "year": 2022,
+    "category": "danish",
+    "note": "MGP-vinder 2022"
+  },
+  {
+    "id": "c-458",
+    "title": "Sand",
+    "artist": "Saba",
+    "year": 2024,
+    "category": "danish",
+    "note": "MGP-vinder 2024"
+  },
+  {
+    "id": "c-459",
+    "title": "Rabalderstræde",
+    "artist": "Gasolin'",
+    "year": 1975,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-460",
+    "title": "Kvinde Min",
+    "artist": "Gasolin'",
+    "year": 1975,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-461",
+    "title": "Langebro",
+    "artist": "Gasolin'",
+    "year": 1971,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-462",
+    "title": "Hvalen Hvalborg",
+    "artist": "Shu-bi-dua",
+    "year": 1975,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-463",
+    "title": "Den Røde Tråd",
+    "artist": "Shu-bi-dua",
+    "year": 1978,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-464",
+    "title": "Fed Rock",
+    "artist": "Shu-bi-dua",
+    "year": 1974,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-465",
+    "title": "Sunshine Reggae",
+    "artist": "Laid Back",
+    "year": 1983,
+    "category": "danish",
+    "note": "Dansk hit i udlandet"
+  },
+  {
+    "id": "c-466",
+    "title": "White Horse",
+    "artist": "Laid Back",
+    "year": 1983,
+    "category": "danish",
+    "note": "Dansk hit i udlandet"
+  },
+  {
+    "id": "c-467",
+    "title": "Saturday Night",
+    "artist": "Whigfield",
+    "year": 1994,
+    "category": "danish",
+    "note": "Dansk sangerinde, europæisk sommerhit"
+  },
+  {
+    "id": "c-468",
+    "title": "Dub-I-Dub",
+    "artist": "Me & My",
+    "year": 1995,
+    "category": "danish",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-469",
+    "title": "Superhero",
+    "artist": "Daze",
+    "year": 1996,
+    "category": "danish",
+    "note": "Eurodance"
+  },
+  {
+    "id": "c-470",
+    "title": "Tarzan & Jane",
+    "artist": "Toy-Box",
+    "year": 1998,
+    "category": "danish",
+    "note": "Eurodance"
+  },
+  {
+    "id": "c-471",
+    "title": "Witch Doctor",
+    "artist": "Cartoons",
+    "year": 1998,
+    "category": "danish",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-472",
+    "title": "Played-A-Live (The Bongo Song)",
+    "artist": "Safri Duo",
+    "year": 2000,
+    "category": "danish",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-473",
+    "title": "Move Your Feet",
+    "artist": "Junior Senior",
+    "year": 2002,
+    "category": "danish",
+    "note": "Dansk hit i udlandet"
+  },
+  {
+    "id": "c-474",
+    "title": "Aicha",
+    "artist": "Outlandish",
+    "year": 2003,
+    "category": "danish"
+  },
+  {
+    "id": "c-475",
+    "title": "From Paris to Berlin",
+    "artist": "Infernal",
+    "year": 2004,
+    "category": "danish",
+    "note": "Dansk hit i udlandet"
+  },
+  {
+    "id": "c-476",
+    "title": "The Actor",
+    "artist": "Michael Learns to Rock",
+    "year": 1991,
+    "category": "danish"
+  },
+  {
+    "id": "c-477",
+    "title": "25 Minutes",
+    "artist": "Michael Learns to Rock",
+    "year": 1993,
+    "category": "danish"
+  },
+  {
+    "id": "c-478",
+    "title": "Han Får For Lidt",
+    "artist": "Østkyst Hustlers",
+    "year": 1995,
+    "category": "danish",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-479",
+    "title": "Walkmand",
+    "artist": "Hej Matematik",
+    "year": 2008,
+    "category": "danish"
+  },
+  {
+    "id": "c-480",
+    "title": "Boyfriend",
+    "artist": "Alphabeat",
+    "year": 2008,
+    "category": "danish"
+  },
+  {
+    "id": "c-481",
+    "title": "What a Life",
+    "artist": "Scarlet Pleasure",
+    "year": 2020,
+    "category": "danish",
+    "note": "Fra filmen Druk"
+  },
+  {
+    "id": "c-482",
+    "title": "Three Lions",
+    "artist": "Baddiel, Skinner & The Lightning Seeds",
+    "year": 1996,
+    "category": "international",
+    "note": "Fodboldsang – EM 1996"
+  },
+  {
+    "id": "c-483",
+    "title": "World in Motion",
+    "artist": "New Order",
+    "year": 1990,
+    "category": "international",
+    "note": "Fodboldsang – VM 1990"
+  },
+  {
+    "id": "c-484",
+    "title": "Un'estate italiana",
+    "artist": "Gianna Nannini & Edoardo Bennato",
+    "year": 1990,
+    "category": "international",
+    "note": "Fodboldsang – VM 1990"
+  },
+  {
+    "id": "c-485",
+    "title": "Nessun Dorma",
+    "artist": "Luciano Pavarotti",
+    "year": 1990,
+    "category": "international",
+    "note": "VM 1990-tema"
+  },
+  {
+    "id": "c-486",
+    "title": "La Copa de la Vida",
+    "artist": "Ricky Martin",
+    "year": 1998,
+    "category": "international",
+    "note": "Fodboldsang – VM 1998"
+  },
+  {
+    "id": "c-487",
+    "title": "Waka Waka (This Time for Africa)",
+    "artist": "Shakira",
+    "year": 2010,
+    "category": "international",
+    "note": "Fodboldsang – VM 2010"
+  },
+  {
+    "id": "c-488",
+    "title": "Wavin' Flag",
+    "artist": "K'naan",
+    "year": 2009,
+    "category": "international",
+    "note": "Fodboldsang – VM 2010"
+  },
+  {
+    "id": "c-489",
+    "title": "We Are One (Ole Ola)",
+    "artist": "Pitbull ft. Jennifer Lopez & Claudia Leitte",
+    "year": 2014,
+    "category": "international",
+    "note": "Fodboldsang – VM 2014"
+  },
+  {
+    "id": "c-490",
+    "title": "Live It Up",
+    "artist": "Nicky Jam ft. Will Smith & Era Istrefi",
+    "year": 2018,
+    "category": "international",
+    "note": "Fodboldsang – VM 2018"
+  },
+  {
+    "id": "c-491",
+    "title": "Carnaval de Paris",
+    "artist": "Dario G",
+    "year": 1998,
+    "category": "international",
+    "note": "Fodboldsang – VM 1998"
+  },
+  {
+    "id": "c-492",
+    "title": "Vindaloo",
+    "artist": "Fat Les",
+    "year": 1998,
+    "category": "international",
+    "note": "Fodboldsang – VM 1998"
+  },
+  {
+    "id": "c-493",
+    "title": "You'll Never Walk Alone",
+    "artist": "Gerry and the Pacemakers",
+    "year": 1963,
+    "category": "international",
+    "note": "Stadionhymne"
+  },
+  {
+    "id": "c-494",
+    "title": "Blue Is the Colour",
+    "artist": "Chelsea FC",
+    "year": 1972,
+    "category": "international",
+    "note": "Fodboldsang"
+  },
+  {
+    "id": "c-495",
+    "title": "Back Home",
+    "artist": "England World Cup Squad",
+    "year": 1970,
+    "category": "international",
+    "note": "Fodboldsang – VM 1970"
+  },
+  {
+    "id": "c-496",
+    "title": "Kernkraft 400",
+    "artist": "Zombie Nation",
+    "year": 1999,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-497",
+    "title": "Song 2",
+    "artist": "Blur",
+    "year": 1997,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-498",
+    "title": "Chelsea Dagger",
+    "artist": "The Fratellis",
+    "year": 2006,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-499",
+    "title": "Samba de Janeiro",
+    "artist": "Bellini",
+    "year": 1997,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-500",
+    "title": "Mas Que Nada",
+    "artist": "Sérgio Mendes & Brasil '66",
+    "year": 1966,
+    "category": "international"
+  },
+  {
+    "id": "c-501",
+    "title": "Live Is Life",
+    "artist": "Opus",
+    "year": 1985,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-502",
+    "title": "Volare (Nel blu dipinto di blu)",
+    "artist": "Domenico Modugno",
+    "year": 1958,
+    "category": "international",
+    "note": "Eurovision 1958"
+  },
+  {
+    "id": "c-503",
+    "title": "Poupée de cire, poupée de son",
+    "artist": "France Gall",
+    "year": 1965,
+    "category": "international",
+    "note": "Eurovision-vinder 1965"
+  },
+  {
+    "id": "c-504",
+    "title": "Puppet on a String",
+    "artist": "Sandie Shaw",
+    "year": 1967,
+    "category": "international",
+    "note": "Eurovision-vinder 1967"
+  },
+  {
+    "id": "c-505",
+    "title": "Eres tú",
+    "artist": "Mocedades",
+    "year": 1973,
+    "category": "international",
+    "note": "Eurovision 1973"
+  },
+  {
+    "id": "c-506",
+    "title": "Save Your Kisses for Me",
+    "artist": "Brotherhood of Man",
+    "year": 1976,
+    "category": "international",
+    "note": "Eurovision-vinder 1976"
+  },
+  {
+    "id": "c-507",
+    "title": "A-Ba-Ni-Bi",
+    "artist": "Izhar Cohen & Alphabeta",
+    "year": 1978,
+    "category": "international",
+    "note": "Eurovision-vinder 1978"
+  },
+  {
+    "id": "c-508",
+    "title": "Hallelujah",
+    "artist": "Milk and Honey",
+    "year": 1979,
+    "category": "international",
+    "note": "Eurovision-vinder 1979"
+  },
+  {
+    "id": "c-509",
+    "title": "Dschinghis Khan",
+    "artist": "Dschinghis Khan",
+    "year": 1979,
+    "category": "international",
+    "note": "Eurovision 1979"
+  },
+  {
+    "id": "c-510",
+    "title": "What's Another Year",
+    "artist": "Johnny Logan",
+    "year": 1980,
+    "category": "international",
+    "note": "Eurovision-vinder 1980"
+  },
+  {
+    "id": "c-511",
+    "title": "Making Your Mind Up",
+    "artist": "Bucks Fizz",
+    "year": 1981,
+    "category": "international",
+    "note": "Eurovision-vinder 1981"
+  },
+  {
+    "id": "c-512",
+    "title": "Ein bißchen Frieden",
+    "artist": "Nicole",
+    "year": 1982,
+    "category": "international",
+    "note": "Eurovision-vinder 1982"
+  },
+  {
+    "id": "c-513",
+    "title": "Diggi-Loo Diggi-Ley",
+    "artist": "Herreys",
+    "year": 1984,
+    "category": "international",
+    "note": "Eurovision-vinder 1984"
+  },
+  {
+    "id": "c-514",
+    "title": "La det swinge",
+    "artist": "Bobbysocks!",
+    "year": 1985,
+    "category": "international",
+    "note": "Eurovision-vinder 1985"
+  },
+  {
+    "id": "c-515",
+    "title": "Hold Me Now",
+    "artist": "Johnny Logan",
+    "year": 1987,
+    "category": "international",
+    "note": "Eurovision-vinder 1987"
+  },
+  {
+    "id": "c-516",
+    "title": "Ne partez pas sans moi",
+    "artist": "Céline Dion",
+    "year": 1988,
+    "category": "international",
+    "note": "Eurovision-vinder 1988"
+  },
+  {
+    "id": "c-517",
+    "title": "Fångad av en stormvind",
+    "artist": "Carola",
+    "year": 1991,
+    "category": "international",
+    "note": "Eurovision-vinder 1991"
+  },
+  {
+    "id": "c-518",
+    "title": "Why Me?",
+    "artist": "Linda Martin",
+    "year": 1992,
+    "category": "international",
+    "note": "Eurovision-vinder 1992"
+  },
+  {
+    "id": "c-519",
+    "title": "Love Shine a Light",
+    "artist": "Katrina and the Waves",
+    "year": 1997,
+    "category": "international",
+    "note": "Eurovision-vinder 1997"
+  },
+  {
+    "id": "c-520",
+    "title": "Diva",
+    "artist": "Dana International",
+    "year": 1998,
+    "category": "international",
+    "note": "Eurovision-vinder 1998"
+  },
+  {
+    "id": "c-521",
+    "title": "Take Me to Your Heaven",
+    "artist": "Charlotte Nilsson",
+    "year": 1999,
+    "category": "international",
+    "note": "Eurovision-vinder 1999"
+  },
+  {
+    "id": "c-522",
+    "title": "Everyway That I Can",
+    "artist": "Sertab Erener",
+    "year": 2003,
+    "category": "international",
+    "note": "Eurovision-vinder 2003"
+  },
+  {
+    "id": "c-523",
+    "title": "Wild Dances",
+    "artist": "Ruslana",
+    "year": 2004,
+    "category": "international",
+    "note": "Eurovision-vinder 2004"
+  },
+  {
+    "id": "c-524",
+    "title": "Hard Rock Hallelujah",
+    "artist": "Lordi",
+    "year": 2006,
+    "category": "international",
+    "note": "Eurovision-vinder 2006"
+  },
+  {
+    "id": "c-525",
+    "title": "Dancing Lasha Tumbai",
+    "artist": "Verka Serduchka",
+    "year": 2007,
+    "category": "international",
+    "note": "Eurovision 2007"
+  },
+  {
+    "id": "c-526",
+    "title": "Molitva",
+    "artist": "Marija Šerifović",
+    "year": 2007,
+    "category": "international",
+    "note": "Eurovision-vinder 2007"
+  },
+  {
+    "id": "c-527",
+    "title": "Fairytale",
+    "artist": "Alexander Rybak",
+    "year": 2009,
+    "category": "international",
+    "note": "Eurovision-vinder 2009"
+  },
+  {
+    "id": "c-528",
+    "title": "Satellite",
+    "artist": "Lena",
+    "year": 2010,
+    "category": "international",
+    "note": "Eurovision-vinder 2010"
+  },
+  {
+    "id": "c-529",
+    "title": "Run Away",
+    "artist": "SunStroke Project & Olia Tira",
+    "year": 2010,
+    "category": "international",
+    "note": "Eurovision 2010 – Epic Sax Guy"
+  },
+  {
+    "id": "c-530",
+    "title": "Euphoria",
+    "artist": "Loreen",
+    "year": 2012,
+    "category": "international",
+    "note": "Eurovision-vinder 2012"
+  },
+  {
+    "id": "c-531",
+    "title": "Rise Like a Phoenix",
+    "artist": "Conchita Wurst",
+    "year": 2014,
+    "category": "international",
+    "note": "Eurovision-vinder 2014"
+  },
+  {
+    "id": "c-532",
+    "title": "Heroes",
+    "artist": "Måns Zelmerlöw",
+    "year": 2015,
+    "category": "international",
+    "note": "Eurovision-vinder 2015"
+  },
+  {
+    "id": "c-533",
+    "title": "Toy",
+    "artist": "Netta",
+    "year": 2018,
+    "category": "international",
+    "note": "Eurovision-vinder 2018"
+  },
+  {
+    "id": "c-534",
+    "title": "Fuego",
+    "artist": "Eleni Foureira",
+    "year": 2018,
+    "category": "international",
+    "note": "Eurovision 2018"
+  },
+  {
+    "id": "c-535",
+    "title": "Arcade",
+    "artist": "Duncan Laurence",
+    "year": 2019,
+    "category": "international",
+    "note": "Eurovision-vinder 2019"
+  },
+  {
+    "id": "c-536",
+    "title": "Soldi",
+    "artist": "Mahmood",
+    "year": 2019,
+    "category": "international",
+    "note": "Eurovision 2019"
+  },
+  {
+    "id": "c-537",
+    "title": "Zitti e buoni",
+    "artist": "Måneskin",
+    "year": 2021,
+    "category": "international",
+    "note": "Eurovision-vinder 2021"
+  },
+  {
+    "id": "c-538",
+    "title": "Stefania",
+    "artist": "Kalush Orchestra",
+    "year": 2022,
+    "category": "international",
+    "note": "Eurovision-vinder 2022"
+  },
+  {
+    "id": "c-539",
+    "title": "Space Man",
+    "artist": "Sam Ryder",
+    "year": 2022,
+    "category": "international",
+    "note": "Eurovision 2022"
+  },
+  {
+    "id": "c-540",
+    "title": "Tattoo",
+    "artist": "Loreen",
+    "year": 2023,
+    "category": "international",
+    "note": "Eurovision-vinder 2023"
+  },
+  {
+    "id": "c-541",
+    "title": "Cha Cha Cha",
+    "artist": "Käärijä",
+    "year": 2023,
+    "category": "international",
+    "note": "Eurovision 2023"
+  },
+  {
+    "id": "c-542",
+    "title": "The Code",
+    "artist": "Nemo",
+    "year": 2024,
+    "category": "international",
+    "note": "Eurovision-vinder 2024"
+  },
+  {
+    "id": "c-543",
+    "title": "Wasted Love",
+    "artist": "JJ",
+    "year": 2025,
+    "category": "international",
+    "note": "Eurovision-vinder 2025"
+  },
+  {
+    "id": "c-544",
+    "title": "Spirit in the Sky",
+    "artist": "Norman Greenbaum",
+    "year": 1969,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-545",
+    "title": "In the Year 2525",
+    "artist": "Zager & Evans",
+    "year": 1969,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-546",
+    "title": "Venus",
+    "artist": "Shocking Blue",
+    "year": 1969,
+    "category": "international"
+  },
+  {
+    "id": "c-547",
+    "title": "Popcorn",
+    "artist": "Hot Butter",
+    "year": 1972,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-548",
+    "title": "Kung Fu Fighting",
+    "artist": "Carl Douglas",
+    "year": 1974,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-549",
+    "title": "Hooked on a Feeling",
+    "artist": "Blue Swede",
+    "year": 1974,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-550",
+    "title": "Sugar Baby Love",
+    "artist": "The Rubettes",
+    "year": 1974,
+    "category": "international"
+  },
+  {
+    "id": "c-551",
+    "title": "Seasons in the Sun",
+    "artist": "Terry Jacks",
+    "year": 1974,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-552",
+    "title": "Ça plane pour moi",
+    "artist": "Plastic Bertrand",
+    "year": 1977,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-553",
+    "title": "Ring My Bell",
+    "artist": "Anita Ward",
+    "year": 1979,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-554",
+    "title": "Funkytown",
+    "artist": "Lipps Inc.",
+    "year": 1980,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-555",
+    "title": "Mickey",
+    "artist": "Toni Basil",
+    "year": 1982,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-556",
+    "title": "Come On Eileen",
+    "artist": "Dexys Midnight Runners",
+    "year": 1982,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-557",
+    "title": "Da Da Da",
+    "artist": "Trio",
+    "year": 1982,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-558",
+    "title": "The Safety Dance",
+    "artist": "Men Without Hats",
+    "year": 1982,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-559",
+    "title": "It's Raining Men",
+    "artist": "The Weather Girls",
+    "year": 1982,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-560",
+    "title": "99 Luftballons",
+    "artist": "Nena",
+    "year": 1983,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-561",
+    "title": "Vamos a la playa",
+    "artist": "Righeira",
+    "year": 1983,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-562",
+    "title": "Break My Stride",
+    "artist": "Matthew Wilder",
+    "year": 1983,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-563",
+    "title": "Somebody's Watching Me",
+    "artist": "Rockwell",
+    "year": 1984,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-564",
+    "title": "Tarzan Boy",
+    "artist": "Baltimora",
+    "year": 1985,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-565",
+    "title": "Rock Me Amadeus",
+    "artist": "Falco",
+    "year": 1985,
+    "category": "international"
+  },
+  {
+    "id": "c-566",
+    "title": "Walking on Sunshine",
+    "artist": "Katrina and the Waves",
+    "year": 1985,
+    "category": "international"
+  },
+  {
+    "id": "c-567",
+    "title": "Voyage voyage",
+    "artist": "Desireless",
+    "year": 1986,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-568",
+    "title": "Joe le taxi",
+    "artist": "Vanessa Paradis",
+    "year": 1987,
+    "category": "international"
+  },
+  {
+    "id": "c-569",
+    "title": "Lambada",
+    "artist": "Kaoma",
+    "year": 1989,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-570",
+    "title": "Pump Up the Jam",
+    "artist": "Technotronic",
+    "year": 1989,
+    "category": "international"
+  },
+  {
+    "id": "c-571",
+    "title": "Ice Ice Baby",
+    "artist": "Vanilla Ice",
+    "year": 1990,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-572",
+    "title": "Groove Is in the Heart",
+    "artist": "Deee-Lite",
+    "year": 1990,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-573",
+    "title": "I'm Too Sexy",
+    "artist": "Right Said Fred",
+    "year": 1991,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-574",
+    "title": "Achy Breaky Heart",
+    "artist": "Billy Ray Cyrus",
+    "year": 1992,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-575",
+    "title": "Jump Around",
+    "artist": "House of Pain",
+    "year": 1992,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-576",
+    "title": "Informer",
+    "artist": "Snow",
+    "year": 1992,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-577",
+    "title": "What's Up?",
+    "artist": "4 Non Blondes",
+    "year": 1993,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-578",
+    "title": "Mmm Mmm Mmm Mmm",
+    "artist": "Crash Test Dummies",
+    "year": 1993,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-579",
+    "title": "The Rhythm of the Night",
+    "artist": "Corona",
+    "year": 1993,
+    "category": "international"
+  },
+  {
+    "id": "c-580",
+    "title": "Here Comes the Hotstepper",
+    "artist": "Ini Kamoze",
+    "year": 1994,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-581",
+    "title": "Scatman (Ski-Ba-Bop-Ba-Dop-Bop)",
+    "artist": "Scatman John",
+    "year": 1994,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-582",
+    "title": "Macarena (Bayside Boys Mix)",
+    "artist": "Los del Río",
+    "year": 1995,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-583",
+    "title": "Gangsta's Paradise",
+    "artist": "Coolio ft. L.V.",
+    "year": 1995,
+    "category": "international"
+  },
+  {
+    "id": "c-584",
+    "title": "How Bizarre",
+    "artist": "OMC",
+    "year": 1996,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-585",
+    "title": "Coco Jamboo",
+    "artist": "Mr. President",
+    "year": 1996,
+    "category": "international"
+  },
+  {
+    "id": "c-586",
+    "title": "Tubthumping",
+    "artist": "Chumbawamba",
+    "year": 1997,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-587",
+    "title": "Your Woman",
+    "artist": "White Town",
+    "year": 1997,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-588",
+    "title": "Bitch",
+    "artist": "Meredith Brooks",
+    "year": 1997,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-589",
+    "title": "Save Tonight",
+    "artist": "Eagle-Eye Cherry",
+    "year": 1997,
+    "category": "international"
+  },
+  {
+    "id": "c-590",
+    "title": "Kiss Me",
+    "artist": "Sixpence None the Richer",
+    "year": 1998,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-591",
+    "title": "You Get What You Give",
+    "artist": "New Radicals",
+    "year": 1998,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-592",
+    "title": "Boom, Boom, Boom, Boom!!",
+    "artist": "Vengaboys",
+    "year": 1998,
+    "category": "international"
+  },
+  {
+    "id": "c-593",
+    "title": "Mambo No. 5",
+    "artist": "Lou Bega",
+    "year": 1999,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-594",
+    "title": "Steal My Sunshine",
+    "artist": "Len",
+    "year": 1999,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-595",
+    "title": "Better Off Alone",
+    "artist": "Alice Deejay",
+    "year": 1999,
+    "category": "international"
+  },
+  {
+    "id": "c-596",
+    "title": "L'amour toujours",
+    "artist": "Gigi D'Agostino",
+    "year": 1999,
+    "category": "international"
+  },
+  {
+    "id": "c-597",
+    "title": "Who Let the Dogs Out",
+    "artist": "Baha Men",
+    "year": 2000,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-598",
+    "title": "Teenage Dirtbag",
+    "artist": "Wheatus",
+    "year": 2000,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-599",
+    "title": "Butterfly",
+    "artist": "Crazy Town",
+    "year": 2000,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-600",
+    "title": "Hey Baby (Uhh, Ahh)",
+    "artist": "DJ Ötzi",
+    "year": 2000,
+    "category": "international",
+    "note": "Festsang"
+  },
+  {
+    "id": "c-601",
+    "title": "Dancing in the Moonlight",
+    "artist": "Toploader",
+    "year": 2000,
+    "category": "international"
+  },
+  {
+    "id": "c-602",
+    "title": "The Ketchup Song (Aserejé)",
+    "artist": "Las Ketchup",
+    "year": 2002,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-603",
+    "title": "Dragostea din tei",
+    "artist": "O-Zone",
+    "year": 2004,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-604",
+    "title": "Axel F",
+    "artist": "Crazy Frog",
+    "year": 2005,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-605",
+    "title": "Friday",
+    "artist": "Rebecca Black",
+    "year": 2011,
+    "category": "international",
+    "note": "Kult-hit"
+  },
+  {
+    "id": "c-606",
+    "title": "Harlem Shake",
+    "artist": "Baauer",
+    "year": 2013,
+    "category": "international",
+    "note": "One-hit wonder"
+  },
+  {
+    "id": "c-607",
+    "title": "The Fox (What Does the Fox Say?)",
+    "artist": "Ylvis",
+    "year": 2013,
+    "category": "international",
+    "note": "Kult-hit"
+  },
+  {
+    "id": "c-608",
+    "title": "Tequila",
+    "artist": "The Champs",
+    "year": 1958,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-609",
+    "title": "Monster Mash",
+    "artist": "Bobby \"Boris\" Pickett",
+    "year": 1962,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-610",
+    "title": "Time Warp",
+    "artist": "The Rocky Horror Picture Show Cast",
+    "year": 1975,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-611",
+    "title": "Daddy Cool",
+    "artist": "Boney M.",
+    "year": 1976,
+    "category": "international"
+  },
+  {
+    "id": "c-612",
+    "title": "Mr. Blue Sky",
+    "artist": "Electric Light Orchestra",
+    "year": 1977,
+    "category": "international"
+  },
+  {
+    "id": "c-613",
+    "title": "\"Heroes\"",
+    "artist": "David Bowie",
+    "year": 1977,
+    "category": "international"
+  },
+  {
+    "id": "c-614",
+    "title": "Rasputin",
+    "artist": "Boney M.",
+    "year": 1978,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-615",
+    "title": "Always Look on the Bright Side of Life",
+    "artist": "Monty Python",
+    "year": 1979,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-616",
+    "title": "I Was Made for Lovin' You",
+    "artist": "KISS",
+    "year": 1979,
+    "category": "international"
+  },
+  {
+    "id": "c-617",
+    "title": "Highway to Hell",
+    "artist": "AC/DC",
+    "year": 1979,
+    "category": "international"
+  },
+  {
+    "id": "c-618",
+    "title": "Moskau",
+    "artist": "Dschinghis Khan",
+    "year": 1979,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-619",
+    "title": "Kids in America",
+    "artist": "Kim Wilde",
+    "year": 1981,
+    "category": "international"
+  },
+  {
+    "id": "c-620",
+    "title": "Total Eclipse of the Heart",
+    "artist": "Bonnie Tyler",
+    "year": 1983,
+    "category": "international"
+  },
+  {
+    "id": "c-621",
+    "title": "Relax",
+    "artist": "Frankie Goes to Hollywood",
+    "year": 1983,
+    "category": "international"
+  },
+  {
+    "id": "c-622",
+    "title": "Jump",
+    "artist": "Van Halen",
+    "year": 1984,
+    "category": "international"
+  },
+  {
+    "id": "c-623",
+    "title": "Ghostbusters",
+    "artist": "Ray Parker Jr.",
+    "year": 1984,
+    "category": "international",
+    "note": "Filmhit"
+  },
+  {
+    "id": "c-624",
+    "title": "Don't You (Forget About Me)",
+    "artist": "Simple Minds",
+    "year": 1985,
+    "category": "international",
+    "note": "Filmhit"
+  },
+  {
+    "id": "c-625",
+    "title": "The Final Countdown",
+    "artist": "Europe",
+    "year": 1986,
+    "category": "international",
+    "note": "Kultsang"
+  },
+  {
+    "id": "c-626",
+    "title": "Pour Some Sugar on Me",
+    "artist": "Def Leppard",
+    "year": 1987,
+    "category": "international"
+  },
+  {
+    "id": "c-627",
+    "title": "Thunderstruck",
+    "artist": "AC/DC",
+    "year": 1990,
+    "category": "international",
+    "note": "Stadionhit"
+  },
+  {
+    "id": "c-628",
+    "title": "U Can't Touch This",
+    "artist": "MC Hammer",
+    "year": 1990,
+    "category": "international"
+  },
+  {
+    "id": "c-629",
+    "title": "I'd Do Anything for Love (But I Won't Do That)",
+    "artist": "Meat Loaf",
+    "year": 1993,
+    "category": "international"
+  },
+  {
+    "id": "c-630",
+    "title": "Hips Don't Lie",
+    "artist": "Shakira ft. Wyclef Jean",
+    "year": 2006,
+    "category": "international"
   }
 ]
