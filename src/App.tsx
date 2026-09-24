@@ -10,6 +10,7 @@ import { VictoryModal } from './components/Modals/VictoryModal';
 import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { getActiveSongs, loadCatalog } from './services/songsService';
+import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
 import { markRemoved } from './services/removalStore';
 import { fetchHighscores, postHighscore, HighscoreEntry } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
@@ -64,7 +65,8 @@ const SOLO_PLAYER: Player = {
 // Draw a mystery song whose year is NOT already on the timeline, so no two cards
 // ever share a year. Pops colliding songs off the deck; if the deck runs dry it
 // rebuilds from `pool` (excluding already-used ids and taken years). Only if no
-// unique-year song exists at all does it fall back to any unused song.
+// unique-year song exists at all does it fall back to any unused song. Rebuilt decks
+// follow the play session order, so skipped (still unplayed) songs come up first.
 function pickMysterySong(
   deck: Song[],
   takenYears: Set<number>,
@@ -76,14 +78,14 @@ function pickMysterySong(
     const s = d.pop()!;
     if (!takenYears.has(s.year)) return { song: s, deck: d };
   }
-  const fresh = pool
-    .filter((s) => !usedIds.has(s.id) && !takenYears.has(s.year))
-    .sort(() => Math.random() - 0.5);
+  const fresh = orderSongs(
+    pool.filter((s) => !usedIds.has(s.id) && !takenYears.has(s.year)),
+  ).reverse();
   if (fresh.length) {
     const s = fresh.pop()!;
     return { song: s, deck: fresh };
   }
-  const any = pool.filter((s) => !usedIds.has(s.id)).sort(() => Math.random() - 0.5);
+  const any = orderSongs(pool.filter((s) => !usedIds.has(s.id))).reverse();
   const s = any.pop() ?? null;
   return { song: s, deck: any };
 }
@@ -151,7 +153,14 @@ export default function App() {
     loadCatalog().then((ok) => {
       if (ok) setRemovedTick((t) => t + 1);
     });
+    loadPlaySession();
   }, []);
+
+  // Every mystery song that comes into play is marked played in this browser's play
+  // session, so the next games draw songs not heard yet (see services/playSession.ts).
+  useEffect(() => {
+    if (gameStarted && settings.mode !== 'dj' && currentSong) markPlayed(currentSong);
+  }, [gameStarted, settings.mode, currentSong]);
 
   // Filter available songs according to settings (excluding removed songs)
   const eligibleSongs = useMemo(() => {
@@ -185,10 +194,12 @@ export default function App() {
         return matchCat && matchDec;
       });
 
-      const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+      // Session order (least recently heard first); the deck is popped from the end
+      const shuffled = orderSongs(filtered).reverse();
 
       // Start with 1 revealed starter song in the common shared timeline
       const starterSong = shuffled.pop();
+      if (starterSong && activeSettings.mode !== 'dj') markPlayed(starterSong);
       const initialSharedTimeline: TimelineEntry[] = starterSong
         ? [
             {

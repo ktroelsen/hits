@@ -29,6 +29,8 @@ public class Game
     // Shuffled song ids for the whole game + how far we've drawn.
     public string DeckJson { get; set; } = "[]";
     public int DeckPosition { get; set; }
+    // The host's play session: round songs are marked played there (see PlaySessionStore).
+    public string? HostSessionId { get; set; }
     // Scoring knobs (issue 8: placement + year bonus, no time factor yet).
     public int PointsPlacement { get; set; } = 1;
     public int PointsYearBonus { get; set; } = 1;
