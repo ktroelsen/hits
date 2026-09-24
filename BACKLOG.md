@@ -21,8 +21,9 @@ markeres "stille" uden preview indtil reload. Batch-scriptet
 
 - [x] **2. Pre-fetch og bag URL'er ind i `songs.ts`** — ✅ `Song` har `previewUrl`/`artworkUrl`;
   `fetchSongAudioPreview(song)` bruger dem direkte og springer netværket helt over. Kør
-  `npm run bake-songs` for at skrive dem ind i `songs.ts` (idempotent). *URL'er kan udløbe →
-  kør scriptet periodisk i CI.*
+  `npm run bake-songs` for at skrive dem ind i `songs.ts` (idempotent). URL'er udløber, og
+  DB'en er sandheden → ✅ backenden fornyer nu døde URL'er i DB'en ugentligt
+  (`server/Catalog/PreviewRefresher.cs`) og via `/admin` → Katalog → "Forny previews".
 
 - [ ] **3. Client-side throttling + backoff** i `fetchSongAudioPreview` (samme mønster som
   scriptet). Hjælper mod bursts, men fjerner ikke afhængigheden af live-kald.
