@@ -3,9 +3,11 @@ import { fetchSongAudioPreview } from '../services/audioService';
 import { Song, SongCategory } from '../types';
 
 // "Katalog" tab on /admin: every song in the database, with search, preview,
-// edit, delete and active toggle. Reads GET /api/songs and writes via PUT/DELETE
+// edit, delete, tags and active toggle. Reads GET /api/songs and writes via PUT/DELETE
 // /api/songs/{id} and POST /api/songs/active (all require the admin key, which
-// `request` adds). Only active songs are dealt into games.
+// `request` adds). Only active songs are dealt into games. The shown songs can be
+// exported as JSON and a (possibly enriched) file imported back via
+// POST /api/admin/songs/import — the same format as scripts/songs.ps1.
 
 type Request = (url: string, init?: RequestInit) => Promise<Response>;
 
@@ -28,6 +30,60 @@ interface RefreshStatus {
 }
 
 const REFRESH_URL = '/api/admin/previews/refresh';
+const IMPORT_URL = '/api/admin/songs/import';
+
+// Mirrors SongTransfer.ImportReport on the server (server/Admin/SongTransfer.cs).
+interface ImportReport {
+  dryRun: boolean;
+  saved: boolean;
+  created: number;
+  updated: number;
+  unchanged: number;
+  errors: { index: number; message: string }[];
+  changes: { id: string; title: string; artist: string; created: boolean; fields: string[] }[];
+}
+
+const NO_TAGS = '__none';
+const HAS_TAGS = '__any';
+
+const parseTags = (text: string) => [
+  ...new Set(
+    text
+      .split(',')
+      .map((t) => t.trim().toLowerCase().replace(/\s+/g, ' '))
+      .filter(Boolean),
+  ),
+];
+
+// Same shape as GET /api/admin/songs/export, so the file works with the import and the script.
+function downloadExport(songs: Song[]) {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    total: songs.length,
+    count: songs.length,
+    nextAfter: null,
+    songs: songs.map((s) => ({
+      id: s.id,
+      title: s.title,
+      artist: s.artist,
+      year: s.year,
+      category: s.category,
+      genre: s.genre ?? null,
+      funFact: s.funFact ?? null,
+      tags: s.tags ?? [],
+      active: s.active !== false,
+      previewUrl: s.previewUrl ?? null,
+      artworkUrl: s.artworkUrl ?? null,
+      customPreviewUrl: s.customPreviewUrl ?? null,
+    })),
+  };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hits-songs-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 const formatTime = (iso: string) =>
   new Date(iso).toLocaleString('da-DK', { dateStyle: 'short', timeStyle: 'short' });
@@ -42,7 +98,14 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<'all' | SongCategory>('all');
   const [status, setStatus] = useState<'all' | 'active' | 'inactive'>('all');
+  const [tagFilter, setTagFilter] = useState(''); // '' = all, NO_TAGS / HAS_TAGS = without / with tags
+  const [addTagsOnly, setAddTagsOnly] = useState(false); // import: `tags` adds instead of replacing
   const [editing, setEditing] = useState<Song | null>(null);
+  const [tagsText, setTagsText] = useState('');
+  const [exportLimit, setExportLimit] = useState('');
+  const [importFile, setImportFile] = useState<{ name: string; body: string } | null>(null);
+  const [importReport, setImportReport] = useState<ImportReport | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -128,12 +191,60 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
       (s) =>
         (category === 'all' || s.category === category) &&
         (status === 'all' || (status === 'active') === isActive(s)) &&
+        (tagFilter === '' ||
+          (tagFilter === NO_TAGS
+            ? !s.tags?.length
+            : tagFilter === HAS_TAGS
+              ? !!s.tags?.length
+              : (s.tags ?? []).includes(tagFilter))) &&
         (!q ||
           s.title.toLowerCase().includes(q) ||
           s.artist.toLowerCase().includes(q) ||
           String(s.year).includes(q)),
     );
-  }, [songs, query, category, status]);
+  }, [songs, query, category, status, tagFilter]);
+
+  const allTags = useMemo(
+    () => [...new Set((songs ?? []).flatMap((s) => s.tags ?? []))].sort((a, b) => a.localeCompare(b, 'da')),
+    [songs],
+  );
+
+  const exportShown = () => {
+    const limit = Number(exportLimit);
+    downloadExport(limit > 0 ? filtered.slice(0, limit) : filtered);
+  };
+
+  // Import = dry-run first (shows what would change), then an explicit confirm.
+  const runImport = async (file: { name: string; body: string }, dryRun: boolean, addOnly = addTagsOnly) => {
+    setBusy(true);
+    try {
+      const params = `tagMode=${addOnly ? 'add' : 'replace'}${dryRun ? '&dryRun=true' : ''}`;
+      const res = await request(`${IMPORT_URL}?${params}`, { method: 'POST', body: file.body });
+      const body = await res.json().catch(() => null);
+      if (!body || (!res.ok && !body.changes)) throw new Error(body?.error ?? `HTTP ${res.status}`);
+      setImportReport(body as ImportReport);
+      setError(null);
+      if (body.saved) {
+        setImportFile(null);
+        await load();
+        onChanged?.();
+      }
+    } catch (e) {
+      setError(`Import fejlede: ${(e as Error).message}`);
+      setImportFile(null);
+      setImportReport(null);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const pickImportFile = async (file: File | undefined) => {
+    if (!file) return;
+    const picked = { name: file.name, body: await file.text() };
+    setImportFile(picked);
+    setImportReport(null);
+    await runImport(picked, true);
+  };
 
   const activeCount = useMemo(() => (songs ?? []).filter(isActive).length, [songs]);
 
@@ -187,7 +298,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
     try {
       const res = await request(`/api/songs/${encodeURIComponent(editing.id)}`, {
         method: 'PUT',
-        body: JSON.stringify(editing),
+        body: JSON.stringify({ ...editing, tags: parseTags(tagsText) }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const saved: Song = await res.json();
@@ -240,6 +351,114 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
         </p>
       </div>
 
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 px-3 py-2">
+        <button
+          onClick={exportShown}
+          disabled={!songs || filtered.length === 0}
+          className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-bold hover:bg-slate-600 disabled:opacity-40"
+        >
+          Eksportér viste
+        </button>
+        <input
+          type="number"
+          min={1}
+          inputMode="numeric"
+          placeholder="Antal"
+          title="Eksportér kun de første N af de viste sange (tomt = alle)"
+          className={`${inputCls.replace('w-full ', '')} w-20`}
+          value={exportLimit}
+          onChange={(e) => setExportLimit(e.target.value)}
+        />
+        <button
+          onClick={() => fileRef.current?.click()}
+          disabled={busy}
+          className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-bold hover:bg-slate-600 disabled:opacity-40"
+        >
+          Importér JSON…
+        </button>
+        <label
+          className="flex items-center gap-1.5 text-xs text-slate-300"
+          title="Tags i filen lægges til sangenes eksisterende tags i stedet for at erstatte dem"
+        >
+          <input
+            type="checkbox"
+            checked={addTagsOnly}
+            disabled={busy}
+            onChange={(e) => {
+              setAddTagsOnly(e.target.checked);
+              // Re-run the preview so it reflects the chosen mode.
+              if (importFile && !importReport?.saved) runImport(importFile, true, e.target.checked);
+            }}
+            className="accent-emerald-500"
+          />
+          Kun tilføj tags
+        </label>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="application/json,.json"
+          className="hidden"
+          onChange={(e) => {
+            pickImportFile(e.target.files?.[0]);
+            e.target.value = '';
+          }}
+        />
+        <p className="text-xs text-slate-400">
+          Tip: filtrér på "Uden tags", eksportér fx 10, berig filen og importér den igen.
+        </p>
+      </div>
+
+      {importReport && (
+        <div className="mb-4 rounded-lg bg-slate-800/60 p-3 text-sm ring-1 ring-slate-700">
+          <p className="font-semibold">
+            {importReport.saved ? 'Importeret: ' : `Forhåndsvisning af ${importFile?.name ?? 'import'}: `}
+            {importReport.updated} {importReport.saved ? 'opdateret' : 'opdateres'}, {importReport.created}{' '}
+            {importReport.saved ? 'oprettet' : 'oprettes'}, {importReport.unchanged} uændrede
+            {importReport.errors.length > 0 && `, ${importReport.errors.length} fejl`}
+          </p>
+          {importReport.errors.length > 0 && (
+            <ul className="mt-2 space-y-0.5 text-xs text-rose-400">
+              {importReport.errors.map((e) => (
+                <li key={e.index}>
+                  Post #{e.index}: {e.message}
+                </li>
+              ))}
+            </ul>
+          )}
+          {importReport.changes.length > 0 && (
+            <ul className="mt-2 max-h-48 space-y-0.5 overflow-y-auto text-xs text-slate-300">
+              {importReport.changes.map((c) => (
+                <li key={c.id}>
+                  <span className={c.created ? 'text-emerald-400' : 'text-amber-300'}>{c.created ? '+' : '~'}</span>{' '}
+                  {c.artist} – {c.title}: <span className="text-slate-400">{c.fields.join(', ')}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-3 flex gap-2">
+            {!importReport.saved && importFile && (
+              <button
+                onClick={() => runImport(importFile, false)}
+                disabled={busy || importReport.errors.length > 0 || importReport.updated + importReport.created === 0}
+                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-bold hover:bg-emerald-500 disabled:opacity-40"
+              >
+                Bekræft import
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setImportReport(null);
+                setImportFile(null);
+              }}
+              disabled={busy}
+              className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-semibold hover:bg-slate-600"
+            >
+              {importReport.saved ? 'Luk' : 'Annullér'}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mb-4 flex flex-wrap gap-2">
         <input
           type="search"
@@ -265,6 +484,20 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
           <option value="all">Aktive og inaktive</option>
           <option value="active">Kun aktive</option>
           <option value="inactive">Kun inaktive</option>
+        </select>
+        <select
+          className={`${inputCls} w-auto py-2`}
+          value={tagFilter}
+          onChange={(e) => setTagFilter(e.target.value)}
+        >
+          <option value="">Alle tags</option>
+          <option value={NO_TAGS}>Uden tags</option>
+          <option value={HAS_TAGS}>Med tags</option>
+          {allTags.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -337,6 +570,12 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                   onChange={(e) => setEditing({ ...editing, funFact: e.target.value || undefined })}
                   placeholder="Fun fact (valgfri)"
                 />
+                <input
+                  className={`${inputCls} col-span-2`}
+                  value={tagsText}
+                  onChange={(e) => setTagsText(e.target.value)}
+                  placeholder="Tags, kommasepareret (fx dance, melodi grand prix)"
+                />
               </div>
               <div className="flex gap-2">
                 <button
@@ -382,6 +621,20 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 <p className="truncate text-xs text-slate-400">
                   {song.artist} · {song.category === 'danish' ? '🇩🇰' : '🌍'}
                 </p>
+                {song.tags && song.tags.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap gap-1">
+                    {song.tags.map((tag) => (
+                      <button
+                        key={tag}
+                        onClick={() => setTagFilter(tag)}
+                        title="Vis kun sange med dette tag"
+                        className="rounded-full bg-cyan-950/60 px-1.5 text-[10px] text-cyan-300 ring-1 ring-cyan-800 hover:bg-cyan-900"
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <span className="font-mono text-sm font-black text-pink-400">{song.year}</span>
               <button
@@ -393,7 +646,10 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 {refreshingId === song.id ? '…' : 'Forny'}
               </button>
               <button
-                onClick={() => setEditing({ ...song })}
+                onClick={() => {
+                  setEditing({ ...song });
+                  setTagsText((song.tags ?? []).join(', '));
+                }}
                 disabled={busy}
                 className="rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-slate-800"
               >

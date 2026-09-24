@@ -18,6 +18,8 @@ export interface Song {
   artworkUrl?: string;
   // Toggled in /admin; only active songs are played. Missing (bundled fallback) = active.
   active?: boolean;
+  // Normalised labels (e.g. "dance", "melodi grand prix") set in /admin or via scripts/songs.ps1.
+  tags?: string[];
 }
 
 export type GameMode = 'timeline' | 'expert' | 'party' | 'quick' | 'dj' | 'solo';
@@ -49,6 +51,7 @@ export interface GameSettings {
   timeLimitMinutes: number; // used when winCondition is 'time'
   categoryFilter: 'all' | 'danish' | 'international';
   decades: Decade[];
+  tags: string[]; // empty = all songs; otherwise songs with at least one of these tags
   autoPlayAudio: boolean;
   enableSoundEffects: boolean;
   expertTolerance: number; // 0 = exact year, 1 = +/- 1 year

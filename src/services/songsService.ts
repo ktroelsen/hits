@@ -1,5 +1,5 @@
 import { HITSTER_SONGS } from '../data/songs';
-import { Song } from '../types';
+import { GameSettings, Song } from '../types';
 import { getRemovedIds } from './removalStore';
 
 // The catalog now lives in the backend (SQLite, issue 10). We fetch it once at
@@ -38,4 +38,17 @@ export async function loadCatalog(): Promise<boolean> {
 export function getActiveSongs(): Song[] {
   const removed = getRemovedIds();
   return catalog.filter((s) => s.active !== false && !removed.has(s.id));
+}
+
+// True if a song passes the game setup filters (category, decades and — when any are
+// chosen — at least one of the selected tags).
+export function matchesSettings(
+  song: Song,
+  settings: Pick<GameSettings, 'categoryFilter' | 'decades' | 'tags'>,
+): boolean {
+  return (
+    (settings.categoryFilter === 'all' || song.category === settings.categoryFilter) &&
+    settings.decades.includes(song.decade) &&
+    (settings.tags.length === 0 || settings.tags.some((t) => song.tags?.includes(t)))
+  );
 }

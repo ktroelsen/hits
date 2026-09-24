@@ -18,4 +18,7 @@ public class Song
     public string? ArtworkUrl { get; set; }
     // Only active songs are dealt into games; inactive ones stay in the catalog (toggled in /admin).
     public bool Active { get; set; } = true;
+    // Free-form, normalised (lowercase, trimmed) labels such as "dance" or "melodi grand prix".
+    // Set in /admin or via the song import (scripts/songs.ps1); local games can filter on them.
+    public List<string> Tags { get; set; } = new();
 }

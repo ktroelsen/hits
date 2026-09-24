@@ -81,6 +81,52 @@ Nøglen sættes som konfiguration `Admin:Key` (env `Admin__Key`); i deployet kom
 GitHub-secret'en **`ADMIN_KEY`**. Uden nøgle er admin åben under `Development` og slået fra
 i produktion.
 
+## Berig sange: eksport/import og tags
+
+Sange kan have **tags** (fx `dance`, `melodi grand prix`, `80er hits`). Tags gemmes med små
+bogstaver, og i spilopsætningen kan man vælge ét eller flere tags. Så trækkes kun sange, der
+har mindst ét af dem. Tags, fun facts osv. kan beriges i batches uden for appen via
+`scripts/songs.ps1`, som kalder admin-API'et. Prod-databasen er en SQLite-fil på serveren,
+så man arbejder altid gennem API'et og ikke direkte i filen.
+
+Læg URL og admin-nøgle i `.env.local` i repo-roden (gitignored):
+
+```
+HITS_URL=https://din-side.dk
+HITS_ADMIN_KEY=...
+```
+
+```powershell
+# 1. Hent 10 sange, der mangler tags (andre filtre: -Missing funFact|genre, -Tag, -Category, -Decade, -Ids)
+.\scripts\songs.ps1 export -Missing tags -Limit 10
+# 2. Bed Claude Code om at berige songs-export.json, fx: "tilføj tags (dance, pop,
+#    melodi grand prix …) og en dansk funFact til hver sang; bevar id"
+# 3. Importér: viser først et dry-run med alle ændringer og spørger før der gemmes
+.\scripts\songs.ps1 import -File songs-export.json
+```
+
+Gentag 1–3: berigede sange falder ud af `-Missing tags`, så der skal ikke holdes styr på,
+hvor langt man er nået. Vil man gennemgå hele kataloget, bruger man `-Limit 50` og derefter
+`-After <id>`, som scriptet selv skriver ud. Brug `-Url http://localhost:5099` mod den
+lokale backend.
+
+Sange, der allerede har tags, rettes ved at eksportere dem med `-HasTags`, `-Tag dance`,
+`-Ids …` eller uden filter.
+
+Importregler (`POST /api/admin/songs/import`): sange matches på `id` og ellers på
+kunstner+titel. Kun de felter, der er med i filen, ændres, og sange uden match oprettes
+(kræver `title`, `artist` og `year`). Intet slettes, og hvis bare én post er ugyldig, gemmes
+ingenting.
+
+Tags kan ændres på tre måder:
+- `"tags": [...]` erstatter sangens tags.
+- Med `-AddTags` (`tagMode=add`) lægges `tags` kun til, og de eksisterende tags bevares.
+- `"addTags": [...]` og `"removeTags": [...]` tilføjer eller fjerner altid uden at røre resten,
+  fx `{ "id": "dk-1", "addTags": ["sommer"] }`.
+
+Det samme kan gøres fra `/admin` → Katalog med "Eksportér viste", "Importér JSON…" og
+fluebenet "Kun tilføj tags".
+
 ## CI/CD (GitHub Actions)
 
 - **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck,
