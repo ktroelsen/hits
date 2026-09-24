@@ -3,8 +3,12 @@
 En Hitster-inspireret musik-gættequiz bygget som en statisk **React + TypeScript + Vite**-app.
 Gæt årstal og placér danske og internationale hits på tidslinjen. 30-sekunders lydklip hentes
 fra iTunes Search API (ingen API-nøgle nødvendig), lydeffekter genereres i browseren.
-Previews kan bages ind i sang-dataene på forhånd (`npm run bake-songs`), så appen laver
-nul runtime-kald til Apple; ellers hentes de live og caches i browseren (localStorage).
+Hver sang har sin `previewUrl`/`artworkUrl` gemt i databasen, så browseren afspiller direkte
+fra Apples CDN uden at kalde Search API'et. Apple lader preview-URL'erne udløbe, så backenden
+tjekker dem automatisk én gang om ugen og slår døde links op igen
+(`server/Catalog/PreviewRefresher.cs`). Det kan også startes manuelt i `/admin` → Katalog
+("Forny previews" for alle, eller "Forny" på én sang). Mangler en sang en URL, hentes den live
+og caches i browseren (localStorage).
 
 ## Kør lokalt
 

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Hits.Api.Admin;
+using Hits.Api.Catalog;
 using Hits.Api.Data;
 using Hits.Api.Gameplay;
 using Hits.Api.Models;
@@ -19,6 +20,11 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(connectionString));
 builder.Services.AddSignalR();
 builder.Services.AddScoped<GameBroadcaster>();
 builder.Services.AddHostedService<PlaySessionCleanupService>();
+
+// Keeps iTunes preview URLs in the catalog alive (they expire); runs weekly + on demand from /admin.
+builder.Services.AddHttpClient(nameof(PreviewRefresher), c => c.Timeout = TimeSpan.FromSeconds(15));
+builder.Services.AddSingleton<PreviewRefresher>();
+builder.Services.AddHostedService<PreviewRefreshJob>();
 
 // Allow the statically-hosted frontend (dev on :3000) to call the API cross-origin.
 const string DevCors = "dev-frontend";

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Hits.Api.Catalog;
 using Hits.Api.Data;
 using Hits.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -116,6 +117,22 @@ public static class AdminEndpoints
                 return Results.BadRequest(new { error = "candidateId mangler." });
             await SetStatusAsync(env, body.CandidateId, "rejected");
             return Results.Ok(new { ok = true });
+        });
+
+        // Preview refresh: re-resolve expired iTunes preview URLs in the DB (see PreviewRefresher).
+        admin.MapGet("/previews/refresh", (PreviewRefresher refresher) => Results.Ok(refresher.GetStatus()));
+
+        admin.MapPost("/previews/refresh", (PreviewRefresher refresher) =>
+        {
+            refresher.TryStartRun(); // already running → just report the current status
+            return Results.Accepted("/api/admin/previews/refresh", refresher.GetStatus());
+        });
+
+        admin.MapPost("/previews/refresh/{id}", async (string id, PreviewRefresher refresher, AppDbContext db, CancellationToken ct) =>
+        {
+            var (song, outcome) = await refresher.RefreshSongAsync(db, id, ct);
+            if (song is null) return Results.NotFound();
+            return Results.Ok(new { song, outcome = outcome.ToString() });
         });
     }
 

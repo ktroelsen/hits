@@ -14,6 +14,23 @@ interface AdminCatalogProps {
   onChanged?: () => void;
 }
 
+// Mirrors PreviewRefresher.Status on the server (server/Catalog/PreviewRefresher.cs).
+interface RefreshStatus {
+  running: boolean;
+  startedAt: string | null;
+  finishedAt: string | null;
+  checked: number;
+  refreshed: number;
+  missing: number;
+  skipped: number;
+  lastCompletedAt: string | null;
+}
+
+const REFRESH_URL = '/api/admin/previews/refresh';
+
+const formatTime = (iso: string) =>
+  new Date(iso).toLocaleString('da-DK', { dateStyle: 'short', timeStyle: 'short' });
+
 const inputCls =
   'w-full rounded-lg bg-slate-800 px-2 py-1.5 text-sm text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500';
 
@@ -25,6 +42,8 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState<RefreshStatus | null>(null);
+  const [refreshingId, setRefreshingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const load = useCallback(async () => {
@@ -42,6 +61,62 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
     load();
     return () => audioRef.current?.pause();
   }, [load]);
+
+  const loadRefreshStatus = useCallback(async () => {
+    try {
+      const res = await request(REFRESH_URL);
+      if (res.ok) setRefresh(await res.json());
+    } catch {
+      // status is informational only
+    }
+  }, [request]);
+
+  useEffect(() => {
+    loadRefreshStatus();
+  }, [loadRefreshStatus]);
+
+  // Poll while a full refresh runs; reload the catalog once it finishes.
+  const running = refresh?.running ?? false;
+  useEffect(() => {
+    if (!running) return;
+    const timer = window.setInterval(loadRefreshStatus, 3000);
+    return () => {
+      window.clearInterval(timer);
+      load();
+    };
+  }, [running, loadRefreshStatus, load]);
+
+  const startRefresh = async () => {
+    try {
+      const res = await request(REFRESH_URL, { method: 'POST' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setRefresh(await res.json());
+      setError(null);
+    } catch (e) {
+      setError(`Kunne ikke starte fornyelse: ${(e as Error).message}`);
+    }
+  };
+
+  const refreshSong = async (song: Song) => {
+    setRefreshingId(song.id);
+    try {
+      const res = await request(`${REFRESH_URL}/${encodeURIComponent(song.id)}`, { method: 'POST' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const body: { song: Song; outcome: 'Found' | 'NotFound' | 'Unknown' } = await res.json();
+      setSongs((list) => list?.map((s) => (s.id === body.song.id ? body.song : s)) ?? null);
+      setError(
+        body.outcome === 'Found'
+          ? null
+          : body.outcome === 'NotFound'
+            ? `iTunes har ingen preview for "${song.title}" — uændret.`
+            : `iTunes svarede ikke (rate limit?) — prøv igen om et minut.`,
+      );
+    } catch (e) {
+      setError(`Kunne ikke forny: ${(e as Error).message}`);
+    } finally {
+      setRefreshingId(null);
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -117,6 +192,25 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
 
   return (
     <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
+      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg bg-slate-800/60 px-3 py-2">
+        <button
+          onClick={startRefresh}
+          disabled={running}
+          className="rounded-lg bg-pink-600 px-3 py-1.5 text-sm font-bold hover:bg-pink-500 disabled:opacity-40"
+        >
+          {running ? 'Fornyer…' : 'Forny previews'}
+        </button>
+        <p className="text-xs text-slate-400">
+          {running && refresh
+            ? `Tjekker… ${refresh.checked} sange gennemgået, ${refresh.refreshed} fornyet`
+            : refresh?.finishedAt
+              ? `Sidst kørt ${formatTime(refresh.finishedAt)}: ${refresh.refreshed} fornyet, ${refresh.missing} uden preview, ${refresh.skipped} sprunget over`
+              : refresh?.lastCompletedAt
+                ? `Sidst kørt ${formatTime(refresh.lastCompletedAt)} · kører automatisk hver uge`
+                : 'Døde preview-links fornyes automatisk hver uge.'}
+        </p>
+      </div>
+
       <div className="mb-4 flex flex-wrap gap-2">
         <input
           type="search"
@@ -228,6 +322,14 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 </p>
               </div>
               <span className="font-mono text-sm font-black text-pink-400">{song.year}</span>
+              <button
+                onClick={() => refreshSong(song)}
+                disabled={busy || refreshingId !== null}
+                title="Slå preview og cover op i iTunes igen"
+                className="rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+              >
+                {refreshingId === song.id ? '…' : 'Forny'}
+              </button>
               <button
                 onClick={() => setEditing({ ...song })}
                 disabled={busy}
