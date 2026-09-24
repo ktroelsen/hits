@@ -9,7 +9,7 @@ import { RulesModal } from './components/Modals/RulesModal';
 import { VictoryModal } from './components/Modals/VictoryModal';
 import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
-import { getActiveSongs, loadCatalog } from './services/songsService';
+import { getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
 import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
 import { markRemoved } from './services/removalStore';
 import { fetchHighscores, postHighscore, HighscoreEntry } from './services/highscoreStore';
@@ -23,6 +23,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   timeLimitMinutes: 10,
   categoryFilter: 'all',
   decades: ['60s', '70s', '80s', '90s', '00s', '10s', '20s'],
+  tags: [],
   autoPlayAudio: true,
   enableSoundEffects: true,
   expertTolerance: 0,
@@ -164,14 +165,9 @@ export default function App() {
 
   // Filter available songs according to settings (excluding removed songs)
   const eligibleSongs = useMemo(() => {
-    return getActiveSongs().filter((s) => {
-      const matchCat =
-        settings.categoryFilter === 'all' || s.category === settings.categoryFilter;
-      const matchDec = settings.decades.includes(s.decade);
-      return matchCat && matchDec;
-    });
+    return getActiveSongs().filter((s) => matchesSettings(s, settings));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.categoryFilter, settings.decades, removedTick]);
+  }, [settings.categoryFilter, settings.decades, settings.tags, removedTick]);
 
   // Start / Reset a fresh game
   const initializeGame = useCallback(
@@ -187,12 +183,7 @@ export default function App() {
         : DEFAULT_PLAYERS;
 
       // Filter and shuffle
-      const filtered = getActiveSongs().filter((s) => {
-        const matchCat =
-          activeSettings.categoryFilter === 'all' || s.category === activeSettings.categoryFilter;
-        const matchDec = activeSettings.decades.includes(s.decade);
-        return matchCat && matchDec;
-      });
+      const filtered = getActiveSongs().filter((s) => matchesSettings(s, activeSettings));
 
       // Session order (least recently heard first); the deck is popped from the end
       const shuffled = orderSongs(filtered).reverse();
@@ -575,11 +566,7 @@ export default function App() {
 
     // If the removed song is the current mystery, draw a fresh one.
     if (currentSong && currentSong.id === song.id) {
-      const pool = getActiveSongs().filter((s) => {
-        const matchCat =
-          settings.categoryFilter === 'all' || s.category === settings.categoryFilter;
-        return matchCat && settings.decades.includes(s.decade);
-      });
+      const pool = getActiveSongs().filter((s) => matchesSettings(s, settings));
       const takenYears = settings.uniqueYearsOnly
         ? new Set(sharedTimeline.map((e) => e.song.year))
         : new Set<number>();

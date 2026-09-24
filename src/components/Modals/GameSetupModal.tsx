@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Play, Users, Disc, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
+import { getActiveSongs, matchesSettings } from '../../services/songsService';
 
 interface GameSetupModalProps {
   isOpen: boolean;
@@ -42,11 +43,25 @@ export function GameSetupModal({
   const [timeLimitMinutes, setTimeLimitMinutes] = useState<number>(currentSettings.timeLimitMinutes ?? 10);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'danish' | 'international'>(currentSettings.categoryFilter);
   const [decades, setDecades] = useState<Decade[]>(currentSettings.decades);
+  const [tags, setTags] = useState<string[]>(currentSettings.tags ?? []);
   const [uniqueYearsOnly, setUniqueYearsOnly] = useState<boolean>(currentSettings.uniqueYearsOnly);
   const [players, setPlayers] = useState<Player[]>(currentPlayers);
   const [newPlayerName, setNewPlayerName] = useState('');
 
   if (!isOpen) return null;
+
+  // Tags present on active songs, most used first (the catalog is small, so no memo needed).
+  const activeSongs = getActiveSongs();
+  const tagCounts = new Map<string, number>();
+  for (const s of activeSongs) for (const t of s.tags ?? []) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  const allTags = [...tagCounts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'da'));
+  const selectedTags = tags.filter((t) => tagCounts.has(t));
+  const matchingCount = activeSongs.filter((s) =>
+    matchesSettings(s, { categoryFilter, decades, tags: selectedTags }),
+  ).length;
+
+  const toggleTag = (tag: string) =>
+    setTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag]);
 
   const toggleDecade = (dec: Decade) => {
     if (decades.includes(dec)) {
@@ -87,6 +102,7 @@ export function GameSetupModal({
       timeLimitMinutes,
       categoryFilter,
       decades,
+      tags: selectedTags,
       uniqueYearsOnly,
     };
     onStartGame(updatedSettings, players);
@@ -295,6 +311,42 @@ export function GameSetupModal({
               })}
             </div>
           </div>
+
+          {/* Tags (optional, only shown once songs have been tagged in /admin) */}
+          {allTags.length > 0 && (
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+                Tags (valgfrit{selectedTags.length > 0 ? `, ${selectedTags.length} valgt` : ''})
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {allTags.map(([tag, count]) => {
+                  const isSelected = selectedTags.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                        isSelected
+                          ? 'bg-cyan-600 text-white border-cyan-500 shadow-sm'
+                          : 'bg-slate-950/50 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      {tag} <span className="opacity-70 font-normal">{count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[11px] text-slate-500 mt-2">
+                {selectedTags.length === 0
+                  ? 'Ingen valgt = alle sange.'
+                  : 'Sange med mindst ét af de valgte tags.'}{' '}
+                <span className={matchingCount < 10 ? 'text-amber-400' : ''}>
+                  {matchingCount} sange matcher dine valg.
+                </span>
+              </p>
+            </div>
+          )}
 
           {/* 4. Mål: antal kort eller på tid (not used in solo) */}
           {mode !== 'solo' && (

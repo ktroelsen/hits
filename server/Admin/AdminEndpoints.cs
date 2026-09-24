@@ -134,9 +134,23 @@ public static class AdminEndpoints
             if (song is null) return Results.NotFound();
             return Results.Ok(new { song, outcome = outcome.ToString() });
         });
+
+        // Song export/import (scripts/songs.ps1 and /admin → Katalog). See SongTransfer.
+        admin.MapGet("/songs/export", SongTransfer.ExportAsync);
+        admin.MapPost("/songs/import", SongTransfer.ImportAsync);
     }
 
-    static string? Blank(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+    // Trim, lowercase, collapse whitespace, drop blanks and duplicates, sort — so "Dance"
+    // and " dance" are the same tag and re-importing an unchanged list is a no-op.
+    internal static List<string> NormalizeTags(IEnumerable<string?>? tags) =>
+        (tags ?? [])
+            .Select(t => t is null ? "" : Norm(t))
+            .Where(t => t != "")
+            .Distinct()
+            .Order(StringComparer.Ordinal)
+            .ToList();
+
+    internal static string? Blank(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 
     // Mirrors decadeForYear in scripts/songsFile.ts.
     internal static string DecadeForYear(int year) => year switch
@@ -150,7 +164,7 @@ public static class AdminEndpoints
         _ => "20s",
     };
 
-    static string Norm(string s) => string.Join(' ', s.ToLowerInvariant().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+    internal static string Norm(string s) => string.Join(' ', s.ToLowerInvariant().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
 
     static bool CatalogHas(List<Song> catalog, string artist, string title)
     {
