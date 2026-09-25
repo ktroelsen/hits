@@ -33,6 +33,21 @@ export function PlacementPicker({
     setSlot(slotForYear(clamped));
   };
 
+  // Mirrors the single-device game's handleSlotClick: tapping a slot on the board
+  // also updates the year guess (and thus the decade highlight), instead of only
+  // moving the selection marker.
+  const suggestedYearForSlot = (i: number): number => {
+    if (timeline.length === 0) return 1995;
+    if (i === 0) return Math.max(MIN_YEAR, timeline[0].year - 5);
+    if (i === timeline.length) return Math.min(MAX_YEAR, timeline[timeline.length - 1].year + 4);
+    return Math.round((timeline[i - 1].year + timeline[i].year) / 2);
+  };
+
+  const setSlotAndYear = (i: number) => {
+    setSlot(i);
+    setYear(suggestedYearForSlot(i));
+  };
+
   const slotLabel = (i: number): string => {
     if (timeline.length === 0) return 'Placér sangen';
     if (i === 0) return `Før ${timeline[0].year}`;
@@ -53,7 +68,7 @@ export function PlacementPicker({
             label={slotLabel(0)}
             isPlacing={!disabled}
             isSelected={slot === 0}
-            onClick={() => setSlot(0)}
+            onClick={() => setSlotAndYear(0)}
           />
           {timeline.map((song, idx) => (
             <div key={song.id} className="flex items-center gap-1 shrink-0">
@@ -74,7 +89,7 @@ export function PlacementPicker({
                 label={slotLabel(idx + 1)}
                 isPlacing={!disabled}
                 isSelected={slot === idx + 1}
-                onClick={() => setSlot(idx + 1)}
+                onClick={() => setSlotAndYear(idx + 1)}
               />
             </div>
           ))}
