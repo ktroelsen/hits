@@ -61,6 +61,15 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
     [code, player],
   );
 
+  const markReady = useCallback(async () => {
+    if (!player) return;
+    try {
+      await gameApi.ready(code, player.id);
+    } catch {
+      /* round moved on already — live state will resync UI */
+    }
+  }, [code, player]);
+
   // --- Join screen ---
   if (!player) {
     return (
@@ -189,7 +198,20 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
               title={`Stilling efter runde ${state.currentRound}`}
             />
           </div>
-          <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
+          {state.playbackMode !== 'individual' ? (
+            <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
+          ) : round.readyPlayerIds.includes(player.id) ? (
+            <p className="mt-6 text-sm text-slate-400">
+              Venter på de andre… ({round.readyPlayerIds.length}/{state.players.length})
+            </p>
+          ) : (
+            <button
+              onClick={markReady}
+              className="mt-6 w-full rounded-lg bg-emerald-600 px-4 py-3 text-lg font-bold text-white hover:bg-emerald-500"
+            >
+              {state.currentRound >= state.targetRounds ? 'Se slutstilling' : 'Videre til næste sang'}
+            </button>
+          )}
         </Centered>
       )}
 

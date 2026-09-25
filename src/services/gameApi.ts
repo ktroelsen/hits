@@ -36,6 +36,8 @@ export interface RoundState {
   status: RoundStatus;
   audioUrl?: string | null;
   answeredPlayerIds: string[];
+  /** Players who pressed "Videre" after this round was revealed. */
+  readyPlayerIds: string[];
   correctIndex: number | null;
   song: (TimelineSong & { previewUrl?: string | null }) | null;
   results: RoundResult[];
@@ -84,6 +86,8 @@ export const gameApi = {
     }),
   reveal: (code: string) => req<void>(`/${code}/reveal`, { method: 'POST' }),
   next: (code: string) => req<{ finished: boolean }>(`/${code}/next`, { method: 'POST' }),
+  ready: (code: string, playerId: string) =>
+    req<void>(`/${code}/ready`, { method: 'POST', body: JSON.stringify({ playerId }) }),
   state: (code: string) => req<GameState>(`/${code}`),
 };
 

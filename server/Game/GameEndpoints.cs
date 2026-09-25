@@ -122,22 +122,46 @@ public static class GameEndpoints
         // Host advances to the next round, or finishes the game.
         games.MapPost("/{code}/next", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
-            var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
-            if (game is null) return Results.NotFound();
-            if (game.Status != GameStatus.Revealed) return Results.BadRequest("Afslør den nuværende runde først.");
-
-            var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
-            if (game.CurrentRound >= game.TargetRounds || game.DeckPosition >= deck.Count)
+            await RoundLock.WaitAsync();
+            try
             {
-                game.Status = GameStatus.Finished;
+                var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+                if (game is null) return Results.NotFound();
+                if (game.Status != GameStatus.Revealed) return Results.BadRequest("Afslør den nuværende runde først.");
+
+                var finished = await AdvanceAsync(game, db);
                 await db.SaveChangesAsync();
                 await bc.BroadcastAsync(db, code);
-                return Results.Ok(new { finished = true });
+                return Results.Ok(new { finished });
             }
-            await StartNextRoundAsync(game, db);
-            await db.SaveChangesAsync();
-            await bc.BroadcastAsync(db, code);
-            return Results.Ok(new { finished = false });
+            finally { RoundLock.Release(); }
+        });
+
+        // Player pressed "Videre" after a reveal. In individual playback mode the next
+        // round starts once every player is ready (the host can still press "Næste runde").
+        games.MapPost("/{code}/ready", async (string code, ReadyRequest req, AppDbContext db, GameBroadcaster bc) =>
+        {
+            await RoundLock.WaitAsync();
+            try
+            {
+                var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+                if (game is null) return Results.NotFound();
+                if (game.Status != GameStatus.Revealed) return Results.BadRequest("Runden er ikke afsløret.");
+
+                var players = await db.Players.Where(p => p.GameId == game.Id).ToListAsync();
+                var player = players.FirstOrDefault(p => p.Id == req.PlayerId);
+                if (player is null) return Results.BadRequest("Ukendt spiller.");
+                player.ReadyForRound = game.CurrentRound;
+
+                if (game.PlaybackMode == GamePlaybackMode.Individual &&
+                    players.All(p => p.ReadyForRound == game.CurrentRound))
+                    await AdvanceAsync(game, db);
+
+                await db.SaveChangesAsync();
+                await bc.BroadcastAsync(db, code);
+                return Results.Ok();
+            }
+            finally { RoundLock.Release(); }
         });
 
         // Full state for the main screen and players (also used by SignalR). Hides the
@@ -252,6 +276,20 @@ public static class GameEndpoints
     private static int CorrectIndexFor(int year, List<Song> timeline)
         => timeline.Count(s => s.Year < year);
 
+    // Moves a revealed game on: the next round, or finished when the target is reached
+    // or the deck is empty. Caller saves. Returns true when the game finished.
+    private static async Task<bool> AdvanceAsync(Game game, AppDbContext db)
+    {
+        var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
+        if (game.CurrentRound >= game.TargetRounds || game.DeckPosition >= deck.Count)
+        {
+            game.Status = GameStatus.Finished;
+            return true;
+        }
+        await StartNextRoundAsync(game, db);
+        return false;
+    }
+
     // Draws the next deck song and opens a new playing round. The song is marked
     // played in the host's play session (if it hasn't been cleaned up).
     private static async Task StartNextRoundAsync(Game game, AppDbContext db)
@@ -279,3 +317,4 @@ public static class GameEndpoints
 public record CreateGameRequest(int? TargetRounds, string? PlaybackMode);
 public record JoinRequest(string Name);
 public record AnswerRequest(string PlayerId, int InsertIndex, int? GuessedYear);
+public record ReadyRequest(string PlayerId);
