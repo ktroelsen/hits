@@ -18,7 +18,7 @@ interface HitsterCardProps {
   } | null;
 }
 
-const DECADE_COLORS: Record<string, { bg: string; border: string; badge: string }> = {
+export const DECADE_COLORS: Record<string, { bg: string; border: string; badge: string }> = {
   '60s': { bg: 'from-amber-900/60 to-slate-900', border: 'border-amber-700/60', badge: 'bg-amber-600 text-amber-100' },
   '70s': { bg: 'from-orange-900/60 to-slate-900', border: 'border-orange-700/60', badge: 'bg-orange-600 text-orange-100' },
   '80s': { bg: 'from-pink-900/60 to-purple-900/80', border: 'border-pink-600/60', badge: 'bg-pink-600 text-pink-100' },

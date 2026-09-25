@@ -4,9 +4,6 @@ import {
   X,
   ArrowRight,
   Coins,
-  Calendar,
-  Minus,
-  Plus,
   ZoomIn,
   ZoomOut,
   Play,
@@ -14,6 +11,7 @@ import {
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from '../types';
 import { HitsterCard } from './HitsterCard';
 import { TimelineSlot } from './TimelineSlot';
+import { YearPicker } from './YearPicker';
 
 interface TimelineViewProps {
   timeline: TimelineEntry[];
@@ -176,16 +174,6 @@ export function TimelineView({
     }
   };
 
-  const DECADES = [
-    { label: "60'erne", year: 1965 },
-    { label: "70'erne", year: 1975 },
-    { label: "80'erne", year: 1985 },
-    { label: "90'erne", year: 1995 },
-    { label: "00'erne", year: 2005 },
-    { label: "10'erne", year: 2015 },
-    { label: "20'erne", year: 2022 },
-  ];
-
   return (
     <div
       id="timeline-view"
@@ -294,68 +282,10 @@ export function TimelineView({
       </div>
       </div>
 
-      {/* Guess controls (year tags + input) + confirm — all on one bar below the board */}
+      {/* Guess controls (decade cards + exact year) + confirm — same picker as the online game */}
       {isPlacingPhase && (
-        <div className="shrink-0 p-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-wrap items-center gap-x-2 gap-y-1.5 shadow-inner">
-          <div className="flex items-center gap-1.5 mr-1">
-            <Calendar className="w-4 h-4 text-pink-400" />
-            <span className="text-xs font-bold text-slate-200">Gæt årstal:</span>
-          </div>
-
-          {/* Quick Decade tags */}
-          {DECADES.map((dec) => {
-            const isSelected =
-              currentNumericYear >= dec.year - 5 && currentNumericYear <= dec.year + 4;
-            return (
-              <button
-                key={dec.label}
-                type="button"
-                onClick={() => handleYearChange(dec.year)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold font-mono border transition-all ${
-                  isSelected
-                    ? 'bg-pink-600 border-pink-500 text-white shadow-md shadow-pink-500/20'
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                }`}
-              >
-                {dec.label}
-              </button>
-            );
-          })}
-
-          {/* Stepper + exact year input */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleYearChange(currentNumericYear - 1)}
-              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-              title="1 år tilbage"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-
-            <div className="relative">
-              <input
-                type="number"
-                min="1960"
-                max="2026"
-                value={yearGuessInput || currentNumericYear.toString()}
-                onChange={(e) => handleYearChange(parseInt(e.target.value, 10) || 1990)}
-                className="w-20 text-center text-lg font-black font-mono text-amber-300 bg-slate-900 border-2 border-amber-500/40 focus:border-amber-400 rounded-xl py-1 px-2 shadow-inner focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-              <span className="absolute -top-2 right-2 px-1 text-[9px] font-bold bg-amber-500 text-slate-950 rounded">
-                ÅR
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => handleYearChange(currentNumericYear + 1)}
-              className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
-              title="1 år frem"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-          </div>
+        <div className="shrink-0 flex flex-col gap-2">
+          <YearPicker year={currentNumericYear} onChange={handleYearChange} />
 
           {/* First press starts the song; afterwards it reveals & checks the placement */}
           {songStarted ? (
