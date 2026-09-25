@@ -230,6 +230,12 @@ function persistPreviewCache() {
 
 // Shared query builder — used by both the in-app player and the offline
 // validation script (scripts/check-previews.ts) so matching stays identical.
+// Apple Music search for a song. The clips are Apple's iTunes previews, so every
+// revealed song links back to Apple Music, where the full track can be played.
+export function appleMusicUrl(artist: string, title: string): string {
+  return `https://music.apple.com/dk/search?term=${encodeURIComponent(`${artist} ${title}`)}`;
+}
+
 export function buildItunesSearchUrl(artist: string, title: string): string {
   const cleanArtist = artist.replace(/ft\..*$/i, '').replace(/'/g, '').trim();
   const cleanTitle = title.replace(/\(.*?\)/g, '').replace(/ft\..*$/i, '').replace(/'/g, '').trim();
