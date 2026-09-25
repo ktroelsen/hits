@@ -5,6 +5,7 @@ import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 
 export type GameStatus = 'lobby' | 'playing' | 'revealed' | 'finished';
 export type RoundStatus = 'playing' | 'revealed';
+export type PlaybackMode = 'shared' | 'individual';
 
 export interface StatePlayer {
   id: string;
@@ -45,6 +46,7 @@ export interface GameState {
   status: GameStatus;
   currentRound: number;
   targetRounds: number;
+  playbackMode: PlaybackMode;
   players: StatePlayer[];
   timeline: TimelineSong[];
   round: RoundState | null;
@@ -64,10 +66,10 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const gameApi = {
-  create: (targetRounds?: number) =>
+  create: (targetRounds?: number, playbackMode?: PlaybackMode) =>
     req<{ gameId: string; code: string }>('/', {
       method: 'POST',
-      body: JSON.stringify({ targetRounds }),
+      body: JSON.stringify({ targetRounds, playbackMode }),
     }),
   join: (code: string, name: string) =>
     req<{ id: string; name: string; color: string }>(`/${code}/join`, {
