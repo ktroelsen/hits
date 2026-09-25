@@ -1,21 +1,45 @@
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, CheckCircle2, XCircle } from 'lucide-react';
-import { Song } from '../types';
+import { Decade } from '../types';
 import { fetchSongAudioPreview } from '../services/audioService';
 import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 
+// Only the fields the card actually renders/plays — lets callers pass either a full
+// catalog Song or a lighter timeline entry (e.g. the online game's TimelineSong).
+export interface CardSong {
+  id: string;
+  title: string;
+  artist: string;
+  year: number;
+  decade: Decade;
+  artworkUrl?: string;
+  previewUrl?: string;
+  customPreviewUrl?: string;
+}
+
 interface HitsterCardProps {
-  song: Song;
+  song: CardSong;
   isRevealed?: boolean;
   isWinningCard?: boolean;
   status?: 'correct' | 'wrong' | 'neutral' | 'active';
   showDetails?: boolean;
-  onPlaySong?: (song: Song) => void;
+  onPlaySong?: (song: CardSong) => void;
   claimedBy?: {
     id: string;
     name: string;
     color: string;
   } | null;
+}
+
+// Mirrors decadeForYear in scripts/songsFile.ts / server/Admin/AdminEndpoints.cs.
+export function decadeForYear(year: number): Decade {
+  if (year < 1970) return '60s';
+  if (year < 1980) return '70s';
+  if (year < 1990) return '80s';
+  if (year < 2000) return '90s';
+  if (year < 2010) return '00s';
+  if (year < 2020) return '10s';
+  return '20s';
 }
 
 export const DECADE_COLORS: Record<string, { bg: string; border: string; badge: string }> = {

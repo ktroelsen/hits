@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { TimelineSong } from '../services/gameApi';
 import { YearPicker } from '../components/YearPicker';
+import { HitsterCard, decadeForYear } from '../components/HitsterCard';
+import { TimelineSlot } from '../components/TimelineSlot';
 
 const MIN_YEAR = 1960;
 const MAX_YEAR = 2026;
 
 // Lets a player pick where the (unknown) playing song belongs on the shared timeline.
-// The year control is the same YearPicker as the single-device game's "Gæt årstal" box,
-// and setting the year auto-selects the matching slot.
+// The board mirrors the single-device game's "Spilleplade": small cards showing
+// artist/title/year with drop-zone slots between them, instead of a plain list of
+// buttons. The year control is the same YearPicker as the single-device game's
+// "Gæt årstal" box (just bigger here), and setting the year auto-selects the
+// matching slot.
 export function PlacementPicker({
   timeline,
   disabled,
@@ -35,29 +40,43 @@ export function PlacementPicker({
     return `Mellem ${timeline[i - 1].year} og ${timeline[i].year}`;
   };
 
-  const slots = Array.from({ length: timeline.length + 1 }, (_, i) => i);
-
   return (
     <div className="space-y-4">
-      <YearPicker year={year} onChange={setYearAndSlot} disabled={disabled} />
+      <YearPicker year={year} onChange={setYearAndSlot} disabled={disabled} size="large" />
 
-      {/* Placement — driven by the year, but can be overridden by tapping a slot */}
+      {/* Placement board — driven by the year, but can be overridden by tapping a slot */}
       <div>
         <p className="mb-2 text-sm font-semibold text-slate-300">Placering på tidslinjen</p>
-        <div className="grid gap-2">
-          {slots.map((i) => (
-            <button
-              key={i}
-              disabled={disabled}
-              onClick={() => setSlot(i)}
-              className={`rounded-lg px-4 py-3 text-left text-sm font-medium ring-1 transition ${
-                slot === i
-                  ? 'bg-pink-600 text-white ring-pink-400'
-                  : 'bg-slate-800 text-slate-200 ring-slate-700 hover:bg-slate-700'
-              } disabled:opacity-40`}
-            >
-              {slotLabel(i)}
-            </button>
+        <div className="w-full rounded-2xl bg-slate-900/70 border border-slate-800 p-2.5 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1">
+          <TimelineSlot
+            index={0}
+            label={slotLabel(0)}
+            isPlacing={!disabled}
+            isSelected={slot === 0}
+            onClick={() => setSlot(0)}
+          />
+          {timeline.map((song, idx) => (
+            <div key={song.id} className="flex items-center gap-1 shrink-0">
+              <HitsterCard
+                song={{
+                  id: song.id,
+                  title: song.title,
+                  artist: song.artist,
+                  year: song.year,
+                  decade: decadeForYear(song.year),
+                  artworkUrl: song.artworkUrl ?? undefined,
+                }}
+                isRevealed
+                status="neutral"
+              />
+              <TimelineSlot
+                index={idx + 1}
+                label={slotLabel(idx + 1)}
+                isPlacing={!disabled}
+                isSelected={slot === idx + 1}
+                onClick={() => setSlot(idx + 1)}
+              />
+            </div>
           ))}
         </div>
       </div>
