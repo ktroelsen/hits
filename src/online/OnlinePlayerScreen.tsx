@@ -110,6 +110,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         <RevealOverlay
           round={round}
           players={state.players}
+          timeline={state.timeline}
           highlightPlayerId={player.id}
           onClose={overlay.close}
         />

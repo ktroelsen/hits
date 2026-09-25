@@ -43,7 +43,7 @@ export function OnlineHostScreen() {
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
       {overlay.visible && state && round && (
-        <RevealOverlay round={round} players={state.players} onClose={overlay.close} />
+        <RevealOverlay round={round} players={state.players} timeline={state.timeline} onClose={overlay.close} />
       )}
       <div className="mx-auto max-w-3xl">
         <header className="mb-6 flex items-center justify-between">
