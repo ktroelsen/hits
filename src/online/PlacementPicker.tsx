@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { TimelineSong } from '../services/gameApi';
 import { YearPicker } from '../components/YearPicker';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
@@ -17,10 +17,13 @@ export function PlacementPicker({
   timeline,
   disabled,
   onSubmit,
+  audioControl,
 }: {
   timeline: TimelineSong[];
   disabled?: boolean;
   onSubmit: (insertIndex: number, guessedYear?: number) => void;
+  /** Play button (individual playback mode), shown next to "Send svar" at the top. */
+  audioControl?: ReactNode;
 }) {
   const [year, setYear] = useState(1995);
   // Insert index for a given year = how many timeline songs are strictly older.
@@ -57,6 +60,18 @@ export function PlacementPicker({
 
   return (
     <div className="space-y-4">
+      {/* Top row: play + send side by side, so answering doesn't need a scroll */}
+      <div className="flex items-stretch gap-3">
+        {audioControl}
+        <button
+          onClick={() => onSubmit(slot, year)}
+          disabled={disabled}
+          className="flex-1 rounded-full bg-pink-600 px-4 py-4 text-lg font-bold text-white hover:bg-pink-500 disabled:opacity-40"
+        >
+          Send svar
+        </button>
+      </div>
+
       <YearPicker year={year} onChange={setYearAndSlot} disabled={disabled} size="large" />
 
       {/* Placement board — driven by the year, but can be overridden by tapping a slot */}
@@ -95,14 +110,6 @@ export function PlacementPicker({
           ))}
         </div>
       </div>
-
-      <button
-        onClick={() => onSubmit(slot, year)}
-        disabled={disabled}
-        className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-bold text-white hover:bg-emerald-500 disabled:opacity-40"
-      >
-        Send svar
-      </button>
     </div>
   );
 }

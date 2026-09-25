@@ -150,9 +150,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
                   <p className="mb-4 text-sm text-slate-400">
                     Runde {round.number} — tryk play for at høre sangen, og placér den.
                   </p>
-                  {round.audioUrl ? (
-                    <LocalAudioPlayer key={round.number} src={round.audioUrl} />
-                  ) : (
+                  {!round.audioUrl && (
                     <p className="mb-4 text-center text-amber-400">Ingen lydklip for denne sang.</p>
                   )}
                 </>
@@ -165,6 +163,11 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
                 key={round.number}
                 timeline={state.timeline}
                 onSubmit={submitAnswer}
+                audioControl={
+                  state.playbackMode === 'individual' && round.audioUrl ? (
+                    <LocalAudioPlayer key={round.number} src={round.audioUrl} />
+                  ) : undefined
+                }
               />
             </>
           )}
@@ -250,7 +253,7 @@ function LocalAudioPlayer({ src }: { src: string }) {
   }, [playing]);
 
   return (
-    <div className="mb-4 flex justify-center">
+    <div className="flex flex-1">
       <audio
         ref={audioRef}
         src={src}
@@ -259,7 +262,7 @@ function LocalAudioPlayer({ src }: { src: string }) {
       />
       <button
         onClick={toggle}
-        className={`rounded-full px-8 py-4 text-lg font-bold ${
+        className={`flex-1 rounded-full px-4 py-4 text-lg font-bold ${
           playing
             ? 'bg-rose-600 hover:bg-rose-500'
             : 'bg-emerald-600 hover:bg-emerald-500'
