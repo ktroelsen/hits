@@ -50,7 +50,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
               disabled={disabled}
               onClick={() => setClampedYear(dec.year)}
               className={`flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 transition-all disabled:opacity-40 ${
-                large ? 'py-3.5 px-1.5' : 'py-2 px-1'
+                large ? 'py-2 px-1.5' : 'py-2 px-1'
               } ${
                 isSelected
                   ? `${colors.border} bg-gradient-to-b ${colors.bg} ring-2 ring-white/30 shadow-md scale-[1.03]`
