@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { attachFadeEnvelope } from '../services/audioFade';
-import { gameApi, useGameState, StatePlayer } from '../services/gameApi';
+import { gameApi, useGameState, PlaybackMode, StatePlayer } from '../services/gameApi';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
@@ -12,6 +12,7 @@ const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(e
 export function OnlineHostScreen() {
   const [code, setCode] = useState<string | null>(null);
   const [targetRounds, setTargetRounds] = useState(10);
+  const [playbackMode, setPlaybackMode] = useState<PlaybackMode>('shared');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { state } = useGameState(code);
@@ -29,7 +30,7 @@ export function OnlineHostScreen() {
   }, []);
 
   const createGame = () => run(async () => {
-    const { code: c } = await gameApi.create(targetRounds);
+    const { code: c } = await gameApi.create(targetRounds, playbackMode);
     setCode(c);
   });
 
@@ -74,6 +75,47 @@ export function OnlineHostScreen() {
                 className="mt-1 w-28 rounded-lg bg-slate-800 px-3 py-2 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
               />
             </label>
+            <fieldset className="mb-4">
+              <legend className="text-xs uppercase tracking-wide text-slate-400">Lydafspilning</legend>
+              <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+                <label
+                  className={`flex-1 cursor-pointer rounded-lg px-4 py-3 text-sm ring-1 ${
+                    playbackMode === 'shared'
+                      ? 'bg-pink-950/60 ring-pink-600'
+                      : 'bg-slate-800 ring-slate-700'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="playbackMode"
+                    value="shared"
+                    checked={playbackMode === 'shared'}
+                    onChange={() => setPlaybackMode('shared')}
+                    className="sr-only"
+                  />
+                  <span className="font-semibold">🔊 Fælles højttaler</span>
+                  <p className="mt-1 text-xs text-slate-400">Sangen spiller på denne skærm.</p>
+                </label>
+                <label
+                  className={`flex-1 cursor-pointer rounded-lg px-4 py-3 text-sm ring-1 ${
+                    playbackMode === 'individual'
+                      ? 'bg-pink-950/60 ring-pink-600'
+                      : 'bg-slate-800 ring-slate-700'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="playbackMode"
+                    value="individual"
+                    checked={playbackMode === 'individual'}
+                    onChange={() => setPlaybackMode('individual')}
+                    className="sr-only"
+                  />
+                  <span className="font-semibold">🎧 Hver spiller lytter selv</span>
+                  <p className="mt-1 text-xs text-slate-400">Hver spiller afspiller på egen telefon.</p>
+                </label>
+              </div>
+            </fieldset>
             <button
               onClick={createGame}
               disabled={busy}
@@ -107,20 +149,28 @@ export function OnlineHostScreen() {
         {/* --- Playing --- */}
         {state?.status === 'playing' && round && (
           <section className="rounded-xl bg-slate-900 p-6 ring-1 ring-slate-800">
-            <p className="mb-3 text-center text-slate-300">
-              🎧 Lyt til sangen og placér den på jeres telefoner
-            </p>
-            {round.audioUrl ? (
-              <audio
-                key={round.number}
-                ref={fadeAudioRef}
-                src={round.audioUrl}
-                controls
-                autoPlay
-                className="mx-auto w-full max-w-md"
-              />
+            {state.playbackMode === 'individual' ? (
+              <p className="mb-3 text-center text-slate-300">
+                🎧 Lyt på jeres egne telefoner og placér sangen
+              </p>
             ) : (
-              <p className="text-center text-amber-400">Ingen lydklip for denne sang.</p>
+              <>
+                <p className="mb-3 text-center text-slate-300">
+                  🎧 Lyt til sangen og placér den på jeres telefoner
+                </p>
+                {round.audioUrl ? (
+                  <audio
+                    key={round.number}
+                    ref={fadeAudioRef}
+                    src={round.audioUrl}
+                    controls
+                    autoPlay
+                    className="mx-auto w-full max-w-md"
+                  />
+                ) : (
+                  <p className="text-center text-amber-400">Ingen lydklip for denne sang.</p>
+                )}
+              </>
             )}
 
             <Timeline songs={state.timeline} />

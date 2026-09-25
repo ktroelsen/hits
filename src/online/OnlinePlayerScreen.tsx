@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 import { gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
@@ -133,9 +134,22 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
             </Centered>
           ) : (
             <>
-              <p className="mb-4 text-sm text-slate-400">
-                Runde {round.number} — lyt på storskærmen og placér sangen.
-              </p>
+              {state.playbackMode === 'individual' ? (
+                <>
+                  <p className="mb-4 text-sm text-slate-400">
+                    Runde {round.number} — tryk play for at høre sangen, og placér den.
+                  </p>
+                  {round.audioUrl ? (
+                    <LocalAudioPlayer key={round.number} src={round.audioUrl} />
+                  ) : (
+                    <p className="mb-4 text-center text-amber-400">Ingen lydklip for denne sang.</p>
+                  )}
+                </>
+              ) : (
+                <p className="mb-4 text-sm text-slate-400">
+                  Runde {round.number} — lyt på storskærmen og placér sangen.
+                </p>
+              )}
               <PlacementPicker
                 key={round.number}
                 timeline={state.timeline}
@@ -177,6 +191,51 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         </Centered>
       )}
     </Shell>
+  );
+}
+
+// Play/stop control for individual playback mode: each player streams the round's
+// preview locally instead of hearing it from the host's speaker. Reuses the same
+// fade-in/fade-out envelope the host screen applies to its <audio> element.
+function LocalAudioPlayer({ src }: { src: string }) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) {
+      fadeOutAndPause(audio).then(() => setPlaying(false));
+      return;
+    }
+    resetFade(audio);
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    cleanupRef.current?.();
+    cleanupRef.current = attachFadeEnvelope(audio);
+    setPlaying(true);
+  }, [playing]);
+
+  return (
+    <div className="mb-4 flex justify-center">
+      <audio
+        ref={audioRef}
+        src={src}
+        onEnded={() => setPlaying(false)}
+        className="hidden"
+      />
+      <button
+        onClick={toggle}
+        className={`rounded-full px-8 py-4 text-lg font-bold ${
+          playing
+            ? 'bg-rose-600 hover:bg-rose-500'
+            : 'bg-emerald-600 hover:bg-emerald-500'
+        }`}
+      >
+        {playing ? '⏹ Stop' : '▶️ Afspil'}
+      </button>
+    </div>
   );
 }
 

@@ -59,6 +59,7 @@ public static class GameStateBuilder
             status = game.Status,
             currentRound = game.CurrentRound,
             targetRounds = game.TargetRounds,
+            playbackMode = game.PlaybackMode,
             players,
             timeline = timeline.Select(s => new { s.Id, s.Title, s.Artist, s.Year, s.ArtworkUrl }),
             round = roundDto,

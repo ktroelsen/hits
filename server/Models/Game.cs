@@ -18,6 +18,12 @@ public static class RoundStatus
     public const string Revealed = "revealed";
 }
 
+public static class GamePlaybackMode
+{
+    public const string Shared = "shared";         // one shared speaker (the host's screen)
+    public const string Individual = "individual"; // each player plays the preview on their own device
+}
+
 public class Game
 {
     public string Id { get; set; } = default!;
@@ -31,6 +37,8 @@ public class Game
     public int DeckPosition { get; set; }
     // The host's play session: round songs are marked played there (see PlaySessionStore).
     public string? HostSessionId { get; set; }
+    // "shared" (host's speaker, default) or "individual" (each player plays locally).
+    public string PlaybackMode { get; set; } = GamePlaybackMode.Shared;
     // Scoring knobs (issue 8: placement + year bonus, no time factor yet).
     public int PointsPlacement { get; set; } = 1;
     public int PointsYearBonus { get; set; } = 1;

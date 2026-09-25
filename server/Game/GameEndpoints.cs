@@ -28,6 +28,9 @@ public static class GameEndpoints
             var songIds = PlaySessionStore.DeckOrder(session);
             if (songIds.Count == 0) return Results.Problem("Kataloget er tomt.");
 
+            var playbackMode = req?.PlaybackMode == GamePlaybackMode.Individual
+                ? GamePlaybackMode.Individual
+                : GamePlaybackMode.Shared;
             var game = new Game
             {
                 Id = NewId(),
@@ -39,6 +42,7 @@ public static class GameEndpoints
                 DeckJson = JsonSerializer.Serialize(songIds),
                 DeckPosition = 0,
                 HostSessionId = session.Id,
+                PlaybackMode = playbackMode,
             };
             db.Games.Add(game);
             await db.SaveChangesAsync();
@@ -235,6 +239,6 @@ public static class GameEndpoints
     }
 }
 
-public record CreateGameRequest(int? TargetRounds);
+public record CreateGameRequest(int? TargetRounds, string? PlaybackMode);
 public record JoinRequest(string Name);
 public record AnswerRequest(string PlayerId, int InsertIndex, int? GuessedYear);
