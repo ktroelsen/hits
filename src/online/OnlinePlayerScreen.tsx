@@ -3,6 +3,7 @@ import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audi
 import { gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
+import { Standings } from './Standings';
 
 interface JoinedPlayer {
   id: string;
@@ -180,7 +181,15 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
               {myResult.yearCorrect ? '✅' : '❌'}
             </p>
           )}
-          <Scoreboard players={state.players} meId={player.id} />
+          <div className="text-left">
+            <Standings
+              players={state.players}
+              results={round.results}
+              meId={player.id}
+              title={`Stilling efter runde ${state.currentRound}`}
+            />
+          </div>
+          <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
         </Centered>
       )}
 

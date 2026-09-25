@@ -4,7 +4,7 @@ import { YearPicker } from '../components/YearPicker';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { TimelineSlot } from '../components/TimelineSlot';
 
-const MIN_YEAR = 1960;
+const MIN_YEAR = 1950;
 const MAX_YEAR = 2026;
 
 // Lets a player pick where the (unknown) playing song belongs on the shared timeline.

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { GameState, RoundState, StatePlayer } from '../services/gameApi';
 
 // Full-screen pop-up shown on the host screen and the phones when a round is revealed: the song
-// (artwork, title, artist, year) plus every player's year guess, closest first.
+// (artwork, title, artist, year) plus every player's year guess (closest first) and round points.
 // Exact guesses get stars and fireworks. Closes itself after `durationMs`.
 
 /** True once per revealed round, until `close` is called. */
@@ -45,8 +45,9 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
     const year = song?.year ?? 0;
     return players
       .map((p) => {
-        const guess = round.results.find((r) => r.playerId === p.id)?.guessedYear ?? null;
-        return { player: p, guess, diff: guess == null ? Infinity : Math.abs(guess - year) };
+        const result = round.results.find((r) => r.playerId === p.id);
+        const guess = result?.guessedYear ?? null;
+        return { player: p, guess, points: result?.points ?? 0, diff: guess == null ? Infinity : Math.abs(guess - year) };
       })
       .sort((a, b) => a.diff - b.diff);
   }, [players, round.results, song?.year]);
@@ -86,7 +87,7 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
         </div>
 
         <div className="mt-6 space-y-2">
-          {rows.map(({ player, guess, diff }, i) => {
+          {rows.map(({ player, guess, points, diff }, i) => {
             const exact = diff === 0;
             const isMe = player.id === highlightPlayerId;
             return (
@@ -119,6 +120,13 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
                       🌟
                     </motion.span>
                   )}
+                  <span
+                    className={`ml-1 min-w-[3.5rem] rounded-full px-2 py-0.5 text-center text-sm font-bold ${
+                      points > 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700/60 text-slate-400'
+                    }`}
+                  >
+                    +{points} p
+                  </span>
                 </span>
               </motion.div>
             );

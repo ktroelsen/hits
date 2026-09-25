@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { attachFadeEnvelope } from '../services/audioFade';
 import { gameApi, useGameState, PlaybackMode, StatePlayer } from '../services/gameApi';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
+import { Standings } from './Standings';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
 const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
@@ -198,13 +199,28 @@ export function OnlineHostScreen() {
               </div>
             </div>
 
-            <button
-              onClick={() => run(() => gameApi.reveal(code!))}
-              disabled={busy}
-              className="mt-6 w-full rounded-lg bg-pink-600 px-4 py-3 font-bold hover:bg-pink-500 disabled:opacity-40"
-            >
-              Afslør svar
-            </button>
+            {state.playbackMode === 'individual' ? (
+              <>
+                <p className="mt-6 text-center text-sm text-slate-400">
+                  Svarene afsløres automatisk, når alle har svaret.
+                </p>
+                <button
+                  onClick={() => run(() => gameApi.reveal(code!))}
+                  disabled={busy}
+                  className="mt-2 w-full rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:opacity-40"
+                >
+                  Afslør nu uden at vente
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => run(() => gameApi.reveal(code!))}
+                disabled={busy}
+                className="mt-6 w-full rounded-lg bg-pink-600 px-4 py-3 font-bold hover:bg-pink-500 disabled:opacity-40"
+              >
+                Afslør svar
+              </button>
+            )}
           </section>
         )}
 
@@ -226,26 +242,11 @@ export function OnlineHostScreen() {
 
             <Timeline songs={state.timeline} />
 
-            <div className="mt-4 space-y-1">
-              {state.players.map((p) => {
-                const r = round.results.find((x) => x.playerId === p.id);
-                return (
-                  <div key={p.id} className="flex items-center justify-between rounded-lg bg-slate-800/60 px-3 py-2 text-sm">
-                    <span style={{ color: p.color }}>{p.name}</span>
-                    <span className="text-slate-400">
-                      {r ? (
-                        <>
-                          placering {r.placementCorrect ? '✅' : '❌'} · årstal {r.yearCorrect ? '✅' : '❌'} ·{' '}
-                          <span className="font-bold text-slate-200">+{r.points}</span>
-                        </>
-                      ) : (
-                        'intet svar'
-                      )}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            <Standings
+              players={state.players}
+              results={round.results}
+              title={`Stilling efter runde ${state.currentRound}`}
+            />
 
             <button
               onClick={() => run(() => gameApi.next(code!))}

@@ -11,7 +11,7 @@ import { dirname, resolve } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const SONGS_PATH = resolve(__dirname, '../src/data/songs.ts');
 
-export type Decade = '60s' | '70s' | '80s' | '90s' | '00s' | '10s' | '20s';
+export type Decade = '50s' | '60s' | '70s' | '80s' | '90s' | '00s' | '10s' | '20s';
 export type SongCategory = 'danish' | 'international';
 
 export interface NewSong {
@@ -34,6 +34,7 @@ export function writeSongsSource(src: string): void {
 }
 
 export function decadeForYear(year: number): Decade {
+  if (year < 1960) return '50s';
   if (year < 1970) return '60s';
   if (year < 1980) return '70s';
   if (year < 1990) return '80s';
