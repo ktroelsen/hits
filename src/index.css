@@ -1,57 +1,5 @@
 @import "tailwindcss";
 
-/* "Memphis" 80s palette: lemon yellow, coral and mint on charcoal. Deliberately
-   steers clear of the neon pink/cyan-on-navy look of other music quiz games. */
-@theme {
-  --color-lemon-50: #fffbea;
-  --color-lemon-100: #fff3c4;
-  --color-lemon-200: #ffe98a;
-  --color-lemon-300: #ffdd55;
-  --color-lemon-400: #ffd23f;
-  --color-lemon-500: #f5b90b;
-  --color-lemon-600: #d89206;
-  --color-lemon-700: #b36909;
-  --color-lemon-800: #91510e;
-  --color-lemon-900: #774311;
-  --color-lemon-950: #452205;
-
-  --color-coral-50: #fff1f3;
-  --color-coral-100: #ffe0e6;
-  --color-coral-200: #ffc2cf;
-  --color-coral-300: #ff94aa;
-  --color-coral-400: #f96585;
-  --color-coral-500: #ee4266;
-  --color-coral-600: #d4264d;
-  --color-coral-700: #b21b3e;
-  --color-coral-800: #931a38;
-  --color-coral-900: #7a1a34;
-  --color-coral-950: #450818;
-
-  --color-mint-50: #effcf8;
-  --color-mint-100: #c9f6ea;
-  --color-mint-200: #97ecd7;
-  --color-mint-300: #5edbbf;
-  --color-mint-400: #3bceac;
-  --color-mint-500: #1fb293;
-  --color-mint-600: #158f78;
-  --color-mint-700: #157262;
-  --color-mint-800: #155b50;
-  --color-mint-900: #144c43;
-  --color-mint-950: #062d28;
-
-  --color-charcoal-50: #f7f7f8;
-  --color-charcoal-100: #ececef;
-  --color-charcoal-200: #d6d6dc;
-  --color-charcoal-300: #b5b5bf;
-  --color-charcoal-400: #8c8c99;
-  --color-charcoal-500: #6c6c79;
-  --color-charcoal-600: #565662;
-  --color-charcoal-700: #45454f;
-  --color-charcoal-800: #2e2e37;
-  --color-charcoal-900: #1f1f26;
-  --color-charcoal-950: #16161d;
-}
-
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -68,17 +16,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(22, 22, 29, 0.6);
+  background: rgba(15, 23, 42, 0.6);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(69, 69, 79, 0.8);
+  background: rgba(51, 65, 85, 0.8);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(238, 66, 102, 0.6);
+  background: rgba(236, 72, 153, 0.6);
 }
 
 /* Hide scrollbar chrome while keeping the element scrollable (used on the game board) */

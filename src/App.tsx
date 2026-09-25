@@ -34,7 +34,7 @@ const DEFAULT_PLAYERS: Player[] = [
   {
     id: 'player-1',
     name: 'Hold 1',
-    color: '#ee4266',
+    color: '#ec4899',
     tokens: 2,
     timeline: [],
     score: 0,
@@ -57,7 +57,7 @@ const SOLO_STARTING_LIVES = 0;
 const SOLO_PLAYER: Player = {
   id: 'solo',
   name: 'Dig',
-  color: '#ee4266',
+  color: '#ec4899',
   tokens: 0,
   timeline: [],
   score: 0,
@@ -595,7 +595,7 @@ export default function App() {
   // Start screen: shown before a game begins
   if (!gameStarted) {
     return (
-      <div className="min-h-dvh bg-charcoal-950 text-charcoal-100 selection:bg-coral-500 selection:text-white">
+      <div className="min-h-dvh bg-slate-950 text-slate-100 selection:bg-pink-500 selection:text-white">
         <StartScreen
           settings={settings}
           highscore={highscore}
@@ -631,7 +631,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh md:h-dvh bg-charcoal-950 text-charcoal-100 flex flex-col md:overflow-hidden selection:bg-coral-500 selection:text-white">
+    <div className="min-h-dvh md:h-dvh bg-slate-950 text-slate-100 flex flex-col md:overflow-hidden selection:bg-pink-500 selection:text-white">
       {/* Main Content Area */}
       <main className="md:flex-1 md:min-h-0 max-w-7xl w-full mx-auto px-3 sm:px-4 py-2 flex flex-col gap-2">
         {settings.mode === 'dj' ? (

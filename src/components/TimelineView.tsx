@@ -177,12 +177,12 @@ export function TimelineView({
   return (
     <div
       id="timeline-view"
-      className="w-full md:h-full md:min-h-0 bg-charcoal-900/70 border border-charcoal-800 rounded-2xl p-2.5 sm:p-3 backdrop-blur-md shadow-xl flex flex-col gap-2"
+      className="w-full md:h-full md:min-h-0 bg-slate-900/70 border border-slate-800 rounded-2xl p-2.5 sm:p-3 backdrop-blur-md shadow-xl flex flex-col gap-2"
     >
       {/* Slim header: board title + whose turn it is */}
-      <div className="flex items-center gap-2.5 border-b border-charcoal-800 pb-2 shrink-0">
+      <div className="flex items-center gap-2.5 border-b border-slate-800 pb-2 shrink-0">
         <div
-          className="w-3 h-3 rounded-full ring-4 ring-coral-500/20 shrink-0"
+          className="w-3 h-3 rounded-full ring-4 ring-pink-500/20 shrink-0"
           style={{ backgroundColor: activePlayer.color }}
         />
         <h3 className="text-base sm:text-lg font-bold text-white font-display flex items-center gap-2">
@@ -205,18 +205,18 @@ export function TimelineView({
             onClick={() => changeZoom(-0.1)}
             disabled={boardZoom <= 0.5}
             title="Zoom ud"
-            className="p-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white border border-charcoal-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
-          <span className="text-[11px] font-mono font-semibold text-charcoal-400 w-9 text-center tabular-nums">
+          <span className="text-[11px] font-mono font-semibold text-slate-400 w-9 text-center tabular-nums">
             {Math.round(boardZoom * 100)}%
           </span>
           <button
             onClick={() => changeZoom(0.1)}
             disabled={boardZoom >= 1.5}
             title="Zoom ind"
-            className="p-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-300 hover:text-white border border-charcoal-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 disabled:opacity-40 disabled:pointer-events-none transition-colors"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
@@ -293,7 +293,7 @@ export function TimelineView({
               id="confirm-placement-btn"
               onClick={onConfirmPlacement}
               disabled={selectedIndex === null || isDeadSlot(selectedIndex)}
-              className="ml-auto px-5 py-2 rounded-xl bg-lemon-400 hover:bg-lemon-300 text-charcoal-950 font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-coral-500/20 transition-all flex items-center justify-center gap-2"
+              className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 text-white font-bold text-xs tracking-wider uppercase disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-pink-500/20 transition-all flex items-center justify-center gap-2"
             >
               <span>Afslør &amp; Tjek Placering</span>
               <ArrowRight className="w-4 h-4" />
@@ -302,7 +302,7 @@ export function TimelineView({
             <button
               id="start-song-btn"
               onClick={onStartSong}
-              className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-mint-600 hover:from-emerald-600 hover:to-mint-700 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+              className="ml-auto px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 text-white font-bold text-xs tracking-wider uppercase shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Start spillet</span>
@@ -323,7 +323,7 @@ export function TimelineView({
           <div className="flex items-center gap-3">
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 font-bold ${
-                lastPlacementResult.isCorrect ? 'bg-emerald-500 text-charcoal-950' : 'bg-rose-500 text-white'
+                lastPlacementResult.isCorrect ? 'bg-emerald-500 text-slate-950' : 'bg-rose-500 text-white'
               }`}
             >
               {lastPlacementResult.isCorrect ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}
@@ -333,7 +333,7 @@ export function TimelineView({
               <h4 className="text-sm font-bold flex items-center gap-2">
                 {lastPlacementResult.isCorrect ? 'Rigtig placering!' : 'Øv, forkert placering!'}
                 {lastPlacementResult.yearBonus && (
-                  <span className="text-[11px] bg-amber-400 text-charcoal-950 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                  <span className="text-[11px] bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                     <Coins className="w-3 h-3" /> +1 HITS Token for præcist årstal ({mysterySong?.year})!
                   </span>
                 )}
@@ -349,7 +349,7 @@ export function TimelineView({
           <button
             id="next-turn-btn"
             onClick={onNextTurn}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white font-bold text-xs tracking-wider uppercase border border-charcoal-700 transition-all flex items-center justify-center gap-2 shrink-0 shadow"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase border border-slate-700 transition-all flex items-center justify-center gap-2 shrink-0 shadow"
           >
             <span>{nextTurnLabel ?? 'Næste Tur'}</span>
             <ArrowRight className="w-4 h-4" />

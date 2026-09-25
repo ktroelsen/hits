@@ -12,7 +12,7 @@ public static class GameEndpoints
 {
     private static readonly string[] PlayerColors =
     {
-        "#ee4266", "#3b82f6", "#f59e0b", "#10b981", "#8b5cf6",
+        "#ec4899", "#3b82f6", "#f59e0b", "#10b981", "#8b5cf6",
         "#ef4444", "#14b8a6", "#f97316", "#6366f1", "#84cc16",
     };
 

@@ -52,16 +52,16 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* Top Banner */}
-      <div className="bg-charcoal-900/80 border border-charcoal-800 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-mint-500/20 text-mint-400 border border-mint-500/30 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
             <Disc className="w-6 h-6 animate-spin" style={{ animationDuration: '4s' }} />
           </div>
           <div>
             <h2 className="text-lg font-bold text-white font-display">
               HITS DJ Companion & Fri Quiz
             </h2>
-            <p className="text-xs text-charcoal-400">
+            <p className="text-xs text-slate-400">
               Træk et sangkort, spil sangen for dine venner, og afslør årstallet når I er klar!
             </p>
           </div>
@@ -69,7 +69,7 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
 
         <button
           onClick={onExitDJMode}
-          className="text-xs font-bold text-charcoal-400 hover:text-white px-3 py-1.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 transition-colors border border-charcoal-700"
+          className="text-xs font-bold text-slate-400 hover:text-white px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors border border-slate-700"
         >
           Tilbage til spil
         </button>
@@ -83,12 +83,12 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
       />
 
       {/* Center Reveal & Draw Card Actions */}
-      <div className="bg-charcoal-900/60 border border-charcoal-800 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-center gap-4">
         {!isRevealed ? (
           <button
             id="dj-reveal-btn"
             onClick={handleReveal}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-lemon-400 hover:bg-lemon-300 text-charcoal-950 font-bold text-sm tracking-wide shadow-lg shadow-lemon-400/20 transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-pink-500/25 transition-all flex items-center justify-center gap-2"
           >
             <Eye className="w-5 h-5" />
             <span>Afslør Årstal & Kunstner</span>
@@ -97,7 +97,7 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
           <button
             id="dj-next-btn"
             onClick={handleNextCard}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-mint-500 to-blue-600 hover:from-mint-600 hover:to-blue-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-mint-500/25 transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-5 h-5" />
             <span>Træk Næste Sang ({currentIndex + 1}/{deck.length})</span>

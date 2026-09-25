@@ -37,12 +37,12 @@ export function Navbar({
   };
 
   return (
-    <header id="app-navbar" className="w-full border-b border-charcoal-800 bg-charcoal-950/80 backdrop-blur-md sticky top-0 z-40">
+    <header id="app-navbar" className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral-500 via-lemon-400 to-mint-400 flex items-center justify-center shadow-lg shadow-coral-500/20">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-pink-500/20">
               <Disc className="w-6 h-6 text-white animate-[spin_8s_linear_infinite]" />
             </div>
             {/* Tiny turntable arm */}
@@ -51,23 +51,23 @@ export function Navbar({
 
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-coral-400 via-lemon-300 to-mint-400 font-display tracking-wider">
+              <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-display tracking-wider">
                 HITS
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-coral-500/10 text-coral-300 border border-coral-500/20 hidden sm:inline-block">
+              <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-300 border border-pink-500/20 hidden sm:inline-block">
                 DK & INT
               </span>
             </div>
-            <span className="text-[10px] text-charcoal-400 font-medium">
+            <span className="text-[10px] text-slate-400 font-medium">
               Gæt årstal & byg din tidslinje
             </span>
           </div>
         </div>
 
         {/* Center / Game Mode Pill */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-charcoal-900 border border-charcoal-800 text-xs text-charcoal-300">
-          <span className="font-bold text-coral-400">{getModeLabel()}</span>
-          <span className="text-charcoal-600">•</span>
+        <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300">
+          <span className="font-bold text-pink-400">{getModeLabel()}</span>
+          <span className="text-slate-600">•</span>
           <span>
             {settings.categoryFilter === 'all'
               ? '🇩🇰 + 🌍 Blandet'
@@ -75,7 +75,7 @@ export function Navbar({
               ? '🇩🇰 Kun Danske'
               : '🌍 Kun Internationale'}
           </span>
-          <span className="text-charcoal-600">•</span>
+          <span className="text-slate-600">•</span>
           <span>Mål: {settings.targetCards} sange</span>
         </div>
 
@@ -84,16 +84,16 @@ export function Navbar({
           {/* Sound FX Toggle */}
           <button
             onClick={toggleSound}
-            className="p-2 sm:px-2.5 sm:py-2 rounded-xl text-charcoal-400 hover:text-charcoal-200 hover:bg-charcoal-900 border border-transparent hover:border-charcoal-800 transition-colors"
+            className="p-2 sm:px-2.5 sm:py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent hover:border-slate-800 transition-colors"
             title={soundOn ? 'Slå lydeffekter fra' : 'Slå lydeffekter til'}
           >
-            {soundOn ? <Volume2 className="w-4 h-4 text-coral-400" /> : <VolumeX className="w-4 h-4 text-charcoal-500" />}
+            {soundOn ? <Volume2 className="w-4 h-4 text-pink-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
           </button>
 
           {/* Song Catalog preview */}
           <button
             onClick={onOpenSongCatalog}
-            className="p-2 sm:px-2.5 sm:py-2 rounded-xl text-charcoal-400 hover:text-charcoal-200 hover:bg-charcoal-900 border border-transparent hover:border-charcoal-800 transition-colors"
+            className="p-2 sm:px-2.5 sm:py-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent hover:border-slate-800 transition-colors"
             title="Se sangliste og statistik"
           >
             <ListMusic className="w-4 h-4" />
@@ -102,20 +102,20 @@ export function Navbar({
           {/* Rules Modal */}
           <button
             onClick={onOpenRules}
-            className="p-2 sm:px-3 sm:py-2 rounded-xl text-charcoal-300 hover:text-white hover:bg-charcoal-900 border border-charcoal-800 transition-colors text-xs font-bold flex items-center gap-1.5"
+            className="p-2 sm:px-3 sm:py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors text-xs font-bold flex items-center gap-1.5"
             title="Spilleregler"
           >
-            <HelpCircle className="w-4 h-4 text-mint-400" />
+            <HelpCircle className="w-4 h-4 text-cyan-400" />
             <span className="hidden sm:inline">Regler</span>
           </button>
 
           {/* Settings / New Game */}
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-charcoal-200 border border-charcoal-700/80 hover:border-charcoal-600 transition-colors text-xs font-bold shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-600 transition-colors text-xs font-bold shadow-sm"
             title="Nyt spil eller indstillinger"
           >
-            <Settings className="w-4 h-4 text-coral-400" />
+            <Settings className="w-4 h-4 text-pink-400" />
             <span className="hidden sm:inline">Nyt spil</span>
           </button>
         </div>
