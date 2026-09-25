@@ -249,6 +249,14 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         <Centered>
           <p className="text-2xl font-extrabold">🏆 Spillet er slut!</p>
           <Scoreboard players={state.players} meId={player.id} />
+          <button
+            onClick={() => {
+              window.location.href = '/';
+            }}
+            className="mt-8 w-full rounded-lg bg-pink-600 px-4 py-3 text-lg font-bold text-white hover:bg-pink-500"
+          >
+            Tilbage til forsiden
+          </button>
         </Centered>
       )}
     </Shell>
