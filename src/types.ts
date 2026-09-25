@@ -1,6 +1,6 @@
 export type SongCategory = 'danish' | 'international';
 
-export type Decade = '60s' | '70s' | '80s' | '90s' | '00s' | '10s' | '20s';
+export type Decade = '50s' | '60s' | '70s' | '80s' | '90s' | '00s' | '10s' | '20s';
 
 export interface Song {
   id: string;

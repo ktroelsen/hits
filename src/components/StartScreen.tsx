@@ -1,4 +1,5 @@
-import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users } from 'lucide-react';
+import { useState } from 'react';
+import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft } from 'lucide-react';
 import { GameSettings } from '../types';
 import type { HighscoreEntry } from '../services/highscoreStore';
 
@@ -21,6 +22,15 @@ export function StartScreen({
   onOpenRules,
   onOpenCatalog,
 }: StartScreenProps) {
+  // Online button expands into "create" / "join"; join asks for the 4-digit code.
+  const [onlineMode, setOnlineMode] = useState<'closed' | 'choose' | 'join'>('closed');
+  const [joinCode, setJoinCode] = useState('');
+  const codeValid = /^\d{4}$/.test(joinCode);
+
+  const joinGame = () => {
+    if (codeValid) window.location.href = `/game/${joinCode}`;
+  };
+
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 relative overflow-hidden">
       {/* Ambient neon glows */}
@@ -83,17 +93,81 @@ export function StartScreen({
         </p>
 
         {/* Online multiplayer — each player on their own phone */}
-        <button
-          onClick={() => {
-            window.location.href = '/game';
-          }}
-          className="mt-5 w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-lg tracking-wide uppercase border border-cyan-500/50 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 hover:scale-[1.02] transition-all"
-        >
-          <Users className="w-6 h-6 text-cyan-400" />
-          Online spil
-        </button>
+        {onlineMode === 'closed' && (
+          <button
+            onClick={() => setOnlineMode('choose')}
+            className="mt-5 w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-lg tracking-wide uppercase border border-cyan-500/50 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 hover:scale-[1.02] transition-all"
+          >
+            <Users className="w-6 h-6 text-cyan-400" />
+            Online spil
+          </button>
+        )}
+        {onlineMode === 'choose' && (
+          <div className="mt-5 w-full sm:w-auto flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => {
+                window.location.href = '/game';
+              }}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black tracking-wide uppercase border border-cyan-500/50 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 transition-all"
+            >
+              <Plus className="w-5 h-5 text-cyan-400" />
+              Opret spil
+            </button>
+            <button
+              onClick={() => setOnlineMode('join')}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black tracking-wide uppercase border border-cyan-500/50 hover:border-cyan-400 shadow-lg shadow-cyan-500/10 transition-all"
+            >
+              <LogIn className="w-5 h-5 text-cyan-400" />
+              Join spil
+            </button>
+          </div>
+        )}
+        {onlineMode === 'join' && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              joinGame();
+            }}
+            className="mt-5 w-full sm:w-auto flex gap-2"
+          >
+            <input
+              autoFocus
+              inputMode="numeric"
+              placeholder="Kode"
+              aria-label="4-cifret spilkode"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              className="w-40 flex-1 sm:flex-none px-4 py-4 rounded-2xl bg-slate-900 border border-cyan-500/50 focus:border-cyan-400 outline-none text-white text-center text-2xl font-black tracking-[0.4em] placeholder:tracking-normal placeholder:text-base placeholder:font-bold placeholder:text-slate-500"
+            />
+            <button
+              type="submit"
+              disabled={!codeValid}
+              className="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black tracking-wide uppercase transition-all"
+            >
+              <LogIn className="w-5 h-5" />
+              Join
+            </button>
+          </form>
+        )}
         <p className="mt-2 text-slate-400 text-sm">
-          Spil sammen på hver jeres telefon med en kode
+          {onlineMode === 'join'
+            ? 'Indtast den 4-cifrede kode fra værtens skærm'
+            : 'Spil sammen på hver jeres telefon med en kode'}
+          {onlineMode !== 'closed' && (
+            <>
+              {' '}·{' '}
+              <button
+                onClick={() => {
+                  setOnlineMode(onlineMode === 'join' ? 'choose' : 'closed');
+                  setJoinCode('');
+                }}
+                className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 font-bold"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                Tilbage
+              </button>
+            </>
+          )}
         </p>
 
         {/* Secondary actions */}

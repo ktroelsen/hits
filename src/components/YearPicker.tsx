@@ -2,10 +2,11 @@ import { Calendar, Minus, Plus } from 'lucide-react';
 import { Decade } from '../types';
 import { DECADE_COLORS } from './HitsterCard';
 
-const MIN_YEAR = 1960;
+const MIN_YEAR = 1950;
 const MAX_YEAR = 2026;
 
 export const DECADE_CARDS: { id: Decade; label: string; year: number }[] = [
+  { id: '50s', label: "50'erne", year: 1955 },
   { id: '60s', label: "60'erne", year: 1965 },
   { id: '70s', label: "70'erne", year: 1975 },
   { id: '80s', label: "80'erne", year: 1985 },
@@ -39,7 +40,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
       </div>
 
       {/* Decade cards */}
-      <div className={`grid grid-cols-4 sm:grid-cols-7 ${large ? 'gap-2' : 'gap-1.5'}`}>
+      <div className={`grid grid-cols-4 sm:grid-cols-8 ${large ? 'gap-2' : 'gap-1.5'}`}>
         {DECADE_CARDS.map((dec) => {
           const isSelected = year >= dec.year - 5 && year <= dec.year + 4;
           const colors = DECADE_COLORS[dec.id];

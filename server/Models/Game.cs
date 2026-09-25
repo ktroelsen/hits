@@ -54,6 +54,8 @@ public class Player
     public string Name { get; set; } = default!;
     public string Color { get; set; } = default!;
     public int Score { get; set; }
+    // Last round this player pressed "Videre" on (individual mode: all ready → next round).
+    public int ReadyForRound { get; set; }
     public DateTime JoinedAt { get; set; }
 }
 

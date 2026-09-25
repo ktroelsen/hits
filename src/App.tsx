@@ -22,7 +22,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   winCondition: 'cards',
   timeLimitMinutes: 10,
   categoryFilter: 'all',
-  decades: ['60s', '70s', '80s', '90s', '00s', '10s', '20s'],
+  decades: ['50s', '60s', '70s', '80s', '90s', '00s', '10s', '20s'],
   tags: [],
   autoPlayAudio: true,
   enableSoundEffects: true,

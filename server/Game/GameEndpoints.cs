@@ -88,92 +88,80 @@ public static class GameEndpoints
             return Results.Ok();
         });
 
-        // Player submits their placement + year for the current round.
+        // Player submits their placement + year for the current round. In individual
+        // playback mode the round reveals itself once every player has answered.
         games.MapPost("/{code}/answer", async (string code, AnswerRequest req, AppDbContext db, GameBroadcaster bc) =>
         {
-            var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
-            if (game is null) return Results.NotFound();
-            if (game.Status != GameStatus.Playing) return Results.BadRequest("Ingen aktiv runde.");
-
-            var round = await db.Rounds.FirstOrDefaultAsync(r => r.GameId == game.Id && r.Number == game.CurrentRound);
-            if (round is null || round.Status != RoundStatus.Playing) return Results.BadRequest("Runden tager ikke imod svar.");
-
-            var player = await db.Players.FirstOrDefaultAsync(p => p.Id == req.PlayerId && p.GameId == game.Id);
-            if (player is null) return Results.BadRequest("Ukendt spiller.");
-
-            var existing = await db.Answers.FirstOrDefaultAsync(a => a.RoundId == round.Id && a.PlayerId == player.Id);
-            if (existing is not null) return Results.Conflict("Du har allerede svaret i denne runde.");
-
-            db.Answers.Add(new Answer
-            {
-                Id = NewId(),
-                GameId = game.Id,
-                RoundId = round.Id,
-                PlayerId = player.Id,
-                InsertIndex = req.InsertIndex,
-                GuessedYear = req.GuessedYear,
-                SubmittedAt = DateTime.UtcNow,
-            });
-            await db.SaveChangesAsync();
-            await bc.BroadcastAsync(db, code);
-            return Results.Ok();
+            await RoundLock.WaitAsync();
+            try { return await SubmitAnswerAsync(code, req, db, bc); }
+            finally { RoundLock.Release(); }
         });
 
-        // Host reveals the current round: score every answer, update the timeline.
+        // Host reveals the current round manually (shared mode, or when someone never answers).
         games.MapPost("/{code}/reveal", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
-            var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
-            if (game is null) return Results.NotFound();
-            if (game.Status != GameStatus.Playing) return Results.BadRequest("Ingen runde at afsløre.");
-
-            var round = await db.Rounds.FirstOrDefaultAsync(r => r.GameId == game.Id && r.Number == game.CurrentRound);
-            if (round is null) return Results.BadRequest("Runden findes ikke.");
-
-            var song = await db.Songs.FindAsync(round.SongId);
-            if (song is null) return Results.Problem("Rundens sang findes ikke i kataloget.");
-
-            var timeline = await GameStateBuilder.BuildTimelineAsync(game, db); // revealed songs so far
-            var correctIndex = CorrectIndexFor(song.Year, timeline);
-            round.CorrectIndex = correctIndex;
-
-            var answers = await db.Answers.Where(a => a.RoundId == round.Id).ToListAsync();
-            var players = await db.Players.Where(p => p.GameId == game.Id).ToListAsync();
-            foreach (var ans in answers)
+            await RoundLock.WaitAsync();
+            try
             {
-                ans.PlacementCorrect = ans.InsertIndex == correctIndex;
-                ans.YearCorrect = ans.GuessedYear.HasValue && ans.GuessedYear.Value == song.Year;
-                ans.Points = (ans.PlacementCorrect ? game.PointsPlacement : 0)
-                           + (ans.YearCorrect ? game.PointsYearBonus : 0);
-                var player = players.FirstOrDefault(p => p.Id == ans.PlayerId);
-                if (player is not null) player.Score += ans.Points;
-            }
+                var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+                if (game is null) return Results.NotFound();
+                if (game.Status != GameStatus.Playing) return Results.BadRequest("Ingen runde at afsløre.");
 
-            round.Status = RoundStatus.Revealed;
-            game.Status = GameStatus.Revealed;
-            await db.SaveChangesAsync();
-            await bc.BroadcastAsync(db, code);
-            return Results.Ok();
+                var round = await db.Rounds.FirstOrDefaultAsync(r => r.GameId == game.Id && r.Number == game.CurrentRound);
+                if (round is null) return Results.BadRequest("Runden findes ikke.");
+
+                var error = await RevealRoundAsync(game, round, db);
+                if (error is not null) return error;
+                await db.SaveChangesAsync();
+                await bc.BroadcastAsync(db, code);
+                return Results.Ok();
+            }
+            finally { RoundLock.Release(); }
         });
 
         // Host advances to the next round, or finishes the game.
         games.MapPost("/{code}/next", async (string code, AppDbContext db, GameBroadcaster bc) =>
         {
-            var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
-            if (game is null) return Results.NotFound();
-            if (game.Status != GameStatus.Revealed) return Results.BadRequest("Afslør den nuværende runde først.");
-
-            var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
-            if (game.CurrentRound >= game.TargetRounds || game.DeckPosition >= deck.Count)
+            await RoundLock.WaitAsync();
+            try
             {
-                game.Status = GameStatus.Finished;
+                var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+                if (game is null) return Results.NotFound();
+                if (game.Status != GameStatus.Revealed) return Results.BadRequest("Afslør den nuværende runde først.");
+
+                var finished = await AdvanceAsync(game, db);
                 await db.SaveChangesAsync();
                 await bc.BroadcastAsync(db, code);
-                return Results.Ok(new { finished = true });
+                return Results.Ok(new { finished });
             }
-            await StartNextRoundAsync(game, db);
-            await db.SaveChangesAsync();
-            await bc.BroadcastAsync(db, code);
-            return Results.Ok(new { finished = false });
+            finally { RoundLock.Release(); }
+        });
+
+        // Player pressed "Videre" after a reveal. In individual playback mode the next
+        // round starts once every player is ready (the host can still press "Næste runde").
+        games.MapPost("/{code}/ready", async (string code, ReadyRequest req, AppDbContext db, GameBroadcaster bc) =>
+        {
+            await RoundLock.WaitAsync();
+            try
+            {
+                var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+                if (game is null) return Results.NotFound();
+                if (game.Status != GameStatus.Revealed) return Results.BadRequest("Runden er ikke afsløret.");
+
+                var players = await db.Players.Where(p => p.GameId == game.Id).ToListAsync();
+                var player = players.FirstOrDefault(p => p.Id == req.PlayerId);
+                if (player is null) return Results.BadRequest("Ukendt spiller.");
+                player.ReadyForRound = game.CurrentRound;
+
+                if (game.PlaybackMode == GamePlaybackMode.Individual &&
+                    players.All(p => p.ReadyForRound == game.CurrentRound))
+                    await AdvanceAsync(game, db);
+
+                await db.SaveChangesAsync();
+                await bc.BroadcastAsync(db, code);
+                return Results.Ok();
+            }
+            finally { RoundLock.Release(); }
         });
 
         // Full state for the main screen and players (also used by SignalR). Hides the
@@ -183,6 +171,79 @@ public static class GameEndpoints
             var state = await GameStateBuilder.BuildAsync(db, code);
             return state is null ? Results.NotFound() : Results.Ok(state);
         });
+    }
+
+    // Serialises answers and reveals, so two "last" answers arriving together can't
+    // both trigger the auto-reveal and score the round twice. Single-server app.
+    private static readonly SemaphoreSlim RoundLock = new(1, 1);
+
+    private static async Task<IResult> SubmitAnswerAsync(string code, AnswerRequest req, AppDbContext db, GameBroadcaster bc)
+    {
+        var game = await db.Games.FirstOrDefaultAsync(g => g.Code == code);
+        if (game is null) return Results.NotFound();
+        if (game.Status != GameStatus.Playing) return Results.BadRequest("Ingen aktiv runde.");
+
+        var round = await db.Rounds.FirstOrDefaultAsync(r => r.GameId == game.Id && r.Number == game.CurrentRound);
+        if (round is null || round.Status != RoundStatus.Playing) return Results.BadRequest("Runden tager ikke imod svar.");
+
+        var player = await db.Players.FirstOrDefaultAsync(p => p.Id == req.PlayerId && p.GameId == game.Id);
+        if (player is null) return Results.BadRequest("Ukendt spiller.");
+
+        var existing = await db.Answers.FirstOrDefaultAsync(a => a.RoundId == round.Id && a.PlayerId == player.Id);
+        if (existing is not null) return Results.Conflict("Du har allerede svaret i denne runde.");
+
+        db.Answers.Add(new Answer
+        {
+            Id = NewId(),
+            GameId = game.Id,
+            RoundId = round.Id,
+            PlayerId = player.Id,
+            InsertIndex = req.InsertIndex,
+            GuessedYear = req.GuessedYear,
+            SubmittedAt = DateTime.UtcNow,
+        });
+        await db.SaveChangesAsync();
+
+        if (game.PlaybackMode == GamePlaybackMode.Individual)
+        {
+            var answered = await db.Answers.CountAsync(a => a.RoundId == round.Id);
+            var playerCount = await db.Players.CountAsync(p => p.GameId == game.Id);
+            if (answered >= playerCount && await RevealRoundAsync(game, round, db) is null)
+                await db.SaveChangesAsync();
+        }
+
+        await bc.BroadcastAsync(db, code);
+        return Results.Ok();
+    }
+
+    // Scores every answer of a playing round and marks it revealed (the round song
+    // joins the timeline). Caller saves. Returns an error result, or null on success.
+    private static async Task<IResult?> RevealRoundAsync(Game game, Round round, AppDbContext db)
+    {
+        if (round.Status != RoundStatus.Playing) return Results.BadRequest("Runden er allerede afsløret.");
+
+        var song = await db.Songs.FindAsync(round.SongId);
+        if (song is null) return Results.Problem("Rundens sang findes ikke i kataloget.");
+
+        var timeline = await GameStateBuilder.BuildTimelineAsync(game, db); // revealed songs so far
+        var correctIndex = CorrectIndexFor(song.Year, timeline);
+        round.CorrectIndex = correctIndex;
+
+        var answers = await db.Answers.Where(a => a.RoundId == round.Id).ToListAsync();
+        var players = await db.Players.Where(p => p.GameId == game.Id).ToListAsync();
+        foreach (var ans in answers)
+        {
+            ans.PlacementCorrect = ans.InsertIndex == correctIndex;
+            ans.YearCorrect = ans.GuessedYear.HasValue && ans.GuessedYear.Value == song.Year;
+            ans.Points = (ans.PlacementCorrect ? game.PointsPlacement : 0)
+                       + (ans.YearCorrect ? game.PointsYearBonus : 0);
+            var player = players.FirstOrDefault(p => p.Id == ans.PlayerId);
+            if (player is not null) player.Score += ans.Points;
+        }
+
+        round.Status = RoundStatus.Revealed;
+        game.Status = GameStatus.Revealed;
+        return null;
     }
 
     // ---- helpers ----
@@ -215,6 +276,20 @@ public static class GameEndpoints
     private static int CorrectIndexFor(int year, List<Song> timeline)
         => timeline.Count(s => s.Year < year);
 
+    // Moves a revealed game on: the next round, or finished when the target is reached
+    // or the deck is empty. Caller saves. Returns true when the game finished.
+    private static async Task<bool> AdvanceAsync(Game game, AppDbContext db)
+    {
+        var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
+        if (game.CurrentRound >= game.TargetRounds || game.DeckPosition >= deck.Count)
+        {
+            game.Status = GameStatus.Finished;
+            return true;
+        }
+        await StartNextRoundAsync(game, db);
+        return false;
+    }
+
     // Draws the next deck song and opens a new playing round. The song is marked
     // played in the host's play session (if it hasn't been cleaned up).
     private static async Task StartNextRoundAsync(Game game, AppDbContext db)
@@ -242,3 +317,4 @@ public static class GameEndpoints
 public record CreateGameRequest(int? TargetRounds, string? PlaybackMode);
 public record JoinRequest(string Name);
 public record AnswerRequest(string PlayerId, int InsertIndex, int? GuessedYear);
+public record ReadyRequest(string PlayerId);

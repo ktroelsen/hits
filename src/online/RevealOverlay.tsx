@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { GameState, RoundState, StatePlayer } from '../services/gameApi';
+import { GameState, RoundState, StatePlayer, TimelineSong } from '../services/gameApi';
+import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 
 // Full-screen pop-up shown on the host screen and the phones when a round is revealed: the song
-// (artwork, title, artist, year) plus every player's year guess, closest first.
+// (artwork, title, artist, year) plus every player's year guess (closest first) and round points.
 // Exact guesses get stars and fireworks. Closes itself after `durationMs`.
 
 /** True once per revealed round, until `close` is called. */
@@ -27,13 +28,15 @@ export function useRevealOverlay(state: GameState | null) {
 interface RevealOverlayProps {
   round: RoundState;
   players: StatePlayer[];
+  /** The shared timeline, which by now includes the revealed song. */
+  timeline: TimelineSong[];
   /** Emphasises this player's row (the player's own phone). */
   highlightPlayerId?: string;
   onClose: () => void;
   durationMs?: number;
 }
 
-export function RevealOverlay({ round, players, highlightPlayerId, onClose, durationMs = 9000 }: RevealOverlayProps) {
+export function RevealOverlay({ round, players, timeline, highlightPlayerId, onClose, durationMs = 9000 }: RevealOverlayProps) {
   const song = round.song;
 
   useEffect(() => {
@@ -45,8 +48,9 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
     const year = song?.year ?? 0;
     return players
       .map((p) => {
-        const guess = round.results.find((r) => r.playerId === p.id)?.guessedYear ?? null;
-        return { player: p, guess, diff: guess == null ? Infinity : Math.abs(guess - year) };
+        const result = round.results.find((r) => r.playerId === p.id);
+        const guess = result?.guessedYear ?? null;
+        return { player: p, guess, points: result?.points ?? 0, diff: guess == null ? Infinity : Math.abs(guess - year) };
       })
       .sort((a, b) => a.diff - b.diff);
   }, [players, round.results, song?.year]);
@@ -71,7 +75,7 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
       >
         <div className="flex flex-col items-center text-center">
           {song.artworkUrl && (
-            <img src={song.artworkUrl} alt="" className="h-40 w-40 rounded-xl shadow-lg" />
+            <img src={song.artworkUrl} alt="" className="h-28 w-28 rounded-xl shadow-lg sm:h-40 sm:w-40" />
           )}
           <p className="mt-4 text-2xl font-extrabold">{song.title}</p>
           <p className="text-slate-400">{song.artist}</p>
@@ -85,8 +89,10 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
           </motion.p>
         </div>
 
+        <TimelineNeighbours song={song} timeline={timeline} />
+
         <div className="mt-6 space-y-2">
-          {rows.map(({ player, guess, diff }, i) => {
+          {rows.map(({ player, guess, points, diff }, i) => {
             const exact = diff === 0;
             const isMe = player.id === highlightPlayerId;
             return (
@@ -119,6 +125,13 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
                       🌟
                     </motion.span>
                   )}
+                  <span
+                    className={`ml-1 min-w-[3.5rem] rounded-full px-2 py-0.5 text-center text-sm font-bold ${
+                      points > 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700/60 text-slate-400'
+                    }`}
+                  >
+                    +{points} p
+                  </span>
                 </span>
               </motion.div>
             );
@@ -134,6 +147,50 @@ export function RevealOverlay({ round, players, highlightPlayerId, onClose, dura
         />
       </motion.div>
     </motion.div>
+  );
+}
+
+// The revealed song on the shared timeline with its neighbours: the card before, the
+// song itself (highlighted), and the card after. The timeline already contains the
+// revealed song, sorted by year.
+function TimelineNeighbours({ song, timeline }: { song: TimelineSong; timeline: TimelineSong[] }) {
+  const idx = timeline.findIndex((s) => s.id === song.id);
+  if (idx < 0) return null;
+  const toCard = (s: TimelineSong) => ({
+    id: s.id,
+    title: s.title,
+    artist: s.artist,
+    year: s.year,
+    decade: decadeForYear(s.year),
+    artworkUrl: s.artworkUrl ?? undefined,
+  });
+  const before = timeline[idx - 1];
+  const after = timeline[idx + 1];
+
+  return (
+    <motion.div
+      className="mt-5"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.45 }}
+      onClick={(e) => e.stopPropagation()} // card play buttons shouldn't close the pop-up
+    >
+      <p className="mb-2 text-center text-xs font-bold uppercase tracking-widest text-slate-400">Tidslinjen</p>
+      <div className="flex items-center justify-center gap-2">
+        {before ? <HitsterCard song={toCard(before)} isRevealed status="neutral" /> : <EdgeCard label="Først" />}
+        <HitsterCard song={toCard(song)} isRevealed status="active" />
+        {after ? <HitsterCard song={toCard(after)} isRevealed status="neutral" /> : <EdgeCard label="Sidst" />}
+      </div>
+    </motion.div>
+  );
+}
+
+// Placeholder where the revealed song sits at either end of the timeline.
+function EdgeCard({ label }: { label: string }) {
+  return (
+    <div className="flex h-32 w-24 items-center justify-center rounded-2xl border-2 border-dashed border-slate-700 text-xs font-bold uppercase tracking-wider text-slate-500 sm:w-28">
+      {label}
+    </div>
   );
 }
 

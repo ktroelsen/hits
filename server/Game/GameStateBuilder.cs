@@ -18,7 +18,7 @@ public static class GameStateBuilder
         var players = await db.Players
             .Where(p => p.GameId == game.Id)
             .OrderByDescending(p => p.Score).ThenBy(p => p.JoinedAt)
-            .Select(p => new { p.Id, p.Name, p.Color, p.Score })
+            .Select(p => new { p.Id, p.Name, p.Color, p.Score, p.ReadyForRound })
             .ToListAsync();
 
         var timeline = await BuildTimelineAsync(game, db);
@@ -38,6 +38,7 @@ public static class GameStateBuilder
                     status = round.Status,
                     audioUrl = song?.PreviewUrl ?? song?.CustomPreviewUrl,
                     answeredPlayerIds = answers.Select(a => a.PlayerId).ToList(),
+                    readyPlayerIds = players.Where(p => p.ReadyForRound == round.Number).Select(p => p.Id).ToList(),
                     correctIndex = revealed ? round.CorrectIndex : null,
                     song = revealed && song is not null
                         ? new { song.Id, song.Title, song.Artist, song.Year, song.PreviewUrl, song.ArtworkUrl }
@@ -60,7 +61,7 @@ public static class GameStateBuilder
             currentRound = game.CurrentRound,
             targetRounds = game.TargetRounds,
             playbackMode = game.PlaybackMode,
-            players,
+            players = players.Select(p => new { p.Id, p.Name, p.Color, p.Score }),
             timeline = timeline.Select(s => new { s.Id, s.Title, s.Artist, s.Year, s.ArtworkUrl }),
             round = roundDto,
         };

@@ -139,7 +139,7 @@ export function SongCatalogModal({
             </div>
 
             <div className="flex items-center gap-1 overflow-x-auto max-w-full pb-1">
-              {['all', '60s', '70s', '80s', '90s', '00s', '10s', '20s'].map((dec) => (
+              {['all', '50s', '60s', '70s', '80s', '90s', '00s', '10s', '20s'].map((dec) => (
                 <button
                   key={dec}
                   onClick={() => setDecade(dec)}

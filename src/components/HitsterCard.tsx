@@ -33,6 +33,7 @@ interface HitsterCardProps {
 
 // Mirrors decadeForYear in scripts/songsFile.ts / server/Admin/AdminEndpoints.cs.
 export function decadeForYear(year: number): Decade {
+  if (year < 1960) return '50s';
   if (year < 1970) return '60s';
   if (year < 1980) return '70s';
   if (year < 1990) return '80s';
@@ -43,6 +44,7 @@ export function decadeForYear(year: number): Decade {
 }
 
 export const DECADE_COLORS: Record<string, { bg: string; border: string; badge: string }> = {
+  '50s': { bg: 'from-red-900/60 to-slate-900', border: 'border-red-700/60', badge: 'bg-red-700 text-red-100' },
   '60s': { bg: 'from-amber-900/60 to-slate-900', border: 'border-amber-700/60', badge: 'bg-amber-600 text-amber-100' },
   '70s': { bg: 'from-orange-900/60 to-slate-900', border: 'border-orange-700/60', badge: 'bg-orange-600 text-orange-100' },
   '80s': { bg: 'from-pink-900/60 to-purple-900/80', border: 'border-pink-600/60', badge: 'bg-pink-600 text-pink-100' },

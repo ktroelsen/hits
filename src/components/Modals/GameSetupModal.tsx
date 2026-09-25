@@ -12,6 +12,7 @@ interface GameSetupModalProps {
 }
 
 const ALL_DECADES: { id: Decade; label: string }[] = [
+  { id: '50s', label: "50'erne" },
   { id: '60s', label: "60'erne" },
   { id: '70s', label: "70'erne" },
   { id: '80s', label: "80'erne" },

@@ -99,13 +99,13 @@ export function TimelineView({
 
   for (let i = 0; i <= timelineLength; i++) {
     let label = '';
-    let minYear = 1960;
+    let minYear = 1950;
     let maxYear = 2026;
 
     if (i === 0) {
       const firstYear = timeline.length > 0 ? timeline[0].song.year : 2000;
       label = timeline.length > 0 ? `Før ${firstYear}` : 'Første sang';
-      minYear = 1960;
+      minYear = 1950;
       maxYear = firstYear;
     } else if (i === timelineLength) {
       const lastYear = timeline[timelineLength - 1].song.year;
@@ -127,7 +127,7 @@ export function TimelineView({
   const isDeadSlot = (i: number): boolean => {
     const s = slots[i];
     if (!s || timeline.length === 0) return false;
-    if (i === 0) return s.maxYear <= 1960; // no year below the first card
+    if (i === 0) return s.maxYear <= 1950; // no year below the first card
     if (i === timelineLength) return s.minYear >= 2026; // no year above the last card
     return s.maxYear - s.minYear < 2; // no integer strictly between the neighbours
   };
@@ -148,7 +148,7 @@ export function TimelineView({
 
   // When user updates the slider or stepper
   const handleYearChange = (newYear: number) => {
-    const clampedYear = Math.max(1960, Math.min(2026, newYear));
+    const clampedYear = Math.max(1950, Math.min(2026, newYear));
     onYearGuessChange(clampedYear.toString());
 
     // Auto-select the corresponding slot, unless it's an impossible (dead) slot
@@ -164,7 +164,7 @@ export function TimelineView({
     if (slot) {
       let suggestedYear = 1995;
       if (slotIdx === 0) {
-        suggestedYear = timeline.length > 0 ? Math.max(1960, timeline[0].song.year - 5) : 1990;
+        suggestedYear = timeline.length > 0 ? Math.max(1950, timeline[0].song.year - 5) : 1990;
       } else if (slotIdx === timelineLength) {
         suggestedYear = Math.min(2024, timeline[timelineLength - 1].song.year + 4);
       } else {

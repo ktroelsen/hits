@@ -155,6 +155,7 @@ public static class AdminEndpoints
     // Mirrors decadeForYear in scripts/songsFile.ts.
     internal static string DecadeForYear(int year) => year switch
     {
+        < 1960 => "50s",
         < 1970 => "60s",
         < 1980 => "70s",
         < 1990 => "80s",
