@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
 import { Song } from '../types';
-import { fetchSongAudioPreview, sfx } from '../services/audioService';
+import { appleMusicUrl, fetchSongAudioPreview, sfx } from '../services/audioService';
 import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 
 interface TurntablePlayerProps {
@@ -148,6 +148,7 @@ export function TurntablePlayer({
     audioRef.current.muted = nextMuted;
   };
 
+  const appleUrl = currentSong ? appleMusicUrl(currentSong.artist, currentSong.title) : '#';
   const spotifyUrl = currentSong 
     ? `https://open.spotify.com/search/${encodeURIComponent(currentSong.artist + ' ' + currentSong.title)}`
     : '#';
@@ -411,6 +412,19 @@ export function TurntablePlayer({
 
             {/* External Links for Party Play */}
             <div className="flex items-center gap-2">
+              <a
+                id="apple-music-external-link"
+                href={appleUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1 text-xs text-pink-300 hover:text-pink-200 bg-pink-950/40 hover:bg-pink-950/70 border border-pink-800/50 px-3 py-1.5 rounded-xl transition-colors font-medium"
+                title="Lyt til hele sangen på Apple Music"
+              >
+                <Music2 className="w-3.5 h-3.5" />
+                <span>Apple Music</span>
+                <ExternalLink className="w-3 h-3 opacity-60" />
+              </a>
+
               <a
                 id="spotify-external-link"
                 href={spotifyUrl}
