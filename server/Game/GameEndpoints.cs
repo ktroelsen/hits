@@ -28,6 +28,10 @@ public static class GameEndpoints
             var songIds = PlaySessionStore.DeckOrder(session);
             if (songIds.Count == 0) return Results.Problem("Kataloget er tomt.");
 
+            // No two rounds may share a year, so a game can't be longer than the number of years.
+            var distinctYears = await db.Songs.Where(x => songIds.Contains(x.Id)).Select(x => x.Year).Distinct().CountAsync();
+            if (distinctYears == 0) return Results.Problem("Kataloget er tomt.");
+
             var playbackMode = req?.PlaybackMode == GamePlaybackMode.Individual
                 ? GamePlaybackMode.Individual
                 : GamePlaybackMode.Shared;
@@ -38,7 +42,7 @@ public static class GameEndpoints
                 Status = GameStatus.Lobby,
                 CreatedAt = DateTime.UtcNow,
                 CurrentRound = 0,
-                TargetRounds = Math.Clamp(req?.TargetRounds ?? 10, 1, songIds.Count),
+                TargetRounds = Math.Clamp(req?.TargetRounds ?? 10, 1, distinctYears),
                 DeckJson = JsonSerializer.Serialize(songIds),
                 DeckPosition = 0,
                 HostSessionId = session.Id,
@@ -82,7 +86,7 @@ public static class GameEndpoints
             if (game is null) return Results.NotFound();
             if (game.Status != GameStatus.Lobby) return Results.BadRequest("Spillet er allerede startet.");
             if (game.Players.Count == 0) return Results.BadRequest("Ingen spillere har joinet endnu.");
-            await StartNextRoundAsync(game, db);
+            if (!await StartNextRoundAsync(game, db)) return Results.Problem("Ingen sange tilbage i bunken.");
             await db.SaveChangesAsync();
             await bc.BroadcastAsync(db, code);
             return Results.Ok();
@@ -280,21 +284,31 @@ public static class GameEndpoints
     // or the deck is empty. Caller saves. Returns true when the game finished.
     private static async Task<bool> AdvanceAsync(Game game, AppDbContext db)
     {
-        var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
-        if (game.CurrentRound >= game.TargetRounds || game.DeckPosition >= deck.Count)
-        {
-            game.Status = GameStatus.Finished;
-            return true;
-        }
-        await StartNextRoundAsync(game, db);
-        return false;
+        if (game.CurrentRound < game.TargetRounds && await StartNextRoundAsync(game, db))
+            return false;
+        game.Status = GameStatus.Finished;
+        return true;
     }
 
-    // Draws the next deck song and opens a new playing round. The song is marked
-    // played in the host's play session (if it hasn't been cleaned up).
-    private static async Task StartNextRoundAsync(Game game, AppDbContext db)
+    // Draws the next deck song and opens a new playing round. Like the single-device
+    // game, songs whose year is already on the timeline are skipped (left unplayed), so
+    // no two cards share a year. The song is marked played in the host's play session
+    // (if it hasn't been cleaned up). Returns false when the deck has no usable song left.
+    private static async Task<bool> StartNextRoundAsync(Game game, AppDbContext db)
     {
         var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
+        var remaining = deck.Skip(game.DeckPosition).ToList();
+        var yearById = await db.Songs.Where(x => remaining.Contains(x.Id))
+            .ToDictionaryAsync(x => x.Id, x => x.Year);
+        var playedIds = await db.Rounds.Where(r => r.GameId == game.Id).Select(r => r.SongId).ToListAsync();
+        var takenYears = (await db.Songs.Where(x => playedIds.Contains(x.Id)).Select(x => x.Year).ToListAsync())
+            .ToHashSet();
+
+        while (game.DeckPosition < deck.Count &&
+               (!yearById.TryGetValue(deck[game.DeckPosition], out var year) || takenYears.Contains(year)))
+            game.DeckPosition++;
+        if (game.DeckPosition >= deck.Count) return false;
+
         var songId = deck[game.DeckPosition];
         if (game.HostSessionId is not null &&
             await db.PlaySessions.FindAsync(game.HostSessionId) is { } session)
@@ -311,6 +325,7 @@ public static class GameEndpoints
             Status = RoundStatus.Playing,
             StartedAt = DateTime.UtcNow,
         });
+        return true;
     }
 }
 

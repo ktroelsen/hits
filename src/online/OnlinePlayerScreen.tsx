@@ -4,6 +4,7 @@ import { gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
+import { HostControls } from './HostControls';
 
 interface JoinedPlayer {
   id: string;
@@ -11,7 +12,17 @@ interface JoinedPlayer {
   color: string;
 }
 
-const storageKey = (code: string) => `hits.game.${code}.player`;
+export const storageKey = (code: string) => `hits.game.${code}.player`;
+// Set when this device created the game and plays along (see OnlineHostScreen).
+export const hostStorageKey = (code: string) => `hits.game.${code}.host`;
+
+function loadIsHost(code: string): boolean {
+  try {
+    return localStorage.getItem(hostStorageKey(code)) === '1';
+  } catch {
+    return false;
+  }
+}
 
 function loadPlayer(code: string): JoinedPlayer | null {
   try {
@@ -24,6 +35,7 @@ function loadPlayer(code: string): JoinedPlayer | null {
 
 export function OnlinePlayerScreen({ code }: { code: string }) {
   const [player, setPlayer] = useState<JoinedPlayer | null>(() => loadPlayer(code));
+  const [isHost] = useState(() => loadIsHost(code));
   const [name, setName] = useState('');
   const [joinError, setJoinError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -101,6 +113,8 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   }
 
   const round = state?.round ?? null;
+  // Shared playback with the host playing along from a phone: that phone is the speaker.
+  const hostIsSpeaker = isHost && state?.playbackMode !== 'individual';
   const answered = round?.answeredPlayerIds.includes(player.id) ?? false;
   const myResult = round?.results.find((r) => r.playerId === player.id) ?? null;
 
@@ -126,7 +140,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
 
       {!state && <p className="mt-8 text-center text-slate-400">Forbinder…</p>}
 
-      {state?.status === 'lobby' && (
+      {state?.status === 'lobby' && !isHost && (
         <Centered>
           <p className="text-lg">Du er med! 🎉</p>
           <p className="mt-2 text-sm text-slate-400">Venter på at værten starter spillet…</p>
@@ -136,6 +150,14 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
 
       {state?.status === 'playing' && round && (
         <div className="mt-6">
+          {hostIsSpeaker && round.audioUrl && (
+            <div className="mb-4">
+              <p className="mb-2 text-sm text-slate-400">🔊 Din telefon er højttaler — tryk play, så alle kan høre sangen.</p>
+              <div className="flex">
+                <LocalAudioPlayer key={round.number} src={round.audioUrl} />
+              </div>
+            </div>
+          )}
           {answered ? (
             <Centered>
               <p className="text-lg">Svar sendt ✅</p>
@@ -154,6 +176,8 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
                     <p className="mb-4 text-center text-amber-400">Ingen lydklip for denne sang.</p>
                   )}
                 </>
+              ) : hostIsSpeaker ? (
+                <p className="mb-4 text-sm text-slate-400">Runde {round.number} — placér sangen.</p>
               ) : (
                 <p className="mb-4 text-sm text-slate-400">
                   Runde {round.number} — lyt på storskærmen og placér sangen.
@@ -203,7 +227,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
             />
           </div>
           {state.playbackMode !== 'individual' ? (
-            <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
+            !isHost && <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
           ) : round.readyPlayerIds.includes(player.id) ? (
             <p className="mt-6 text-sm text-slate-400">
               Venter på de andre… ({round.readyPlayerIds.length}/{state.players.length})
@@ -218,6 +242,8 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
           )}
         </Centered>
       )}
+
+      {isHost && state && <HostControls code={code} state={state} />}
 
       {state?.status === 'finished' && (
         <Centered>

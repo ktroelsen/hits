@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { GameState, RoundState, StatePlayer, TimelineSong } from '../services/gameApi';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
+import { appleMusicUrl } from '../services/audioService';
 
 // Full-screen pop-up shown on the host screen and the phones when a round is revealed: the song
 // (artwork, title, artist, year) plus every player's year guess (closest first) and round points.
@@ -79,6 +80,15 @@ export function RevealOverlay({ round, players, timeline, highlightPlayerId, onC
           )}
           <p className="mt-4 text-2xl font-extrabold">{song.title}</p>
           <p className="text-slate-400">{song.artist}</p>
+          <a
+            href={appleMusicUrl(song.artist, song.title)}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()} // don't close the pop-up
+            className="mt-2 inline-flex items-center gap-1 rounded-full bg-pink-950/50 px-3 py-1 text-xs font-semibold text-pink-300 ring-1 ring-pink-800/60 hover:bg-pink-950/80 hover:text-pink-200"
+          >
+            ♫ Lyt på Apple Music ↗
+          </a>
           <motion.p
             className="mt-2 text-6xl font-black text-pink-400"
             initial={{ scale: 0 }}

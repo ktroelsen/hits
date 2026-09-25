@@ -3,6 +3,7 @@ import { attachFadeEnvelope } from '../services/audioFade';
 import { gameApi, useGameState, PlaybackMode, StatePlayer } from '../services/gameApi';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
+import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
 const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
@@ -14,6 +15,9 @@ export function OnlineHostScreen() {
   const [code, setCode] = useState<string | null>(null);
   const [targetRounds, setTargetRounds] = useState(10);
   const [playbackMode, setPlaybackMode] = useState<PlaybackMode>('shared');
+  // "Jeg spiller også med": the host joins as a player and plays from this device.
+  const [playAlong, setPlayAlong] = useState(false);
+  const [hostName, setHostName] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { state } = useGameState(code);
@@ -32,7 +36,22 @@ export function OnlineHostScreen() {
 
   const createGame = () => run(async () => {
     const { code: c } = await gameApi.create(targetRounds, playbackMode);
-    setCode(c);
+    if (!playAlong) {
+      setCode(c);
+      return;
+    }
+    // Join as a player and continue on the player screen, which shows the host
+    // controls because of the host flag.
+    const p = await gameApi.join(c, hostName.trim());
+    try {
+      localStorage.setItem(playerStorageKey(c), JSON.stringify(p));
+      localStorage.setItem(hostStorageKey(c), '1');
+    } catch {
+      /* private mode: fall back to the big-screen host view */
+      setCode(c);
+      return;
+    }
+    window.location.href = `/game/${c}`;
   });
 
   const round = state?.round ?? null;
@@ -117,9 +136,34 @@ export function OnlineHostScreen() {
                 </label>
               </div>
             </fieldset>
+            <label className="mb-2 flex cursor-pointer items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={playAlong}
+                onChange={(e) => setPlayAlong(e.target.checked)}
+                className="h-4 w-4 accent-pink-500"
+              />
+              <span className="font-semibold">📱 Jeg spiller også med fra denne enhed</span>
+            </label>
+            {playAlong && (
+              <label className="mb-4 block">
+                <span className="text-xs uppercase tracking-wide text-slate-400">Dit spillernavn</span>
+                <input
+                  value={hostName}
+                  onChange={(e) => setHostName(e.target.value)}
+                  placeholder="fx Anna"
+                  className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+                />
+                <span className="mt-1 block text-xs text-slate-500">
+                  {playbackMode === 'shared'
+                    ? 'Din telefon bliver højttaler, og du styrer spillet derfra.'
+                    : 'Du styrer spillet fra din telefon, mens du spiller.'}
+                </span>
+              </label>
+            )}
             <button
               onClick={createGame}
-              disabled={busy}
+              disabled={busy || (playAlong && !hostName.trim())}
               className="rounded-lg bg-pink-600 px-5 py-3 font-bold hover:bg-pink-500 disabled:opacity-40"
             >
               Opret spil
