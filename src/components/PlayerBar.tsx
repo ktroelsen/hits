@@ -22,14 +22,14 @@ export function PlayerBar({
   onExitGame,
 }: PlayerBarProps) {
   return (
-    <div id="player-bar" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-2.5 backdrop-blur-md">
+    <div id="player-bar" className="bg-charcoal-900/90 border border-charcoal-800 rounded-2xl p-2 sm:p-2.5 backdrop-blur-md">
       <div className="flex items-center gap-3">
         {/* Exit to the start screen (choose what to play) */}
         <button
           id="exit-game-btn"
           onClick={onExitGame}
           title="Afslut spillet og vælg et nyt"
-          className="flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/70 text-slate-300 hover:text-rose-300 border border-slate-700 hover:border-rose-500/50 transition-colors text-xs font-bold"
+          className="flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-xl bg-charcoal-800 hover:bg-rose-950/70 text-charcoal-300 hover:text-rose-300 border border-charcoal-700 hover:border-rose-500/50 transition-colors text-xs font-bold"
         >
           <LogOut className="w-4 h-4" />
           <span className="hidden sm:inline">Afslut spillet</span>
@@ -49,7 +49,7 @@ export function PlayerBar({
                 <span className="text-xs font-bold text-rose-300">Sidste chance!</span>
               )}
             </div>
-            <span className="text-sm font-bold text-slate-300">
+            <span className="text-sm font-bold text-charcoal-300">
               Score: <span className="font-black text-white font-mono">{players[0]?.score ?? 0}</span>
             </span>
             <span className="flex items-center gap-1 text-sm font-bold text-amber-300">
@@ -71,8 +71,8 @@ export function PlayerBar({
                 key={player.id}
                 className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-all shrink-0 ${
                   isActive
-                    ? 'bg-slate-800 border-pink-500 shadow-lg ring-2 ring-pink-500/30 scale-[1.02]'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 opacity-70'
+                    ? 'bg-charcoal-800 border-coral-500 shadow-lg ring-2 ring-coral-500/30 scale-[1.02]'
+                    : 'bg-charcoal-950/60 border-charcoal-800 text-charcoal-400 opacity-70'
                 }`}
               >
                 {/* Player Color Avatar */}
@@ -90,24 +90,24 @@ export function PlayerBar({
                       {player.name}
                     </span>
                     {isActive && (
-                      <span className="text-[10px] font-bold text-pink-300 bg-pink-950/80 px-1.5 py-0.5 rounded border border-pink-500/40 animate-pulse">
+                      <span className="text-[10px] font-bold text-coral-300 bg-coral-950/80 px-1.5 py-0.5 rounded border border-coral-500/40 animate-pulse">
                         Deres tur
                       </span>
                     )}
                   </div>
                   {/* Progress bar towards target cards (timed games just show the count) */}
-                  <div className="flex items-center gap-2 text-slate-400 font-mono">
+                  <div className="flex items-center gap-2 text-charcoal-400 font-mono">
                     {!isTimed && (
-                    <div className="w-20 h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div className="w-20 h-2 bg-charcoal-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-pink-500 to-amber-400 transition-all duration-300"
+                        className="h-full bg-gradient-to-r from-coral-500 to-amber-400 transition-all duration-300"
                         style={{ width: `${progressPercent}%` }}
                       />
                     </div>
                     )}
                     <span className="text-sm font-black text-white">
                       {cardCount}
-                      <span className="text-[11px] font-bold text-slate-500">
+                      <span className="text-[11px] font-bold text-charcoal-500">
                         {isTimed ? ' kort' : `/${settings.targetCards}`}
                       </span>
                     </span>
@@ -142,7 +142,7 @@ function Countdown({ seconds }: { seconds: number }) {
       className={`flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-xl border font-mono font-black text-sm ${
         urgent
           ? 'bg-rose-950/70 border-rose-500/60 text-rose-300 animate-pulse'
-          : 'bg-slate-800 border-slate-700 text-cyan-300'
+          : 'bg-charcoal-800 border-charcoal-700 text-mint-300'
       }`}
     >
       <Clock className="w-4 h-4" />

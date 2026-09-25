@@ -75,16 +75,16 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
     return (
       <Shell>
         <h1 className="text-2xl font-extrabold">Join spil</h1>
-        <p className="mt-1 text-sm text-slate-400">
-          Kode: <span className="font-mono text-pink-400">{code}</span>
+        <p className="mt-1 text-sm text-charcoal-400">
+          Kode: <span className="font-mono text-coral-400">{code}</span>
         </p>
         <label className="mt-6 block">
-          <span className="text-xs uppercase tracking-wide text-slate-400">Dit spillernavn</span>
+          <span className="text-xs uppercase tracking-wide text-charcoal-400">Dit spillernavn</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && join()}
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+            className="mt-1 w-full rounded-lg bg-charcoal-800 px-3 py-2 text-charcoal-100 outline-none ring-1 ring-charcoal-700 focus:ring-coral-500"
             placeholder="fx Anna"
           />
         </label>
@@ -92,7 +92,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         <button
           onClick={join}
           disabled={busy || !name.trim()}
-          className="mt-4 w-full rounded-lg bg-pink-600 px-4 py-3 font-bold text-white hover:bg-pink-500 disabled:opacity-40"
+          className="mt-4 w-full rounded-lg bg-coral-600 px-4 py-3 font-bold text-white hover:bg-coral-500 disabled:opacity-40"
         >
           Join
         </button>
@@ -119,18 +119,18 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         <span className="font-semibold" style={{ color: player.color }}>
           {player.name}
         </span>
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-charcoal-400">
           {state ? `${state.players.find((p) => p.id === player.id)?.score ?? 0} point` : '…'}
         </span>
       </div>
 
-      {!state && <p className="mt-8 text-center text-slate-400">Forbinder…</p>}
+      {!state && <p className="mt-8 text-center text-charcoal-400">Forbinder…</p>}
 
       {state?.status === 'lobby' && (
         <Centered>
           <p className="text-lg">Du er med! 🎉</p>
-          <p className="mt-2 text-sm text-slate-400">Venter på at værten starter spillet…</p>
-          <p className="mt-4 text-sm text-slate-500">{state.players.length} spillere er klar</p>
+          <p className="mt-2 text-sm text-charcoal-400">Venter på at værten starter spillet…</p>
+          <p className="mt-4 text-sm text-charcoal-500">{state.players.length} spillere er klar</p>
         </Centered>
       )}
 
@@ -139,7 +139,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
           {answered ? (
             <Centered>
               <p className="text-lg">Svar sendt ✅</p>
-              <p className="mt-2 text-sm text-slate-400">
+              <p className="mt-2 text-sm text-charcoal-400">
                 Venter på de andre… ({round.answeredPlayerIds.length}/{state.players.length})
               </p>
             </Centered>
@@ -147,7 +147,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
             <>
               {state.playbackMode === 'individual' ? (
                 <>
-                  <p className="mb-4 text-sm text-slate-400">
+                  <p className="mb-4 text-sm text-charcoal-400">
                     Runde {round.number} — tryk play for at høre sangen, og placér den.
                   </p>
                   {!round.audioUrl && (
@@ -155,7 +155,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
                   )}
                 </>
               ) : (
-                <p className="mb-4 text-sm text-slate-400">
+                <p className="mb-4 text-sm text-charcoal-400">
                   Runde {round.number} — lyt på storskærmen og placér sangen.
                 </p>
               )}
@@ -186,10 +186,10 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
               {myResult.points > 0 ? `+${myResult.points} point` : '0 point'}
             </p>
           ) : (
-            <p className="mt-3 text-slate-400">Du svarede ikke i denne runde.</p>
+            <p className="mt-3 text-charcoal-400">Du svarede ikke i denne runde.</p>
           )}
           {myResult && (
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-charcoal-400">
               Placering {myResult.placementCorrect ? '✅' : '❌'} · Årstal{' '}
               {myResult.yearCorrect ? '✅' : '❌'}
             </p>
@@ -203,9 +203,9 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
             />
           </div>
           {state.playbackMode !== 'individual' ? (
-            <p className="mt-4 text-sm text-slate-500">Venter på næste runde…</p>
+            <p className="mt-4 text-sm text-charcoal-500">Venter på næste runde…</p>
           ) : round.readyPlayerIds.includes(player.id) ? (
-            <p className="mt-6 text-sm text-slate-400">
+            <p className="mt-6 text-sm text-charcoal-400">
               Venter på de andre… ({round.readyPlayerIds.length}/{state.players.length})
             </p>
           ) : (
@@ -276,7 +276,7 @@ function LocalAudioPlayer({ src }: { src: string }) {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
+    <div className="min-h-screen bg-charcoal-950 px-4 py-8 text-charcoal-100">
       <div className="mx-auto max-w-md">{children}</div>
     </div>
   );
@@ -299,11 +299,11 @@ function Scoreboard({
         <div
           key={p.id}
           className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-            p.id === meId ? 'bg-slate-800 ring-1 ring-pink-500/40' : 'bg-slate-900'
+            p.id === meId ? 'bg-charcoal-800 ring-1 ring-coral-500/40' : 'bg-charcoal-900'
           }`}
         >
           <span>
-            <span className="mr-2 text-slate-500">{i + 1}.</span>
+            <span className="mr-2 text-charcoal-500">{i + 1}.</span>
             <span style={{ color: p.color }}>{p.name}</span>
           </span>
           <span className="font-bold">{p.score}</span>

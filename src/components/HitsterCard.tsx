@@ -44,14 +44,14 @@ export function decadeForYear(year: number): Decade {
 }
 
 export const DECADE_COLORS: Record<string, { bg: string; border: string; badge: string }> = {
-  '50s': { bg: 'from-red-900/60 to-slate-900', border: 'border-red-700/60', badge: 'bg-red-700 text-red-100' },
-  '60s': { bg: 'from-amber-900/60 to-slate-900', border: 'border-amber-700/60', badge: 'bg-amber-600 text-amber-100' },
-  '70s': { bg: 'from-orange-900/60 to-slate-900', border: 'border-orange-700/60', badge: 'bg-orange-600 text-orange-100' },
-  '80s': { bg: 'from-pink-900/60 to-purple-900/80', border: 'border-pink-600/60', badge: 'bg-pink-600 text-pink-100' },
-  '90s': { bg: 'from-cyan-900/60 to-blue-900/80', border: 'border-cyan-600/60', badge: 'bg-cyan-600 text-cyan-100' },
-  '00s': { bg: 'from-emerald-900/60 to-teal-900/80', border: 'border-emerald-600/60', badge: 'bg-emerald-600 text-emerald-100' },
-  '10s': { bg: 'from-indigo-900/60 to-violet-900/80', border: 'border-indigo-600/60', badge: 'bg-indigo-600 text-indigo-100' },
-  '20s': { bg: 'from-fuchsia-900/60 to-rose-900/80', border: 'border-fuchsia-600/60', badge: 'bg-fuchsia-600 text-fuchsia-100' },
+  '50s': { bg: 'from-red-900/60 to-charcoal-900', border: 'border-red-700/60', badge: 'bg-red-700 text-red-100' },
+  '60s': { bg: 'from-amber-900/60 to-charcoal-900', border: 'border-amber-700/60', badge: 'bg-amber-600 text-amber-100' },
+  '70s': { bg: 'from-orange-900/60 to-charcoal-900', border: 'border-orange-700/60', badge: 'bg-orange-600 text-orange-100' },
+  '80s': { bg: 'from-coral-900/60 to-charcoal-900', border: 'border-coral-600/60', badge: 'bg-coral-600 text-coral-100' },
+  '90s': { bg: 'from-mint-900/60 to-charcoal-900', border: 'border-mint-600/60', badge: 'bg-mint-600 text-mint-100' },
+  '00s': { bg: 'from-emerald-900/60 to-charcoal-900', border: 'border-emerald-600/60', badge: 'bg-emerald-600 text-emerald-100' },
+  '10s': { bg: 'from-lemon-900/60 to-charcoal-900', border: 'border-lemon-500/60', badge: 'bg-lemon-400 text-lemon-950' },
+  '20s': { bg: 'from-blue-900/60 to-charcoal-900', border: 'border-blue-500/60', badge: 'bg-blue-600 text-blue-100' },
 };
 
 export function HitsterCard({
@@ -122,20 +122,20 @@ export function HitsterCard({
           : status === 'wrong'
           ? 'ring-4 ring-rose-500/80 border-rose-400 bg-rose-950/40'
           : status === 'active'
-          ? 'ring-4 ring-pink-500/90 border-pink-400 bg-pink-950/30 shadow-pink-500/20'
+          ? 'ring-4 ring-coral-500/90 border-coral-400 bg-coral-950/30 shadow-coral-500/20'
           : `${decadeStyle.border} bg-gradient-to-b ${decadeStyle.bg}`
       }`}
     >
       {/* Background vinyl texture sheen */}
-      <div className="absolute inset-0 rounded-2xl bg-slate-900/30 backdrop-blur-sm pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl bg-charcoal-900/30 backdrop-blur-sm pointer-events-none" />
 
       {/* Play / pause — fixed in the card's top-right corner */}
       <button
         onClick={handlePlayCard}
         className={`absolute top-1.5 right-1.5 z-20 flex items-center justify-center w-7 h-7 rounded-full border transition-colors shadow ${
           isPlayingAudio
-            ? 'bg-pink-600 border-pink-400 text-white ring-2 ring-pink-500/40'
-            : 'bg-slate-950/80 border-slate-600/70 text-white hover:bg-pink-950/80 hover:border-pink-500/60'
+            ? 'bg-coral-600 border-coral-400 text-white ring-2 ring-coral-500/40'
+            : 'bg-charcoal-950/80 border-charcoal-600/70 text-white hover:bg-coral-950/80 hover:border-coral-500/60'
         }`}
         title={isPlayingAudio ? 'Pause sang' : 'Lyt til sang'}
       >
@@ -153,7 +153,7 @@ export function HitsterCard({
             {song.year}
           </span>
         ) : (
-          <span className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
+          <span className="text-base sm:text-lg font-black text-charcoal-400 font-mono tracking-widest">
             ????
           </span>
         )}
@@ -179,7 +179,7 @@ export function HitsterCard({
             </div>
           ) : isRevealed ? (
             <div
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-semibold bg-slate-900/80 border border-slate-700/70 text-slate-300"
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-semibold bg-charcoal-900/80 border border-charcoal-700/70 text-charcoal-300"
               title="Fælles startkort på tidslinjen"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
@@ -207,11 +207,11 @@ export function HitsterCard({
       )}
 
       {/* Bottom Info: Title & Artist — gets the room freed by removing the disc */}
-      <div className="relative z-10 mt-auto pt-1.5 border-t border-slate-800/80">
-        <h4 className="font-bold text-white text-sm leading-snug line-clamp-2 group-hover:text-pink-300 transition-colors">
+      <div className="relative z-10 mt-auto pt-1.5 border-t border-charcoal-800/80">
+        <h4 className="font-bold text-white text-sm leading-snug line-clamp-2 group-hover:text-coral-300 transition-colors">
           {song.title}
         </h4>
-        <p className="text-slate-300 text-xs line-clamp-1 font-medium mt-0.5">
+        <p className="text-charcoal-300 text-xs line-clamp-1 font-medium mt-0.5">
           {song.artist}
         </p>
       </div>

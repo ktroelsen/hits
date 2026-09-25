@@ -33,10 +33,10 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
   const large = size === 'large';
 
   return (
-    <div className={`rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner ${large ? 'p-4' : 'p-3'}`}>
+    <div className={`rounded-2xl bg-charcoal-950/80 border border-charcoal-800 shadow-inner ${large ? 'p-4' : 'p-3'}`}>
       <div className={`flex items-center gap-1.5 ${large ? 'mb-3' : 'mb-2'}`}>
-        <Calendar className={`text-pink-400 ${large ? 'h-5 w-5' : 'h-4 w-4'}`} />
-        <span className={`font-bold text-slate-200 ${large ? 'text-sm' : 'text-xs'}`}>Gæt årstal:</span>
+        <Calendar className={`text-coral-400 ${large ? 'h-5 w-5' : 'h-4 w-4'}`} />
+        <span className={`font-bold text-charcoal-200 ${large ? 'text-sm' : 'text-xs'}`}>Gæt årstal:</span>
       </div>
 
       {/* Decade cards */}
@@ -55,17 +55,17 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
               } ${
                 isSelected
                   ? `${colors.border} bg-gradient-to-b ${colors.bg} ring-2 ring-white/30 shadow-md scale-[1.03]`
-                  : 'border-slate-800 bg-slate-900 hover:bg-slate-800'
+                  : 'border-charcoal-800 bg-charcoal-900 hover:bg-charcoal-800'
               }`}
             >
               <span
                 className={`font-bold uppercase tracking-wider px-1 rounded ${large ? 'text-[11px]' : 'text-[9px]'} ${
-                  isSelected ? colors.badge : 'text-slate-500'
+                  isSelected ? colors.badge : 'text-charcoal-500'
                 }`}
               >
                 {dec.id}
               </span>
-              <span className={`font-black font-mono ${large ? 'text-sm' : 'text-xs'} ${isSelected ? 'text-white' : 'text-slate-400'}`}>
+              <span className={`font-black font-mono ${large ? 'text-sm' : 'text-xs'} ${isSelected ? 'text-white' : 'text-charcoal-400'}`}>
                 {dec.label}
               </span>
             </button>
@@ -79,7 +79,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
           type="button"
           disabled={disabled}
           onClick={() => setClampedYear(year - 1)}
-          className={`rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-40 ${
+          className={`rounded-xl border border-charcoal-700 bg-charcoal-800 text-charcoal-300 hover:bg-charcoal-700 hover:text-white disabled:opacity-40 ${
             large ? 'p-2.5' : 'p-1.5'
           }`}
           title="1 år tilbage"
@@ -95,11 +95,11 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
             value={year}
             disabled={disabled}
             onChange={(e) => setClampedYear(parseInt(e.target.value, 10) || 1990)}
-            className={`rounded-xl border-2 border-amber-500/40 bg-slate-900 text-center font-mono font-black text-amber-300 shadow-inner focus:border-amber-400 focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:opacity-40 ${
+            className={`rounded-xl border-2 border-amber-500/40 bg-charcoal-900 text-center font-mono font-black text-amber-300 shadow-inner focus:border-amber-400 focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:opacity-40 ${
               large ? 'w-32 px-3 py-2 text-2xl' : 'w-24 px-2 py-1 text-lg'
             }`}
           />
-          <span className="absolute -top-2 right-2 rounded bg-amber-500 px-1 text-[9px] font-bold text-slate-950">
+          <span className="absolute -top-2 right-2 rounded bg-amber-500 px-1 text-[9px] font-bold text-charcoal-950">
             ÅR
           </span>
         </div>
@@ -108,7 +108,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
           type="button"
           disabled={disabled}
           onClick={() => setClampedYear(year + 1)}
-          className={`rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-40 ${
+          className={`rounded-xl border border-charcoal-700 bg-charcoal-800 text-charcoal-300 hover:bg-charcoal-700 hover:text-white disabled:opacity-40 ${
             large ? 'p-2.5' : 'p-1.5'
           }`}
           title="1 år frem"

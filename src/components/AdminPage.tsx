@@ -284,9 +284,9 @@ export function AdminPage() {
 
   const field = (label: string, value: string, onChange: (v: string) => void, extra?: InputHTMLAttributes<HTMLInputElement>) => (
     <label className="block">
-      <span className="text-xs uppercase tracking-wide text-slate-400">{label}</span>
+      <span className="text-xs uppercase tracking-wide text-charcoal-400">{label}</span>
       <input
-        className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+        className="mt-1 w-full rounded-lg bg-charcoal-800 px-3 py-2 text-charcoal-100 outline-none ring-1 ring-charcoal-700 focus:ring-coral-500"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         {...extra}
@@ -299,21 +299,21 @@ export function AdminPage() {
   const remaining = queue.length;
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
+    <div className="min-h-screen bg-charcoal-950 px-4 py-8 text-charcoal-100">
       <div className="mx-auto max-w-2xl">
         <header className="mb-6">
           <h1 className="text-2xl font-extrabold">
             🎛️ Sang-admin
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-charcoal-400">
             Auditionér kandidater og vælg hvilke der ryger i kataloget. Godkendte sange gemmes
-            direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
+            direkte i <code className="text-coral-400">databasen</code> og er live med det samme.
           </p>
         </header>
 
         {needsKey && (
           <form
-            className="mb-4 flex gap-2 rounded-xl bg-slate-900 p-4 ring-1 ring-slate-800"
+            className="mb-4 flex gap-2 rounded-xl bg-charcoal-900 p-4 ring-1 ring-charcoal-800"
             onSubmit={(e) => {
               e.preventDefault();
               try {
@@ -325,11 +325,11 @@ export function AdminPage() {
             <input
               type="password"
               placeholder="Admin-nøgle"
-              className="flex-1 rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+              className="flex-1 rounded-lg bg-charcoal-800 px-3 py-2 text-charcoal-100 outline-none ring-1 ring-charcoal-700 focus:ring-coral-500"
               value={keyInput}
               onChange={(e) => setKeyInput(e.target.value)}
             />
-            <button className="rounded-lg bg-pink-600 px-4 py-2 font-semibold hover:bg-pink-500">Log ind</button>
+            <button className="rounded-lg bg-coral-600 px-4 py-2 font-semibold hover:bg-coral-500">Log ind</button>
           </form>
         )}
 
@@ -339,19 +339,19 @@ export function AdminPage() {
 
         {state && (
           <>
-            <section className="mb-6 rounded-xl bg-slate-900 p-4 ring-1 ring-slate-800">
+            <section className="mb-6 rounded-xl bg-charcoal-900 p-4 ring-1 ring-charcoal-800">
               <div className="flex items-baseline justify-between text-sm">
                 <span className="font-semibold">
                   {total} / {GOAL} sange
                 </span>
-                <span className="text-slate-400">
+                <span className="text-charcoal-400">
                   🇩🇰 {state.counts.danish} · 🌍 {state.counts.international}
                 </span>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
-                <div className="h-full bg-gradient-to-r from-pink-500 to-blue-500" style={{ width: `${pct}%` }} />
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-charcoal-800">
+                <div className="h-full bg-gradient-to-r from-coral-500 to-blue-500" style={{ width: `${pct}%` }} />
               </div>
-              <div className="mt-2 flex justify-between text-xs text-slate-500">
+              <div className="mt-2 flex justify-between text-xs text-charcoal-500">
                 <span>{remaining} kandidater tilbage i køen</span>
                 <span>
                   ✓ {state.decided.approved} godkendt · ✗ {state.decided.rejected} afvist
@@ -359,7 +359,7 @@ export function AdminPage() {
               </div>
             </section>
 
-            <div className="mb-4 flex gap-1 rounded-xl bg-slate-900 p-1 ring-1 ring-slate-800">
+            <div className="mb-4 flex gap-1 rounded-xl bg-charcoal-900 p-1 ring-1 ring-charcoal-800">
               {[
                 { id: 'candidates' as const, label: `Kandidater (${remaining})` },
                 { id: 'catalog' as const, label: `Katalog (${total})` },
@@ -371,7 +371,7 @@ export function AdminPage() {
                     setTab(t.id);
                   }}
                   className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-                    tab === t.id ? 'bg-pink-600 text-white' : 'text-slate-400 hover:bg-slate-800'
+                    tab === t.id ? 'bg-coral-600 text-white' : 'text-charcoal-400 hover:bg-charcoal-800'
                   }`}
                 >
                   {t.label}
@@ -382,13 +382,13 @@ export function AdminPage() {
             {tab === 'catalog' && <AdminCatalog request={keyedFetch} onChanged={loadCounts} />}
 
             {tab === 'candidates' && (
-            <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
+            <section className="rounded-xl bg-charcoal-900 p-5 ring-1 ring-charcoal-800">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="font-bold">
                   {manualMode ? 'Tilføj egen sang' : `Kandidat${draft.candidateId ? ` (${draft.candidateId})` : ''}`}
                 </h2>
                 <button
-                  className="text-xs text-slate-400 underline hover:text-slate-200"
+                  className="text-xs text-charcoal-400 underline hover:text-charcoal-200"
                   onClick={() => {
                     stopAudio();
                     setManualMode((m) => !m);
@@ -412,9 +412,9 @@ export function AdminPage() {
                   inputMode: 'numeric',
                 })}
                 <label className="block">
-                  <span className="text-xs uppercase tracking-wide text-slate-400">Kategori</span>
+                  <span className="text-xs uppercase tracking-wide text-charcoal-400">Kategori</span>
                   <select
-                    className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+                    className="mt-1 w-full rounded-lg bg-charcoal-800 px-3 py-2 text-charcoal-100 outline-none ring-1 ring-charcoal-700 focus:ring-coral-500"
                     value={draft.category}
                     onChange={(e) => setDraft((d) => ({ ...d, category: e.target.value as SongCategory }))}
                   >
@@ -427,14 +427,14 @@ export function AdminPage() {
               </div>
 
               {!manualMode && draft.candidateId && queue[0]?.note && (
-                <p className="mt-3 text-xs text-slate-500">💡 {queue[0].note}</p>
+                <p className="mt-3 text-xs text-charcoal-500">💡 {queue[0].note}</p>
               )}
 
               <div className="mt-4 flex items-center gap-3">
                 <button
                   onClick={audition}
                   disabled={!isPlaying && (busy || preview.loading || !draft.title || !draft.artist)}
-                  className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-600 disabled:opacity-40"
+                  className="rounded-lg bg-charcoal-700 px-4 py-2 text-sm font-semibold hover:bg-charcoal-600 disabled:opacity-40"
                 >
                   {preview.loading ? 'Henter…' : isPlaying ? '■ Stop preview' : '▶ Afspil preview'}
                 </button>
@@ -459,7 +459,7 @@ export function AdminPage() {
                     <button
                       onClick={skip}
                       disabled={busy || queue.length <= 1}
-                      className="rounded-lg bg-slate-700 px-4 py-3 font-semibold hover:bg-slate-600 disabled:opacity-40"
+                      className="rounded-lg bg-charcoal-700 px-4 py-3 font-semibold hover:bg-charcoal-600 disabled:opacity-40"
                     >
                       ↷ Spring over
                     </button>
@@ -474,7 +474,7 @@ export function AdminPage() {
                 )}
               </div>
 
-              {message && <p className="mt-4 text-sm text-slate-300">{message}</p>}
+              {message && <p className="mt-4 text-sm text-charcoal-300">{message}</p>}
               {!manualMode && queue.length === 0 && (
                 <p className="mt-4 text-sm text-emerald-400">
                   Alle kandidater er gennemgået! Tilføj evt. dine egne sange ovenfor.
@@ -483,7 +483,7 @@ export function AdminPage() {
             </section>
             )}
 
-            <p className="mt-6 text-center text-xs text-slate-600">
+            <p className="mt-6 text-center text-xs text-charcoal-600">
               Ændringer gemmes direkte i databasen — ingen commit eller deploy nødvendig.
             </p>
           </>

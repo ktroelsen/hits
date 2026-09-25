@@ -23,7 +23,7 @@ const ALL_DECADES: { id: Decade; label: string }[] = [
 ];
 
 const PRESET_COLORS = [
-  '#ec4899', // Pink
+  '#ee4266', // Coral
   '#3b82f6', // Blue
   '#10b981', // Emerald
   '#f59e0b', // Amber
@@ -111,22 +111,22 @@ export function GameSetupModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-charcoal-900 border border-charcoal-800 rounded-3xl p-6 sm:p-7 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Glow accent */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-coral-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-charcoal-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white shadow-md">
+            <div className="p-2 rounded-xl bg-lemon-400 text-charcoal-950 shadow-md">
               <Disc className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
             </div>
             <div>
               <h3 className="text-xl font-black text-white font-display">
                 HITS Spilindstillinger
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-charcoal-400">
                 Vælg spiltype, hold og sangkategorier
               </p>
             </div>
@@ -134,7 +134,7 @@ export function GameSetupModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-charcoal-400 hover:text-white hover:bg-charcoal-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -144,7 +144,7 @@ export function GameSetupModal({
         <div className="mt-5 space-y-6">
           {/* 1. Spiltilstand (Game Mode) */}
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               1. Vælg Spiltype
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -153,15 +153,15 @@ export function GameSetupModal({
                 onClick={() => setMode('timeline')}
                 className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
                   mode === 'timeline'
-                    ? 'bg-pink-950/40 border-pink-500 ring-2 ring-pink-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                    ? 'bg-coral-950/40 border-coral-500 ring-2 ring-coral-500/20'
+                    : 'bg-charcoal-950/50 border-charcoal-800 hover:border-charcoal-700 text-charcoal-300'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-bold text-sm text-white">🏆 Klassisk HITS</span>
-                  {mode === 'timeline' && <Check className="w-4 h-4 text-pink-400" />}
+                  {mode === 'timeline' && <Check className="w-4 h-4 text-coral-400" />}
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-charcoal-400 mt-1">
                   Holdene dyster på samme fælles tidslinje! Placér sangene kronologisk. {winCondition === 'time'
                     ? `Flest hits efter ${timeLimitMinutes} min vinder!`
                     : `Første hold til ${targetCards} hits vinder!`}
@@ -173,15 +173,15 @@ export function GameSetupModal({
                 onClick={() => setMode('expert')}
                 className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
                   mode === 'expert'
-                    ? 'bg-purple-950/40 border-purple-500 ring-2 ring-purple-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                    ? 'bg-lemon-950/40 border-lemon-500 ring-2 ring-lemon-500/20'
+                    : 'bg-charcoal-950/50 border-charcoal-800 hover:border-charcoal-700 text-charcoal-300'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-bold text-sm text-white">🎯 Ekspert Mode</span>
-                  {mode === 'expert' && <Check className="w-4 h-4 text-purple-400" />}
+                  {mode === 'expert' && <Check className="w-4 h-4 text-lemon-400" />}
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-charcoal-400 mt-1">
                   Gæt både korrekt tidslinje og prøv at ramme det præcise udgivelsesår for bonusmønter.
                 </p>
               </button>
@@ -192,14 +192,14 @@ export function GameSetupModal({
                 className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
                   mode === 'solo'
                     ? 'bg-rose-950/40 border-rose-500 ring-2 ring-rose-500/20'
-                    : 'bg-slate-950/50 border-slate-800 hover:border-slate-700 text-slate-300'
+                    : 'bg-charcoal-950/50 border-charcoal-800 hover:border-charcoal-700 text-charcoal-300'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-bold text-sm text-white">❤️ Single player</span>
                   {mode === 'solo' && <Check className="w-4 h-4 text-rose-400" />}
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-charcoal-400 mt-1">
                   Spil alene uden liv. Præcist årstal giver et liv, forkert placering koster et — eller slutter spillet. Slå din highscore!
                 </p>
               </button>
@@ -208,15 +208,15 @@ export function GameSetupModal({
                 type="button"
                 disabled
                 title="Kommer snart"
-                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-charcoal-950/50 border-charcoal-800 text-charcoal-400 opacity-60 cursor-not-allowed"
               >
                 <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🥳 Fest / Holdkamp</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-amber-500/30 shrink-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-charcoal-800 text-amber-300 border border-amber-500/30 shrink-0">
                     Kommer snart
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-charcoal-400 mt-1">
                   Pass-and-play for 2+ hold. Skift tur ved DJ-pulten og stjæl kort fra modstanderne!
                 </p>
               </button>
@@ -225,15 +225,15 @@ export function GameSetupModal({
                 type="button"
                 disabled
                 title="Kommer snart"
-                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-slate-950/50 border-slate-800 text-slate-400 opacity-60 cursor-not-allowed"
+                className="p-3.5 rounded-2xl border text-left flex flex-col justify-between bg-charcoal-950/50 border-charcoal-800 text-charcoal-400 opacity-60 cursor-not-allowed"
               >
                 <div className="flex items-center justify-between w-full gap-2">
                   <span className="font-bold text-sm text-white">🎧 Digital DJ Hjælper</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-cyan-500/30 shrink-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-charcoal-800 text-mint-300 border border-mint-500/30 shrink-0">
                     Kommer snart
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-charcoal-400 mt-1">
                   Brug appen som DJ til jeres fysiske HITS brætspilskort eller fri musikquiz!
                 </p>
               </button>
@@ -242,7 +242,7 @@ export function GameSetupModal({
 
           {/* 2. Sangvalg & Kategori */}
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               2. Sangkategori (Danske & Internationale)
             </label>
             <div className="grid grid-cols-3 gap-2.5">
@@ -251,8 +251,8 @@ export function GameSetupModal({
                 onClick={() => setCategoryFilter('all')}
                 className={`p-3 rounded-xl border text-center transition-all ${
                   categoryFilter === 'all'
-                    ? 'bg-pink-600 text-white border-pink-500 font-bold shadow-md'
-                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    ? 'bg-coral-600 text-white border-coral-500 font-bold shadow-md'
+                    : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                 }`}
               >
                 <span className="text-xs sm:text-sm block">🇩🇰 + 🌍 Blandet</span>
@@ -265,7 +265,7 @@ export function GameSetupModal({
                 className={`p-3 rounded-xl border text-center transition-all ${
                   categoryFilter === 'danish'
                     ? 'bg-red-600 text-white border-red-500 font-bold shadow-md'
-                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                 }`}
               >
                 <span className="text-xs sm:text-sm block">🇩🇰 Kun Danske</span>
@@ -278,7 +278,7 @@ export function GameSetupModal({
                 className={`p-3 rounded-xl border text-center transition-all ${
                   categoryFilter === 'international'
                     ? 'bg-blue-600 text-white border-blue-500 font-bold shadow-md'
-                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                 }`}
               >
                 <span className="text-xs sm:text-sm block">🌍 Kun Internationale</span>
@@ -289,7 +289,7 @@ export function GameSetupModal({
 
           {/* 3. Årtier */}
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               3. Vælg Årtier ({decades.length} valgt)
             </label>
             <div className="flex flex-wrap gap-2">
@@ -302,8 +302,8 @@ export function GameSetupModal({
                     onClick={() => toggleDecade(dec.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
                       isSelected
-                        ? 'bg-purple-600 text-white border-purple-500 shadow-sm'
-                        : 'bg-slate-950/50 text-slate-400 border-slate-800 hover:border-slate-700'
+                        ? 'bg-lemon-400 text-charcoal-950 border-lemon-500 shadow-sm'
+                        : 'bg-charcoal-950/50 text-charcoal-400 border-charcoal-800 hover:border-charcoal-700'
                     }`}
                   >
                     {dec.label}
@@ -316,7 +316,7 @@ export function GameSetupModal({
           {/* Tags (optional, only shown once songs have been tagged in /admin) */}
           {allTags.length > 0 && (
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
                 Tags (valgfrit{selectedTags.length > 0 ? `, ${selectedTags.length} valgt` : ''})
               </label>
               <div className="flex flex-wrap gap-2">
@@ -329,8 +329,8 @@ export function GameSetupModal({
                       onClick={() => toggleTag(tag)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
                         isSelected
-                          ? 'bg-cyan-600 text-white border-cyan-500 shadow-sm'
-                          : 'bg-slate-950/50 text-slate-400 border-slate-800 hover:border-slate-700'
+                          ? 'bg-mint-600 text-white border-mint-500 shadow-sm'
+                          : 'bg-charcoal-950/50 text-charcoal-400 border-charcoal-800 hover:border-charcoal-700'
                       }`}
                     >
                       {tag} <span className="opacity-70 font-normal">{count}</span>
@@ -338,7 +338,7 @@ export function GameSetupModal({
                   );
                 })}
               </div>
-              <p className="text-[11px] text-slate-500 mt-2">
+              <p className="text-[11px] text-charcoal-500 mt-2">
                 {selectedTags.length === 0
                   ? 'Ingen valgt = alle sange.'
                   : 'Sange med mindst ét af de valgte tags.'}{' '}
@@ -352,13 +352,13 @@ export function GameSetupModal({
           {/* 4. Mål: antal kort eller på tid (not used in solo) */}
           {mode !== 'solo' && (
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               4. Mål: Hvordan vinder man?
             </label>
             <div className="grid grid-cols-2 gap-2.5 mb-2.5">
               {[
                 { value: 'cards' as const, icon: <Trophy className="w-4 h-4 text-amber-400" />, label: 'Antal kort', sub: 'Første hold til et antal kort vinder' },
-                { value: 'time' as const, icon: <Clock className="w-4 h-4 text-cyan-400" />, label: 'På tid', sub: 'Flest kort når tiden løber ud vinder' },
+                { value: 'time' as const, icon: <Clock className="w-4 h-4 text-mint-400" />, label: 'På tid', sub: 'Flest kort når tiden løber ud vinder' },
               ].map((opt) => (
                 <button
                   key={opt.value}
@@ -366,17 +366,17 @@ export function GameSetupModal({
                   onClick={() => setWinCondition(opt.value)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     winCondition === opt.value
-                      ? 'bg-slate-800 border-pink-500 ring-2 ring-pink-500/20'
-                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'bg-charcoal-800 border-coral-500 ring-2 ring-coral-500/20'
+                      : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                   }`}
                 >
                   <span className="flex items-center justify-between">
                     <span className="flex items-center gap-1.5 font-bold text-sm text-white">
                       {opt.icon} {opt.label}
                     </span>
-                    {winCondition === opt.value && <Check className="w-4 h-4 text-pink-400" />}
+                    {winCondition === opt.value && <Check className="w-4 h-4 text-coral-400" />}
                   </span>
-                  <span className="text-[11px] text-slate-400 block mt-0.5">{opt.sub}</span>
+                  <span className="text-[11px] text-charcoal-400 block mt-0.5">{opt.sub}</span>
                 </button>
               ))}
             </div>
@@ -393,8 +393,8 @@ export function GameSetupModal({
                   onClick={() => setTimeLimitMinutes(opt.min)}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     timeLimitMinutes === opt.min
-                      ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-md'
-                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'bg-mint-500 text-charcoal-950 border-mint-400 font-bold shadow-md'
+                      : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                   }`}
                 >
                   <span className="text-sm block">{opt.label}</span>
@@ -415,8 +415,8 @@ export function GameSetupModal({
                   onClick={() => setTargetCards(opt.count)}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     targetCards === opt.count
-                      ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md'
-                      : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'bg-amber-500 text-charcoal-950 border-amber-400 font-bold shadow-md'
+                      : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                   }`}
                 >
                   <span className="text-sm block">{opt.label}</span>
@@ -431,7 +431,7 @@ export function GameSetupModal({
           {/* 5. Spillere / Hold (not used in solo) */}
           {mode !== 'solo' && (
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               5. Hold & Spillere ({players.length})
             </label>
 
@@ -439,7 +439,7 @@ export function GameSetupModal({
               {players.map((p, idx) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 border border-slate-800"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-charcoal-950/60 border border-charcoal-800"
                 >
                   <div className="flex items-center gap-2.5">
                     <div
@@ -448,7 +448,7 @@ export function GameSetupModal({
                     >
                       {idx + 1}
                     </div>
-                    <span className="text-sm font-semibold text-slate-200">
+                    <span className="text-sm font-semibold text-charcoal-200">
                       {p.name}
                     </span>
                   </div>
@@ -457,7 +457,7 @@ export function GameSetupModal({
                     <button
                       type="button"
                       onClick={() => handleRemovePlayer(p.id)}
-                      className="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg hover:bg-slate-800 transition-colors"
+                      className="p-1.5 text-charcoal-500 hover:text-rose-400 rounded-lg hover:bg-charcoal-800 transition-colors"
                       title="Fjern spiller"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -475,13 +475,13 @@ export function GameSetupModal({
                 onChange={(e) => setNewPlayerName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddPlayer()}
                 placeholder="Tilføj nyt hold eller spillernavn..."
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-pink-500"
+                className="flex-1 bg-charcoal-950 border border-charcoal-800 rounded-xl px-3.5 py-2 text-sm text-charcoal-100 placeholder-charcoal-500 focus:outline-none focus:border-coral-500"
               />
               <button
                 type="button"
                 onClick={handleAddPlayer}
                 disabled={!newPlayerName.trim()}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-40 flex items-center gap-1 text-sm font-bold border border-slate-700 transition-colors"
+                className="px-4 py-2 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-charcoal-200 disabled:opacity-40 flex items-center gap-1 text-sm font-bold border border-charcoal-700 transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 <span>Tilføj</span>
@@ -492,7 +492,7 @@ export function GameSetupModal({
 
           {/* 6. Årstal */}
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-charcoal-400 block mb-2.5">
               6. Årstal
             </label>
             <div className="grid grid-cols-2 gap-2.5">
@@ -501,8 +501,8 @@ export function GameSetupModal({
                 onClick={() => setUniqueYearsOnly(true)}
                 className={`p-3 rounded-xl border text-center transition-all ${
                   uniqueYearsOnly
-                    ? 'bg-purple-600 text-white border-purple-500 font-bold shadow-md'
-                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    ? 'bg-lemon-400 text-charcoal-950 border-lemon-500 font-bold shadow-md'
+                    : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                 }`}
               >
                 <span className="text-xs sm:text-sm block">Kun unikke år</span>
@@ -514,8 +514,8 @@ export function GameSetupModal({
                 onClick={() => setUniqueYearsOnly(false)}
                 className={`p-3 rounded-xl border text-center transition-all ${
                   !uniqueYearsOnly
-                    ? 'bg-purple-600 text-white border-purple-500 font-bold shadow-md'
-                    : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    ? 'bg-lemon-400 text-charcoal-950 border-lemon-500 font-bold shadow-md'
+                    : 'bg-charcoal-950/50 border-charcoal-800 text-charcoal-300 hover:bg-charcoal-800'
                 }`}
               >
                 <span className="text-xs sm:text-sm block">Sange kan have samme år</span>
@@ -526,11 +526,11 @@ export function GameSetupModal({
         </div>
 
         {/* Footer */}
-        <div className="mt-7 pt-4 border-t border-slate-800 flex items-center justify-between">
+        <div className="mt-7 pt-4 border-t border-charcoal-800 flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+            className="px-4 py-2 text-xs font-bold text-charcoal-400 hover:text-white transition-colors"
           >
             Annuller
           </button>
@@ -538,7 +538,7 @@ export function GameSetupModal({
           <button
             type="button"
             onClick={handleSaveAndStart}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:scale-105"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-lemon-400 hover:bg-lemon-300 text-charcoal-950 font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:scale-105"
           >
             <Play className="w-4 h-4 fill-current" />
             <span>Start Spil</span>

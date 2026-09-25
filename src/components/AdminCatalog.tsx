@@ -91,7 +91,7 @@ const formatTime = (iso: string) =>
 const isActive = (s: Song) => s.active !== false;
 
 const inputCls =
-  'w-full rounded-lg bg-slate-800 px-2 py-1.5 text-sm text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500';
+  'w-full rounded-lg bg-charcoal-800 px-2 py-1.5 text-sm text-charcoal-100 outline-none ring-1 ring-charcoal-700 focus:ring-coral-500';
 
 export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [songs, setSongs] = useState<Song[] | null>(null);
@@ -331,16 +331,16 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   };
 
   return (
-    <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
-      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg bg-slate-800/60 px-3 py-2">
+    <section className="rounded-xl bg-charcoal-900 p-5 ring-1 ring-charcoal-800">
+      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg bg-charcoal-800/60 px-3 py-2">
         <button
           onClick={startRefresh}
           disabled={running}
-          className="rounded-lg bg-pink-600 px-3 py-1.5 text-sm font-bold hover:bg-pink-500 disabled:opacity-40"
+          className="rounded-lg bg-coral-600 px-3 py-1.5 text-sm font-bold hover:bg-coral-500 disabled:opacity-40"
         >
           {running ? 'Fornyer…' : 'Forny previews'}
         </button>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-charcoal-400">
           {running && refresh
             ? `Tjekker… ${refresh.checked} sange gennemgået, ${refresh.refreshed} fornyet`
             : refresh?.finishedAt
@@ -351,11 +351,11 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
         </p>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg bg-slate-800/60 px-3 py-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg bg-charcoal-800/60 px-3 py-2">
         <button
           onClick={exportShown}
           disabled={!songs || filtered.length === 0}
-          className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-bold hover:bg-slate-600 disabled:opacity-40"
+          className="rounded-lg bg-charcoal-700 px-3 py-1.5 text-sm font-bold hover:bg-charcoal-600 disabled:opacity-40"
         >
           Eksportér viste
         </button>
@@ -372,12 +372,12 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={busy}
-          className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-bold hover:bg-slate-600 disabled:opacity-40"
+          className="rounded-lg bg-charcoal-700 px-3 py-1.5 text-sm font-bold hover:bg-charcoal-600 disabled:opacity-40"
         >
           Importér JSON…
         </button>
         <label
-          className="flex items-center gap-1.5 text-xs text-slate-300"
+          className="flex items-center gap-1.5 text-xs text-charcoal-300"
           title="Tags i filen lægges til sangenes eksisterende tags i stedet for at erstatte dem"
         >
           <input
@@ -403,13 +403,13 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
             e.target.value = '';
           }}
         />
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-charcoal-400">
           Tip: filtrér på "Uden tags", eksportér fx 10, berig filen og importér den igen.
         </p>
       </div>
 
       {importReport && (
-        <div className="mb-4 rounded-lg bg-slate-800/60 p-3 text-sm ring-1 ring-slate-700">
+        <div className="mb-4 rounded-lg bg-charcoal-800/60 p-3 text-sm ring-1 ring-charcoal-700">
           <p className="font-semibold">
             {importReport.saved ? 'Importeret: ' : `Forhåndsvisning af ${importFile?.name ?? 'import'}: `}
             {importReport.updated} {importReport.saved ? 'opdateret' : 'opdateres'}, {importReport.created}{' '}
@@ -426,11 +426,11 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
             </ul>
           )}
           {importReport.changes.length > 0 && (
-            <ul className="mt-2 max-h-48 space-y-0.5 overflow-y-auto text-xs text-slate-300">
+            <ul className="mt-2 max-h-48 space-y-0.5 overflow-y-auto text-xs text-charcoal-300">
               {importReport.changes.map((c) => (
                 <li key={c.id}>
                   <span className={c.created ? 'text-emerald-400' : 'text-amber-300'}>{c.created ? '+' : '~'}</span>{' '}
-                  {c.artist} – {c.title}: <span className="text-slate-400">{c.fields.join(', ')}</span>
+                  {c.artist} – {c.title}: <span className="text-charcoal-400">{c.fields.join(', ')}</span>
                 </li>
               ))}
             </ul>
@@ -451,7 +451,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 setImportFile(null);
               }}
               disabled={busy}
-              className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-semibold hover:bg-slate-600"
+              className="rounded-lg bg-charcoal-700 px-3 py-1.5 text-sm font-semibold hover:bg-charcoal-600"
             >
               {importReport.saved ? 'Luk' : 'Annullér'}
             </button>
@@ -502,30 +502,30 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
       </div>
 
       {error && <p className="mb-3 text-sm text-amber-400">{error}</p>}
-      {!songs && !error && <p className="text-sm text-slate-400">Henter katalog…</p>}
+      {!songs && !error && <p className="text-sm text-charcoal-400">Henter katalog…</p>}
       {songs && (
-        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-charcoal-500">
           <p className="flex-1">
             Viser {filtered.length} af {songs.length} sange · {activeCount} aktive i spillene
           </p>
           <button
             onClick={() => setActive(filtered, true)}
             disabled={busy || filtered.every(isActive)}
-            className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+            className="rounded-lg px-2 py-1 text-charcoal-300 hover:bg-charcoal-800 disabled:opacity-40"
           >
             Aktivér viste
           </button>
           <button
             onClick={() => setActive(filtered, false)}
             disabled={busy || !filtered.some(isActive)}
-            className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+            className="rounded-lg px-2 py-1 text-charcoal-300 hover:bg-charcoal-800 disabled:opacity-40"
           >
             Deaktivér viste
           </button>
         </div>
       )}
 
-      <ul className="divide-y divide-slate-800">
+      <ul className="divide-y divide-charcoal-800">
         {filtered.map((song) =>
           editing?.id === song.id ? (
             <li key={song.id} className="space-y-2 py-3">
@@ -588,7 +588,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 <button
                   onClick={() => setEditing(null)}
                   disabled={busy}
-                  className="rounded-lg bg-slate-700 px-3 py-1.5 text-sm font-semibold hover:bg-slate-600"
+                  className="rounded-lg bg-charcoal-700 px-3 py-1.5 text-sm font-semibold hover:bg-charcoal-600"
                 >
                   Annullér
                 </button>
@@ -607,18 +607,18 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
               <button
                 onClick={() => togglePlay(song)}
                 title="Afspil preview"
-                className="h-8 w-8 shrink-0 rounded-full bg-slate-800 text-sm hover:bg-slate-700"
+                className="h-8 w-8 shrink-0 rounded-full bg-charcoal-800 text-sm hover:bg-charcoal-700"
               >
                 {playingId === song.id ? '⏸' : '▶'}
               </button>
               {song.artworkUrl ? (
                 <img src={song.artworkUrl} alt="" className="h-9 w-9 shrink-0 rounded" />
               ) : (
-                <div className="h-9 w-9 shrink-0 rounded bg-slate-800" />
+                <div className="h-9 w-9 shrink-0 rounded bg-charcoal-800" />
               )}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold">{song.title}</p>
-                <p className="truncate text-xs text-slate-400">
+                <p className="truncate text-xs text-charcoal-400">
                   {song.artist} · {song.category === 'danish' ? '🇩🇰' : '🌍'}
                 </p>
                 {song.tags && song.tags.length > 0 && (
@@ -628,7 +628,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                         key={tag}
                         onClick={() => setTagFilter(tag)}
                         title="Vis kun sange med dette tag"
-                        className="rounded-full bg-cyan-950/60 px-1.5 text-[10px] text-cyan-300 ring-1 ring-cyan-800 hover:bg-cyan-900"
+                        className="rounded-full bg-mint-950/60 px-1.5 text-[10px] text-mint-300 ring-1 ring-mint-800 hover:bg-mint-900"
                       >
                         {tag}
                       </button>
@@ -636,12 +636,12 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                   </div>
                 )}
               </div>
-              <span className="font-mono text-sm font-black text-pink-400">{song.year}</span>
+              <span className="font-mono text-sm font-black text-coral-400">{song.year}</span>
               <button
                 onClick={() => refreshSong(song)}
                 disabled={busy || refreshingId !== null}
                 title="Slå preview og cover op i iTunes igen"
-                className="rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+                className="rounded-lg px-2 py-1 text-xs text-charcoal-300 hover:bg-charcoal-800 disabled:opacity-40"
               >
                 {refreshingId === song.id ? '…' : 'Forny'}
               </button>
@@ -651,7 +651,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                   setTagsText((song.tags ?? []).join(', '));
                 }}
                 disabled={busy}
-                className="rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-slate-800"
+                className="rounded-lg px-2 py-1 text-xs text-charcoal-300 hover:bg-charcoal-800"
               >
                 Redigér
               </button>

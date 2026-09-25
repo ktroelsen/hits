@@ -66,7 +66,7 @@ export function PlacementPicker({
         <button
           onClick={() => onSubmit(slot, year)}
           disabled={disabled}
-          className="flex-1 rounded-full bg-pink-600 px-4 py-4 text-lg font-bold text-white hover:bg-pink-500 disabled:opacity-40"
+          className="flex-1 rounded-full bg-coral-600 px-4 py-4 text-lg font-bold text-white hover:bg-coral-500 disabled:opacity-40"
         >
           Send svar
         </button>
@@ -76,8 +76,8 @@ export function PlacementPicker({
 
       {/* Placement board — driven by the year, but can be overridden by tapping a slot */}
       <div>
-        <p className="mb-2 text-sm font-semibold text-slate-300">Placering på tidslinjen</p>
-        <div className="w-full rounded-2xl bg-slate-900/70 border border-slate-800 p-2.5 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1">
+        <p className="mb-2 text-sm font-semibold text-charcoal-300">Placering på tidslinjen</p>
+        <div className="w-full rounded-2xl bg-charcoal-900/70 border border-charcoal-800 p-2.5 flex flex-wrap items-start justify-center content-start gap-y-2 gap-x-1">
           <TimelineSlot
             index={0}
             label={slotLabel(0)}
