@@ -8,12 +8,14 @@ import { appleMusicUrl } from '../services/audioService';
 // (artwork, title, artist, year) plus every player's year guess (closest first) and round points.
 // Exact guesses get stars and fireworks. Closes itself after `durationMs`.
 
-/** True once per revealed round, until `close` is called. */
+/** True once per revealed round, until `close` is called. The last round is revealed
+ *  straight into "finished", so that status shows the pop-up too. */
 export function useRevealOverlay(state: GameState | null) {
   const [openRound, setOpenRound] = useState<number | null>(null);
   const [shownRound, setShownRound] = useState<number | null>(null);
   const round = state?.round ?? null;
-  const revealed = state?.status === 'revealed' && round != null;
+  const revealed =
+    (state?.status === 'revealed' || state?.status === 'finished') && round?.status === 'revealed';
 
   useEffect(() => {
     if (revealed && round.number !== shownRound) {

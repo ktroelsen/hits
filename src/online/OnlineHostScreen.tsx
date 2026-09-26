@@ -303,7 +303,7 @@ export function OnlineHostScreen() {
                   disabled={busy}
                   className="mt-2 w-full rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:opacity-40"
                 >
-                  {state.currentRound >= state.targetRounds ? 'Afslut spil nu' : 'Start næste runde nu'}
+                  Start næste runde nu
                 </button>
               </>
             ) : (
@@ -312,7 +312,7 @@ export function OnlineHostScreen() {
                 disabled={busy}
                 className="mt-6 w-full rounded-lg bg-emerald-600 px-4 py-3 font-bold hover:bg-emerald-500 disabled:opacity-40"
               >
-                {state.currentRound >= state.targetRounds ? 'Afslut spil' : 'Næste runde'}
+                Næste runde
               </button>
             )}
           </section>
