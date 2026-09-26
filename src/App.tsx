@@ -63,6 +63,11 @@ const SOLO_PLAYER: Player = {
   score: 0,
 };
 
+// Single player always starts from the same card ("Oops!... I Did It Again", Britney
+// Spears, 2000), so every solo run begins alike. Falls back to a normal draw if the
+// song is ever removed from the catalog.
+const SOLO_STARTER_SONG_ID = 'int-165';
+
 // Draw a mystery song whose year is NOT already on the timeline, so no two cards
 // ever share a year. Pops colliding songs off the deck; if the deck runs dry it
 // rebuilds from `pool` (excluding already-used ids and taken years). Only if no
@@ -188,8 +193,16 @@ export default function App() {
       // Session order (least recently heard first); the deck is popped from the end
       const shuffled = orderSongs(filtered).reverse();
 
-      // Start with 1 revealed starter song in the common shared timeline
-      const starterSong = shuffled.pop();
+      // Start with 1 revealed starter song in the common shared timeline. Solo uses its
+      // fixed starter (regardless of the song filters) and keeps it out of the deck.
+      const soloStarter = isSolo
+        ? getActiveSongs().find((s) => s.id === SOLO_STARTER_SONG_ID)
+        : undefined;
+      if (soloStarter) {
+        const i = shuffled.findIndex((s) => s.id === soloStarter.id);
+        if (i >= 0) shuffled.splice(i, 1);
+      }
+      const starterSong = soloStarter ?? shuffled.pop();
       if (starterSong && activeSettings.mode !== 'dj') markPlayed(starterSong);
       const initialSharedTimeline: TimelineEntry[] = starterSong
         ? [
