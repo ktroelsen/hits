@@ -94,6 +94,9 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   if (!player) {
     return (
       <Shell>
+        <a href="/" className="mb-4 inline-block text-sm font-semibold text-slate-400 hover:text-slate-200">
+          ← Forside
+        </a>
         <h1 className="text-2xl font-extrabold">Join spil</h1>
         <p className="mt-1 text-sm text-slate-400">
           Kode: <span className="font-mono text-pink-400">{code}</span>

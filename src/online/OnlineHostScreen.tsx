@@ -65,6 +65,11 @@ export function OnlineHostScreen() {
         <RevealOverlay round={round} players={state.players} timeline={state.timeline} onClose={overlay.close} />
       )}
       <div className="mx-auto max-w-3xl">
+        {!code && (
+          <a href="/" className="mb-4 inline-block text-sm font-semibold text-slate-400 hover:text-slate-200">
+            ← Forside
+          </a>
+        )}
         <header className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold">🎵 Hits — Online</h1>
           {state && (

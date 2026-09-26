@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft } from 'lucide-react';
+import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft, Download, Share } from 'lucide-react';
 import { GameSettings } from '../types';
 import type { HighscoreEntry } from '../services/highscoreStore';
+import { useInstallOption } from '../services/installPrompt';
 
 interface StartScreenProps {
   settings: GameSettings;
@@ -25,6 +26,7 @@ export function StartScreen({
   // Online button expands into "create" / "join"; join asks for the 4-digit code.
   const [onlineMode, setOnlineMode] = useState<'closed' | 'choose' | 'join'>('closed');
   const [joinCode, setJoinCode] = useState('');
+  const installOption = useInstallOption();
   const codeValid = /^\d{4}$/.test(joinCode);
 
   const joinGame = () => {
@@ -194,6 +196,24 @@ export function StartScreen({
             Se sange
           </button>
         </div>
+
+        {/* Install as app (PWA): button where the browser supports it, hint on iPhone */}
+        {installOption.kind === 'prompt' && (
+          <button
+            onClick={installOption.install}
+            className="mt-6 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-cyan-300 hover:text-cyan-200 bg-cyan-950/30 hover:bg-cyan-950/60 border border-cyan-800/50 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Installer som app
+          </button>
+        )}
+        {installOption.kind === 'ios' && (
+          <p className="mt-6 flex flex-wrap items-center justify-center gap-1 text-xs text-slate-400">
+            📲 Få HITS som app: tryk
+            <Share className="w-3.5 h-3.5 text-cyan-400" aria-label="Del" />
+            og vælg <span className="font-semibold text-slate-300">Føj til hjemmeskærm</span>
+          </p>
+        )}
       </div>
     </div>
   );
