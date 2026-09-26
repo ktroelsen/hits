@@ -269,44 +269,87 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   );
 }
 
+// A tiny silent WAV, used to "unlock" the audio element on the player's first tap.
+const SILENT_WAV = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+
 // Plays one round's preview on this phone (individual mode, or the host's phone as the
 // speaker in shared mode), with the same fade-in/fade-out envelope as the host screen.
-// A new src (next round) or null (round over) stops the current clip.
+// A new round starts its song automatically; null (round over) stops it.
+//
+// One audio element is kept for the whole game: phones (iPhone in particular) only let
+// a script start sound on an element a tap has started before. The player's first tap
+// anywhere (Join, Start, Videre …) plays a silent clip on it, after which every new
+// round can autoplay. If autoplay is still blocked (e.g. after a reload), the Afspil
+// button works as before.
 function useRoundAudio(src: string | null | undefined, roundNumber: number | undefined) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const detachFadeRef = useRef<(() => void) | null>(null);
   const [playing, setPlaying] = useState(false);
 
+  // Create the element once, and unlock it on the first user gesture.
   useEffect(() => {
-    if (!src) return;
-    const audio = new Audio(src);
+    const audio = new Audio();
+    audioRef.current = audio;
     const onEnded = () => setPlaying(false);
     audio.addEventListener('ended', onEnded);
-    audioRef.current = audio;
+
+    let unlocked = false;
+    const unlock = () => {
+      if (unlocked) return;
+      unlocked = true;
+      removeUnlockListeners();
+      // Only when no round song is loaded — otherwise the tap is on Afspil, which plays it.
+      if (audio.src && audio.src !== SILENT_WAV) return;
+      audio.src = SILENT_WAV;
+      audio.play().then(() => audio.pause()).catch(() => {});
+    };
+    const events = ['pointerdown', 'touchend', 'keydown'] as const;
+    const removeUnlockListeners = () => events.forEach((e) => window.removeEventListener(e, unlock, true));
+    events.forEach((e) => window.addEventListener(e, unlock, true));
+
     return () => {
+      removeUnlockListeners();
       audio.removeEventListener('ended', onEnded);
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const start = useCallback((audio: HTMLAudioElement) => {
+    resetFade(audio);
+    audio.currentTime = 0;
+    detachFadeRef.current?.();
+    detachFadeRef.current = attachFadeEnvelope(audio);
+    return audio.play();
+  }, []);
+
+  // New round: load its song and try to start it right away.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !src) return;
+    audio.src = src;
+    start(audio)
+      .then(() => setPlaying(true))
+      .catch(() => setPlaying(false)); // autoplay blocked: the Afspil button still works
+    return () => {
       audio.pause();
       detachFadeRef.current?.();
       detachFadeRef.current = null;
-      audioRef.current = null;
       setPlaying(false);
     };
-  }, [src, roundNumber]);
+  }, [src, roundNumber, start]);
 
   const toggle = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !src) return;
     if (playing) {
       fadeOutAndPause(audio).then(() => setPlaying(false));
       return;
     }
-    resetFade(audio);
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-    detachFadeRef.current?.();
-    detachFadeRef.current = attachFadeEnvelope(audio);
+    if (audio.src !== src) audio.src = src;
+    start(audio).catch(() => {});
     setPlaying(true);
-  }, [playing]);
+  }, [playing, src, start]);
 
   return { available: !!src, playing, toggle };
 }
