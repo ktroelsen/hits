@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
 import { gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
@@ -41,6 +41,14 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   const [busy, setBusy] = useState(false);
   const { state } = useGameState(player ? code : null);
   const overlay = useRevealOverlay(state);
+  // This phone plays the song itself in individual mode, and when the host plays along
+  // in shared mode (their phone is the speaker). The audio lives here, not in the play
+  // button, so it keeps playing after the answer is sent; it stops when the round ends.
+  const playsLocally = state?.playbackMode === 'individual' || isHost;
+  const roundAudio = useRoundAudio(
+    playsLocally && state?.status === 'playing' ? state.round?.audioUrl : null,
+    state?.round?.number,
+  );
 
   const join = useCallback(async () => {
     if (!name.trim()) return;
@@ -115,6 +123,9 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   const round = state?.round ?? null;
   // Shared playback with the host playing along from a phone: that phone is the speaker.
   const hostIsSpeaker = isHost && state?.playbackMode !== 'individual';
+  const audioButton = roundAudio.available ? (
+    <AudioToggle playing={roundAudio.playing} onToggle={roundAudio.toggle} />
+  ) : undefined;
   const answered = round?.answeredPlayerIds.includes(player.id) ?? false;
   const myResult = round?.results.find((r) => r.playerId === player.id) ?? null;
 
@@ -151,15 +162,11 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
       {state?.status === 'playing' && round && (
         <div className="mt-6">
           {hostIsSpeaker && round.audioUrl && (
-            <div className="mb-4">
-              <p className="mb-2 text-sm text-slate-400">🔊 Din telefon er højttaler — tryk play, så alle kan høre sangen.</p>
-              <div className="flex">
-                <LocalAudioPlayer key={round.number} src={round.audioUrl} />
-              </div>
-            </div>
+            <p className="mb-4 text-sm text-slate-400">🔊 Din telefon er højttaler — tryk play, så alle kan høre sangen.</p>
           )}
           {answered ? (
             <Centered>
+              {audioButton && <div className="mb-6 flex">{audioButton}</div>}
               <p className="text-lg">Svar sendt ✅</p>
               <p className="mt-2 text-sm text-slate-400">
                 Venter på de andre… ({round.answeredPlayerIds.length}/{state.players.length})
@@ -187,11 +194,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
                 key={round.number}
                 timeline={state.timeline}
                 onSubmit={submitAnswer}
-                audioControl={
-                  state.playbackMode === 'individual' && round.audioUrl ? (
-                    <LocalAudioPlayer key={round.number} src={round.audioUrl} />
-                  ) : undefined
-                }
+                audioControl={audioButton}
               />
             </>
           )}
@@ -237,7 +240,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
               onClick={markReady}
               className="mt-6 w-full rounded-lg bg-emerald-600 px-4 py-3 text-lg font-bold text-white hover:bg-emerald-500"
             >
-              {state.currentRound >= state.targetRounds ? 'Se slutstilling' : 'Videre til næste sang'}
+              Videre til næste sang
             </button>
           )}
         </Centered>
@@ -263,13 +266,29 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
   );
 }
 
-// Play/stop control for individual playback mode: each player streams the round's
-// preview locally instead of hearing it from the host's speaker. Reuses the same
-// fade-in/fade-out envelope the host screen applies to its <audio> element.
-function LocalAudioPlayer({ src }: { src: string }) {
+// Plays one round's preview on this phone (individual mode, or the host's phone as the
+// speaker in shared mode), with the same fade-in/fade-out envelope as the host screen.
+// A new src (next round) or null (round over) stops the current clip.
+function useRoundAudio(src: string | null | undefined, roundNumber: number | undefined) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const cleanupRef = useRef<(() => void) | null>(null);
+  const detachFadeRef = useRef<(() => void) | null>(null);
   const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (!src) return;
+    const audio = new Audio(src);
+    const onEnded = () => setPlaying(false);
+    audio.addEventListener('ended', onEnded);
+    audioRef.current = audio;
+    return () => {
+      audio.removeEventListener('ended', onEnded);
+      audio.pause();
+      detachFadeRef.current?.();
+      detachFadeRef.current = null;
+      audioRef.current = null;
+      setPlaying(false);
+    };
+  }, [src, roundNumber]);
 
   const toggle = useCallback(() => {
     const audio = audioRef.current;
@@ -281,30 +300,24 @@ function LocalAudioPlayer({ src }: { src: string }) {
     resetFade(audio);
     audio.currentTime = 0;
     audio.play().catch(() => {});
-    cleanupRef.current?.();
-    cleanupRef.current = attachFadeEnvelope(audio);
+    detachFadeRef.current?.();
+    detachFadeRef.current = attachFadeEnvelope(audio);
     setPlaying(true);
   }, [playing]);
 
+  return { available: !!src, playing, toggle };
+}
+
+function AudioToggle({ playing, onToggle }: { playing: boolean; onToggle: () => void }) {
   return (
-    <div className="flex flex-1">
-      <audio
-        ref={audioRef}
-        src={src}
-        onEnded={() => setPlaying(false)}
-        className="hidden"
-      />
-      <button
-        onClick={toggle}
-        className={`flex-1 rounded-full px-4 py-4 text-lg font-bold ${
-          playing
-            ? 'bg-rose-600 hover:bg-rose-500'
-            : 'bg-emerald-600 hover:bg-emerald-500'
-        }`}
-      >
-        {playing ? '⏹ Stop' : '▶️ Afspil'}
-      </button>
-    </div>
+    <button
+      onClick={onToggle}
+      className={`flex-1 rounded-full px-4 py-4 text-lg font-bold ${
+        playing ? 'bg-rose-600 hover:bg-rose-500' : 'bg-emerald-600 hover:bg-emerald-500'
+      }`}
+    >
+      {playing ? '⏹ Stop' : '▶️ Afspil'}
+    </button>
   );
 }
 

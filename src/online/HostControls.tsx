@@ -26,7 +26,6 @@ export function HostControls({ code, state }: { code: string; state: GameState }
     'w-full rounded-lg px-4 py-3 text-lg font-bold text-white disabled:opacity-40';
   const fallback =
     'w-full rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-700 disabled:opacity-40';
-  const lastRound = state.currentRound >= state.targetRounds;
 
   let content: React.ReactNode = null;
   if (state.status === 'lobby') {
@@ -63,9 +62,7 @@ export function HostControls({ code, state }: { code: string; state: GameState }
         disabled={busy}
         className={individual ? fallback : `bg-emerald-600 hover:bg-emerald-500 ${primary}`}
       >
-        {individual
-          ? lastRound ? 'Afslut spil nu' : 'Start næste runde nu'
-          : lastRound ? 'Afslut spil' : 'Næste runde'}
+        {individual ? 'Start næste runde nu' : 'Næste runde'}
       </button>
     );
   }

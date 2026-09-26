@@ -246,7 +246,9 @@ public static class GameEndpoints
         }
 
         round.Status = RoundStatus.Revealed;
-        game.Status = GameStatus.Revealed;
+        // The last round goes straight to the final standings: no "Videre"/"Næste runde"
+        // step in between. Clients still show the reveal pop-up for it (useRevealOverlay).
+        game.Status = game.CurrentRound >= game.TargetRounds ? GameStatus.Finished : GameStatus.Revealed;
         return null;
     }
 
