@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { attachFadeEnvelope } from '../services/audioFade';
-import { gameApi, useGameState, PlaybackMode, StatePlayer } from '../services/gameApi';
+import { gameApi, useGameState, PlaybackMode, StatePlayer, TimelineSong } from '../services/gameApi';
+import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
 import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
@@ -64,7 +65,8 @@ export function OnlineHostScreen() {
       {overlay.visible && state && round && (
         <RevealOverlay round={round} players={state.players} timeline={state.timeline} onClose={overlay.close} />
       )}
-      <div className="mx-auto max-w-3xl">
+      {/* Wider once the game runs, so the card board has room on the big screen */}
+      <div className={`mx-auto ${state && state.status !== 'lobby' ? 'max-w-6xl' : 'max-w-3xl'}`}>
         {!code && (
           <a href="/" className="mb-4 inline-block text-sm font-semibold text-slate-400 hover:text-slate-200">
             ← Forside
@@ -376,18 +378,37 @@ function PlayerChips({ players }: { players: StatePlayer[] }) {
   );
 }
 
-function Timeline({ songs }: { songs: { id: string; title: string; artist: string; year: number }[] }) {
-  if (songs.length === 0) {
-    return <p className="mt-4 text-center text-sm text-slate-500">Tidslinjen er tom endnu.</p>;
-  }
+// Same board look as the single-device game's "Spilleplade": the shared timeline
+// laid out as classic HitsterCards that wrap onto multiple rows.
+function Timeline({ songs }: { songs: TimelineSong[] }) {
   return (
-    <div className="mt-4 flex flex-wrap items-stretch gap-2">
-      {songs.map((s) => (
-        <div key={s.id} className="rounded-lg bg-slate-800 px-3 py-2 text-center ring-1 ring-slate-700">
-          <p className="text-lg font-black text-pink-400">{s.year}</p>
-          <p className="max-w-[8rem] truncate text-xs text-slate-300">{s.title}</p>
+    <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/60 p-3 shadow-inner">
+      <div className="mb-3 flex items-center gap-2.5 border-b border-slate-800 pb-2">
+        <div className="h-3 w-3 shrink-0 rounded-full bg-pink-500 ring-4 ring-pink-500/20" />
+        <h3 className="font-display text-base font-bold text-white sm:text-lg">Spilleplade</h3>
+        <span className="ml-auto text-xs font-semibold text-slate-400">{songs.length} kort</span>
+      </div>
+      {songs.length === 0 ? (
+        <p className="py-6 text-center text-sm text-slate-500">Tidslinjen er tom endnu.</p>
+      ) : (
+        <div className="flex flex-wrap content-start items-start justify-center gap-2">
+          {songs.map((s) => (
+            <HitsterCard
+              key={s.id}
+              song={{
+                id: s.id,
+                title: s.title,
+                artist: s.artist,
+                year: s.year,
+                decade: decadeForYear(s.year),
+                artworkUrl: s.artworkUrl ?? undefined,
+              }}
+              isRevealed
+              status="neutral"
+            />
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
