@@ -636,7 +636,6 @@ export default function App() {
         <SongCatalogModal
           isOpen={isCatalogOpen}
           onClose={() => setIsCatalogOpen(false)}
-          onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
           removedTick={removedTick}
         />
       </div>
@@ -741,7 +740,6 @@ export default function App() {
       <SongCatalogModal
         isOpen={isCatalogOpen}
         onClose={() => setIsCatalogOpen(false)}
-        onMarkMissingMusic={(s) => handleMarkMissingMusic(s)}
         removedTick={removedTick}
       />
     </div>

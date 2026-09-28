@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { X, Search, Play, Pause, Disc, Trash2, ClipboardCopy } from 'lucide-react';
+import { X, Search, Play, Pause, Disc, ClipboardCopy } from 'lucide-react';
 import { getActiveSongs } from '../../services/songsService';
 import { getRemovedIds, clearRemoved } from '../../services/removalStore';
 import { fetchSongAudioPreview } from '../../services/audioService';
@@ -8,14 +8,12 @@ import { Song } from '../../types';
 interface SongCatalogModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onMarkMissingMusic?: (song: Song) => void;
   removedTick?: number;
 }
 
 export function SongCatalogModal({
   isOpen,
   onClose,
-  onMarkMissingMusic,
   removedTick = 0,
 }: SongCatalogModalProps) {
   const [search, setSearch] = useState('');
@@ -199,16 +197,6 @@ export function SongCatalogModal({
                       <Play className="w-4 h-4 fill-current" />
                     )}
                   </button>
-
-                  {onMarkMissingMusic && (
-                    <button
-                      onClick={() => onMarkMissingMusic(song)}
-                      className="p-2 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white transition-all"
-                      title="Markér som mangler musik og skjul fra spillet"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  )}
                 </div>
               </div>
             ))
