@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Disc, Settings, HelpCircle, Volume2, VolumeX, RotateCcw, Sparkles, ListMusic } from 'lucide-react';
+import { Settings, HelpCircle, Volume2, VolumeX, RotateCcw, Sparkles, ListMusic } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 import { sfx } from '../services/audioService';
 import { GameSettings } from '../types';
 
@@ -42,9 +43,7 @@ export function Navbar({
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-pink-500/20">
-              <Disc className="w-6 h-6 text-white animate-[spin_8s_linear_infinite]" />
-            </div>
+            <BrandLogo className="w-10 h-10 rounded-2xl shadow-lg shadow-pink-500/20" />
             {/* Tiny turntable arm */}
             <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 shadow-xs" />
           </div>
