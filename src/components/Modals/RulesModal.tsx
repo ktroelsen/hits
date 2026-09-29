@@ -92,10 +92,10 @@ export function RulesModal({ isOpen, onClose }: RulesModalProps) {
             <div>
               <h4 className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
                 <Coins className="w-4 h-4 text-amber-400" />
-                HITS-tokens (Mønter)
+                Mønter
               </h4>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                Du starter med 2 HITS-tokens. Du kan bruge 1 token til at <strong>skifte sang</strong> hvis du er helt på bar bund. Gætter du det nøjagtige årstal i Ekspert-mode, vinder du en ekstra token!
+                Du starter med 2 mønter. Gætter du det nøjagtige årstal, vinder du en ekstra mønt. En mønt kan bruges til enten at <strong>afsløre kunstner og titel</strong> eller til at <strong>trække en ny sang</strong>. Har du ingen mønter tilbage, kan du ikke gøre det mere.
               </p>
             </div>
           </div>
