@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft, Download, Share } from 'lucide-react';
+import { Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft, Download, Share } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 import { GameSettings } from '../types';
 import type { BestScores } from '../services/highscoreStore';
 import { useInstallOption } from '../services/installPrompt';
@@ -41,9 +42,7 @@ export function StartScreen({
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-lg w-full">
         {/* Brand logo */}
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-pink-500 via-purple-600 to-cyan-400 flex items-center justify-center shadow-xl shadow-pink-500/20 mb-6">
-          <Disc className="w-12 h-12 text-white animate-[spin_8s_linear_infinite]" />
-        </div>
+        <BrandLogo className="w-20 h-20 rounded-3xl shadow-xl shadow-pink-500/20 mb-6" />
 
         <h1 className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-display tracking-wider">
           HITS
