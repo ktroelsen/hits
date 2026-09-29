@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { X, Search, Play, Pause, Disc, ClipboardCopy } from 'lucide-react';
+import { X, Search, Play, Pause, ClipboardCopy } from 'lucide-react';
+import { BrandLogo } from '../BrandLogo';
 import { getActiveSongs } from '../../services/songsService';
 import { getRemovedIds, clearRemoved } from '../../services/removalStore';
 import { fetchSongAudioPreview } from '../../services/audioService';
@@ -90,7 +91,7 @@ export function SongCatalogModal({
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div>
             <h3 className="text-xl font-black text-white font-display flex items-center gap-2">
-              <Disc className="w-5 h-5 text-pink-400" />
+              <BrandLogo className="w-6 h-6 rounded-md shrink-0" spinning={false} />
               HITS Sangbibliotek ({activeSongs.length} sange)
             </h3>
             <p className="text-xs text-slate-400">
