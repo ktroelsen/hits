@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Disc, Play, RefreshCw, Eye, EyeOff, Sparkles, Volume2, HelpCircle } from 'lucide-react';
+import { Play, RefreshCw, Eye, EyeOff, Sparkles, Volume2, HelpCircle } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 import { Song, GameSettings } from '../types';
 import { TurntablePlayer } from './TurntablePlayer';
 import { HitsterCard } from './HitsterCard';
@@ -54,9 +55,7 @@ export function DJCompanionMode({ songs, settings, onExitDJMode }: DJCompanionMo
       {/* Top Banner */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
-            <Disc className="w-6 h-6 animate-spin" style={{ animationDuration: '4s' }} />
-          </div>
+          <BrandLogo className="w-10 h-10 rounded-2xl shrink-0" />
           <div>
             <h2 className="text-lg font-bold text-white font-display">
               HITS DJ Companion & Fri Quiz

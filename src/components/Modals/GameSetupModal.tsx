@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { X, Play, Users, Disc, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
+import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
+import { BrandLogo } from '../BrandLogo';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 import { getActiveSongs, matchesSettings } from '../../services/songsService';
 
@@ -119,9 +120,7 @@ export function GameSetupModal({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white shadow-md">
-              <Disc className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
-            </div>
+            <BrandLogo className="w-9 h-9 rounded-xl shadow-md shrink-0" />
             <div>
               <h3 className="text-xl font-black text-white font-display">
                 HITS Spilindstillinger
