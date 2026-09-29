@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hits.Api.Gameplay;
 
-// Shared single-player highscore list. Open for players to post; admins can delete.
+// Shared single-player highscore lists: all-time and this week (resets Monday 00:00
+// Danish time). Every score keeps its name, score and timestamp, so the weekly list
+// is the same data filtered on CreatedAt — nothing is deleted at the reset.
+// Open for players to post; admins can delete.
 public static class HighscoreEndpoints
 {
     private const int MaxNameLength = 20;
@@ -16,7 +19,7 @@ public static class HighscoreEndpoints
     {
         var scores = app.MapGroup("/api/highscores");
 
-        scores.MapGet("/", async (AppDbContext db) => await TopAsync(db));
+        scores.MapGet("/", async (AppDbContext db) => await ListsAsync(db));
 
         scores.MapPost("/", async (SubmitScoreRequest req, AppDbContext db) =>
         {
@@ -34,7 +37,7 @@ public static class HighscoreEndpoints
                 CreatedAt = DateTime.UtcNow,
             });
             await db.SaveChangesAsync();
-            return Results.Ok(await TopAsync(db));
+            return Results.Ok(await ListsAsync(db));
         });
 
         scores.MapDelete("/{id:guid}", async (Guid id, AppDbContext db) =>
@@ -47,11 +50,20 @@ public static class HighscoreEndpoints
         }).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
     }
 
-    private static async Task<List<SoloScore>> TopAsync(AppDbContext db)
+    private static async Task<HighscoreLists> ListsAsync(AppDbContext db)
+    {
+        var weekStart = WeekStartUtc(DateTime.UtcNow);
+        return new HighscoreLists(
+            await TopAsync(db.SoloScores),
+            await TopAsync(db.SoloScores.Where(s => s.CreatedAt >= weekStart)),
+            weekStart);
+    }
+
+    private static async Task<List<SoloScore>> TopAsync(IQueryable<SoloScore> query)
     {
         // SQLite can't ORDER BY DateTime server-side reliably; the list is small, so
         // order by score in SQL and break ties by date in memory.
-        var top = await db.SoloScores
+        var top = await query
             .OrderByDescending(s => s.Score)
             .Take(TopCount * 5)
             .ToListAsync();
@@ -62,5 +74,29 @@ public static class HighscoreEndpoints
             .ToList();
     }
 
+    // Monday 00:00 (Danish time) of the week containing utcNow, returned as UTC.
+    internal static DateTime WeekStartUtc(DateTime utcNow)
+    {
+        var local = TimeZoneInfo.ConvertTimeFromUtc(utcNow, DanishTime);
+        var daysSinceMonday = ((int)local.DayOfWeek + 6) % 7;
+        var monday = DateTime.SpecifyKind(local.Date.AddDays(-daysSinceMonday), DateTimeKind.Unspecified);
+        return TimeZoneInfo.ConvertTimeToUtc(monday, DanishTime);
+    }
+
+    private static readonly TimeZoneInfo DanishTime = FindDanishTime();
+
+    // IANA id works on Linux and on Windows with ICU; the Windows id is the fallback for IIS.
+    private static TimeZoneInfo FindDanishTime()
+    {
+        foreach (var id in new[] { "Europe/Copenhagen", "Romance Standard Time" })
+        {
+            try { return TimeZoneInfo.FindSystemTimeZoneById(id); }
+            catch (TimeZoneNotFoundException) { }
+            catch (InvalidTimeZoneException) { }
+        }
+        return TimeZoneInfo.Utc;
+    }
+
     public record SubmitScoreRequest(string? Name, int Score);
+    public record HighscoreLists(List<SoloScore> AllTime, List<SoloScore> Weekly, DateTime WeekStart);
 }

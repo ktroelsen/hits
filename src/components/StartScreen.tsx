@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Disc, Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft, Download, Share } from 'lucide-react';
 import { GameSettings } from '../types';
-import type { HighscoreEntry } from '../services/highscoreStore';
+import type { BestScores } from '../services/highscoreStore';
 import { useInstallOption } from '../services/installPrompt';
 
 interface StartScreenProps {
   settings: GameSettings;
-  highscore: HighscoreEntry | null;
+  highscores: BestScores;
   onStart: () => void;
   onStartSolo: () => void;
   onOpenSettings: () => void;
@@ -16,7 +16,7 @@ interface StartScreenProps {
 
 export function StartScreen({
   settings,
-  highscore,
+  highscores,
   onStart,
   onStartSolo,
   onOpenSettings,
@@ -87,9 +87,14 @@ export function StartScreen({
         </button>
         <p className="mt-2 text-slate-400 text-sm">
           Spil alene · én fejl og du er ude
-          {highscore && (
+          {highscores.weekly && (
             <>
-              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscore.score} ({highscore.name})</span>
+              {' '}· <span className="text-amber-300 font-bold">Ugens highscore: {highscores.weekly.score} ({highscores.weekly.name})</span>
+            </>
+          )}
+          {highscores.allTime && (
+            <>
+              {' '}· <span className="text-amber-300 font-bold">Highscore: {highscores.allTime.score} ({highscores.allTime.name})</span>
             </>
           )}
         </p>

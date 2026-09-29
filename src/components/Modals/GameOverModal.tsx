@@ -1,24 +1,25 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { HeartCrack, Trophy, RotateCcw, LogOut, Save } from 'lucide-react';
-import { getSavedName, MAX_NAME_LENGTH, type HighscoreEntry } from '../../services/highscoreStore';
+import { getSavedName, MAX_NAME_LENGTH, type BestScores, type RecordKind } from '../../services/highscoreStore';
 
 interface GameOverModalProps {
   isOpen: boolean;
   score: number;
-  highscore: HighscoreEntry | null;
-  isNewRecord: boolean;
+  highscores: BestScores;
+  newRecord: RecordKind;
   onSubmitName: (name: string) => Promise<void>;
   onRestart: () => void;
   onExit: () => void;
 }
 
 // Shown when a solo game ends (wrong placement with no lives left). On a new
-// record the player enters their name so it is saved to the shared highscore.
+// record (all-time or this week's) the player enters their name so it is saved
+// to the shared highscore.
 export function GameOverModal({
   isOpen,
   score,
-  highscore,
-  isNewRecord,
+  highscores,
+  newRecord,
   onSubmitName,
   onRestart,
   onExit,
@@ -35,6 +36,8 @@ export function GameOverModal({
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const isNewRecord = newRecord !== null;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -74,22 +77,25 @@ export function GameOverModal({
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-display">
-            {isNewRecord ? 'Ny rekord!' : 'Game over'}
+            {newRecord === 'allTime' ? 'Ny rekord!' : newRecord === 'weekly' ? 'Ugens rekord!' : 'Game over'}
           </h2>
           <p className="text-sm text-slate-400 mt-1">Du har ikke flere liv tilbage.</p>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
+          <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="p-3 sm:p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
               <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Score</div>
-              <div className="text-4xl font-black text-white font-mono mt-1">{score}</div>
+              <div className="text-3xl sm:text-4xl font-black text-white font-mono mt-1">{score}</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30">
-              <div className="text-xs font-bold uppercase tracking-wider text-amber-300">Highscore</div>
-              <div className="text-4xl font-black text-amber-400 font-mono mt-1">{highscore?.score ?? 0}</div>
-              {highscore && (
-                <div className="text-xs font-bold text-amber-300/80 mt-1 truncate">{highscore.name}</div>
-              )}
-            </div>
+            {[
+              { label: 'Ugens', entry: highscores.weekly },
+              { label: 'Highscore', entry: highscores.allTime },
+            ].map(({ label, entry }) => (
+              <div key={label} className="p-3 sm:p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30 min-w-0">
+                <div className="text-xs font-bold uppercase tracking-wider text-amber-300 truncate">{label}</div>
+                <div className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">{entry?.score ?? 0}</div>
+                {entry && <div className="text-xs font-bold text-amber-300/80 mt-1 truncate">{entry.name}</div>}
+              </div>
+            ))}
           </div>
 
           {showNameForm && (

@@ -1,6 +1,6 @@
 import { Clock, Coins, Heart, LogOut, Trophy } from 'lucide-react';
 import { Player, GameSettings } from '../types';
-import type { HighscoreEntry } from '../services/highscoreStore';
+import type { BestScores } from '../services/highscoreStore';
 
 interface PlayerBarProps {
   players: Player[];
@@ -8,7 +8,7 @@ interface PlayerBarProps {
   settings: GameSettings;
   lives: number;
   remainingSeconds: number | null; // timed team games; null otherwise
-  highscore: HighscoreEntry | null;
+  highscores: BestScores;
   onExitGame: () => void;
 }
 
@@ -18,7 +18,7 @@ export function PlayerBar({
   settings,
   lives,
   remainingSeconds,
-  highscore,
+  highscores,
   onExitGame,
 }: PlayerBarProps) {
   return (
@@ -38,7 +38,7 @@ export function PlayerBar({
         {remainingSeconds !== null && <Countdown seconds={remainingSeconds} />}
 
         {settings.mode === 'solo' ? (
-          // Solo: lives, score and highscore instead of teams/tokens
+          // Solo: lives, score and highscores (weekly + all-time) instead of teams/tokens
           <div className="flex items-center gap-3 sm:gap-5 flex-1 flex-wrap">
             <div className="flex items-center gap-1" title={`${lives} liv tilbage`}>
               {lives > 0 ? (
@@ -52,10 +52,15 @@ export function PlayerBar({
             <span className="text-sm font-bold text-slate-300">
               Score: <span className="font-black text-white font-mono">{players[0]?.score ?? 0}</span>
             </span>
-            <span className="flex items-center gap-1 text-sm font-bold text-amber-300">
+            <span className="flex items-center gap-1 text-sm font-bold text-amber-300" title="Ugens highscore">
+              <span className="text-xs text-amber-300/80">Uge:</span>
+              <span className="font-black font-mono">{highscores.weekly?.score ?? 0}</span>
+              {highscores.weekly && <span className="text-xs text-amber-300/80">({highscores.weekly.name})</span>}
+            </span>
+            <span className="flex items-center gap-1 text-sm font-bold text-amber-300" title="Highscore">
               <Trophy className="w-4 h-4" />
-              <span className="font-black font-mono">{highscore?.score ?? 0}</span>
-              {highscore && <span className="text-xs text-amber-300/80">({highscore.name})</span>}
+              <span className="font-black font-mono">{highscores.allTime?.score ?? 0}</span>
+              {highscores.allTime && <span className="text-xs text-amber-300/80">({highscores.allTime.name})</span>}
             </span>
           </div>
         ) : (

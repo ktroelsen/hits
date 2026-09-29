@@ -12,7 +12,7 @@ import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
 import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
 import { markRemoved } from './services/removalStore';
-import { fetchHighscores, postHighscore, HighscoreEntry } from './services/highscoreStore';
+import { fetchHighscores, postHighscore, HighscoreLists, RecordKind, bestScores } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
 import { sfx } from './services/audioService';
 
@@ -142,17 +142,18 @@ export default function App() {
   // Timed team games: when the game ends (ms timestamp) and the live seconds left
   const [gameEndsAt, setGameEndsAt] = useState<number | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
-  const [highscore, setHighscore] = useState<HighscoreEntry | null>(null);
+  const [highscoreLists, setHighscoreLists] = useState<HighscoreLists | null>(null);
+  const highscores = bestScores(highscoreLists);
   const [isGameOverOpen, setIsGameOverOpen] = useState(false);
-  const [isNewRecord, setIsNewRecord] = useState(false);
+  const [newRecord, setNewRecord] = useState<RecordKind>(null);
   const [soloGameOverPending, setSoloGameOverPending] = useState(false);
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
 
-  // Load the shared solo highscore (best entry) once at startup.
+  // Load the shared solo highscores (all-time + this week) at startup.
   useEffect(() => {
-    fetchHighscores().then((list) => setHighscore(list[0] ?? null));
+    fetchHighscores().then(setHighscoreLists);
   }, []);
 
   // Load the catalog from the backend (issue 10) once at startup. On success we bump
@@ -254,7 +255,9 @@ export default function App() {
       setIsVictoryOpen(false);
       setLives(SOLO_STARTING_LIVES);
       setIsGameOverOpen(false);
-      setIsNewRecord(false);
+      setNewRecord(null);
+      // Refresh so a long-open app picks up Monday's weekly reset.
+      if (isSolo) fetchHighscores().then(setHighscoreLists);
       setSoloGameOverPending(false);
       setAutoPlayArmed(false); // First mystery song does not auto-play
 
@@ -317,25 +320,26 @@ export default function App() {
     setIsVictoryOpen(true);
   };
 
-  const isRecordScore = (score: number) => score > (highscore?.score ?? 0);
+  // Which record a final score beats: all-time wins over weekly.
+  const recordKind = (score: number): RecordKind =>
+    score > (highscores.allTime?.score ?? 0) ? 'allTime' : score > (highscores.weekly?.score ?? 0) ? 'weekly' : null;
 
   // Saves a new record under the player's name (from the game over modal).
   const submitHighscore = async (name: string) => {
-    const list = await postHighscore(name, activePlayer.score);
-    setHighscore(list[0] ?? null);
+    setHighscoreLists(await postHighscore(name, activePlayer.score));
   };
 
   // End a solo game: flag a new record (the player enters their name in the game
   // over modal). The revealed card stays on screen so the player can see the
   // correct year; the modal opens when they press "Se resultat" (see handleNextTurn).
   const endSoloGame = (finalScore: number) => {
-    setIsNewRecord(isRecordScore(finalScore));
+    setNewRecord(recordKind(finalScore));
     setSoloGameOverPending(true);
   };
 
   const showSoloGameOver = () => {
     setPhase('game_over');
-    if (isNewRecord) sfx.playVictory();
+    if (newRecord) sfx.playVictory();
     setIsGameOverOpen(true);
   };
 
@@ -496,8 +500,8 @@ export default function App() {
 
     // Solo: running out of songs ends the game
     if (isSolo && !nextMystery) {
-      const record = isRecordScore(activePlayer.score);
-      setIsNewRecord(record);
+      const record = recordKind(activePlayer.score);
+      setNewRecord(record);
       setPhase('game_over');
       if (record) sfx.playVictory();
       setIsGameOverOpen(true);
@@ -599,7 +603,7 @@ export default function App() {
       <div className="min-h-dvh bg-slate-950 text-slate-100 selection:bg-pink-500 selection:text-white">
         <StartScreen
           settings={settings}
-          highscore={highscore}
+          highscores={highscores}
           onStart={startGame}
           onStartSolo={() => {
             initializeGame({ ...settings, mode: 'solo' });
@@ -651,7 +655,7 @@ export default function App() {
               settings={settings}
               lives={lives}
               remainingSeconds={remainingSeconds}
-              highscore={highscore}
+              highscores={highscores}
               onExitGame={exitToStart}
             />
 
@@ -730,8 +734,8 @@ export default function App() {
       <GameOverModal
         isOpen={isGameOverOpen}
         score={activePlayer.score}
-        highscore={highscore}
-        isNewRecord={isNewRecord}
+        highscores={highscores}
+        newRecord={newRecord}
         onSubmitName={submitHighscore}
         onRestart={() => initializeGame()}
         onExit={exitToStart}
