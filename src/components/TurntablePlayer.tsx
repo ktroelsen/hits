@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, ExternalLink, Music2, Eye, EyeOff, Disc3, Shuffle, AlertTriangle, Trash2, Coins } from 'lucide-react';
 import { Song } from '../types';
 import { appleMusicUrl, fetchSongAudioPreview, sfx } from '../services/audioService';
 import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
@@ -12,6 +12,11 @@ interface TurntablePlayerProps {
   onDrawRandomSong?: () => void;
   onMarkMissingMusic?: () => void;
   autoPlay?: boolean;
+  /** Coin mode: revealing and drawing a new song cost 1 coin each */
+  coinMode?: boolean;
+  tokens?: number;
+  titleRevealed?: boolean;
+  onRevealTitle?: () => void;
 }
 
 export function TurntablePlayer({
@@ -22,6 +27,10 @@ export function TurntablePlayer({
   onDrawRandomSong,
   onMarkMissingMusic,
   autoPlay = true,
+  coinMode = false,
+  tokens = 0,
+  titleRevealed = false,
+  onRevealTitle,
 }: TurntablePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +41,9 @@ export function TurntablePlayer({
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.85);
   const [blindMode, setBlindMode] = useState(true); // Hide title & artist until placed by default
+
+  const noCoins = tokens <= 0;
+  const showInfo = coinMode ? titleRevealed : !blindMode;
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumeRef = useRef(volume);
@@ -250,6 +262,20 @@ export function TurntablePlayer({
             </div>
 
             {/* Blind mode switch for party & authentic Hitster play */}
+            {coinMode ? (
+              <button
+                id="reveal-song-btn"
+                onClick={onRevealTitle}
+                disabled={titleRevealed || isRevealed || noCoins}
+                className="text-xs flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                title={noCoins ? 'Ingen mønter tilbage' : 'Afslør kunstner og titel for 1 mønt'}
+              >
+                <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Afslør kunstner og titel (1</span>
+                <Coins className="w-3.5 h-3.5 text-amber-400" />
+                <span>)</span>
+              </button>
+            ) : (
             <button
               id="toggle-blind-mode-btn"
               onClick={() => setBlindMode(!blindMode)}
@@ -268,6 +294,7 @@ export function TurntablePlayer({
                 </>
               )}
             </button>
+            )}
           </div>
 
           {/* Song Info (Blurred or Hidden if Blind Mode and not revealed) */}
@@ -284,7 +311,7 @@ export function TurntablePlayer({
                   {currentSong?.artist}
                 </span>
               </div>
-            ) : blindMode ? (
+            ) : !showInfo ? (
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-lg sm:text-xl font-black text-slate-300 tracking-wide font-display">
                   🎵 Mysterie Sang
@@ -376,11 +403,17 @@ export function TurntablePlayer({
                 <button
                   id="draw-random-song-btn"
                   onClick={onDrawRandomSong}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-800/90 hover:bg-purple-950/70 text-slate-300 hover:text-purple-300 border border-slate-700 hover:border-purple-500/50 transition-colors text-xs font-bold"
-                  title="Træk en ny tilfældig sang"
+                  disabled={coinMode && (noCoins || isRevealed)}
+                  className="disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-slate-800/90 hover:bg-purple-950/70 text-slate-300 hover:text-purple-300 border border-slate-700 hover:border-purple-500/50 transition-colors text-xs font-bold"
+                  title={coinMode && noCoins ? 'Ingen mønter tilbage' : coinMode ? 'Træk en ny sang for 1 mønt' : 'Træk en ny tilfældig sang'}
                 >
                   <Shuffle className="w-4 h-4 text-purple-400" />
                   <span className="hidden sm:inline">Træk ny</span>
+                  {coinMode && (
+                    <span className="flex items-center gap-0.5 text-amber-400">
+                      (1<Coins className="w-3.5 h-3.5" />)
+                    </span>
+                  )}
                 </button>
               )}
 

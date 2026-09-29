@@ -117,6 +117,8 @@ export default function App() {
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [phase, setPhase] = useState<TurnPhase>('listening');
   const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(null);
+  const [titleRevealed, setTitleRevealed] = useState(false);
+  useEffect(() => setTitleRevealed(false), [currentSong]);
   const [yearGuessInput, setYearGuessInput] = useState<string>('');
 
   // Result of the last placement
@@ -515,7 +517,7 @@ export default function App() {
   };
 
   // Use Hitster token
-  const handleUseToken = (action: 'skip' | 'hint') => {
+  const handleUseToken = (action: 'skip' | 'reveal') => {
     if (activePlayer.tokens <= 0) return;
 
     if (action === 'skip') {
@@ -544,30 +546,16 @@ export default function App() {
       setSelectedSlotIndex(null);
       setYearGuessInput('');
       setAutoPlayArmed(true);
+    } else if (action === 'reveal') {
+      if (phase === 'revealed' || titleRevealed) return;
+      sfx.playToken();
+      setPlayers((prev) =>
+        prev.map((p, idx) =>
+          idx === activePlayerIndex ? { ...p, tokens: p.tokens - 1 } : p
+        )
+      );
+      setTitleRevealed(true);
     }
-  };
-
-  // Draw a new random song for current turn (unique year vs the timeline, unless disabled)
-  const handleDrawRandomSong = () => {
-    const takenYears = settings.uniqueYearsOnly
-      ? new Set(sharedTimeline.map((e) => e.song.year))
-      : new Set<number>();
-    const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
-    if (currentSong) usedIds.add(currentSong.id);
-    const { song: newMystery, deck: nextDeck } = pickMysterySong(
-      availableDeck,
-      takenYears,
-      eligibleSongs,
-      usedIds,
-    );
-    setAvailableDeck(nextDeck);
-    setCurrentSong(newMystery);
-    setPhase('listening');
-    setSelectedSlotIndex(null);
-    setYearGuessInput('');
-    setLastPlacementResult(null);
-    setAutoPlayArmed(true);
-    sfx.playFlip();
   };
 
   // Mark a song as "missing music" — hide it from play now and across reloads.
@@ -695,8 +683,20 @@ export default function App() {
               currentSong={currentSong}
               isRevealed={phase === 'revealed'}
               autoPlay={settings.autoPlayAudio && autoPlayArmed}
-              onOpenSongPicker={isSolo ? undefined : () => setIsCatalogOpen(true)}
-              onDrawRandomSong={isSolo ? undefined : handleDrawRandomSong}
+              coinMode={!isSolo}
+              tokens={activePlayer.tokens}
+              titleRevealed={titleRevealed}
+              onRevealTitle={() => handleUseToken('reveal')}
+              onDrawRandomSong={
+                isSolo
+                  ? undefined
+                  : () => {
+                      if (activePlayer.tokens <= 0 || phase === 'revealed') return;
+                      handleUseToken('skip');
+                      setPhase('listening');
+                      setLastPlacementResult(null);
+                    }
+              }
               onMarkMissingMusic={currentSong ? () => handleMarkMissingMusic(currentSong) : undefined}
             />
           </>
