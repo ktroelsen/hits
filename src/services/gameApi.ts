@@ -68,10 +68,11 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const gameApi = {
-  create: (targetRounds?: number, playbackMode?: PlaybackMode) =>
+  // tags: song collections to deal from (e.g. ["hitmix"]); tags no song has are ignored.
+  create: (targetRounds?: number, playbackMode?: PlaybackMode, tags?: string[]) =>
     req<{ gameId: string; code: string }>('/', {
       method: 'POST',
-      body: JSON.stringify({ targetRounds, playbackMode }),
+      body: JSON.stringify({ targetRounds, playbackMode, tags }),
     }),
   join: (code: string, name: string) =>
     req<{ id: string; name: string; color: string }>(`/${code}/join`, {

@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { attachFadeEnvelope } from '../services/audioFade';
 import { gameApi, useGameState, PlaybackMode, StatePlayer, TimelineSong } from '../services/gameApi';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
 import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
+import { DEFAULT_TAG, getActiveSongs, loadCatalog } from '../services/songsService';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
 const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
@@ -19,9 +20,23 @@ export function OnlineHostScreen() {
   // "Jeg spiller også med": the host joins as a player and plays from this device.
   const [playAlong, setPlayAlong] = useState(false);
   const [hostName, setHostName] = useState('');
+  // Song collections (tags) to deal from; defaults to the standard collection.
+  const [tags, setTags] = useState<string[]>([DEFAULT_TAG]);
+  const [tagCounts, setTagCounts] = useState<[string, number][]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { state } = useGameState(code);
+
+  useEffect(() => {
+    loadCatalog().then(() => {
+      const counts = new Map<string, number>();
+      for (const s of getActiveSongs()) for (const t of s.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1);
+      setTagCounts([...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'da')));
+    });
+  }, []);
+  const selectedTags = tags.filter((t) => tagCounts.some(([k]) => k === t));
+  const toggleTag = (tag: string) =>
+    setTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag]);
 
   const run = useCallback(async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -36,7 +51,7 @@ export function OnlineHostScreen() {
   }, []);
 
   const createGame = () => run(async () => {
-    const { code: c } = await gameApi.create(targetRounds, playbackMode);
+    const { code: c } = await gameApi.create(targetRounds, playbackMode, selectedTags);
     if (!playAlong) {
       setCode(c);
       return;
@@ -143,6 +158,30 @@ export function OnlineHostScreen() {
                 </label>
               </div>
             </fieldset>
+            {tagCounts.length > 0 && (
+              <div className="mb-4">
+                <span className="text-xs uppercase tracking-wide text-slate-400">Sange</span>
+                <div className="mt-1 flex flex-wrap gap-2">
+                  {tagCounts.map(([tag, count]) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-bold ring-1 transition-colors ${
+                        selectedTags.includes(tag)
+                          ? 'bg-cyan-600 text-white ring-cyan-500'
+                          : 'bg-slate-800 text-slate-400 ring-slate-700 hover:ring-slate-500'
+                      }`}
+                    >
+                      {tag} <span className="font-normal opacity-70">{count}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-1 text-xs text-slate-500">
+                  {selectedTags.length === 0 ? 'Ingen valgt = alle sange.' : 'Sange med mindst ét af de valgte tags.'}
+                </p>
+              </div>
+            )}
             <label className="mb-2 flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"
