@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Hits.Api.Admin;
 using Hits.Api.Data;
 using Hits.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,22 @@ public static class GameEndpoints
         {
             var session = await PlaySessionStore.GetOrCreateAsync(http, db);
             var songIds = PlaySessionStore.DeckOrder(session);
+
+            // Optional song collection (tags, e.g. "hitmix" or "top 100"): keep songs with at
+            // least one of them. Tags no song has are ignored, so the deck never ends up empty
+            // just because a collection hasn't been tagged yet.
+            var tags = AdminEndpoints.NormalizeTags(req?.Tags);
+            if (tags.Count > 0)
+            {
+                var tagged = (await db.Songs.AsNoTracking()
+                        .Where(s => s.Active && songIds.Contains(s.Id))
+                        .Select(s => new { s.Id, s.Tags })
+                        .ToListAsync())
+                    .Where(s => s.Tags.Any(tags.Contains))
+                    .Select(s => s.Id)
+                    .ToHashSet();
+                if (tagged.Count > 0) songIds = songIds.Where(tagged.Contains).ToList();
+            }
             if (songIds.Count == 0) return Results.Problem("Kataloget er tomt.");
 
             // No two rounds may share a year, so a game can't be longer than the number of years.
@@ -331,7 +348,7 @@ public static class GameEndpoints
     }
 }
 
-public record CreateGameRequest(int? TargetRounds, string? PlaybackMode);
+public record CreateGameRequest(int? TargetRounds, string? PlaybackMode, List<string>? Tags);
 public record JoinRequest(string Name);
 public record AnswerRequest(string PlayerId, int InsertIndex, int? GuessedYear);
 public record ReadyRequest(string PlayerId);

@@ -14,11 +14,13 @@ public static class AdminEndpoints
 {
     public const string KeyHeader = "X-Admin-Key";
 
-    record Candidate(string Id, string Title, string Artist, int Year, string Category, string? Note);
+    // Tags (optional) are put on the song when the candidate is approved — also when the
+    // song is already in the catalog, so a list like "top 100" can be layered onto it.
+    record Candidate(string Id, string Title, string Artist, int Year, string Category, string? Note, List<string>? Tags);
 
     public record ApproveRequest(
         string? CandidateId, string? Title, string? Artist, int? Year, string? Category,
-        string? Genre, string? FunFact, string? PreviewUrl, string? ArtworkUrl);
+        string? Genre, string? FunFact, string? PreviewUrl, string? ArtworkUrl, List<string>? Tags);
 
     public record RejectRequest(string? CandidateId);
 
@@ -57,9 +59,23 @@ public static class AdminEndpoints
             var catalog = await db.Songs.AsNoTracking().ToListAsync();
             var status = await LoadStatusAsync(env);
             var candidates = LoadCandidates(env);
-            var pending = candidates
-                .Where(c => !status.ContainsKey(c.Id) && !CatalogHas(catalog, c.Artist, c.Title))
-                .ToList();
+            // A candidate already in the catalog is still pending when it carries tags the
+            // catalog song lacks; approving it then just adds those tags.
+            var pending = new List<object>();
+            foreach (var c in candidates)
+            {
+                if (status.ContainsKey(c.Id)) continue;
+                var tags = NormalizeTags(c.Tags);
+                var existing = FindInCatalog(catalog, c.Artist, c.Title);
+                if (existing is null)
+                    pending.Add(new { c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags, Existing = (object?)null });
+                else if (tags.Except(existing.Tags).Any())
+                    pending.Add(new
+                    {
+                        c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags,
+                        Existing = (object?)new { existing.Id, existing.Title, existing.Artist, existing.Year, existing.Active, existing.Tags },
+                    });
+            }
             return Results.Ok(new
             {
                 counts = new
@@ -70,6 +86,7 @@ public static class AdminEndpoints
                 },
                 candidates = pending,
                 totalCandidates = candidates.Count,
+                tags = catalog.SelectMany(s => s.Tags).Distinct().Order(StringComparer.Ordinal).ToList(),
                 decided = new
                 {
                     approved = status.Values.Count(v => v == "approved"),
@@ -85,11 +102,18 @@ public static class AdminEndpoints
             if (title == "" || artist == "" || body.Year is not int year)
                 return Results.BadRequest(new { error = "title, artist og year er påkrævet." });
 
-            var catalog = await db.Songs.AsNoTracking().ToListAsync();
-            if (CatalogHas(catalog, artist, title))
+            var tags = NormalizeTags(body.Tags);
+            var catalog = await db.Songs.ToListAsync(); // tracked, so tags added below are saved
+            if (FindInCatalog(catalog, artist, title) is { } existing)
             {
+                var added = tags.Except(existing.Tags).ToList();
+                if (added.Count > 0)
+                {
+                    existing.Tags = NormalizeTags(existing.Tags.Concat(added));
+                    await db.SaveChangesAsync();
+                }
                 await SetStatusAsync(env, body.CandidateId, "approved");
-                return Results.Ok(new { id = (string?)null, duplicate = true });
+                return Results.Ok(new { id = existing.Id, duplicate = true, tagsAdded = added });
             }
 
             var song = new Song
@@ -104,6 +128,7 @@ public static class AdminEndpoints
                 FunFact = Blank(body.FunFact),
                 PreviewUrl = Blank(body.PreviewUrl),
                 ArtworkUrl = Blank(body.ArtworkUrl),
+                Tags = tags,
             };
             db.Songs.Add(song);
             await db.SaveChangesAsync();
@@ -167,11 +192,24 @@ public static class AdminEndpoints
 
     internal static string Norm(string s) => string.Join(' ', s.ToLowerInvariant().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
 
-    static bool CatalogHas(List<Song> catalog, string artist, string title)
+    // Loose key for spotting the same song under slightly different spellings:
+    // "Igen & Igen &" = "Igen og igen og", "Volbeat ft. Johan Olsen" = "Volbeat feat. Johan Olsen",
+    // "Dodo and the Dodos" = "Dodo & The Dodo's", "Hot!" = "Hot".
+    internal static string MatchKey(string s)
     {
-        var a = Norm(artist);
-        var t = Norm(title);
-        return catalog.Any(s => Norm(s.Artist) == a && Norm(s.Title) == t);
+        s = s.ToLowerInvariant().Replace("&", " og ");
+        s = System.Text.RegularExpressions.Regex.Replace(s, @"\(.*?\)", " ");     // "(Live …)", "(The Bongo Song)"
+        s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\p{L}\p{N}]+", " ");
+        var words = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(w => w switch { "and" => "og", "ft" or "featuring" => "feat", _ => w })
+            .Where(w => w != "the");
+        return string.Concat(words);
+    }
+
+    static Song? FindInCatalog(List<Song> catalog, string artist, string title)
+    {
+        var (a, t) = (MatchKey(artist), MatchKey(title));
+        return catalog.FirstOrDefault(s => MatchKey(s.Artist) == a && MatchKey(s.Title) == t);
     }
 
     // Candidate pool ships with the app (seed/, linked from src/data in the csproj).

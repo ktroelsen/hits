@@ -9,7 +9,7 @@ import { RulesModal } from './components/Modals/RulesModal';
 import { VictoryModal } from './components/Modals/VictoryModal';
 import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
-import { getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
+import { DEFAULT_TAG, getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
 import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
 import { markRemoved } from './services/removalStore';
 import { fetchHighscores, postHighscore, HighscoreLists, RecordKind, bestScores } from './services/highscoreStore';
@@ -23,7 +23,7 @@ const DEFAULT_SETTINGS: GameSettings = {
   timeLimitMinutes: 10,
   categoryFilter: 'all',
   decades: ['50s', '60s', '70s', '80s', '90s', '00s', '10s', '20s'],
-  tags: [],
+  tags: [DEFAULT_TAG], // the standard collection; unknown tags are ignored (see effectiveTags)
   autoPlayAudio: true,
   enableSoundEffects: true,
   expertTolerance: 0,

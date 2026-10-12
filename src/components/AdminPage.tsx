@@ -11,6 +11,25 @@ import { AdminCatalog } from './AdminCatalog';
 const GOAL = 500;
 const API = '/api/admin';
 const KEY_STORAGE = 'hits-admin-key';
+const STICKY_TAGS_STORAGE = 'hits-admin-sticky-tags';
+
+// "dance, Melodi  Grand Prix" → ["dance", "melodi grand prix"] (same rules as the server).
+const parseTags = (text: string) => [
+  ...new Set(
+    text
+      .split(',')
+      .map((t) => t.trim().toLowerCase().replace(/\s+/g, ' '))
+      .filter(Boolean),
+  ),
+];
+
+function readStickyTags(): string {
+  try {
+    return localStorage.getItem(STICKY_TAGS_STORAGE) || '';
+  } catch {
+    return '';
+  }
+}
 
 function readKey(): string {
   try {
@@ -39,6 +58,10 @@ interface Candidate {
   year: number;
   category: SongCategory;
   note?: string;
+  // Tags the song gets when approved (e.g. "top 100").
+  tags?: string[];
+  // Set when the song is already in the catalog: approving only adds the missing tags.
+  existing?: { id: string; title: string; artist: string; year: number; active: boolean; tags: string[] } | null;
 }
 
 interface AdminState {
@@ -46,6 +69,7 @@ interface AdminState {
   candidates: Candidate[];
   totalCandidates: number;
   decided: { approved: number; rejected: number };
+  tags?: string[]; // every tag in the catalog, for suggestions
 }
 
 interface Draft {
@@ -92,6 +116,14 @@ export function AdminPage() {
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [tab, setTab] = useState<'candidates' | 'catalog'>('candidates');
+  // Tags put on every song approved from here. Kept between songs (and reloads), so a
+  // whole batch can be tagged while reviewing it.
+  const [stickyTags, setStickyTags] = useState(readStickyTags);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STICKY_TAGS_STORAGE, stickyTags);
+    } catch {}
+  }, [stickyTags]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const auditionToken = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -198,6 +230,14 @@ export function AdminPage() {
     });
   }, [stopAudio]);
 
+  const current = !manualMode && draft.candidateId ? queue.find((c) => c.id === draft.candidateId) : undefined;
+  const approveTags = [...new Set([...parseTags(stickyTags), ...(current?.tags ?? [])])];
+  const knownTags = state?.tags ?? [];
+  const toggleStickyTag = (tag: string) => {
+    const tags = parseTags(stickyTags);
+    setStickyTags((tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag]).join(', '));
+  };
+
   const approve = useCallback(async () => {
     if (!draft.title.trim() || !draft.artist.trim() || !draft.year.trim()) {
       setMessage('Titel, kunstner og årstal skal udfyldes.');
@@ -226,14 +266,18 @@ export function AdminPage() {
           funFact: draft.funFact.trim() || undefined,
           previewUrl: url,
           artworkUrl: artwork,
+          tags: approveTags,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      const added: string[] = data.tagsAdded ?? [];
       setMessage(
         data.duplicate
-          ? `"${draft.title}" findes allerede — sprunget over.`
-          : `Tilføjet som ${data.id}: ${draft.artist} – ${draft.title}`,
+          ? added.length > 0
+            ? `"${draft.title}" findes allerede — fik tags: ${added.join(', ')}.`
+            : `"${draft.title}" findes allerede — sprunget over.`
+          : `Tilføjet som ${data.id}: ${draft.artist} – ${draft.title}${approveTags.length ? ` (${approveTags.join(', ')})` : ''}`,
       );
       setState((s) =>
         s
@@ -247,6 +291,7 @@ export function AdminPage() {
                     international: s.counts.international + (draft.category === 'international' ? 1 : 0),
                   },
               decided: { ...s.decided, approved: s.decided.approved + 1 },
+              tags: [...new Set([...(s.tags ?? []), ...approveTags])].sort(),
             }
           : s,
       );
@@ -262,7 +307,7 @@ export function AdminPage() {
     } finally {
       setBusy(false);
     }
-  }, [draft, preview, manualMode, advance, stopAudio]);
+  }, [draft, preview, manualMode, advance, stopAudio, approveTags]);
 
   const reject = useCallback(async () => {
     if (!draft.candidateId) {
@@ -426,9 +471,61 @@ export function AdminPage() {
                 {field('Fun fact (valgfri)', draft.funFact, (v) => setDraft((d) => ({ ...d, funFact: v })))}
               </div>
 
-              {!manualMode && draft.candidateId && queue[0]?.note && (
-                <p className="mt-3 text-xs text-slate-500">💡 {queue[0].note}</p>
+              {current?.note && <p className="mt-3 text-xs text-slate-500">💡 {current.note}</p>}
+
+              {current?.existing && (
+                <p className="mt-3 rounded-lg bg-sky-950/60 px-3 py-2 text-xs text-sky-200 ring-1 ring-sky-800">
+                  Findes allerede i kataloget: {current.existing.artist} – {current.existing.title} (
+                  {current.existing.year}){current.existing.active ? '' : ', inaktiv'}
+                  {current.existing.tags.length > 0 && ` · tags: ${current.existing.tags.join(', ')}`}. Godkend for kun
+                  at tilføje de manglende tags — titel, årstal osv. ændres ikke.
+                </p>
               )}
+
+              <div className="mt-4">
+                <label className="block">
+                  <span className="text-xs uppercase tracking-wide text-slate-400">
+                    Tags — bliver stående til næste sang
+                  </span>
+                  <input
+                    list="admin-tags"
+                    className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none ring-1 ring-slate-700 focus:ring-pink-500"
+                    value={stickyTags}
+                    onChange={(e) => setStickyTags(e.target.value)}
+                    placeholder="Kommasepareret, fx hitmix"
+                  />
+                  <datalist id="admin-tags">
+                    {knownTags.map((tag) => (
+                      <option key={tag} value={tag} />
+                    ))}
+                  </datalist>
+                </label>
+                {knownTags.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {knownTags.map((tag) => {
+                      const on = parseTags(stickyTags).includes(tag);
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => toggleStickyTag(tag)}
+                          className={`rounded-full px-2.5 py-0.5 text-xs ring-1 ${
+                            on ? 'bg-cyan-700 text-white ring-cyan-500' : 'text-slate-400 ring-slate-700 hover:ring-slate-500'
+                          }`}
+                        >
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                {approveTags.length > 0 && (
+                  <p className="mt-2 text-xs text-slate-400">
+                    Sangen får: <span className="text-cyan-300">{approveTags.join(', ')}</span>
+                    {current?.tags?.length ? ` (${current.tags.join(', ')} fra listen)` : ''}
+                  </p>
+                )}
+              </div>
 
               <div className="mt-4 flex items-center gap-3">
                 <button
@@ -452,7 +549,7 @@ export function AdminPage() {
                   disabled={busy}
                   className="flex-1 rounded-lg bg-emerald-600 px-4 py-3 font-bold hover:bg-emerald-500 disabled:opacity-40"
                 >
-                  ✓ Tilføj til kataloget
+                  {current?.existing ? '✓ Tilføj tags' : '✓ Tilføj til kataloget'}
                 </button>
                 {!manualMode && (
                   <>

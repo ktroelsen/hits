@@ -102,6 +102,26 @@ songs.MapPost("/active", async (SetActiveRequest body, AppDbContext db) =>
     return Results.Ok(new { changed });
 }).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
 
+// Adds and/or removes tags on many songs at once (/admin → Katalog → "Tag viste").
+songs.MapPost("/tags", async (BulkTagsRequest body, AppDbContext db) =>
+{
+    var ids = (body.Ids ?? new()).ToHashSet();
+    var add = AdminEndpoints.NormalizeTags(body.Add);
+    var remove = AdminEndpoints.NormalizeTags(body.Remove);
+    if (ids.Count == 0 || (add.Count == 0 && remove.Count == 0))
+        return Results.BadRequest(new { error = "ids og add eller remove er påkrævet." });
+    var changed = 0;
+    foreach (var song in await db.Songs.Where(s => ids.Contains(s.Id)).ToListAsync())
+    {
+        var tags = AdminEndpoints.NormalizeTags(song.Tags.Concat(add).Except(remove));
+        if (tags.SequenceEqual(song.Tags)) continue;
+        song.Tags = tags;
+        changed++;
+    }
+    await db.SaveChangesAsync();
+    return Results.Ok(new { changed });
+}).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
+
 songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 {
     var song = await db.Songs.FindAsync(id);
@@ -152,3 +172,4 @@ static async Task SeedSongsAsync(AppDbContext db, IWebHostEnvironment env, ILogg
 }
 
 record SetActiveRequest(List<string>? Ids, bool Active);
+record BulkTagsRequest(List<string>? Ids, List<string>? Add, List<string>? Remove);

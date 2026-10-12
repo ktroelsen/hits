@@ -102,6 +102,7 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [addTagsOnly, setAddTagsOnly] = useState(false); // import: `tags` adds instead of replacing
   const [editing, setEditing] = useState<Song | null>(null);
   const [tagsText, setTagsText] = useState('');
+  const [bulkTag, setBulkTag] = useState('hitmix'); // tag to add to / remove from the shown songs
   const [exportLimit, setExportLimit] = useState('');
   const [importFile, setImportFile] = useState<{ name: string; body: string } | null>(null);
   const [importReport, setImportReport] = useState<ImportReport | null>(null);
@@ -265,6 +266,42 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
       onChanged?.();
     } catch (e) {
       setError(`Kunne ikke ændre aktiv-status: ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // Adds (or removes) one tag on all shown songs, e.g. "hitmix" on every active song.
+  const tagShown = async (mode: 'add' | 'remove') => {
+    const tag = bulkTag.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (!tag) return;
+    const has = (s: Song) => (s.tags ?? []).includes(tag);
+    const ids = filtered.filter((s) => (mode === 'add' ? !has(s) : has(s))).map((s) => s.id);
+    if (ids.length === 0) {
+      setError(mode === 'add' ? `Alle viste sange har allerede "${tag}".` : `Ingen af de viste sange har "${tag}".`);
+      return;
+    }
+    if (!window.confirm(`${mode === 'add' ? 'Tilføj' : 'Fjern'} tagget "${tag}" ${mode === 'add' ? 'til' : 'fra'} ${ids.length} sange?`)) return;
+    setBusy(true);
+    try {
+      const res = await request('/api/songs/tags', {
+        method: 'POST',
+        body: JSON.stringify({ ids, [mode]: [tag] }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const changed = new Set(ids);
+      setSongs(
+        (list) =>
+          list?.map((s) => {
+            if (!changed.has(s.id)) return s;
+            const rest = (s.tags ?? []).filter((t) => t !== tag);
+            return { ...s, tags: mode === 'add' ? [...rest, tag].sort() : rest };
+          }) ?? null,
+      );
+      setError(null);
+      onChanged?.();
+    } catch (e) {
+      setError(`Kunne ikke ændre tags: ${(e as Error).message}`);
     } finally {
       setBusy(false);
     }
@@ -522,6 +559,35 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
           >
             Deaktivér viste
           </button>
+          <span className="flex items-center gap-1">
+            <input
+              list="admin-catalog-tags"
+              className={`${inputCls.replace('w-full ', '')} w-32 py-1 text-xs`}
+              value={bulkTag}
+              onChange={(e) => setBulkTag(e.target.value)}
+              placeholder="Tag"
+              title="Tag der tilføjes til / fjernes fra alle viste sange"
+            />
+            <datalist id="admin-catalog-tags">
+              {allTags.map((tag) => (
+                <option key={tag} value={tag} />
+              ))}
+            </datalist>
+            <button
+              onClick={() => tagShown('add')}
+              disabled={busy || !bulkTag.trim() || filtered.length === 0}
+              className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+            >
+              + Tag viste
+            </button>
+            <button
+              onClick={() => tagShown('remove')}
+              disabled={busy || !bulkTag.trim() || filtered.length === 0}
+              className="rounded-lg px-2 py-1 text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+            >
+              − Fjern tag fra viste
+            </button>
+          </span>
         </div>
       )}
 

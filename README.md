@@ -127,6 +127,24 @@ Tags kan ændres på tre måder:
 Det samme kan gøres fra `/admin` → Katalog med "Eksportér viste", "Importér JSON…" og
 fluebenet "Kun tilføj tags".
 
+## Sangsamlinger: `hitmix` og `top 100`
+
+Alle spil (tidslinje, solo, DJ og online) bruger som standard sange med tagget **`hitmix`**
+(`DEFAULT_TAG` i `src/services/songsService.ts`). Andre samlinger, fx **`top 100`** (DR's
+Top100 over Danmarks bedste sange), vælges som tags i spilopsætningen eller på online-
+værtens skærm. Et tag, som ingen aktiv sang har, ignoreres, så spillet bruger alle sange,
+indtil kataloget er tagget.
+
+- **Tag mange sange på én gang:** `/admin` → Katalog. Filtrér (fx "Kun aktive"), skriv
+  tagget og tryk "+ Tag viste" (eller "− Fjern tag fra viste").
+- **Kandidater med tags:** Poster i `src/data/candidates.json` kan have `"tags"`. Når de
+  godkendes, får sangen de tags. Hvis sangen allerede findes i kataloget, vises den stadig som
+  kandidat, og godkendelse lægger kun de manglende tags på den eksisterende sang.
+- **Tags under gennemgang:** Feltet "Tags" under kandidaterne bliver stående fra sang til
+  sang (det gemmes i browseren), så en hel batch kan tagges, mens den gennemgås.
+
+Nye sange skal have `hitmix` for at komme med i standardspillet.
+
 ## CI/CD (GitHub Actions)
 
 - **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck,
