@@ -3,6 +3,7 @@ import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } 
 import { BrandLogo } from '../BrandLogo';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 import { getActiveSongs, matchesSettings } from '../../services/songsService';
+import { formatRank, getRankedTags, songsWithRank } from '../../services/rankedTags';
 
 interface GameSetupModalProps {
   isOpen: boolean;
@@ -47,6 +48,9 @@ export function GameSetupModal({
   const [decades, setDecades] = useState<Decade[]>(currentSettings.decades);
   const [tags, setTags] = useState<string[]>(currentSettings.tags ?? []);
   const [uniqueYearsOnly, setUniqueYearsOnly] = useState<boolean>(currentSettings.uniqueYearsOnly);
+  // Spiltype: the normal year game, or a placement game on a tag with numbers.
+  const [playBy, setPlayBy] = useState<'year' | 'rank'>(currentSettings.rankTag ? 'rank' : 'year');
+  const [rankTag, setRankTag] = useState<string | undefined>(currentSettings.rankTag);
   const [players, setPlayers] = useState<Player[]>(currentPlayers);
   const [newPlayerName, setNewPlayerName] = useState('');
 
@@ -61,6 +65,15 @@ export function GameSetupModal({
   const matchingCount = activeSongs.filter((s) =>
     matchesSettings(s, { categoryFilter, decades, tags: selectedTags }),
   ).length;
+
+  // Tags with numbers (top 100 etc.) and at least two active numbered songs can be played
+  // as a placement game.
+  const rankedTagNames = new Set(getRankedTags().map((t) => t.tag));
+  const playableRanks = getRankedTags()
+    .map((t) => ({ rank: t, count: songsWithRank(t, activeSongs).length }))
+    .filter((x) => x.count >= 2);
+  const selectedRank =
+    playBy === 'rank' ? playableRanks.find((x) => x.rank.tag === rankTag) ?? playableRanks[0] : undefined;
 
   const toggleTag = (tag: string) =>
     setTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag]);
@@ -106,6 +119,7 @@ export function GameSetupModal({
       decades,
       tags: selectedTags,
       uniqueYearsOnly,
+      rankTag: selectedRank?.rank.tag,
     };
     onStartGame(updatedSettings, players);
     onClose();
@@ -239,6 +253,71 @@ export function GameSetupModal({
             </div>
           </div>
 
+          {/* Spiltype: årstal or placement — only once some tag has numbers */}
+          {playableRanks.length > 0 && (
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+                Spiltype
+              </label>
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { value: 'year' as const, label: '📅 Årstal', sub: 'Læg sangene efter udgivelsesår' },
+                  { value: 'rank' as const, label: '🏆 Placering', sub: 'Læg sangene efter deres tal, fx #1–#100' },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setPlayBy(opt.value)}
+                    className={`p-3 rounded-xl border text-center transition-all ${
+                      playBy === opt.value
+                        ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md'
+                        : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <span className="text-xs sm:text-sm block">{opt.label}</span>
+                    <span className="text-[10px] opacity-80 block mt-0.5">{opt.sub}</span>
+                  </button>
+                ))}
+              </div>
+
+              {selectedRank && (
+                <div className="mt-3">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                    Samling
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {playableRanks.map(({ rank, count }) => (
+                      <button
+                        key={rank.tag}
+                        type="button"
+                        onClick={() => setRankTag(rank.tag)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          rank.tag === selectedRank.rank.tag
+                            ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
+                            : 'bg-slate-950/50 text-slate-400 border-slate-800 hover:border-slate-700'
+                        }`}
+                        title={rank.description ?? undefined}
+                      >
+                        {rank.tag} <span className="opacity-70 font-normal">{count}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-2">
+                    {selectedRank.rank.description ? `${selectedRank.rank.description}. ` : ''}
+                    Sangene lægges efter deres tal (
+                    {[...new Set(selectedRank.rank.values.map((v) => v.value))]
+                      .slice(0, 2)
+                      .map((v) => formatRank(selectedRank.rank, v))
+                      .join(', ')}{' '}
+                    …) i stedet for årstal.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {!selectedRank && (
+          <>
           {/* 2. Sangvalg & Kategori */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
@@ -332,7 +411,13 @@ export function GameSetupModal({
                           : 'bg-slate-950/50 text-slate-400 border-slate-800 hover:border-slate-700'
                       }`}
                     >
-                      {tag} <span className="opacity-70 font-normal">{count}</span>
+                      {tag}
+                      {rankedTagNames.has(tag) && (
+                        <span className="opacity-70" title="Tagget har tal og kan også spilles som placeringsspil">
+                          {' '}#
+                        </span>
+                      )}{' '}
+                      <span className="opacity-70 font-normal">{count}</span>
                     </button>
                   );
                 })}
@@ -346,6 +431,8 @@ export function GameSetupModal({
                 </span>
               </p>
             </div>
+          )}
+          </>
           )}
 
           {/* 4. Mål: antal kort eller på tid (not used in solo) */}
@@ -492,7 +579,7 @@ export function GameSetupModal({
           {/* 6. Årstal */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              6. Årstal
+              6. {selectedRank ? 'Tal' : 'Årstal'}
             </label>
             <div className="grid grid-cols-2 gap-2.5">
               <button
@@ -504,8 +591,10 @@ export function GameSetupModal({
                     : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
                 }`}
               >
-                <span className="text-xs sm:text-sm block">Kun unikke år</span>
-                <span className="text-[10px] opacity-80 block mt-0.5">Hvert årstal højst én gang</span>
+                <span className="text-xs sm:text-sm block">{selectedRank ? 'Kun unikke tal' : 'Kun unikke år'}</span>
+                <span className="text-[10px] opacity-80 block mt-0.5">
+                  {selectedRank ? 'Hvert tal højst én gang' : 'Hvert årstal højst én gang'}
+                </span>
               </button>
 
               <button
@@ -517,8 +606,12 @@ export function GameSetupModal({
                     : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
                 }`}
               >
-                <span className="text-xs sm:text-sm block">Sange kan have samme år</span>
-                <span className="text-[10px] opacity-80 block mt-0.5">Årstal kan gå igen</span>
+                <span className="text-xs sm:text-sm block">
+                  {selectedRank ? 'Sange kan have samme tal' : 'Sange kan have samme år'}
+                </span>
+                <span className="text-[10px] opacity-80 block mt-0.5">
+                  {selectedRank ? 'Tal kan gå igen' : 'Årstal kan gå igen'}
+                </span>
               </button>
             </div>
           </div>

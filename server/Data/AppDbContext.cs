@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
     public DbSet<Answer> Answers => Set<Answer>();
     public DbSet<SoloScore> SoloScores => Set<SoloScore>();
     public DbSet<PlaySession> PlaySessions => Set<PlaySession>();
+    public DbSet<RankedTag> RankedTags => Set<RankedTag>();
+    public DbSet<SongTagValue> SongTagValues => Set<SongTagValue>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,6 +68,20 @@ public class AppDbContext : DbContext
             e.HasKey(s => s.Id);
             e.Property(s => s.Id).ValueGeneratedNever();
             e.HasIndex(s => s.LastSeenAt);
+        });
+
+        modelBuilder.Entity<RankedTag>(e =>
+        {
+            e.HasKey(t => t.Tag);
+            e.Property(t => t.Tag).ValueGeneratedNever();
+            e.HasMany<SongTagValue>().WithOne().HasForeignKey(v => v.Tag).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SongTagValue>(e =>
+        {
+            e.HasKey(v => new { v.Tag, v.SongId });
+            e.HasIndex(v => new { v.Tag, v.Value });
+            e.HasOne<Song>().WithMany().HasForeignKey(v => v.SongId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

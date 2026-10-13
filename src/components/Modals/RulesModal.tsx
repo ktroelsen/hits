@@ -115,6 +115,9 @@ export function RulesModal({ isOpen, onClose }: RulesModalProps) {
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                 <strong>Single player:</strong> Du starter uden liv. Hver rigtig placering giver 1 point, og rammer du også det præcise årstal, får du <strong>et liv</strong>. En forkert placering koster et liv — gætter du forkert uden flere liv, er spillet slut. Slå din highscore — eller ugens highscore, som nulstilles hver mandag.
               </p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <strong>Placeringsspil:</strong> Vælger du spiltypen "Placering" og en samling med tal (fx top 100), lægges sangene efter deres tal i stedet for årstal — placering på top 100 eller fx antal uger som nr. 1. Det præcise tal giver bonus ligesom det præcise årstal. Placeringsspil tæller ikke med i highscoren.
+              </p>
             </div>
           </div>
         </div>

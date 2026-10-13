@@ -10617,7 +10617,10 @@
     "note": "DR Top100 #1 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 1
+    }
   },
   {
     "id": "c-1381",
@@ -10628,7 +10631,10 @@
     "note": "DR Top100 #2",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 2
+    }
   },
   {
     "id": "c-1382",
@@ -10639,7 +10645,10 @@
     "note": "DR Top100 #3 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 3
+    }
   },
   {
     "id": "c-1383",
@@ -10650,7 +10659,10 @@
     "note": "DR Top100 #4 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 4
+    }
   },
   {
     "id": "c-1384",
@@ -10661,7 +10673,10 @@
     "note": "DR Top100 #5 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 5
+    }
   },
   {
     "id": "c-1385",
@@ -10672,7 +10687,10 @@
     "note": "DR Top100 #6",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 6
+    }
   },
   {
     "id": "c-1386",
@@ -10683,7 +10701,10 @@
     "note": "DR Top100 #7 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 7
+    }
   },
   {
     "id": "c-1387",
@@ -10694,7 +10715,10 @@
     "note": "DR Top100 #8",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 8
+    }
   },
   {
     "id": "c-1388",
@@ -10705,7 +10729,10 @@
     "note": "DR Top100 #9 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 9
+    }
   },
   {
     "id": "c-1389",
@@ -10716,7 +10743,10 @@
     "note": "DR Top100 #10",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 10
+    }
   },
   {
     "id": "c-1390",
@@ -10727,7 +10757,10 @@
     "note": "DR Top100 #11 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 11
+    }
   },
   {
     "id": "c-1391",
@@ -10738,7 +10771,10 @@
     "note": "DR Top100 #12 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 12
+    }
   },
   {
     "id": "c-1392",
@@ -10749,7 +10785,10 @@
     "note": "DR Top100 #13",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 13
+    }
   },
   {
     "id": "c-1393",
@@ -10760,7 +10799,10 @@
     "note": "DR Top100 #14",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 14
+    }
   },
   {
     "id": "c-1394",
@@ -10771,7 +10813,10 @@
     "note": "DR Top100 #15",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 15
+    }
   },
   {
     "id": "c-1395",
@@ -10782,7 +10827,10 @@
     "note": "DR Top100 #16",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 16
+    }
   },
   {
     "id": "c-1396",
@@ -10793,7 +10841,10 @@
     "note": "DR Top100 #17",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 17
+    }
   },
   {
     "id": "c-1397",
@@ -10804,7 +10855,10 @@
     "note": "DR Top100 #18",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 18
+    }
   },
   {
     "id": "c-1398",
@@ -10815,7 +10869,10 @@
     "note": "DR Top100 #19",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 19
+    }
   },
   {
     "id": "c-1399",
@@ -10826,7 +10883,10 @@
     "note": "DR Top100 #20 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 20
+    }
   },
   {
     "id": "c-1400",
@@ -10837,7 +10897,10 @@
     "note": "DR Top100 #21 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 21
+    }
   },
   {
     "id": "c-1401",
@@ -10848,7 +10911,10 @@
     "note": "DR Top100 #22",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 22
+    }
   },
   {
     "id": "c-1402",
@@ -10859,7 +10925,10 @@
     "note": "DR Top100 #23 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 23
+    }
   },
   {
     "id": "c-1403",
@@ -10870,7 +10939,10 @@
     "note": "DR Top100 #24 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 24
+    }
   },
   {
     "id": "c-1404",
@@ -10881,7 +10953,10 @@
     "note": "DR Top100 #25",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 25
+    }
   },
   {
     "id": "c-1405",
@@ -10892,7 +10967,10 @@
     "note": "DR Top100 #26 · Fællessang: tekst H.C. Andersen (1850), melodi Poul Schierbeck. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 26
+    }
   },
   {
     "id": "c-1406",
@@ -10903,7 +10981,10 @@
     "note": "DR Top100 #27 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 27
+    }
   },
   {
     "id": "c-1407",
@@ -10914,7 +10995,10 @@
     "note": "DR Top100 #28 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 28
+    }
   },
   {
     "id": "c-1408",
@@ -10925,7 +11009,10 @@
     "note": "DR Top100 #29 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 29
+    }
   },
   {
     "id": "c-1409",
@@ -10936,7 +11023,10 @@
     "note": "DR Top100 #30 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 30
+    }
   },
   {
     "id": "c-1410",
@@ -10947,7 +11037,10 @@
     "note": "DR Top100 #31",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 31
+    }
   },
   {
     "id": "c-1411",
@@ -10958,7 +11051,10 @@
     "note": "DR Top100 #32 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 32
+    }
   },
   {
     "id": "c-1412",
@@ -10969,7 +11065,10 @@
     "note": "DR Top100 #33 · Fællessang: tekst Kaj Munk, melodi Egil Harder. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 33
+    }
   },
   {
     "id": "c-1413",
@@ -10980,7 +11079,10 @@
     "note": "DR Top100 #34 · Salme (tekst B.S. Ingemann, 1850). Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 34
+    }
   },
   {
     "id": "c-1414",
@@ -10991,7 +11093,10 @@
     "note": "DR Top100 #35",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 35
+    }
   },
   {
     "id": "c-1415",
@@ -11002,7 +11107,10 @@
     "note": "DR Top100 #36 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 36
+    }
   },
   {
     "id": "c-1416",
@@ -11013,7 +11121,10 @@
     "note": "DR Top100 #37 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 37
+    }
   },
   {
     "id": "c-1417",
@@ -11024,7 +11135,10 @@
     "note": "DR Top100 #38 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 38
+    }
   },
   {
     "id": "c-1418",
@@ -11035,7 +11149,10 @@
     "note": "DR Top100 #39",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 39
+    }
   },
   {
     "id": "c-1419",
@@ -11046,7 +11163,10 @@
     "note": "DR Top100 #40 · årstal ikke verificeret · På listen i akustisk version (Moyo Live P3).",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 40
+    }
   },
   {
     "id": "c-1420",
@@ -11057,7 +11177,10 @@
     "note": "DR Top100 #41 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 41
+    }
   },
   {
     "id": "c-1421",
@@ -11068,7 +11191,10 @@
     "note": "DR Top100 #42 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 42
+    }
   },
   {
     "id": "c-1422",
@@ -11079,7 +11205,10 @@
     "note": "DR Top100 #43 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 43
+    }
   },
   {
     "id": "c-1423",
@@ -11090,7 +11219,10 @@
     "note": "DR Top100 #44 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 44
+    }
   },
   {
     "id": "c-1424",
@@ -11101,7 +11233,10 @@
     "note": "DR Top100 #45",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 45
+    }
   },
   {
     "id": "c-1425",
@@ -11112,7 +11247,10 @@
     "note": "DR Top100 #46 · Fællessang: tekst Jens Rosendal, melodi Per Warming. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 46
+    }
   },
   {
     "id": "c-1426",
@@ -11123,7 +11261,10 @@
     "note": "DR Top100 #47 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 47
+    }
   },
   {
     "id": "c-1427",
@@ -11134,7 +11275,10 @@
     "note": "DR Top100 #48 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 48
+    }
   },
   {
     "id": "c-1428",
@@ -11145,7 +11289,10 @@
     "note": "DR Top100 #49 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 49
+    }
   },
   {
     "id": "c-1429",
@@ -11156,7 +11303,10 @@
     "note": "DR Top100 #50 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 50
+    }
   },
   {
     "id": "c-1430",
@@ -11167,7 +11317,10 @@
     "note": "DR Top100 #51 · Fællessang: tekst Jakob Knudsen, melodi Oluf Ring. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 51
+    }
   },
   {
     "id": "c-1431",
@@ -11178,7 +11331,10 @@
     "note": "DR Top100 #52 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 52
+    }
   },
   {
     "id": "c-1432",
@@ -11189,7 +11345,10 @@
     "note": "DR Top100 #53 · Børnesang: tekst Harald Bergstedt, melodi Carl Nielsen. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 53
+    }
   },
   {
     "id": "c-1433",
@@ -11200,7 +11359,10 @@
     "note": "DR Top100 #54 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 54
+    }
   },
   {
     "id": "c-1434",
@@ -11211,7 +11373,10 @@
     "note": "DR Top100 #55 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 55
+    }
   },
   {
     "id": "c-1435",
@@ -11222,7 +11387,10 @@
     "note": "DR Top100 #56",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 56
+    }
   },
   {
     "id": "c-1436",
@@ -11233,7 +11401,10 @@
     "note": "DR Top100 #57 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 57
+    }
   },
   {
     "id": "c-1437",
@@ -11244,7 +11415,10 @@
     "note": "DR Top100 #58 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 58
+    }
   },
   {
     "id": "c-1438",
@@ -11255,7 +11429,10 @@
     "note": "DR Top100 #59 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 59
+    }
   },
   {
     "id": "c-1439",
@@ -11266,7 +11443,10 @@
     "note": "DR Top100 #60 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 60
+    }
   },
   {
     "id": "c-1440",
@@ -11277,7 +11457,10 @@
     "note": "DR Top100 #61 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 61
+    }
   },
   {
     "id": "c-1441",
@@ -11288,7 +11471,10 @@
     "note": "DR Top100 #62",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 62
+    }
   },
   {
     "id": "c-1442",
@@ -11299,7 +11485,10 @@
     "note": "DR Top100 #63",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 63
+    }
   },
   {
     "id": "c-1443",
@@ -11310,7 +11499,10 @@
     "note": "DR Top100 #64",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 64
+    }
   },
   {
     "id": "c-1444",
@@ -11321,7 +11513,10 @@
     "note": "DR Top100 #65 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 65
+    }
   },
   {
     "id": "c-1445",
@@ -11332,7 +11527,10 @@
     "note": "DR Top100 #66 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 66
+    }
   },
   {
     "id": "c-1446",
@@ -11343,7 +11541,10 @@
     "note": "DR Top100 #67 · Salme: tekst N.F.S. Grundtvig, melodi C.C. Hoffmann. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 67
+    }
   },
   {
     "id": "c-1447",
@@ -11354,7 +11555,10 @@
     "note": "DR Top100 #68 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 68
+    }
   },
   {
     "id": "c-1448",
@@ -11365,7 +11569,10 @@
     "note": "DR Top100 #69 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 69
+    }
   },
   {
     "id": "c-1449",
@@ -11376,7 +11583,10 @@
     "note": "DR Top100 #70 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 70
+    }
   },
   {
     "id": "c-1450",
@@ -11387,7 +11597,10 @@
     "note": "DR Top100 #71 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 71
+    }
   },
   {
     "id": "c-1451",
@@ -11398,7 +11611,10 @@
     "note": "DR Top100 #72",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 72
+    }
   },
   {
     "id": "c-1452",
@@ -11409,7 +11625,10 @@
     "note": "DR Top100 #73",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 73
+    }
   },
   {
     "id": "c-1453",
@@ -11420,7 +11639,10 @@
     "note": "DR Top100 #74 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 74
+    }
   },
   {
     "id": "c-1454",
@@ -11431,7 +11653,10 @@
     "note": "DR Top100 #75 · Fællessang: tekst Thøger Larsen, melodi Oluf Ring. Årstal afhænger af indspilningen.",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 75
+    }
   },
   {
     "id": "c-1455",
@@ -11442,7 +11667,10 @@
     "note": "DR Top100 #76 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 76
+    }
   },
   {
     "id": "c-1456",
@@ -11453,7 +11681,10 @@
     "note": "DR Top100 #77 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 77
+    }
   },
   {
     "id": "c-1457",
@@ -11464,7 +11695,10 @@
     "note": "DR Top100 #78 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 78
+    }
   },
   {
     "id": "c-1458",
@@ -11475,7 +11709,10 @@
     "note": "DR Top100 #79 · På listen i live-version (Roskilde Festival 2007).",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 79
+    }
   },
   {
     "id": "c-1459",
@@ -11486,7 +11723,10 @@
     "note": "DR Top100 #80",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 80
+    }
   },
   {
     "id": "c-1460",
@@ -11497,7 +11737,10 @@
     "note": "DR Top100 #81 · ?",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 81
+    }
   },
   {
     "id": "c-1461",
@@ -11508,7 +11751,10 @@
     "note": "DR Top100 #82 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 82
+    }
   },
   {
     "id": "c-1462",
@@ -11519,7 +11765,10 @@
     "note": "DR Top100 #83 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 83
+    }
   },
   {
     "id": "c-1463",
@@ -11530,7 +11779,10 @@
     "note": "DR Top100 #84 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 84
+    }
   },
   {
     "id": "c-1464",
@@ -11541,7 +11793,10 @@
     "note": "DR Top100 #85 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 85
+    }
   },
   {
     "id": "c-1465",
@@ -11552,7 +11807,10 @@
     "note": "DR Top100 #86",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 86
+    }
   },
   {
     "id": "c-1466",
@@ -11563,7 +11821,10 @@
     "note": "DR Top100 #87 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 87
+    }
   },
   {
     "id": "c-1467",
@@ -11574,7 +11835,10 @@
     "note": "DR Top100 #88",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 88
+    }
   },
   {
     "id": "c-1468",
@@ -11585,7 +11849,10 @@
     "note": "DR Top100 #89 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 89
+    }
   },
   {
     "id": "c-1469",
@@ -11596,7 +11863,10 @@
     "note": "DR Top100 #90 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 90
+    }
   },
   {
     "id": "c-1470",
@@ -11607,7 +11877,10 @@
     "note": "DR Top100 #91 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 91
+    }
   },
   {
     "id": "c-1471",
@@ -11618,7 +11891,10 @@
     "note": "DR Top100 #92 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 92
+    }
   },
   {
     "id": "c-1472",
@@ -11629,7 +11905,10 @@
     "note": "DR Top100 #93 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 93
+    }
   },
   {
     "id": "c-1473",
@@ -11640,7 +11919,10 @@
     "note": "DR Top100 #94",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 94
+    }
   },
   {
     "id": "c-1474",
@@ -11651,7 +11933,10 @@
     "note": "DR Top100 #95",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 95
+    }
   },
   {
     "id": "c-1475",
@@ -11662,7 +11947,10 @@
     "note": "DR Top100 #96 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 96
+    }
   },
   {
     "id": "c-1476",
@@ -11673,7 +11961,10 @@
     "note": "DR Top100 #97 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 97
+    }
   },
   {
     "id": "c-1477",
@@ -11684,7 +11975,10 @@
     "note": "DR Top100 #98 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 98
+    }
   },
   {
     "id": "c-1478",
@@ -11695,7 +11989,10 @@
     "note": "DR Top100 #99 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 99
+    }
   },
   {
     "id": "c-1479",
@@ -11706,6 +12003,9 @@
     "note": "DR Top100 #100 · årstal ikke verificeret",
     "tags": [
       "top 100"
-    ]
+    ],
+    "tagValues": {
+      "top 100": 100
+    }
   }
 ]

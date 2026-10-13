@@ -12,6 +12,7 @@ import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from '../types';
 import { HitsterCard } from './HitsterCard';
 import { TimelineSlot } from './TimelineSlot';
 import { YearPicker } from './YearPicker';
+import { ValueScale, YEAR_SCALE } from '../services/rankedTags';
 
 interface TimelineViewProps {
   timeline: TimelineEntry[];
@@ -36,6 +37,8 @@ interface TimelineViewProps {
     chosenIndex: number;
     yearBonus: boolean;
   } | null;
+  // What the timeline is ordered by: the year (default) or a tag's numbers (placement game).
+  scale?: ValueScale;
 }
 
 export function TimelineView({
@@ -56,9 +59,16 @@ export function TimelineView({
   yearGuessInput,
   onYearGuessChange,
   lastPlacementResult,
+  scale = YEAR_SCALE,
 }: TimelineViewProps) {
-  // Active numeric year state for the stepper / tags
-  const currentNumericYear = parseInt(yearGuessInput, 10) || 1995;
+  const { valueOf, format } = scale;
+  const isList = scale.rankTag !== undefined;
+  // Value the guess starts from: 1995, or the middle of the list.
+  const defaultGuess = scale.values ? scale.values[Math.floor(scale.values.length / 2)] : 1995;
+
+  // Active numeric year (or list value) for the stepper / tags
+  const parsedGuess = parseInt(yearGuessInput, 10);
+  const currentNumericYear = Number.isNaN(parsedGuess) ? defaultGuess : parsedGuess;
 
   // Board zoom — lets players scale the cards up/down when many are on the board.
   const [boardZoom, setBoardZoom] = useState<number>(() => {
@@ -99,47 +109,54 @@ export function TimelineView({
 
   for (let i = 0; i <= timelineLength; i++) {
     let label = '';
-    let minYear = 1950;
-    let maxYear = 2026;
+    let minYear = scale.min;
+    let maxYear = scale.max;
 
     if (i === 0) {
-      const firstYear = timeline.length > 0 ? timeline[0].song.year : 2000;
-      label = timeline.length > 0 ? `Før ${firstYear}` : 'Første sang';
-      minYear = 1950;
+      const firstYear = timeline.length > 0 ? valueOf(timeline[0].song) : 2000;
+      label = timeline.length > 0 ? `Før ${format(firstYear)}` : 'Første sang';
       maxYear = firstYear;
     } else if (i === timelineLength) {
-      const lastYear = timeline[timelineLength - 1].song.year;
-      label = `Efter ${lastYear}`;
+      const lastYear = valueOf(timeline[timelineLength - 1].song);
+      label = `Efter ${format(lastYear)}`;
       minYear = lastYear;
-      maxYear = 2026;
     } else {
-      const prevYear = timeline[i - 1].song.year;
-      const nextYear = timeline[i].song.year;
-      label = `${prevYear} – ${nextYear}`;
+      const prevYear = valueOf(timeline[i - 1].song);
+      const nextYear = valueOf(timeline[i].song);
+      label = `${format(prevYear)} – ${format(nextYear)}`;
       minYear = prevYear;
       maxYear = nextYear;
     }
     slots.push({ index: i, label, minYear, maxYear });
   }
 
+  // Numbers that could still land in slot i (strictly between its neighbours).
+  const rankValuesIn = (i: number): number[] => {
+    const lo = i === 0 ? -Infinity : slots[i].minYear;
+    const hi = i === timelineLength ? Infinity : slots[i].maxYear;
+    return (scale.values ?? []).filter((v) => v > lo && v < hi);
+  };
+
   // A slot is "dead" when no unused year can ever land in it — e.g. between two
   // cards whose years are consecutive (2015 & 2016), since card years are unique.
+  // In a placement game: when no number of the collection lies between the neighbours.
   const isDeadSlot = (i: number): boolean => {
     const s = slots[i];
     if (!s || timeline.length === 0) return false;
-    if (i === 0) return s.maxYear <= 1950; // no year below the first card
-    if (i === timelineLength) return s.minYear >= 2026; // no year above the last card
+    if (isList) return rankValuesIn(i).length === 0;
+    if (i === 0) return s.maxYear <= scale.min; // no year below the first card
+    if (i === timelineLength) return s.minYear >= scale.max; // no year above the last card
     return s.maxYear - s.minYear < 2; // no integer strictly between the neighbours
   };
 
-  // Determine slot index from a numeric year on the shared timeline
+  // Determine slot index from a numeric year (or list value) on the shared timeline
   const getSlotFromYear = (year: number): number => {
     if (timeline.length === 0) return 0;
-    if (year < timeline[0].song.year) return 0;
-    if (year > timeline[timeline.length - 1].song.year) return timeline.length;
+    if (year < valueOf(timeline[0].song)) return 0;
+    if (year > valueOf(timeline[timeline.length - 1].song)) return timeline.length;
 
     for (let i = 0; i < timeline.length - 1; i++) {
-      if (year >= timeline[i].song.year && year <= timeline[i + 1].song.year) {
+      if (year >= valueOf(timeline[i].song) && year <= valueOf(timeline[i + 1].song)) {
         return i + 1;
       }
     }
@@ -148,7 +165,7 @@ export function TimelineView({
 
   // When user updates the slider or stepper
   const handleYearChange = (newYear: number) => {
-    const clampedYear = Math.max(1950, Math.min(2026, newYear));
+    const clampedYear = Math.max(scale.min, Math.min(scale.max, newYear));
     onYearGuessChange(clampedYear.toString());
 
     // Auto-select the corresponding slot, unless it's an impossible (dead) slot
@@ -163,10 +180,13 @@ export function TimelineView({
     const slot = slots[slotIdx];
     if (slot) {
       let suggestedYear = 1995;
-      if (slotIdx === 0) {
-        suggestedYear = timeline.length > 0 ? Math.max(1950, timeline[0].song.year - 5) : 1990;
+      if (isList) {
+        const candidates = timeline.length > 0 ? rankValuesIn(slotIdx) : scale.values ?? [];
+        suggestedYear = candidates[Math.floor(candidates.length / 2)] ?? defaultGuess;
+      } else if (slotIdx === 0) {
+        suggestedYear = timeline.length > 0 ? Math.max(scale.min, valueOf(timeline[0].song) - 5) : 1990;
       } else if (slotIdx === timelineLength) {
-        suggestedYear = Math.min(2024, timeline[timelineLength - 1].song.year + 4);
+        suggestedYear = Math.min(2024, valueOf(timeline[timelineLength - 1].song) + 4);
       } else {
         suggestedYear = Math.round((slot.minYear + slot.maxYear) / 2);
       }
@@ -251,6 +271,7 @@ export function TimelineView({
               isRevealed={true}
               status="neutral"
               claimedBy={entry.claimedBy}
+              valueLabel={isList ? format(valueOf(entry.song)) : undefined}
             />
 
             {/* Slot right after this card */}
@@ -285,7 +306,15 @@ export function TimelineView({
       {/* Guess controls (decade cards + exact year) + confirm — same picker as the online game */}
       {isPlacingPhase && (
         <div className="shrink-0 flex flex-col gap-2">
-          <YearPicker year={currentNumericYear} onChange={handleYearChange} />
+          <YearPicker
+            year={currentNumericYear}
+            onChange={handleYearChange}
+            valueRange={
+              isList
+                ? { min: scale.min, max: scale.max, label: scale.rankTag?.valuePrefix === '#' ? 'placering' : 'tal', badge: 'TAL' }
+                : undefined
+            }
+          />
 
           {/* First press starts the song; afterwards it reveals & checks the placement */}
           {songStarted ? (
@@ -334,14 +363,16 @@ export function TimelineView({
                 {lastPlacementResult.isCorrect ? 'Rigtig placering!' : 'Øv, forkert placering!'}
                 {lastPlacementResult.yearBonus && (
                   <span className="text-[11px] bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                    <Coins className="w-3 h-3" /> +1 Mønt for præcist årstal ({mysterySong?.year})!
+                    <Coins className="w-3 h-3" /> +1 Mønt for præcist {isList ? 'tal' : 'årstal'} (
+                    {mysterySong && format(valueOf(mysterySong))})!
                   </span>
                 )}
               </h4>
               <p className="text-xs opacity-90 mt-0.5">
-                {lastPlacementResult.isCorrect
-                  ? `${mysterySong?.title} (${mysterySong?.year}) er nu gemt på din tidslinje.`
-                  : `${mysterySong?.title} udkom i ${mysterySong?.year} og hørte til ved: "${slots[lastPlacementResult.correctIndex]?.label}". Kortet kasseres.`}
+                {mysterySong &&
+                  (lastPlacementResult.isCorrect
+                    ? `${mysterySong.title} (${format(valueOf(mysterySong))}) er nu gemt på din tidslinje.`
+                    : `${mysterySong.title} ${isList ? `er ${format(valueOf(mysterySong))} på ${scale.rankTag?.tag}` : `udkom i ${mysterySong.year}`} og hørte til ved: "${slots[lastPlacementResult.correctIndex]?.label}". Kortet kasseres.`)}
               </p>
             </div>
           </div>

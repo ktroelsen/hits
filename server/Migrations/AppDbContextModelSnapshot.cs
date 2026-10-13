@@ -95,6 +95,9 @@ namespace Hits.Api.Migrations
                     b.Property<int>("PointsYearBonus")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("RankTag")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -167,6 +170,30 @@ namespace Hits.Api.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("Hits.Api.Models.RankedTag", b =>
+                {
+                    b.Property<string>("Tag")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ValuePrefix")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ValueSuffix")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Tag");
+
+                    b.ToTable("RankedTags");
                 });
 
             modelBuilder.Entity("Hits.Api.Models.Round", b =>
@@ -276,6 +303,26 @@ namespace Hits.Api.Migrations
                     b.ToTable("Songs");
                 });
 
+            modelBuilder.Entity("Hits.Api.Models.SongTagValue", b =>
+                {
+                    b.Property<string>("Tag")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SongId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Tag", "SongId");
+
+                    b.HasIndex("SongId");
+
+                    b.HasIndex("Tag", "Value");
+
+                    b.ToTable("SongTagValues");
+                });
+
             modelBuilder.Entity("Hits.Api.Models.Answer", b =>
                 {
                     b.HasOne("Hits.Api.Models.Round", null)
@@ -299,6 +346,21 @@ namespace Hits.Api.Migrations
                     b.HasOne("Hits.Api.Models.Game", null)
                         .WithMany("Rounds")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Hits.Api.Models.SongTagValue", b =>
+                {
+                    b.HasOne("Hits.Api.Models.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hits.Api.Models.RankedTag", null)
+                        .WithMany()
+                        .HasForeignKey("Tag")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

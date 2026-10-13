@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback, type InputHTMLAttributes } fr
 import { fetchSongAudioPreview } from '../services/audioService';
 import { SongCategory } from '../types';
 import { AdminCatalog } from './AdminCatalog';
+import { AdminRankedTags } from './AdminRankedTags';
+import { AdminAi } from './AdminAi';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
@@ -60,6 +62,8 @@ interface Candidate {
   note?: string;
   // Tags the song gets when approved (e.g. "top 100").
   tags?: string[];
+  // Numbers the song gets in tags with numbers when approved, e.g. { "top 100": 3 }.
+  tagValues?: Record<string, number>;
   // Set when the song is already in the catalog: approving only adds the missing tags.
   existing?: { id: string; title: string; artist: string; year: number; active: boolean; tags: string[] } | null;
 }
@@ -115,7 +119,7 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
-  const [tab, setTab] = useState<'candidates' | 'catalog'>('candidates');
+  const [tab, setTab] = useState<'candidates' | 'catalog' | 'ranked' | 'ai'>('candidates');
   // Tags put on every song approved from here. Kept between songs (and reloads), so a
   // whole batch can be tagged while reviewing it.
   const [stickyTags, setStickyTags] = useState(readStickyTags);
@@ -233,6 +237,7 @@ export function AdminPage() {
   const current = !manualMode && draft.candidateId ? queue.find((c) => c.id === draft.candidateId) : undefined;
   const approveTags = [...new Set([...parseTags(stickyTags), ...(current?.tags ?? [])])];
   const knownTags = state?.tags ?? [];
+  const candidateValues = Object.entries(current?.tagValues ?? {});
   const toggleStickyTag = (tag: string) => {
     const tags = parseTags(stickyTags);
     setStickyTags((tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag]).join(', '));
@@ -267,6 +272,7 @@ export function AdminPage() {
           previewUrl: url,
           artworkUrl: artwork,
           tags: approveTags,
+          tagValues: current?.tagValues,
         }),
       });
       const data = await res.json();
@@ -307,7 +313,7 @@ export function AdminPage() {
     } finally {
       setBusy(false);
     }
-  }, [draft, preview, manualMode, advance, stopAudio, approveTags]);
+  }, [draft, preview, manualMode, advance, stopAudio, approveTags, current]);
 
   const reject = useCallback(async () => {
     if (!draft.candidateId) {
@@ -408,6 +414,8 @@ export function AdminPage() {
               {[
                 { id: 'candidates' as const, label: `Kandidater (${remaining})` },
                 { id: 'catalog' as const, label: `Katalog (${total})` },
+                { id: 'ranked' as const, label: 'Tags med tal' },
+                { id: 'ai' as const, label: '✨ AI-assistent' },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -425,6 +433,10 @@ export function AdminPage() {
             </div>
 
             {tab === 'catalog' && <AdminCatalog request={keyedFetch} onChanged={loadCounts} />}
+
+            {tab === 'ranked' && <AdminRankedTags request={keyedFetch} />}
+
+            {tab === 'ai' && <AdminAi request={keyedFetch} />}
 
             {tab === 'candidates' && (
             <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
@@ -478,7 +490,7 @@ export function AdminPage() {
                   Findes allerede i kataloget: {current.existing.artist} – {current.existing.title} (
                   {current.existing.year}){current.existing.active ? '' : ', inaktiv'}
                   {current.existing.tags.length > 0 && ` · tags: ${current.existing.tags.join(', ')}`}. Godkend for kun
-                  at tilføje de manglende tags — titel, årstal osv. ændres ikke.
+                  at tilføje de manglende tags{candidateValues.length ? ' og tallene' : ''} — titel, årstal osv. ændres ikke.
                 </p>
               )}
 
@@ -523,6 +535,14 @@ export function AdminPage() {
                   <p className="mt-2 text-xs text-slate-400">
                     Sangen får: <span className="text-cyan-300">{approveTags.join(', ')}</span>
                     {current?.tags?.length ? ` (${current.tags.join(', ')} fra listen)` : ''}
+                  </p>
+                )}
+                {candidateValues.length > 0 && (
+                  <p className="mt-1 text-xs text-slate-400">
+                    Tal:{' '}
+                    <span className="text-amber-300">
+                      {candidateValues.map(([tag, value]) => tag + ' ' + value).join(', ')}
+                    </span>
                   </p>
                 )}
               </div>

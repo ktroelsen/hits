@@ -21,7 +21,9 @@ public static class GameStateBuilder
             .Select(p => new { p.Id, p.Name, p.Color, p.Score, p.ReadyForRound })
             .ToListAsync();
 
-        var timeline = await BuildTimelineAsync(game, db);
+        var valueOf = await ValueOfAsync(game, db);
+        var timeline = await BuildTimelineAsync(game, db, valueOf);
+        var rank = game.RankTag is null ? null : await db.RankedTags.FindAsync(game.RankTag);
 
         object? roundDto = null;
         if (game.CurrentRound > 0)
@@ -41,7 +43,7 @@ public static class GameStateBuilder
                     readyPlayerIds = players.Where(p => p.ReadyForRound == round.Number).Select(p => p.Id).ToList(),
                     correctIndex = revealed ? round.CorrectIndex : null,
                     song = revealed && song is not null
-                        ? new { song.Id, song.Title, song.Artist, song.Year, song.PreviewUrl, song.ArtworkUrl }
+                        ? new { song.Id, song.Title, song.Artist, song.Year, value = valueOf(song), song.PreviewUrl, song.ArtworkUrl }
                         : null,
                     results = revealed
                         ? answers.Select(a => new
@@ -61,14 +63,42 @@ public static class GameStateBuilder
             currentRound = game.CurrentRound,
             targetRounds = game.TargetRounds,
             playbackMode = game.PlaybackMode,
+            // Placement game: how the numbers read and which occur (for the guess picker).
+            rank = game.RankTag is null ? null : new
+            {
+                tag = game.RankTag,
+                valuePrefix = rank?.ValuePrefix ?? "",
+                valueSuffix = rank?.ValueSuffix ?? "",
+                values = await GameValuesAsync(game, db),
+            },
             players = players.Select(p => new { p.Id, p.Name, p.Color, p.Score }),
-            timeline = timeline.Select(s => new { s.Id, s.Title, s.Artist, s.Year, s.ArtworkUrl }),
+            timeline = timeline.Select(s => new { s.Id, s.Title, s.Artist, s.Year, value = valueOf(s), s.ArtworkUrl }),
             round = roundDto,
         };
     }
 
-    // The shared timeline = songs from already-revealed rounds, sorted ascending by year.
-    public static async Task<List<Song>> BuildTimelineAsync(Game game, AppDbContext db)
+    // The number each song is placed by: its year, or in a placement game its number in
+    // the game's tag (songs without one sort last; the deck only holds numbered songs).
+    public static async Task<Func<Song, int>> ValueOfAsync(Game game, AppDbContext db)
+    {
+        if (game.RankTag is null) return s => s.Year;
+        var values = await db.SongTagValues.Where(v => v.Tag == game.RankTag)
+            .ToDictionaryAsync(v => v.SongId, v => v.Value);
+        return s => values.TryGetValue(s.Id, out var v) ? v : int.MaxValue;
+    }
+
+    // The distinct numbers of the songs in a placement game's deck, ascending.
+    static async Task<List<int>> GameValuesAsync(Game game, AppDbContext db)
+    {
+        var deck = System.Text.Json.JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
+        return await db.SongTagValues
+            .Where(v => v.Tag == game.RankTag && deck.Contains(v.SongId))
+            .Select(v => v.Value).Distinct().OrderBy(v => v).ToListAsync();
+    }
+
+    // The shared timeline = songs from already-revealed rounds, sorted ascending by their
+    // value (year, or number in a placement game).
+    public static async Task<List<Song>> BuildTimelineAsync(Game game, AppDbContext db, Func<Song, int> valueOf)
     {
         var revealedSongIds = await db.Rounds
             .Where(r => r.GameId == game.Id && r.Status == RoundStatus.Revealed)
@@ -76,6 +106,6 @@ public static class GameStateBuilder
             .ToListAsync();
         if (revealedSongIds.Count == 0) return new();
         var songs = await db.Songs.Where(s => revealedSongIds.Contains(s.Id)).ToListAsync();
-        return songs.OrderBy(s => s.Year).ToList();
+        return songs.OrderBy(valueOf).ToList();
     }
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { attachFadeEnvelope, fadeOutAndPause, resetFade } from '../services/audioFade';
-import { gameApi, useGameState } from '../services/gameApi';
+import { formatGameValue, gameApi, useGameState } from '../services/gameApi';
 import { PlacementPicker } from './PlacementPicker';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
@@ -137,6 +137,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
       {overlay.visible && state && round && (
         <RevealOverlay
           round={round}
+          rank={state.rank}
           players={state.players}
           timeline={state.timeline}
           highlightPlayerId={player.id}
@@ -196,6 +197,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
               <PlacementPicker
                 key={round.number}
                 timeline={state.timeline}
+                rank={state.rank}
                 onSubmit={submitAnswer}
                 audioControl={audioButton}
               />
@@ -208,7 +210,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
         <Centered>
           {round.song && (
             <p className="text-lg font-bold">
-              {round.song.artist} – {round.song.title} ({round.song.year})
+              {round.song.artist} – {round.song.title} ({formatGameValue(state.rank, round.song)})
             </p>
           )}
           {myResult ? (
@@ -220,7 +222,7 @@ export function OnlinePlayerScreen({ code }: { code: string }) {
           )}
           {myResult && (
             <p className="mt-1 text-sm text-slate-400">
-              Placering {myResult.placementCorrect ? '✅' : '❌'} · Årstal{' '}
+              Placering {myResult.placementCorrect ? '✅' : '❌'} · {state.rank ? 'Tal' : 'Årstal'}{' '}
               {myResult.yearCorrect ? '✅' : '❌'}
             </p>
           )}

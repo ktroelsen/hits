@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { Heart, Play, Settings, HelpCircle, ListMusic, Users, Plus, LogIn, ArrowLeft, Download, Share } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { GameSettings } from '../types';
+import { effectiveTags } from '../services/songsService';
 import type { BestScores } from '../services/highscoreStore';
 import { useInstallOption } from '../services/installPrompt';
 
 interface StartScreenProps {
   settings: GameSettings;
   highscores: BestScores;
+  // Tags with numbers that can be played as a placement game (with their song counts).
+  rankChoices: { tag: string; count: number }[];
+  // Songs the current settings deal from.
+  songCount: number;
+  onSelectRankTag: (rankTag: string | undefined) => void;
   onStart: () => void;
   onStartSolo: () => void;
   onOpenSettings: () => void;
@@ -18,6 +24,9 @@ interface StartScreenProps {
 export function StartScreen({
   settings,
   highscores,
+  rankChoices,
+  songCount,
+  onSelectRankTag,
   onStart,
   onStartSolo,
   onOpenSettings,
@@ -29,6 +38,9 @@ export function StartScreen({
   const [joinCode, setJoinCode] = useState('');
   const installOption = useInstallOption();
   const codeValid = /^\d{4}$/.test(joinCode);
+  // Placement game on a tag with numbers, or the normal year game.
+  const rankTag = rankChoices.some((c) => c.tag === settings.rankTag) ? settings.rankTag : undefined;
+  const tags = effectiveTags(settings.tags);
 
   const joinGame = () => {
     if (codeValid) window.location.href = `/game/${joinCode}`;
@@ -48,15 +60,49 @@ export function StartScreen({
           HITS
         </h1>
         <p className="mt-3 text-slate-300 text-base sm:text-lg font-medium">
-          Gæt årstal & byg jeres fælles tidslinje
+          {rankTag ? 'Gæt placeringen & byg jeres fælles liste' : 'Gæt årstal & byg jeres fælles tidslinje'}
         </p>
-        <p className="mt-1 text-slate-500 text-sm">
-          {settings.categoryFilter === 'all'
-            ? '🇩🇰 + 🌍 Blandet'
-            : settings.categoryFilter === 'danish'
-            ? '🇩🇰 Kun danske'
-            : '🌍 Kun internationale'}{' '}
-          • Mål:{' '}
+
+        {/* Game type: the year game, or a placement game per tag with numbers */}
+        {rankChoices.length > 0 && (
+          <div className="mt-4 flex flex-wrap justify-center gap-2" role="radiogroup" aria-label="Spiltype">
+            {[{ tag: undefined as string | undefined, label: '📅 Årstal' }, ...rankChoices.map((c) => ({ tag: c.tag, label: `🏆 ${c.tag}` }))].map(
+              (opt) => {
+                const selected = opt.tag === rankTag;
+                return (
+                  <button
+                    key={opt.tag ?? 'year'}
+                    role="radio"
+                    aria-checked={selected}
+                    onClick={() => onSelectRankTag(opt.tag)}
+                    className={`px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${
+                      selected
+                        ? 'bg-amber-500 text-slate-950 border-amber-400'
+                        : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              },
+            )}
+          </div>
+        )}
+
+        <p className="mt-3 text-slate-500 text-sm">
+          {rankTag ? (
+            <>Placeringsspil · {rankTag}</>
+          ) : (
+            <>
+              {settings.categoryFilter === 'all'
+                ? '🇩🇰 + 🌍 Blandet'
+                : settings.categoryFilter === 'danish'
+                ? '🇩🇰 Kun danske'
+                : '🌍 Kun internationale'}
+              {tags.length > 0 && <> · {tags.join(', ')}</>}
+            </>
+          )}{' '}
+          · {songCount} sange • Mål:{' '}
           {settings.winCondition === 'time'
             ? `flest kort på ${settings.timeLimitMinutes} min`
             : `${settings.targetCards} sange`}
@@ -86,12 +132,13 @@ export function StartScreen({
         </button>
         <p className="mt-2 text-slate-400 text-sm">
           Spil alene · én fejl og du er ude
-          {highscores.weekly && (
+          {rankTag && <> · placeringsspil tæller ikke i highscoren</>}
+          {!rankTag && highscores.weekly && (
             <>
               {' '}· <span className="text-amber-300 font-bold">Ugens highscore: {highscores.weekly.score} ({highscores.weekly.name})</span>
             </>
           )}
-          {highscores.allTime && (
+          {!rankTag && highscores.allTime && (
             <>
               {' '}· <span className="text-amber-300 font-bold">Highscore: {highscores.allTime.score} ({highscores.allTime.name})</span>
             </>

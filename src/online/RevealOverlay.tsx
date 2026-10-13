@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { GameState, RoundState, StatePlayer, TimelineSong } from '../services/gameApi';
+import { formatGameValue, GameRank, GameState, RoundState, StatePlayer, TimelineSong } from '../services/gameApi';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { appleMusicUrl } from '../services/audioService';
 
@@ -30,6 +30,8 @@ export function useRevealOverlay(state: GameState | null) {
 
 interface RevealOverlayProps {
   round: RoundState;
+  /** Placement game: numbers instead of years. */
+  rank?: GameRank | null;
   players: StatePlayer[];
   /** The shared timeline, which by now includes the revealed song. */
   timeline: TimelineSong[];
@@ -39,7 +41,7 @@ interface RevealOverlayProps {
   durationMs?: number;
 }
 
-export function RevealOverlay({ round, players, timeline, highlightPlayerId, onClose, durationMs = 9000 }: RevealOverlayProps) {
+export function RevealOverlay({ round, rank, players, timeline, highlightPlayerId, onClose, durationMs = 9000 }: RevealOverlayProps) {
   const song = round.song;
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export function RevealOverlay({ round, players, timeline, highlightPlayerId, onC
   }, [onClose, durationMs]);
 
   const rows = useMemo(() => {
-    const year = song?.year ?? 0;
+    const year = song?.value ?? 0;
     return players
       .map((p) => {
         const result = round.results.find((r) => r.playerId === p.id);
@@ -56,7 +58,7 @@ export function RevealOverlay({ round, players, timeline, highlightPlayerId, onC
         return { player: p, guess, points: result?.points ?? 0, diff: guess == null ? Infinity : Math.abs(guess - year) };
       })
       .sort((a, b) => a.diff - b.diff);
-  }, [players, round.results, song?.year]);
+  }, [players, round.results, song?.value]);
 
   if (!song) return null;
   const anyExact = rows.some((r) => r.diff === 0);
@@ -97,11 +99,12 @@ export function RevealOverlay({ round, players, timeline, highlightPlayerId, onC
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 12 }}
           >
-            {song.year}
+            {formatGameValue(rank, song)}
           </motion.p>
+          {rank && <p className="text-sm text-slate-400">{song.year}</p>}
         </div>
 
-        <TimelineNeighbours song={song} timeline={timeline} />
+        <TimelineNeighbours song={song} timeline={timeline} rank={rank} />
 
         <div className="mt-6 space-y-2">
           {rows.map(({ player, guess, points, diff }, i) => {
@@ -164,8 +167,8 @@ export function RevealOverlay({ round, players, timeline, highlightPlayerId, onC
 
 // The revealed song on the shared timeline with its neighbours: the card before, the
 // song itself (highlighted), and the card after. The timeline already contains the
-// revealed song, sorted by year.
-function TimelineNeighbours({ song, timeline }: { song: TimelineSong; timeline: TimelineSong[] }) {
+// revealed song, sorted by year (or number in a placement game).
+function TimelineNeighbours({ song, timeline, rank }: { song: TimelineSong; timeline: TimelineSong[]; rank?: GameRank | null }) {
   const idx = timeline.findIndex((s) => s.id === song.id);
   if (idx < 0) return null;
   const toCard = (s: TimelineSong) => ({
@@ -189,9 +192,17 @@ function TimelineNeighbours({ song, timeline }: { song: TimelineSong; timeline: 
     >
       <p className="mb-2 text-center text-xs font-bold uppercase tracking-widest text-slate-400">Tidslinjen</p>
       <div className="flex items-center justify-center gap-2">
-        {before ? <HitsterCard song={toCard(before)} isRevealed status="neutral" /> : <EdgeCard label="Først" />}
-        <HitsterCard song={toCard(song)} isRevealed status="active" />
-        {after ? <HitsterCard song={toCard(after)} isRevealed status="neutral" /> : <EdgeCard label="Sidst" />}
+        {before ? (
+          <HitsterCard song={toCard(before)} isRevealed status="neutral" valueLabel={rank ? formatGameValue(rank, before) : undefined} />
+        ) : (
+          <EdgeCard label="Først" />
+        )}
+        <HitsterCard song={toCard(song)} isRevealed status="active" valueLabel={rank ? formatGameValue(rank, song) : undefined} />
+        {after ? (
+          <HitsterCard song={toCard(after)} isRevealed status="neutral" valueLabel={rank ? formatGameValue(rank, after) : undefined} />
+        ) : (
+          <EdgeCard label="Sidst" />
+        )}
       </div>
     </motion.div>
   );

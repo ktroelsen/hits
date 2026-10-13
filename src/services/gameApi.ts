@@ -19,8 +19,23 @@ export interface TimelineSong {
   title: string;
   artist: string;
   year: number;
+  /** What the song is placed by: the year, or its number in a placement game. */
+  value: number;
   artworkUrl?: string | null;
 }
+
+/** Placement game: the tag with numbers being played and how its numbers read. */
+export interface GameRank {
+  tag: string;
+  valuePrefix: string;
+  valueSuffix: string;
+  /** The distinct numbers in the game's deck, ascending. */
+  values: number[];
+}
+
+/** A song's label on the board: its year, or "#12" / "14 uger" in a placement game. */
+export const formatGameValue = (rank: GameRank | null | undefined, song: Pick<TimelineSong, 'year' | 'value'>) =>
+  rank ? `${rank.valuePrefix}${song.value}${rank.valueSuffix}` : String(song.year);
 
 export interface RoundResult {
   playerId: string;
@@ -49,6 +64,8 @@ export interface GameState {
   currentRound: number;
   targetRounds: number;
   playbackMode: PlaybackMode;
+  /** Set in a placement game; null in the normal year game. */
+  rank: GameRank | null;
   players: StatePlayer[];
   timeline: TimelineSong[];
   round: RoundState | null;
@@ -69,10 +86,11 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const gameApi = {
   // tags: song collections to deal from (e.g. ["hitmix"]); tags no song has are ignored.
-  create: (targetRounds?: number, playbackMode?: PlaybackMode, tags?: string[]) =>
+  // rankTag: play a placement game on this tag with numbers instead (tags are ignored).
+  create: (targetRounds?: number, playbackMode?: PlaybackMode, tags?: string[], rankTag?: string) =>
     req<{ gameId: string; code: string }>('/', {
       method: 'POST',
-      body: JSON.stringify({ targetRounds, playbackMode, tags }),
+      body: JSON.stringify({ targetRounds, playbackMode, tags, rankTag }),
     }),
   join: (code: string, name: string) =>
     req<{ id: string; name: string; color: string }>(`/${code}/join`, {
@@ -80,6 +98,7 @@ export const gameApi = {
       body: JSON.stringify({ name }),
     }),
   start: (code: string) => req<void>(`/${code}/start`, { method: 'POST' }),
+  // guessedYear: the exact year — or the exact number in a placement game.
   answer: (code: string, playerId: string, insertIndex: number, guessedYear?: number) =>
     req<void>(`/${code}/answer`, {
       method: 'POST',

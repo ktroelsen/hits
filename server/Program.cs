@@ -1,8 +1,10 @@
 using System.Text.Json;
 using Hits.Api.Admin;
+using Hits.Api.Ai;
 using Hits.Api.Catalog;
 using Hits.Api.Data;
 using Hits.Api.Gameplay;
+using Hits.Api.Tags;
 using Hits.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +27,9 @@ builder.Services.AddHostedService<PlaySessionCleanupService>();
 builder.Services.AddHttpClient(nameof(PreviewRefresher), c => c.Timeout = TimeSpan.FromSeconds(15));
 builder.Services.AddSingleton<PreviewRefresher>();
 builder.Services.AddHostedService<PreviewRefreshJob>();
+
+// AI assistant in /admin (researches song collections with Claude; needs Anthropic__ApiKey).
+builder.Services.AddSingleton<AiResearch>();
 
 // Allow the statically-hosted frontend (dev on :3000) to call the API cross-origin.
 const string DevCors = "dev-frontend";
@@ -133,6 +138,12 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 
 // ---- Admin curation API (/admin) ----
 app.MapAdminEndpoints();
+
+// ---- Tags with numbers (top 100 etc.; the placement game orders by the number) ----
+app.MapRankedTagEndpoints();
+
+// ---- AI assistant (/admin → AI-assistent) ----
+app.MapAiEndpoints();
 
 // ---- Online game API (issue 8) ----
 app.MapGameEndpoints();

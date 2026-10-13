@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSongAudioPreview } from '../services/audioService';
 import { Song, SongCategory } from '../types';
+import { RankedTag } from '../services/rankedTags';
 
 // "Katalog" tab on /admin: every song in the database, with search, preview,
 // edit, delete, tags and active toggle. Reads GET /api/songs and writes via PUT/DELETE
@@ -102,6 +103,9 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
   const [addTagsOnly, setAddTagsOnly] = useState(false); // import: `tags` adds instead of replacing
   const [editing, setEditing] = useState<Song | null>(null);
   const [tagsText, setTagsText] = useState('');
+  // Tags with numbers (top 100 etc.) and the edited song's numbers in them, by tag.
+  const [rankedTags, setRankedTags] = useState<RankedTag[]>([]);
+  const [rankDrafts, setRankDrafts] = useState<Record<string, string>>({});
   const [bulkTag, setBulkTag] = useState('hitmix'); // tag to add to / remove from the shown songs
   const [exportLimit, setExportLimit] = useState('');
   const [importFile, setImportFile] = useState<{ name: string; body: string } | null>(null);
@@ -116,9 +120,10 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch('/api/songs');
+      const [res, ranked] = await Promise.all([fetch('/api/songs'), fetch('/api/ranked-tags')]);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSongs(await res.json());
+      if (ranked.ok) setRankedTags(await ranked.json());
       setError(null);
     } catch (e) {
       setError(`Kunne ikke hente kataloget: ${(e as Error).message}`);
@@ -339,6 +344,23 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const saved: Song = await res.json();
+      // Numbers for the song's tags with numbers (blank clears the number).
+      const rankedOnSong = rankedTags.filter((t) => saved.tags?.includes(t.tag));
+      if (rankedOnSong.length > 0) {
+        const values = Object.fromEntries(
+          rankedOnSong.map((t) => {
+            const text = (rankDrafts[t.tag] ?? '').trim();
+            return [t.tag, text === '' || !Number.isFinite(Number(text)) ? null : Number(text)];
+          }),
+        );
+        const r = await request(`/api/ranked-tags/song/${encodeURIComponent(saved.id)}`, {
+          method: 'POST',
+          body: JSON.stringify({ values }),
+        });
+        if (!r.ok) throw new Error(`tal: HTTP ${r.status}`);
+        const ranked = await fetch('/api/ranked-tags');
+        if (ranked.ok) setRankedTags(await ranked.json());
+      }
       setSongs((list) => list?.map((s) => (s.id === saved.id ? saved : s)) ?? null);
       setEditing(null);
       setError(null);
@@ -642,6 +664,21 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                   onChange={(e) => setTagsText(e.target.value)}
                   placeholder="Tags, kommasepareret (fx dance, melodi grand prix)"
                 />
+                {rankedTags
+                  .filter((t) => parseTags(tagsText).includes(t.tag))
+                  .map((t) => (
+                    <label key={t.tag} className="col-span-2 flex items-center gap-2 text-sm text-slate-300 sm:col-span-1">
+                      <span className="flex-1 truncate">Tal i {t.tag}</span>
+                      <input
+                        className={inputCls.replace('w-full', 'w-24')}
+                        type="number"
+                        inputMode="numeric"
+                        placeholder={t.valuePrefix || t.valueSuffix ? `${t.valuePrefix}?${t.valueSuffix}` : 'Tal'}
+                        value={rankDrafts[t.tag] ?? ''}
+                        onChange={(e) => setRankDrafts((d) => ({ ...d, [t.tag]: e.target.value }))}
+                      />
+                    </label>
+                  ))}
               </div>
               <div className="flex gap-2">
                 <button
@@ -715,6 +752,11 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                 onClick={() => {
                   setEditing({ ...song });
                   setTagsText((song.tags ?? []).join(', '));
+                  setRankDrafts(
+                    Object.fromEntries(
+                      rankedTags.map((t) => [t.tag, String(t.values.find((v) => v.songId === song.id)?.value ?? '')]),
+                    ),
+                  );
                 }}
                 disabled={busy}
                 className="rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-slate-800"
