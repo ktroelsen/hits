@@ -10,7 +10,9 @@ namespace Hits.Api.Catalog;
 // Keeps the catalog's iTunes preview/artwork URLs alive in the database. Apple's preview
 // URLs expire over time and the DB is only seeded once, so the server periodically checks
 // each song's previewUrl against Apple's CDN and re-resolves dead ones via the iTunes
-// Search API. It never clears a URL: songs that can't be resolved are left untouched.
+// Search API — or, for songs whose track was picked by hand in /admin (ITunesTrackId),
+// via the iTunes Lookup API for exactly that track, so a corrected preview stays correct.
+// It never clears a URL: songs that can't be resolved are left untouched.
 public sealed partial class PreviewRefresher(
     IHttpClientFactory httpFactory, IServiceScopeFactory scopes, IWebHostEnvironment env, ILogger<PreviewRefresher> logger)
 {
@@ -93,7 +95,7 @@ public sealed partial class PreviewRefresher(
                 if (alive != false) { Publish(true, null); continue; } // alive, or unknown → leave it
             }
 
-            var result = await ResolveAsync(song.Artist, song.Title, ct);
+            var result = await ResolveForSongAsync(song, ct);
             switch (result.Outcome)
             {
                 case Outcome.Found:
@@ -128,7 +130,7 @@ public sealed partial class PreviewRefresher(
     {
         var song = await db.Songs.FindAsync([id], ct);
         if (song is null) return (null, Outcome.NotFound);
-        var result = await ResolveAsync(song.Artist, song.Title, ct, retry: false);
+        var result = await ResolveForSongAsync(song, ct, retry: false);
         if (result.Outcome == Outcome.Found)
         {
             Apply(song, result);
@@ -158,13 +160,28 @@ public sealed partial class PreviewRefresher(
     [GeneratedRegex(@"\(.*?\)")]
     private static partial Regex ParensRegex();
 
-    async Task<Resolved> ResolveAsync(string artist, string title, CancellationToken ct, bool retry = true)
+    // A hand-picked track is looked up by id (the store it came from isn't stored, so the
+    // default store is tried first, then the Danish one); otherwise the search's first hit.
+    async Task<Resolved> ResolveForSongAsync(Song song, CancellationToken ct, bool retry = true)
+    {
+        if (song.ITunesTrackId is not long trackId)
+            return await ResolveAsync(BuildSearchUrl(song.Artist, song.Title), ct, retry);
+        var result = await ResolveAsync(BuildLookupUrl(trackId, null), ct, retry);
+        return result.Outcome == Outcome.NotFound
+            ? await ResolveAsync(BuildLookupUrl(trackId, "dk"), ct, retry)
+            : result;
+    }
+
+    public static string BuildLookupUrl(long trackId, string? country) =>
+        $"https://itunes.apple.com/lookup?id={trackId}&entity=song" + (country is null ? "" : $"&country={country}");
+
+    async Task<Resolved> ResolveAsync(string url, CancellationToken ct, bool retry = true)
     {
         for (var attempt = 0; attempt <= (retry ? MaxRetries : 0); attempt++)
         {
             try
             {
-                using var res = await Http.GetAsync(BuildSearchUrl(artist, title), ct);
+                using var res = await Http.GetAsync(url, ct);
                 if (res.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.TooManyRequests)
                 {
                     if (!retry) return new(Outcome.Unknown);

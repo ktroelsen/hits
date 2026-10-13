@@ -92,6 +92,7 @@ songs.MapPut("/{id}", async (string id, Song input, AppDbContext db) =>
     song.CustomPreviewUrl = input.CustomPreviewUrl;
     song.PreviewUrl = input.PreviewUrl;
     song.ArtworkUrl = input.ArtworkUrl;
+    song.ITunesTrackId = input.ITunesTrackId;
     song.Tags = AdminEndpoints.NormalizeTags(input.Tags);
     await db.SaveChangesAsync();
     return Results.Ok(song);
