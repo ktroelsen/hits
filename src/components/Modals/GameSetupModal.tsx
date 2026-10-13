@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
+import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock, SlidersHorizontal } from 'lucide-react';
 import { BrandLogo } from '../BrandLogo';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 import { getActiveSongs, isTagActive, matchesSettings } from '../../services/songsService';
@@ -632,13 +632,24 @@ export function GameSetupModal({
 
         {/* Footer */}
         <div className="mt-7 pt-4 border-t border-slate-800 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
-          >
-            Annuller
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+            >
+              Annuller
+            </button>
+            {/* Song admin (/admin asks for the admin key itself) */}
+            <a
+              href="/admin"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 hover:text-white transition-colors"
+              title="Sang-admin: kandidater, katalog, tags og AI-assistent"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Admin
+            </a>
+          </div>
 
           <button
             type="button"
