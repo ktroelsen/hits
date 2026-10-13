@@ -56,6 +56,10 @@ export interface GameSettings {
   enableSoundEffects: boolean;
   expertTolerance: number; // 0 = exact year, 1 = +/- 1 year
   uniqueYearsOnly: boolean; // false allows multiple songs from the same year on the timeline
+  // Placement game: play the songs of this tag with numbers (e.g. "top 100") and order
+  // the timeline by their number instead of the year. Replaces the category/decade/tag
+  // filters. Unset = the normal year game.
+  rankTag?: string;
 }
 
 export type TurnPhase = 

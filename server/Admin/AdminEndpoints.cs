@@ -2,6 +2,7 @@ using System.Text.Json;
 using Hits.Api.Catalog;
 using Hits.Api.Data;
 using Hits.Api.Models;
+using Hits.Api.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hits.Api.Admin;
@@ -16,11 +17,14 @@ public static class AdminEndpoints
 
     // Tags (optional) are put on the song when the candidate is approved — also when the
     // song is already in the catalog, so a list like "top 100" can be layered onto it.
-    record Candidate(string Id, string Title, string Artist, int Year, string Category, string? Note, List<string>? Tags);
+    // TagValues give the song its number in a tag with numbers, e.g. {"top 100": 3}.
+    record Candidate(string Id, string Title, string Artist, int Year, string Category, string? Note, List<string>? Tags,
+        Dictionary<string, int>? TagValues = null);
 
     public record ApproveRequest(
         string? CandidateId, string? Title, string? Artist, int? Year, string? Category,
-        string? Genre, string? FunFact, string? PreviewUrl, string? ArtworkUrl, List<string>? Tags);
+        string? Genre, string? FunFact, string? PreviewUrl, string? ArtworkUrl, List<string>? Tags,
+        Dictionary<string, int>? TagValues = null);
 
     public record RejectRequest(string? CandidateId);
 
@@ -59,20 +63,23 @@ public static class AdminEndpoints
             var catalog = await db.Songs.AsNoTracking().ToListAsync();
             var status = await LoadStatusAsync(env);
             var candidates = LoadCandidates(env);
-            // A candidate already in the catalog is still pending when it carries tags the
-            // catalog song lacks; approving it then just adds those tags.
+            var values = (await db.SongTagValues.AsNoTracking().ToListAsync())
+                .Select(v => (v.Tag, v.SongId, v.Value)).ToHashSet();
+            // A candidate already in the catalog is still pending when it carries tags or
+            // numbers the catalog song lacks; approving it then just adds those.
             var pending = new List<object>();
             foreach (var c in candidates)
             {
                 if (status.ContainsKey(c.Id)) continue;
                 var tags = NormalizeTags(c.Tags);
+                var tagValues = c.TagValues ?? new();
                 var existing = FindInCatalog(catalog, c.Artist, c.Title);
                 if (existing is null)
-                    pending.Add(new { c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags, Existing = (object?)null });
-                else if (tags.Except(existing.Tags).Any())
+                    pending.Add(new { c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags, TagValues = tagValues, Existing = (object?)null });
+                else if (tags.Except(existing.Tags).Any() || tagValues.Any(kv => !values.Contains((kv.Key, existing.Id, kv.Value))))
                     pending.Add(new
                     {
-                        c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags,
+                        c.Id, c.Title, c.Artist, c.Year, c.Category, c.Note, Tags = tags, TagValues = tagValues,
                         Existing = (object?)new { existing.Id, existing.Title, existing.Artist, existing.Year, existing.Active, existing.Tags },
                     });
             }
@@ -107,11 +114,10 @@ public static class AdminEndpoints
             if (FindInCatalog(catalog, artist, title) is { } existing)
             {
                 var added = tags.Except(existing.Tags).ToList();
-                if (added.Count > 0)
-                {
-                    existing.Tags = NormalizeTags(existing.Tags.Concat(added));
-                    await db.SaveChangesAsync();
-                }
+                if (added.Count > 0) existing.Tags = NormalizeTags(existing.Tags.Concat(added));
+                foreach (var (tag, value) in body.TagValues ?? new())
+                    await RankedTagEndpoints.SetValueAsync(db, tag, existing, value);
+                await db.SaveChangesAsync();
                 await SetStatusAsync(env, body.CandidateId, "approved");
                 return Results.Ok(new { id = existing.Id, duplicate = true, tagsAdded = added });
             }
@@ -131,6 +137,8 @@ public static class AdminEndpoints
                 Tags = tags,
             };
             db.Songs.Add(song);
+            foreach (var (tag, value) in body.TagValues ?? new())
+                await RankedTagEndpoints.SetValueAsync(db, tag, song, value);
             await db.SaveChangesAsync();
             await SetStatusAsync(env, body.CandidateId, "approved");
             return Results.Ok(new { id = song.Id, duplicate = false });
@@ -206,11 +214,32 @@ public static class AdminEndpoints
         return string.Concat(words);
     }
 
-    static Song? FindInCatalog(List<Song> catalog, string artist, string title)
+    internal static Song? FindInCatalog(List<Song> catalog, string artist, string title)
     {
         var (a, t) = (MatchKey(artist), MatchKey(title));
         return catalog.FirstOrDefault(s => MatchKey(s.Artist) == a && MatchKey(s.Title) == t);
     }
+
+    // Like FindInCatalog, but also accepts the same title by the same main artist when the
+    // credits differ: "Luis Fonsi & Daddy Yankee feat. Justin Bieber" = "Luis Fonsi". Used
+    // when lists from outside (bulk import, AI) are matched, so they don't create duplicates.
+    internal static Song? FindInCatalogLoose(List<Song> catalog, string artist, string title)
+    {
+        if (FindInCatalog(catalog, artist, title) is { } exact) return exact;
+        var (a, t) = (MatchKey(MainArtist(artist)), MatchKey(title));
+        if (a == "") return null;
+        // Several hits are duplicates of the same song in the catalog: prefer an active one.
+        return catalog
+            .Where(s => MatchKey(s.Title) == t && MatchKey(MainArtist(s.Artist)) == a)
+            .OrderByDescending(s => s.Active)
+            .FirstOrDefault();
+    }
+
+    // "Luis Fonsi & Daddy Yankee feat. Justin Bieber" → "Luis Fonsi"
+    static string MainArtist(string artist) =>
+        System.Text.RegularExpressions.Regex.Split(
+            artist, @"\s+(?:feat\.?|ft\.?|featuring|with|x|&|og|and|vs\.?)\s+|,\s*",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase)[0];
 
     // Candidate pool ships with the app (seed/, linked from src/data in the csproj).
     // In `dotnet run` the content root is server/, so fall back to the repo's src/data.

@@ -23,23 +23,31 @@ interface YearPickerProps {
   // 'large' is used on the online game's phone screen, where this is the main
   // control on the page and benefits from bigger touch targets.
   size?: 'default' | 'large';
+  // Placement games guess a number (e.g. a top 100 placement) instead of a year:
+  // other bounds and labels, and no decade cards.
+  valueRange?: { min: number; max: number; label: string; badge: string };
 }
 
 // Shared "Gæt årstal" control — decade cards (styled like the song cards on the
 // board) plus a stepper/input for the exact year. Used by both the single-device
 // game (TimelineView) and the online game (PlacementPicker) so they can't drift apart.
-export function YearPicker({ year, onChange, disabled, size = 'default' }: YearPickerProps) {
-  const setClampedYear = (newYear: number) => onChange(Math.max(MIN_YEAR, Math.min(MAX_YEAR, newYear)));
+export function YearPicker({ year, onChange, disabled, size = 'default', valueRange }: YearPickerProps) {
+  const min = valueRange?.min ?? MIN_YEAR;
+  const max = valueRange?.max ?? MAX_YEAR;
+  const setClampedYear = (newYear: number) => onChange(Math.max(min, Math.min(max, newYear)));
   const large = size === 'large';
 
   return (
     <div className={`rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner ${large ? 'p-4' : 'p-3'}`}>
       <div className={`flex items-center gap-1.5 ${large ? 'mb-3' : 'mb-2'}`}>
         <Calendar className={`text-pink-400 ${large ? 'h-5 w-5' : 'h-4 w-4'}`} />
-        <span className={`font-bold text-slate-200 ${large ? 'text-sm' : 'text-xs'}`}>Gæt årstal:</span>
+        <span className={`font-bold text-slate-200 ${large ? 'text-sm' : 'text-xs'}`}>
+          {valueRange ? `Gæt ${valueRange.label}:` : 'Gæt årstal:'}
+        </span>
       </div>
 
       {/* Decade cards */}
+      {!valueRange && (
       <div className={`grid grid-cols-4 sm:grid-cols-8 ${large ? 'gap-2' : 'gap-1.5'}`}>
         {DECADE_CARDS.map((dec) => {
           const isSelected = year >= dec.year - 5 && year <= dec.year + 4;
@@ -72,9 +80,10 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
           );
         })}
       </div>
+      )}
 
       {/* Stepper + exact year input */}
-      <div className={`flex items-center justify-center gap-2 ${large ? 'mt-4' : 'mt-3'}`}>
+      <div className={`flex items-center justify-center gap-2 ${valueRange ? '' : large ? 'mt-4' : 'mt-3'}`}>
         <button
           type="button"
           disabled={disabled}
@@ -82,7 +91,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
           className={`rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-40 ${
             large ? 'p-2.5' : 'p-1.5'
           }`}
-          title="1 år tilbage"
+          title={valueRange ? '1 ned' : '1 år tilbage'}
         >
           <Minus className={large ? 'h-5 w-5' : 'h-4 w-4'} />
         </button>
@@ -90,17 +99,17 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
         <div className="relative">
           <input
             type="number"
-            min={MIN_YEAR}
-            max={MAX_YEAR}
+            min={min}
+            max={max}
             value={year}
             disabled={disabled}
-            onChange={(e) => setClampedYear(parseInt(e.target.value, 10) || 1990)}
+            onChange={(e) => setClampedYear(parseInt(e.target.value, 10) || (valueRange ? min : 1990))}
             className={`rounded-xl border-2 border-amber-500/40 bg-slate-900 text-center font-mono font-black text-amber-300 shadow-inner focus:border-amber-400 focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:opacity-40 ${
               large ? 'w-32 px-3 py-2 text-2xl' : 'w-24 px-2 py-1 text-lg'
             }`}
           />
           <span className="absolute -top-2 right-2 rounded bg-amber-500 px-1 text-[9px] font-bold text-slate-950">
-            ÅR
+            {valueRange ? valueRange.badge : 'ÅR'}
           </span>
         </div>
 
@@ -111,7 +120,7 @@ export function YearPicker({ year, onChange, disabled, size = 'default' }: YearP
           className={`rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-40 ${
             large ? 'p-2.5' : 'p-1.5'
           }`}
-          title="1 år frem"
+          title={valueRange ? '1 op' : '1 år frem'}
         >
           <Plus className={large ? 'h-5 w-5' : 'h-4 w-4'} />
         </button>

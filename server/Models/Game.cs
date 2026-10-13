@@ -39,6 +39,9 @@ public class Game
     public string? HostSessionId { get; set; }
     // "shared" (host's speaker, default) or "individual" (each player plays locally).
     public string PlaybackMode { get; set; } = GamePlaybackMode.Shared;
+    // Placement game: the tag with numbers (e.g. "top 100") whose songs are dealt and whose
+    // numbers order the timeline instead of the year. Null = the normal year game.
+    public string? RankTag { get; set; }
     // Scoring knobs (issue 8: placement + year bonus, no time factor yet).
     public int PointsPlacement { get; set; } = 1;
     public int PointsYearBonus { get; set; } = 1;

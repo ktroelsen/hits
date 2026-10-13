@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { TimelineSong } from '../services/gameApi';
+import { formatGameValue, GameRank, TimelineSong } from '../services/gameApi';
 import { YearPicker } from '../components/YearPicker';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { TimelineSlot } from '../components/TimelineSlot';
@@ -12,26 +12,34 @@ const MAX_YEAR = 2026;
 // artist/title/year with drop-zone slots between them, instead of a plain list of
 // buttons. The year control is the same YearPicker as the single-device game's
 // "Gæt årstal" box (just bigger here), and setting the year auto-selects the
-// matching slot.
+// matching slot. In a placement game (`rank`) the board and the guess use the songs'
+// numbers instead of years.
 export function PlacementPicker({
   timeline,
+  rank,
   disabled,
   onSubmit,
   audioControl,
 }: {
   timeline: TimelineSong[];
+  rank?: GameRank | null;
   disabled?: boolean;
   onSubmit: (insertIndex: number, guessedYear?: number) => void;
   /** Play button (individual playback mode), shown next to "Send svar" at the top. */
   audioControl?: ReactNode;
 }) {
-  const [year, setYear] = useState(1995);
-  // Insert index for a given year = how many timeline songs are strictly older.
-  const slotForYear = (y: number) => timeline.filter((s) => s.year < y).length;
-  const [slot, setSlot] = useState<number>(() => slotForYear(1995));
+  const min = rank ? rank.values[0] ?? 1 : MIN_YEAR;
+  const max = rank ? rank.values[rank.values.length - 1] ?? 100 : MAX_YEAR;
+  const start = rank ? rank.values[Math.floor(rank.values.length / 2)] ?? min : 1995;
+  const label = (s: TimelineSong) => formatGameValue(rank, s);
+
+  const [year, setYear] = useState(start);
+  // Insert index for a given value = how many timeline songs have a strictly lower one.
+  const slotForYear = (y: number) => timeline.filter((s) => s.value < y).length;
+  const [slot, setSlot] = useState<number>(() => slotForYear(start));
 
   const setYearAndSlot = (newYear: number) => {
-    const clamped = Math.max(MIN_YEAR, Math.min(MAX_YEAR, newYear));
+    const clamped = Math.max(min, Math.min(max, newYear));
     setYear(clamped);
     setSlot(slotForYear(clamped));
   };
@@ -40,10 +48,17 @@ export function PlacementPicker({
   // also updates the year guess (and thus the decade highlight), instead of only
   // moving the selection marker.
   const suggestedYearForSlot = (i: number): number => {
+    if (rank) {
+      // A number of the deck that fits the slot (the middle one), if any.
+      const lo = i === 0 ? -Infinity : timeline[i - 1].value;
+      const hi = i === timeline.length ? Infinity : timeline[i].value;
+      const fits = timeline.length === 0 ? rank.values : rank.values.filter((v) => v > lo && v < hi);
+      return fits[Math.floor(fits.length / 2)] ?? year;
+    }
     if (timeline.length === 0) return 1995;
-    if (i === 0) return Math.max(MIN_YEAR, timeline[0].year - 5);
-    if (i === timeline.length) return Math.min(MAX_YEAR, timeline[timeline.length - 1].year + 4);
-    return Math.round((timeline[i - 1].year + timeline[i].year) / 2);
+    if (i === 0) return Math.max(MIN_YEAR, timeline[0].value - 5);
+    if (i === timeline.length) return Math.min(MAX_YEAR, timeline[timeline.length - 1].value + 4);
+    return Math.round((timeline[i - 1].value + timeline[i].value) / 2);
   };
 
   const setSlotAndYear = (i: number) => {
@@ -53,9 +68,9 @@ export function PlacementPicker({
 
   const slotLabel = (i: number): string => {
     if (timeline.length === 0) return 'Placér sangen';
-    if (i === 0) return `Før ${timeline[0].year}`;
-    if (i === timeline.length) return `Efter ${timeline[timeline.length - 1].year}`;
-    return `Mellem ${timeline[i - 1].year} og ${timeline[i].year}`;
+    if (i === 0) return `Før ${label(timeline[0])}`;
+    if (i === timeline.length) return `Efter ${label(timeline[timeline.length - 1])}`;
+    return `Mellem ${label(timeline[i - 1])} og ${label(timeline[i])}`;
   };
 
   return (
@@ -72,7 +87,13 @@ export function PlacementPicker({
         </button>
       </div>
 
-      <YearPicker year={year} onChange={setYearAndSlot} disabled={disabled} size="large" />
+      <YearPicker
+        year={year}
+        onChange={setYearAndSlot}
+        disabled={disabled}
+        size="large"
+        valueRange={rank ? { min, max, label: rank.valuePrefix === '#' ? 'placering' : 'tal', badge: 'TAL' } : undefined}
+      />
 
       {/* Placement board — driven by the year, but can be overridden by tapping a slot */}
       <div>
@@ -98,6 +119,7 @@ export function PlacementPicker({
                 }}
                 isRevealed
                 status="neutral"
+                valueLabel={rank ? label(song) : undefined}
               />
               <TimelineSlot
                 index={idx + 1}

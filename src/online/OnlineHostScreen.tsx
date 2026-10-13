@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { attachFadeEnvelope } from '../services/audioFade';
-import { gameApi, useGameState, PlaybackMode, StatePlayer, TimelineSong } from '../services/gameApi';
+import { formatGameValue, gameApi, useGameState, GameRank, PlaybackMode, StatePlayer, TimelineSong } from '../services/gameApi';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
 import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
 import { DEFAULT_TAG, getActiveSongs, loadCatalog } from '../services/songsService';
+import { loadRankedTags, songsWithRank } from '../services/rankedTags';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
 const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
@@ -23,6 +24,9 @@ export function OnlineHostScreen() {
   // Song collections (tags) to deal from; defaults to the standard collection.
   const [tags, setTags] = useState<string[]>([DEFAULT_TAG]);
   const [tagCounts, setTagCounts] = useState<[string, number][]>([]);
+  // Spiltype: the year game, or a placement game on a tag with numbers (with song counts).
+  const [rankChoices, setRankChoices] = useState<{ tag: string; count: number }[]>([]);
+  const [rankTag, setRankTag] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { state } = useGameState(code);
@@ -32,8 +36,16 @@ export function OnlineHostScreen() {
       const counts = new Map<string, number>();
       for (const s of getActiveSongs()) for (const t of s.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1);
       setTagCounts([...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'da')));
+      loadRankedTags().then((ranked) =>
+        setRankChoices(
+          ranked
+            .map((t) => ({ tag: t.tag, count: songsWithRank(t, getActiveSongs()).length }))
+            .filter((c) => c.count >= 2),
+        ),
+      );
     });
   }, []);
+  const selectedRank = rankChoices.find((c) => c.tag === rankTag);
   const selectedTags = tags.filter((t) => tagCounts.some(([k]) => k === t));
   const toggleTag = (tag: string) =>
     setTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag]);
@@ -51,7 +63,7 @@ export function OnlineHostScreen() {
   }, []);
 
   const createGame = () => run(async () => {
-    const { code: c } = await gameApi.create(targetRounds, playbackMode, selectedTags);
+    const { code: c } = await gameApi.create(targetRounds, playbackMode, selectedTags, selectedRank?.tag);
     if (!playAlong) {
       setCode(c);
       return;
@@ -78,7 +90,7 @@ export function OnlineHostScreen() {
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
       {overlay.visible && state && round && (
-        <RevealOverlay round={round} players={state.players} timeline={state.timeline} onClose={overlay.close} />
+        <RevealOverlay round={round} rank={state.rank} players={state.players} timeline={state.timeline} onClose={overlay.close} />
       )}
       {/* Wider once the game runs, so the card board has room on the big screen */}
       <div className={`mx-auto ${state && state.status !== 'lobby' ? 'max-w-6xl' : 'max-w-3xl'}`}>
@@ -158,7 +170,36 @@ export function OnlineHostScreen() {
                 </label>
               </div>
             </fieldset>
-            {tagCounts.length > 0 && (
+            {rankChoices.length > 0 && (
+              <div className="mb-4">
+                <span className="text-xs uppercase tracking-wide text-slate-400">Spiltype</span>
+                <div className="mt-1 flex flex-wrap gap-2">
+                  {[{ tag: undefined as string | undefined, label: '📅 Årstal', count: null as number | null }, ...rankChoices.map((c) => ({ tag: c.tag as string | undefined, label: `🏆 ${c.tag}`, count: c.count as number | null }))].map(
+                    (opt) => (
+                      <button
+                        key={opt.tag ?? 'year'}
+                        type="button"
+                        onClick={() => setRankTag(opt.tag)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-bold ring-1 transition-colors ${
+                          selectedRank?.tag === opt.tag
+                            ? 'bg-amber-500 text-slate-950 ring-amber-400'
+                            : 'bg-slate-800 text-slate-400 ring-slate-700 hover:ring-slate-500'
+                        }`}
+                      >
+                        {opt.label}
+                        {opt.count !== null && <span className="font-normal opacity-70"> {opt.count}</span>}
+                      </button>
+                    ),
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-slate-500">
+                  {selectedRank
+                    ? `Placeringsspil: sangene fra "${selectedRank.tag}" lægges efter deres tal i stedet for årstal.`
+                    : 'Sangene lægges efter udgivelsesår.'}
+                </p>
+              </div>
+            )}
+            {!selectedRank && tagCounts.length > 0 && (
               <div className="mb-4">
                 <span className="text-xs uppercase tracking-wide text-slate-400">Sange</span>
                 <div className="mt-1 flex flex-wrap gap-2">
@@ -264,7 +305,7 @@ export function OnlineHostScreen() {
               </>
             )}
 
-            <Timeline songs={state.timeline} />
+            <Timeline songs={state.timeline} rank={state.rank} />
 
             <div className="mt-6">
               <p className="mb-2 text-sm text-slate-400">
@@ -325,12 +366,13 @@ export function OnlineHostScreen() {
                 <div>
                   <p className="text-xl font-extrabold">{round.song.title}</p>
                   <p className="text-slate-400">{round.song.artist}</p>
-                  <p className="mt-1 text-3xl font-black text-pink-400">{round.song.year}</p>
+                  <p className="mt-1 text-3xl font-black text-pink-400">{formatGameValue(state.rank, round.song)}</p>
+                  {state.rank && <p className="text-sm text-slate-400">{round.song.year}</p>}
                 </div>
               </div>
             )}
 
-            <Timeline songs={state.timeline} />
+            <Timeline songs={state.timeline} rank={state.rank} />
 
             <Standings
               players={state.players}
@@ -419,7 +461,7 @@ function PlayerChips({ players }: { players: StatePlayer[] }) {
 
 // Same board look as the single-device game's "Spilleplade": the shared timeline
 // laid out as classic HitsterCards that wrap onto multiple rows.
-function Timeline({ songs }: { songs: TimelineSong[] }) {
+function Timeline({ songs, rank }: { songs: TimelineSong[]; rank?: GameRank | null }) {
   return (
     <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/60 p-3 shadow-inner">
       <div className="mb-3 flex items-center gap-2.5 border-b border-slate-800 pb-2">
@@ -444,6 +486,7 @@ function Timeline({ songs }: { songs: TimelineSong[] }) {
               }}
               isRevealed
               status="neutral"
+              valueLabel={rank ? formatGameValue(rank, s) : undefined}
             />
           ))}
         </div>

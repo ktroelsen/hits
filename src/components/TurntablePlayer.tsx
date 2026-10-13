@@ -17,6 +17,8 @@ interface TurntablePlayerProps {
   tokens?: number;
   titleRevealed?: boolean;
   onRevealTitle?: () => void;
+  /** Placement games: the revealed number shown instead of the year (e.g. "#12") */
+  valueLabel?: string;
 }
 
 export function TurntablePlayer({
@@ -31,6 +33,7 @@ export function TurntablePlayer({
   tokens = 0,
   titleRevealed = false,
   onRevealTitle,
+  valueLabel,
 }: TurntablePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -305,7 +308,7 @@ export function TurntablePlayer({
                   {currentSong?.title}
                 </h3>
                 <span className="text-base sm:text-lg font-extrabold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-lg border border-amber-400/30">
-                  {currentSong?.year}
+                  {valueLabel ?? currentSong?.year}
                 </span>
                 <span className="text-slate-300 text-sm font-medium">
                   {currentSong?.artist}
@@ -317,7 +320,7 @@ export function TurntablePlayer({
                   🎵 Mysterie Sang
                 </span>
                 <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">
-                  Årstal skjult: ????
+                  {valueLabel !== undefined ? 'Tal' : 'Årstal'} skjult: ????
                 </span>
               </div>
             ) : (

@@ -145,6 +145,47 @@ indtil kataloget er tagget.
 
 Nye sange skal have `hitmix` for at komme med i standardspillet.
 
+### Tags med tal og placeringsspil
+
+Et tag kan få tal, så hver sang i samlingen også har et nummer, fx placering på `top 100` eller
+antal uger som nr. 1. Samlingen kan så spilles på to måder (spilopsætningen → **Spiltype**):
+
+- **Årstal:** som alle andre tags; tidslinjen følger udgivelsesåret.
+- **Placering:** kun sange med et tal; tidslinjen følger tallet (`#1`, `#2` … eller `3 uger`,
+  `14 uger` …). Det præcise tal giver bonus. Tæller ikke med i highscoren. Virker både lokalt
+  og online (værten vælger spiltype, når spillet oprettes).
+
+Spiltypen kan også vælges direkte på forsiden, og valget huskes i browseren.
+
+Tallene gemmes ved siden af tagget (tabellerne `RankedTags` og `SongTagValues`), ikke i
+tag-teksten. De sættes i `/admin`:
+
+- **Tags med tal:** vælg tagget (eller "+ Giv et tag tal"), tilføj sange med tal, ret tallene
+  eller masseimportér linjer som `1;Alberte;Lyse nætter`. Et tal giver også sangen tagget, og
+  "Fjern" tager både tal og tag af.
+- **Katalog → Redigér:** et tal-felt ud for hvert tag med tal.
+- **Kandidater:** `"tagValues": { "top 100": 1 }` i `candidates.json` giver sangen tallet, når den
+  godkendes (også hvis den allerede findes i kataloget).
+
+Kun aktive sange er med i spillet.
+
+### AI-assistent: find sangene til en samling
+
+`/admin` → **✨ AI-assistent**: beskriv samlingen (fx "Billboard Hot 100: de 50 sange med flest
+uger som nr. 1"), så researcher Claude (`claude-opus-5-5` med websøgning) listen og foreslår
+tag, tal, titel, kunstner, årstal og kategori med kilde-URL pr. sang. Det tager typisk 1–3 min.
+
+- Forslaget matches mod kataloget: **✓ Findes** får tag og tal, **+ Ny** oprettes. Usikre årstal
+  er markeret ⚠, og AI'ens årstal vises, hvis det afviger fra katalogets.
+- Du kan rette felter og fravælge rækker. Intet gemmes, før du trykker **Importér**.
+- Nye sange oprettes som **inaktive** og får preview og cover fra iTunes. Find dem i Katalog
+  (filtrér på tagget og "Kun inaktive"), lyt dem igennem og aktivér dem.
+
+Kræver en Anthropic API-nøgle: konfiguration `Anthropic:ApiKey` (env `Anthropic__ApiKey`) eller
+miljøvariablen `ANTHROPIC_API_KEY`. I deployet kommer den fra GitHub-secret'en
+**`ANTHROPIC_API_KEY`**. Uden nøgle er kun AI-assistenten slået fra. Hver research koster
+API-forbrug (tokens + websøgninger, højst 8 søgninger pr. kørsel).
+
 ## CI/CD (GitHub Actions)
 
 - **`.github/workflows/ci.yml`** — kører på PR + push til `main`: `npm ci`, typecheck,
@@ -177,6 +218,8 @@ lægge den et andet persistent sted, så sæt `ConnectionStrings__Default` i mil
 | `SIMPLY_WEBDEPLOY_SITE` | deploy | IIS site name, fx `mitdomæne.dk` |
 | `SIMPLY_WEBDEPLOY_USERNAME` | deploy | Web Deploy brugernavn |
 | `SIMPLY_WEBDEPLOY_PASSWORD` | deploy | Web Deploy adgangskode |
+| `ADMIN_KEY` | deploy | Admin-nøglen til `/admin` |
+| `ANTHROPIC_API_KEY` | deploy | Anthropic API-nøgle til AI-assistenten i `/admin` (valgfri) |
 | `CLAUDE_CODE_OAUTH_TOKEN` | claude | Fra `claude setup-token` (eller brug `ANTHROPIC_API_KEY`) |
 
 Anbefaling: slå branch protection til på `main` og kræv at CI er grøn før merge.

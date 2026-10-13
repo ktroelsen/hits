@@ -11,6 +11,7 @@ import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
 import { DEFAULT_TAG, getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
 import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
+import { getRankedTag, getRankedTags, loadRankedTags, scaleForSettings, songsWithRank, ValueScale } from './services/rankedTags';
 import { markRemoved } from './services/removalStore';
 import { fetchHighscores, postHighscore, HighscoreLists, RecordKind, bestScores } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
@@ -29,6 +30,19 @@ const DEFAULT_SETTINGS: GameSettings = {
   expertTolerance: 0,
   uniqueYearsOnly: true,
 };
+
+// The game settings are remembered in the browser between visits (game type, collection,
+// filters …). Missing fields — e.g. from an older version — fall back to the defaults.
+const SETTINGS_STORAGE = 'hits-settings';
+
+function readSettings(): GameSettings {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_STORAGE) || 'null');
+    return saved && typeof saved === 'object' ? { ...DEFAULT_SETTINGS, ...saved } : DEFAULT_SETTINGS;
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
 
 const DEFAULT_PLAYERS: Player[] = [
   {
@@ -68,24 +82,34 @@ const SOLO_PLAYER: Player = {
 // song is ever removed from the catalog.
 const SOLO_STARTER_SONG_ID = 'int-165';
 
-// Draw a mystery song whose year is NOT already on the timeline, so no two cards
-// ever share a year. Pops colliding songs off the deck; if the deck runs dry it
-// rebuilds from `pool` (excluding already-used ids and taken years). Only if no
-// unique-year song exists at all does it fall back to any unused song. Rebuilt decks
-// follow the play session order, so skipped (still unplayed) songs come up first.
+// The songs a game draws from: in a placement game the active songs with a number in
+// the chosen tag, otherwise the active songs matching the category/decade/tag filters.
+function songPool(settings: GameSettings): Song[] {
+  const rankTag = getRankedTag(settings.rankTag);
+  if (rankTag && rankTag.values.length > 0) return songsWithRank(rankTag, getActiveSongs());
+  return getActiveSongs().filter((s) => matchesSettings(s, settings));
+}
+
+// Draw a mystery song whose value (year, or number in a placement game) is NOT already
+// on the timeline, so no two cards ever share one. Pops colliding songs off the deck;
+// if the deck runs dry it rebuilds from `pool` (excluding already-used ids and taken
+// values). Only if no unique-value song exists at all does it fall back to any unused
+// song. Rebuilt decks follow the play session order, so skipped (still unplayed) songs
+// come up first.
 function pickMysterySong(
   deck: Song[],
-  takenYears: Set<number>,
+  takenValues: Set<number>,
   pool: Song[],
   usedIds: Set<string>,
+  valueOf: (song: Song) => number,
 ): { song: Song | null; deck: Song[] } {
   const d = [...deck];
   while (d.length) {
     const s = d.pop()!;
-    if (!takenYears.has(s.year)) return { song: s, deck: d };
+    if (!takenValues.has(valueOf(s))) return { song: s, deck: d };
   }
   const fresh = orderSongs(
-    pool.filter((s) => !usedIds.has(s.id) && !takenYears.has(s.year)),
+    pool.filter((s) => !usedIds.has(s.id) && !takenValues.has(valueOf(s))),
   ).reverse();
   if (fresh.length) {
     const s = fresh.pop()!;
@@ -97,7 +121,16 @@ function pickMysterySong(
 }
 
 export default function App() {
-  const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = useState<GameSettings>(readSettings);
+  useEffect(() => {
+    try {
+      // Solo/DJ are started from their own buttons, so only the team mode is remembered.
+      const { mode, ...rest } = settings;
+      localStorage.setItem(SETTINGS_STORAGE, JSON.stringify({ ...rest, mode: mode === 'solo' || mode === 'dj' ? 'timeline' : mode }));
+    } catch {
+      /* private mode etc. — settings just aren't remembered */
+    }
+  }, [settings]);
   const [players, setPlayers] = useState<Player[]>(DEFAULT_PLAYERS);
   const [activePlayerIndex, setActivePlayerIndex] = useState(0);
 
@@ -150,6 +183,8 @@ export default function App() {
 
   // Bumped whenever a song is marked "missing music" so song lists recompute.
   const [removedTick, setRemovedTick] = useState(0);
+  // Bumped when the tags with numbers (top 100 etc.) have loaded.
+  const [rankedTick, setRankedTick] = useState(0);
 
   // Load the shared solo highscores (all-time + this week) at startup.
   useEffect(() => {
@@ -163,7 +198,17 @@ export default function App() {
       if (ok) setRemovedTick((t) => t + 1);
     });
     loadPlaySession();
+    loadRankedTags().then(() => setRankedTick((t) => t + 1));
   }, []);
+
+  // What the timeline is ordered by: the year, or the chosen tag's numbers.
+  const scale: ValueScale = useMemo(
+    () => scaleForSettings(settings),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [settings.rankTag, rankedTick],
+  );
+  const valueOf = scale.valueOf;
+  const isPlacementGame = scale.rankTag !== undefined;
 
   // Every mystery song that comes into play is marked played in this browser's play
   // session, so the next games draw songs not heard yet (see services/playSession.ts).
@@ -173,9 +218,9 @@ export default function App() {
 
   // Filter available songs according to settings (excluding removed songs)
   const eligibleSongs = useMemo(() => {
-    return getActiveSongs().filter((s) => matchesSettings(s, settings));
+    return songPool(settings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.categoryFilter, settings.decades, settings.tags, removedTick]);
+  }, [settings.categoryFilter, settings.decades, settings.tags, settings.rankTag, removedTick, rankedTick]);
 
   // Start / Reset a fresh game
   const initializeGame = useCallback(
@@ -191,14 +236,16 @@ export default function App() {
         : DEFAULT_PLAYERS;
 
       // Filter and shuffle
-      const filtered = getActiveSongs().filter((s) => matchesSettings(s, activeSettings));
+      const filtered = songPool(activeSettings);
+      const gameValueOf = scaleForSettings(activeSettings).valueOf;
 
       // Session order (least recently heard first); the deck is popped from the end
       const shuffled = orderSongs(filtered).reverse();
 
       // Start with 1 revealed starter song in the common shared timeline. Solo uses its
-      // fixed starter (regardless of the song filters) and keeps it out of the deck.
-      const soloStarter = isSolo
+      // fixed starter (regardless of the song filters) and keeps it out of the deck;
+      // a solo placement game starts from a random song of the collection.
+      const soloStarter = isSolo && !getRankedTag(activeSettings.rankTag)
         ? getActiveSongs().find((s) => s.id === SOLO_STARTER_SONG_ID)
         : undefined;
       if (soloStarter) {
@@ -231,7 +278,7 @@ export default function App() {
       // Draw first mystery song for active player (year must differ from starter,
       // unless the setting allows duplicate years on the timeline)
       const takenYears = activeSettings.uniqueYearsOnly
-        ? new Set(initialSharedTimeline.map((e) => e.song.year))
+        ? new Set(initialSharedTimeline.map((e) => gameValueOf(e.song)))
         : new Set<number>();
       const usedIds = new Set(initialSharedTimeline.map((e) => e.song.id));
       const { song: firstMystery, deck: deckAfterDraw } = pickMysterySong(
@@ -239,6 +286,7 @@ export default function App() {
         takenYears,
         filtered,
         usedIds,
+        gameValueOf,
       );
 
       setSettings(activeSettings);
@@ -321,8 +369,15 @@ export default function App() {
   };
 
   // Which record a final score beats: all-time wins over weekly.
+  // Placement games don't count: their scores aren't comparable with the normal game.
   const recordKind = (score: number): RecordKind =>
-    score > (highscores.allTime?.score ?? 0) ? 'allTime' : score > (highscores.weekly?.score ?? 0) ? 'weekly' : null;
+    isPlacementGame
+      ? null
+      : score > (highscores.allTime?.score ?? 0)
+      ? 'allTime'
+      : score > (highscores.weekly?.score ?? 0)
+      ? 'weekly'
+      : null;
 
   // Saves a new record under the player's name (from the game over modal).
   const submitHighscore = async (name: string) => {
@@ -346,11 +401,12 @@ export default function App() {
   // Calculate the correct slot index for mystery song relative to the shared timeline
   const computeCorrectSlotIndex = (song: Song, timeline: TimelineEntry[]): number => {
     if (timeline.length === 0) return 0;
-    if (song.year < timeline[0].song.year) return 0;
-    if (song.year > timeline[timeline.length - 1].song.year) return timeline.length;
+    const v = valueOf(song);
+    if (v < valueOf(timeline[0].song)) return 0;
+    if (v > valueOf(timeline[timeline.length - 1].song)) return timeline.length;
 
     for (let i = 0; i < timeline.length - 1; i++) {
-      if (song.year >= timeline[i].song.year && song.year <= timeline[i + 1].song.year) {
+      if (v >= valueOf(timeline[i].song) && v <= valueOf(timeline[i + 1].song)) {
         return i + 1;
       }
     }
@@ -364,21 +420,22 @@ export default function App() {
     timeline: TimelineEntry[]
   ): boolean => {
     if (timeline.length === 0) return true;
+    const v = valueOf(song);
 
     // Slot 0: before first song
     if (chosenIndex === 0) {
-      return song.year <= timeline[0].song.year;
+      return v <= valueOf(timeline[0].song);
     }
 
     // Slot N: after last song
     if (chosenIndex === timeline.length) {
-      return song.year >= timeline[timeline.length - 1].song.year;
+      return v >= valueOf(timeline[timeline.length - 1].song);
     }
 
     // Between index - 1 and index
     const prevSong = timeline[chosenIndex - 1].song;
     const nextSong = timeline[chosenIndex].song;
-    return song.year >= prevSong.year && song.year <= nextSong.year;
+    return v >= valueOf(prevSong) && v <= valueOf(nextSong);
   };
 
   // Confirm placement & reveal card
@@ -392,9 +449,9 @@ export default function App() {
     );
     const correctIndex = computeCorrectSlotIndex(currentSong, sharedTimeline);
 
-    // Check year bonus in expert mode or exact guess
+    // Bonus for guessing the exact year (or number in a placement game)
     const guessedYear = parseInt(yearGuessInput.trim(), 10);
-    const yearBonus = !isNaN(guessedYear) && guessedYear === currentSong.year;
+    const yearBonus = !isNaN(guessedYear) && guessedYear === valueOf(currentSong);
 
     setLastPlacementResult({
       isCorrect,
@@ -419,7 +476,7 @@ export default function App() {
       };
 
       const newSharedTimeline = [...sharedTimeline, newEntry].sort(
-        (a, b) => a.song.year - b.song.year
+        (a, b) => valueOf(a.song) - valueOf(b.song)
       );
       setSharedTimeline(newSharedTimeline);
 
@@ -431,7 +488,7 @@ export default function App() {
 
       // Add to active team's personal hits
       const newPersonalTimeline = [...activePlayer.timeline, currentSong].sort(
-        (a, b) => a.year - b.year
+        (a, b) => valueOf(a) - valueOf(b)
       );
 
       const updatedPlayers = players.map((p, idx) => {
@@ -486,7 +543,7 @@ export default function App() {
 
     // Draw next song whose year is not already on the timeline (unless duplicates are allowed)
     const takenYears = settings.uniqueYearsOnly
-      ? new Set(sharedTimeline.map((e) => e.song.year))
+      ? new Set(sharedTimeline.map((e) => valueOf(e.song)))
       : new Set<number>();
     const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
     if (currentSong) usedIds.add(currentSong.id);
@@ -495,6 +552,7 @@ export default function App() {
       takenYears,
       eligibleSongs,
       usedIds,
+      valueOf,
     );
     const nextPlayerIndex = (activePlayerIndex + 1) % players.length;
 
@@ -527,7 +585,7 @@ export default function App() {
     if (action === 'skip') {
       sfx.playToken();
       const takenYears = settings.uniqueYearsOnly
-        ? new Set(sharedTimeline.map((e) => e.song.year))
+        ? new Set(sharedTimeline.map((e) => valueOf(e.song)))
         : new Set<number>();
       const usedIds = new Set(sharedTimeline.map((e) => e.song.id));
       if (currentSong) usedIds.add(currentSong.id);
@@ -536,6 +594,7 @@ export default function App() {
         takenYears,
         eligibleSongs,
         usedIds,
+        valueOf,
       );
 
       // Deduct 1 token
@@ -571,13 +630,13 @@ export default function App() {
 
     // If the removed song is the current mystery, draw a fresh one.
     if (currentSong && currentSong.id === song.id) {
-      const pool = getActiveSongs().filter((s) => matchesSettings(s, settings));
+      const pool = songPool(settings);
       const takenYears = settings.uniqueYearsOnly
-        ? new Set(sharedTimeline.map((e) => e.song.year))
+        ? new Set(sharedTimeline.map((e) => valueOf(e.song)))
         : new Set<number>();
       const usedIds = new Set<string>(sharedTimeline.map((e) => e.song.id));
       usedIds.add(song.id);
-      const { song: fresh, deck: freshDeck } = pickMysterySong([], takenYears, pool, usedIds);
+      const { song: fresh, deck: freshDeck } = pickMysterySong([], takenYears, pool, usedIds, valueOf);
       setAvailableDeck(freshDeck);
       setCurrentSong(fresh);
       setPhase('listening');
@@ -604,6 +663,11 @@ export default function App() {
         <StartScreen
           settings={settings}
           highscores={highscores}
+          rankChoices={getRankedTags()
+            .map((t) => ({ tag: t.tag, count: songsWithRank(t, getActiveSongs()).length }))
+            .filter((c) => c.count >= 2)}
+          songCount={eligibleSongs.length}
+          onSelectRankTag={(rankTag) => setSettings((s) => ({ ...s, rankTag }))}
           onStart={startGame}
           onStartSolo={() => {
             initializeGame({ ...settings, mode: 'solo' });
@@ -614,7 +678,11 @@ export default function App() {
           onOpenCatalog={() => setIsCatalogOpen(true)}
         />
 
+        {/* Remounted on open so it starts from the current settings (the start screen can change them). */}
+
         <GameSetupModal
+
+          key={isSetupOpen ? 'setup-open' : 'setup-closed'}
           isOpen={isSetupOpen}
           onClose={() => setIsSetupOpen(false)}
           currentSettings={settings}
@@ -679,6 +747,7 @@ export default function App() {
               yearGuessInput={yearGuessInput}
               onYearGuessChange={setYearGuessInput}
               lastPlacementResult={lastPlacementResult}
+              scale={scale}
             />
             </div>
 
@@ -691,6 +760,7 @@ export default function App() {
               tokens={activePlayer.tokens}
               titleRevealed={titleRevealed}
               onRevealTitle={() => handleUseToken('reveal')}
+              valueLabel={isPlacementGame && currentSong ? scale.format(valueOf(currentSong)) : undefined}
               onDrawRandomSong={
                 isSolo
                   ? undefined
@@ -708,7 +778,9 @@ export default function App() {
       </main>
 
       {/* Modals */}
+      {/* Remounted on open so it starts from the current settings (the start screen can change them). */}
       <GameSetupModal
+        key={isSetupOpen ? 'setup-open' : 'setup-closed'}
         isOpen={isSetupOpen}
         onClose={() => setIsSetupOpen(false)}
         currentSettings={settings}
@@ -729,6 +801,7 @@ export default function App() {
         onRestart={() => initializeGame()}
         onExit={exitToStart}
         onPlaySong={handlePlaySongInTurntable}
+        formatValue={isPlacementGame ? (s) => scale.format(valueOf(s)) : undefined}
       />
 
       <GameOverModal

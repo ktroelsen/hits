@@ -29,6 +29,9 @@ interface HitsterCardProps {
     name: string;
     color: string;
   } | null;
+  // Placement games: the song's number (e.g. "#12", "14 uger"), shown instead of the
+  // year; the year then takes the decade badge's place.
+  valueLabel?: string;
 }
 
 // Mirrors decadeForYear in scripts/songsFile.ts / server/Admin/AdminEndpoints.cs.
@@ -60,6 +63,7 @@ export function HitsterCard({
   status = 'neutral',
   onPlaySong,
   claimedBy,
+  valueLabel,
 }: HitsterCardProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -150,7 +154,7 @@ export function HitsterCard({
       <div className="relative z-10 pr-8">
         {isRevealed ? (
           <span className="text-lg sm:text-xl font-black text-white tracking-tight drop-shadow font-display">
-            {song.year}
+            {valueLabel ?? song.year}
           </span>
         ) : (
           <span className="text-base sm:text-lg font-black text-slate-400 font-mono tracking-widest">
@@ -159,7 +163,7 @@ export function HitsterCard({
         )}
         <div className="flex flex-wrap items-center gap-1 mt-0.5">
           <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${decadeStyle.badge}`}>
-            {song.decade}
+            {valueLabel && isRevealed ? song.year : song.decade}
           </span>
           {claimedBy ? (
             <div

@@ -7,9 +7,11 @@ interface VictoryModalProps {
   onRestart: () => void;
   onExit: () => void;
   onPlaySong: (song: Song) => void;
+  /** Placement games: label for a song's number (e.g. "#12"), shown instead of the year */
+  formatValue?: (song: Song) => string;
 }
 
-export function VictoryModal({ isOpen, winner, onRestart, onExit, onPlaySong }: VictoryModalProps) {
+export function VictoryModal({ isOpen, winner, onRestart, onExit, onPlaySong, formatValue }: VictoryModalProps) {
   if (!isOpen || !winner) return null;
 
   return (
@@ -38,7 +40,7 @@ export function VictoryModal({ isOpen, winner, onRestart, onExit, onPlaySong }: 
         <div className="mt-6 flex-1 overflow-y-auto pr-1 space-y-2 max-h-60 sm:max-h-72">
           <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider px-2 mb-2">
             <span>Vinderens Tidslinje ({winner.timeline.length} sange)</span>
-            <span>Kronologisk</span>
+            <span>{formatValue ? 'Efter placering' : 'Kronologisk'}</span>
           </div>
 
           {winner.timeline.map((song, i) => (
@@ -52,7 +54,7 @@ export function VictoryModal({ isOpen, winner, onRestart, onExit, onPlaySong }: 
                 </span>
 
                 <span className="text-base sm:text-lg font-black text-amber-400 font-mono bg-amber-400/10 px-2 py-0.5 rounded-lg border border-amber-400/20">
-                  {song.year}
+                  {formatValue ? formatValue(song) : song.year}
                 </span>
 
                 <div className="flex flex-col">

@@ -43,11 +43,31 @@ public static class GameEndpoints
                     .ToHashSet();
                 if (tagged.Count > 0) songIds = songIds.Where(tagged.Contains).ToList();
             }
+            // Placement game: only active songs with a number in the tag (the tag filter
+            // above doesn't apply), ordered on the timeline by that number.
+            var rankTag = AdminEndpoints.NormalizeTags([req?.RankTag]).FirstOrDefault();
+            if (rankTag is not null)
+            {
+                if (!await db.RankedTags.AnyAsync(t => t.Tag == rankTag))
+                    return Results.BadRequest($"Tagget '{rankTag}' har ingen tal.");
+                var numbered = (await db.SongTagValues.Where(v => v.Tag == rankTag).Select(v => v.SongId).ToListAsync()).ToHashSet();
+                var active = (await db.Songs.AsNoTracking()
+                        .Where(s => s.Active && numbered.Contains(s.Id))
+                        .Select(s => new { s.Id, s.Tags })
+                        .ToListAsync())
+                    .Where(s => s.Tags.Contains(rankTag)) // a number only counts while the song has the tag
+                    .Select(s => s.Id)
+                    .ToHashSet();
+                songIds = PlaySessionStore.DeckOrder(session).Where(active.Contains).ToList();
+            }
             if (songIds.Count == 0) return Results.Problem("Kataloget er tomt.");
 
-            // No two rounds may share a year, so a game can't be longer than the number of years.
-            var distinctYears = await db.Songs.Where(x => songIds.Contains(x.Id)).Select(x => x.Year).Distinct().CountAsync();
-            if (distinctYears == 0) return Results.Problem("Kataloget er tomt.");
+            // No two rounds may share a value (year, or number in a placement game), so a
+            // game can't be longer than the number of distinct values.
+            var distinctValues = rankTag is null
+                ? await db.Songs.Where(x => songIds.Contains(x.Id)).Select(x => x.Year).Distinct().CountAsync()
+                : await db.SongTagValues.Where(v => v.Tag == rankTag && songIds.Contains(v.SongId)).Select(v => v.Value).Distinct().CountAsync();
+            if (distinctValues == 0) return Results.Problem("Kataloget er tomt.");
 
             var playbackMode = req?.PlaybackMode == GamePlaybackMode.Individual
                 ? GamePlaybackMode.Individual
@@ -59,11 +79,12 @@ public static class GameEndpoints
                 Status = GameStatus.Lobby,
                 CreatedAt = DateTime.UtcNow,
                 CurrentRound = 0,
-                TargetRounds = Math.Clamp(req?.TargetRounds ?? 10, 1, distinctYears),
+                TargetRounds = Math.Clamp(req?.TargetRounds ?? 10, 1, distinctValues),
                 DeckJson = JsonSerializer.Serialize(songIds),
                 DeckPosition = 0,
                 HostSessionId = session.Id,
                 PlaybackMode = playbackMode,
+                RankTag = rankTag,
             };
             db.Games.Add(game);
             await db.SaveChangesAsync();
@@ -246,8 +267,11 @@ public static class GameEndpoints
         var song = await db.Songs.FindAsync(round.SongId);
         if (song is null) return Results.Problem("Rundens sang findes ikke i kataloget.");
 
-        var timeline = await GameStateBuilder.BuildTimelineAsync(game, db); // revealed songs so far
-        var correctIndex = CorrectIndexFor(song.Year, timeline);
+        var valueOf = await GameStateBuilder.ValueOfAsync(game, db);
+        var timeline = await GameStateBuilder.BuildTimelineAsync(game, db, valueOf); // revealed songs so far
+        var value = valueOf(song);
+        // The number of timeline songs with a strictly lower value (empty timeline → 0).
+        var correctIndex = timeline.Count(s => valueOf(s) < value);
         round.CorrectIndex = correctIndex;
 
         var answers = await db.Answers.Where(a => a.RoundId == round.Id).ToListAsync();
@@ -255,7 +279,8 @@ public static class GameEndpoints
         foreach (var ans in answers)
         {
             ans.PlacementCorrect = ans.InsertIndex == correctIndex;
-            ans.YearCorrect = ans.GuessedYear.HasValue && ans.GuessedYear.Value == song.Year;
+            // Bonus for the exact year — or the exact number in a placement game.
+            ans.YearCorrect = ans.GuessedYear.HasValue && ans.GuessedYear.Value == value;
             ans.Points = (ans.PlacementCorrect ? game.PointsPlacement : 0)
                        + (ans.YearCorrect ? game.PointsYearBonus : 0);
             var player = players.FirstOrDefault(p => p.Id == ans.PlayerId);
@@ -294,11 +319,6 @@ public static class GameEndpoints
         throw new InvalidOperationException("Kunne ikke generere en unik spilkode.");
     }
 
-    // Correct insertion index into a year-sorted timeline: the number of songs with a
-    // strictly earlier year. An empty timeline always yields 0 (first card is free).
-    private static int CorrectIndexFor(int year, List<Song> timeline)
-        => timeline.Count(s => s.Year < year);
-
     // Moves a revealed game on: the next round, or finished when the target is reached
     // or the deck is empty. Caller saves. Returns true when the game finished.
     private static async Task<bool> AdvanceAsync(Game game, AppDbContext db)
@@ -310,18 +330,20 @@ public static class GameEndpoints
     }
 
     // Draws the next deck song and opens a new playing round. Like the single-device
-    // game, songs whose year is already on the timeline are skipped (left unplayed), so
-    // no two cards share a year. The song is marked played in the host's play session
+    // game, songs whose value (year, or number in a placement game) is already on the
+    // timeline are skipped (left unplayed), so no two cards share one. The song is
+    // marked played in the host's play session
     // (if it hasn't been cleaned up). Returns false when the deck has no usable song left.
     private static async Task<bool> StartNextRoundAsync(Game game, AppDbContext db)
     {
         var deck = JsonSerializer.Deserialize<List<string>>(game.DeckJson) ?? new();
         var remaining = deck.Skip(game.DeckPosition).ToList();
-        var yearById = await db.Songs.Where(x => remaining.Contains(x.Id))
-            .ToDictionaryAsync(x => x.Id, x => x.Year);
+        var valueOf = await GameStateBuilder.ValueOfAsync(game, db);
+        var yearById = (await db.Songs.Where(x => remaining.Contains(x.Id)).ToListAsync())
+            .ToDictionary(x => x.Id, valueOf);
         var playedIds = await db.Rounds.Where(r => r.GameId == game.Id).Select(r => r.SongId).ToListAsync();
-        var takenYears = (await db.Songs.Where(x => playedIds.Contains(x.Id)).Select(x => x.Year).ToListAsync())
-            .ToHashSet();
+        var takenYears = (await db.Songs.Where(x => playedIds.Contains(x.Id)).ToListAsync())
+            .Select(valueOf).ToHashSet();
 
         while (game.DeckPosition < deck.Count &&
                (!yearById.TryGetValue(deck[game.DeckPosition], out var year) || takenYears.Contains(year)))
@@ -348,7 +370,7 @@ public static class GameEndpoints
     }
 }
 
-public record CreateGameRequest(int? TargetRounds, string? PlaybackMode, List<string>? Tags);
+public record CreateGameRequest(int? TargetRounds, string? PlaybackMode, List<string>? Tags, string? RankTag = null);
 public record JoinRequest(string Name);
 public record AnswerRequest(string PlayerId, int InsertIndex, int? GuessedYear);
 public record ReadyRequest(string PlayerId);
