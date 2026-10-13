@@ -145,6 +145,13 @@ indtil kataloget er tagget.
 
 Nye sange skal have `hitmix` for at komme med i standardspillet.
 
+### Aktive og inaktive tags
+
+`/admin` → **Tags** viser alle tags med antal sange og en til/fra-knap. Et **inaktivt** tag kan ikke vælges i
+noget spil (tag-filter, placeringsspil, online) — fx en playliste, der stadig bygges op, eller en der kun
+bruges til en bestemt lejlighed. Sangene påvirkes ikke, og tagget kan stadig redigeres i admin. En helt ny
+samling ("+ Ny samling med tal" eller AI-import til et nyt tag) starter som inaktiv.
+
 ### Tags med tal og placeringsspil
 
 Et tag kan få tal, så hver sang i samlingen også har et nummer, fx placering på `top 100` eller
@@ -160,7 +167,7 @@ Spiltypen kan også vælges direkte på forsiden, og valget huskes i browseren.
 Tallene gemmes ved siden af tagget (tabellerne `RankedTags` og `SongTagValues`), ikke i
 tag-teksten. De sættes i `/admin`:
 
-- **Tags med tal:** vælg tagget (eller "+ Giv et tag tal"), tilføj sange med tal, ret tallene
+- **Tags:** vælg "Vis tal" / "Giv tal" ud for tagget (eller "+ Ny samling med tal"), tilføj sange med tal, ret tallene
   eller masseimportér linjer som `1;Alberte;Lyse nætter`. Et tal giver også sangen tagget, og
   "Fjern" tager både tal og tag af.
 - **Katalog → Redigér:** et tal-felt ud for hvert tag med tal.

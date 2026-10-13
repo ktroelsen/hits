@@ -41,6 +41,8 @@ public static class RankedTagEndpoints
             var ranked = new RankedTag { Tag = tag, CreatedAt = DateTime.UtcNow };
             Apply(ranked, body);
             db.RankedTags.Add(ranked);
+            // A brand-new collection starts inactive, so it can be built up before players can pick it.
+            if (await TagEndpoints.IsNewTagAsync(db, tag)) await TagEndpoints.SetActiveAsync(db, tag, false);
             await db.SaveChangesAsync();
             return Results.Ok(ToResponse(ranked, []));
         }).AddEndpointFilter(AdminEndpoints.RequireAdminKey);

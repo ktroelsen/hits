@@ -170,6 +170,10 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
     {
         var tag = AdminEndpoints.NormalizeTags([body.Tag]).FirstOrDefault()
             ?? throw new ArgumentException("tag er påkrævet.");
+        // A brand-new collection starts inactive: the admin listens through the new songs
+        // and activates the tag (in /admin → Tags) when the playlist is ready.
+        var newTag = await db.RankedTags.FindAsync(tag) is null && await Tags.TagEndpoints.IsNewTagAsync(db, tag);
+        if (newTag) await Tags.TagEndpoints.SetActiveAsync(db, tag, false);
         if (await db.RankedTags.FindAsync(tag) is null)
             db.RankedTags.Add(new RankedTag
             {
@@ -226,7 +230,7 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
                 }
             });
 
-        return new { tag, updated, created };
+        return new { tag, updated, created, inactive = newTag };
     }
 
     static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };

@@ -139,7 +139,8 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
 // ---- Admin curation API (/admin) ----
 app.MapAdminEndpoints();
 
-// ---- Tags with numbers (top 100 etc.; the placement game orders by the number) ----
+// ---- Tags: active/inactive, and tags with numbers (top 100 etc.; the placement game orders by the number) ----
+app.MapTagEndpoints();
 app.MapRankedTagEndpoints();
 
 // ---- AI assistant (/admin → AI-assistent) ----

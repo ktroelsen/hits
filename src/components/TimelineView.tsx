@@ -12,7 +12,7 @@ import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from '../types';
 import { HitsterCard } from './HitsterCard';
 import { TimelineSlot } from './TimelineSlot';
 import { YearPicker } from './YearPicker';
-import { ValueScale, YEAR_SCALE } from '../services/rankedTags';
+import { rankNoun, ValueScale, YEAR_SCALE } from '../services/rankedTags';
 
 interface TimelineViewProps {
   timeline: TimelineEntry[];
@@ -311,7 +311,7 @@ export function TimelineView({
             onChange={handleYearChange}
             valueRange={
               isList
-                ? { min: scale.min, max: scale.max, label: scale.rankTag?.valuePrefix === '#' ? 'placering' : 'tal', badge: 'TAL' }
+                ? { min: scale.min, max: scale.max, label: scale.rankTag ? rankNoun(scale.rankTag) : 'tal', badge: 'TAL' }
                 : undefined
             }
           />

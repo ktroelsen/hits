@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { formatGameValue, GameRank, TimelineSong } from '../services/gameApi';
+import { rankNoun } from '../services/rankedTags';
 import { YearPicker } from '../components/YearPicker';
 import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { TimelineSlot } from '../components/TimelineSlot';
@@ -92,7 +93,7 @@ export function PlacementPicker({
         onChange={setYearAndSlot}
         disabled={disabled}
         size="large"
-        valueRange={rank ? { min, max, label: rank.valuePrefix === '#' ? 'placering' : 'tal', badge: 'TAL' } : undefined}
+        valueRange={rank ? { min, max, label: rankNoun(rank), badge: 'TAL' } : undefined}
       />
 
       {/* Placement board — driven by the year, but can be overridden by tapping a slot */}

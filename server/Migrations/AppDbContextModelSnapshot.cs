@@ -323,6 +323,22 @@ namespace Hits.Api.Migrations
                     b.ToTable("SongTagValues");
                 });
 
+            modelBuilder.Entity("Hits.Api.Models.TagSetting", b =>
+                {
+                    b.Property<string>("Tag")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Tag");
+
+                    b.ToTable("TagSettings");
+                });
+
             modelBuilder.Entity("Hits.Api.Models.Answer", b =>
                 {
                     b.HasOne("Hits.Api.Models.Round", null)
