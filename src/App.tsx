@@ -9,9 +9,9 @@ import { RulesModal } from './components/Modals/RulesModal';
 import { VictoryModal } from './components/Modals/VictoryModal';
 import { GameOverModal } from './components/Modals/GameOverModal';
 import { SongCatalogModal } from './components/Modals/SongCatalogModal';
-import { DEFAULT_TAG, getActiveSongs, loadCatalog, matchesSettings } from './services/songsService';
+import { DEFAULT_TAG, getActiveSongs, loadCatalog, loadTagSettings, matchesSettings } from './services/songsService';
 import { loadPlaySession, markPlayed, orderSongs } from './services/playSession';
-import { getRankedTag, getRankedTags, loadRankedTags, scaleForSettings, songsWithRank, ValueScale } from './services/rankedTags';
+import { getRankedTag, getRankedTags, loadRankedTags, rankNoun, scaleForSettings, songsWithRank, ValueScale } from './services/rankedTags';
 import { markRemoved } from './services/removalStore';
 import { fetchHighscores, postHighscore, HighscoreLists, RecordKind, bestScores } from './services/highscoreStore';
 import { Song, Player, GameSettings, TurnPhase, TimelineEntry } from './types';
@@ -198,7 +198,10 @@ export default function App() {
       if (ok) setRemovedTick((t) => t + 1);
     });
     loadPlaySession();
-    loadRankedTags().then(() => setRankedTick((t) => t + 1));
+    // Tag settings first: inactive tags are hidden from the tag filter and placement games.
+    loadTagSettings()
+      .then(loadRankedTags)
+      .then(() => setRankedTick((t) => t + 1));
   }, []);
 
   // What the timeline is ordered by: the year, or the chosen tag's numbers.
@@ -664,7 +667,7 @@ export default function App() {
           settings={settings}
           highscores={highscores}
           rankChoices={getRankedTags()
-            .map((t) => ({ tag: t.tag, count: songsWithRank(t, getActiveSongs()).length }))
+            .map((t) => ({ tag: t.tag, count: songsWithRank(t, getActiveSongs()).length, noun: rankNoun(t) }))
             .filter((c) => c.count >= 2)}
           songCount={eligibleSongs.length}
           onSelectRankTag={(rankTag) => setSettings((s) => ({ ...s, rankTag }))}

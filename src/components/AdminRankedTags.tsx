@@ -2,13 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Song } from '../types';
 import { formatRank, RankedTag } from '../services/rankedTags';
 
-// "Tags med tal" tab on /admin: tags whose songs also have a number, e.g. "top 100"
+// "Tags" tab on /admin: every tag with an active/inactive switch (inactive tags can't
+// be picked in any game), and tags whose songs also have a number, e.g. "top 100"
 // (placement) or "billboard uger" (weeks at #1). The tag decides which songs are in the
 // collection; the number lets it be played as a placement game. Giving a song a number
 // here also gives it the tag, and "Fjern" takes off both. Reads GET /api/ranked-tags and
 // /api/songs; writes via the admin-keyed endpoints in server/Tags/RankedTagEndpoints.cs.
 
 type Request = (url: string, init?: RequestInit) => Promise<Response>;
+
+// Every tag in the catalog (GET /api/tags).
+interface TagInfo {
+  tag: string;
+  active: boolean;
+  hasNumbers: boolean;
+  songs: number;
+  activeSongs: number;
+}
 
 interface ImportResult {
   matched: { line: number; value: number; songId: string; artist: string; title: string; year: number }[];
@@ -28,6 +38,7 @@ const emptyMeta = { tag: '', description: '', valuePrefix: '#', valueSuffix: '' 
 
 export function AdminRankedTags({ request }: { request: Request }) {
   const [ranked, setRanked] = useState<RankedTag[] | null>(null);
+  const [tags, setTags] = useState<TagInfo[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
@@ -41,10 +52,11 @@ export function AdminRankedTags({ request }: { request: Request }) {
 
   const load = useCallback(async () => {
     try {
-      const [r, s] = await Promise.all([fetch(API), fetch('/api/songs')]);
-      if (!r.ok || !s.ok) throw new Error(`HTTP ${r.ok ? s.status : r.status}`);
+      const [r, s, t] = await Promise.all([fetch(API), fetch('/api/songs'), fetch('/api/tags')]);
+      if (!r.ok || !s.ok || !t.ok) throw new Error(`HTTP ${!r.ok ? r.status : !s.ok ? s.status : t.status}`);
       setRanked(await r.json());
       setSongs(await s.json());
+      setTags(await t.json());
       setError(null);
     } catch (e) {
       setError(`Kunne ikke hente tags med tal: ${(e as Error).message}`);
@@ -88,7 +100,7 @@ export function AdminRankedTags({ request }: { request: Request }) {
     }
   };
 
-  // Tags in the catalog that don't have numbers yet (suggestions for "+ Giv et tag tal").
+  // Tags in the catalog that don't have numbers yet (suggestions for "+ Ny samling med tal").
   const plainTags = useMemo(() => {
     const rankedNames = new Set(ranked?.map((t) => t.tag));
     return [...new Set(songs.flatMap((s) => s.tags ?? []))].filter((t) => !rankedNames.has(t)).sort();
@@ -113,6 +125,10 @@ export function AdminRankedTags({ request }: { request: Request }) {
       .filter((s) => !numbered.has(s.id) && `${s.artist} ${s.title}`.toLowerCase().includes(q))
       .slice(0, 8);
   }, [search, songs, current]);
+
+  // Inactive tags can't be picked in any game (playlists being built, special occasions).
+  const setTagActive = (tag: string, active: boolean) =>
+    send(`/api/tags/${enc(tag)}`, { method: 'PUT', body: JSON.stringify({ active }) });
 
   const saveMeta = async () => {
     const body = JSON.stringify(meta);
@@ -159,28 +175,74 @@ export function AdminRankedTags({ request }: { request: Request }) {
   return (
     <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">
       <p className="mb-4 text-xs text-slate-400">
-        Et tag med tal er en samling, hvor hver sang også har et tal, fx placering på DR's top 100 eller antal uger
-        som nr. 1. Samlingen kan spilles efter årstal som alle andre tags, eller som placeringsspil, hvor sangene
-        lægges efter tallet. Giver du en sang et tal her, får den også tagget.
+        Tags samler sange i samlinger, man kan vælge i spillet. Et <strong>inaktivt</strong> tag kan ikke vælges i
+        noget spil — brug det til playlister, der ikke er færdige, eller som kun er til en bestemt lejlighed.
+        Sangene påvirkes ikke. Et tag med <strong>tal</strong> (fx placering på DR's top 100 eller antal uger som nr.
+        1) kan også spilles som placeringsspil, hvor sangene lægges efter tallet.
       </p>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        {ranked.map((t) => (
-          <button
-            key={t.tag}
-            onClick={() => {
-              setCreating(false);
-              setSelected(t.tag);
-            }}
-            className={`rounded-full px-3 py-1 text-sm ring-1 ${
-              t.tag === selected && !creating
-                ? 'bg-pink-600 text-white ring-pink-500'
-                : 'text-slate-300 ring-slate-700 hover:ring-slate-500'
-            }`}
-          >
-            {t.tag} ({t.values.length})
-          </button>
-        ))}
+      <div className="mb-5 overflow-x-auto rounded-lg ring-1 ring-slate-800">
+        <table className="w-full min-w-[520px] text-sm">
+          <thead className="bg-slate-950/60 text-left text-xs uppercase tracking-wide text-slate-500">
+            <tr>
+              <th className="px-3 py-2">Tag</th>
+              <th className="px-3 py-2">Sange</th>
+              <th className="px-3 py-2">Tal</th>
+              <th className="px-3 py-2">I spillet</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {tags.map((t) => (
+              <tr key={t.tag} className={t.tag === selected && !creating ? 'bg-pink-950/30' : ''}>
+                <td className="px-3 py-1.5 font-semibold text-slate-200">{t.tag}</td>
+                <td className="px-3 py-1.5 text-slate-400" title="Aktive sange / alle sange med tagget">
+                  {t.activeSongs}
+                  {t.songs !== t.activeSongs && <span className="text-slate-600"> / {t.songs}</span>}
+                </td>
+                <td className="px-3 py-1.5">
+                  {t.hasNumbers ? (
+                    <button
+                      className="text-xs text-cyan-300 underline hover:text-cyan-200"
+                      onClick={() => {
+                        setCreating(false);
+                        setSelected(t.tag);
+                      }}
+                    >
+                      Vis tal
+                    </button>
+                  ) : (
+                    <button
+                      className="text-xs text-slate-500 underline hover:text-slate-300"
+                      onClick={() => {
+                        setCreating(true);
+                        setSelected(null);
+                        setMeta({ ...emptyMeta, tag: t.tag });
+                      }}
+                    >
+                      Giv tal
+                    </button>
+                  )}
+                </td>
+                <td className="px-3 py-1.5">
+                  <label className="inline-flex cursor-pointer items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={t.active}
+                      disabled={busy}
+                      onChange={(e) => setTagActive(t.tag, e.target.checked)}
+                    />
+                    <span className={t.active ? 'text-emerald-300' : 'text-amber-300'}>
+                      {t.active ? 'Aktiv' : 'Inaktiv'}
+                    </span>
+                  </label>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-4">
         <button
           onClick={() => {
             setCreating(true);
@@ -189,8 +251,11 @@ export function AdminRankedTags({ request }: { request: Request }) {
           }}
           className="rounded-full px-3 py-1 text-sm text-cyan-300 ring-1 ring-cyan-800 hover:ring-cyan-600"
         >
-          + Giv et tag tal
+          + Ny samling med tal
         </button>
+        {creating && (
+          <span className="ml-3 text-xs text-slate-500">Et helt nyt tag starter som inaktivt, til du aktiverer det.</span>
+        )}
       </div>
 
       {error && <p className="mb-3 rounded-lg bg-red-950/60 px-3 py-2 text-sm text-red-200">{error}</p>}

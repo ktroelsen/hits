@@ -1,4 +1,5 @@
 import { GameSettings, Song } from '../types';
+import { isTagActive } from './songsService';
 
 // Tags with numbers ("top 100" → placement, "billboard uger" → weeks at #1) from
 // GET /api/ranked-tags, cached once like the catalog. The tag decides which songs are in
@@ -18,7 +19,8 @@ const API_BASE = (import.meta.env.VITE_API_BASE ?? '').replace(/\/$/, '');
 
 let rankedTags: RankedTag[] = [];
 
-// Fetches the tags with numbers. Without a backend there are simply none.
+// Fetches the tags with numbers. Without a backend there are simply none. Returns the
+// playable (active) ones; load the tag settings (loadTagSettings) first.
 export async function loadRankedTags(): Promise<RankedTag[]> {
   try {
     const res = await fetch(`${API_BASE}/api/ranked-tags`);
@@ -27,15 +29,23 @@ export async function loadRankedTags(): Promise<RankedTag[]> {
   } catch (err) {
     console.warn('Tags with numbers unavailable.', err);
   }
-  return rankedTags;
+  return getRankedTags();
 }
 
+// The tags with numbers that can be played — inactive tags are left out.
 export function getRankedTags(): RankedTag[] {
-  return rankedTags;
+  return rankedTags.filter((t) => isTagActive(t.tag));
 }
 
 export function getRankedTag(tag: string | undefined): RankedTag | undefined {
-  return tag ? rankedTags.find((t) => t.tag === tag) : undefined;
+  return tag ? getRankedTags().find((t) => t.tag === tag) : undefined;
+}
+
+// What the numbers mean, for UI text: "placering" for "#1, #2 …", otherwise the unit
+// ("uger" for "3 uger"), or plain "tal".
+export function rankNoun(t: Pick<RankedTag, 'valuePrefix' | 'valueSuffix'>): string {
+  if (t.valuePrefix.trim() === '#') return 'placering';
+  return t.valueSuffix.trim() || 'tal';
 }
 
 export const formatRank = (t: Pick<RankedTag, 'valuePrefix' | 'valueSuffix'>, value: number) =>

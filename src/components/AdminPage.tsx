@@ -414,7 +414,7 @@ export function AdminPage() {
               {[
                 { id: 'candidates' as const, label: `Kandidater (${remaining})` },
                 { id: 'catalog' as const, label: `Katalog (${total})` },
-                { id: 'ranked' as const, label: 'Tags med tal' },
+                { id: 'ranked' as const, label: 'Tags' },
                 { id: 'ai' as const, label: '✨ AI-assistent' },
               ].map((t) => (
                 <button

@@ -44,19 +44,42 @@ export function getActiveSongs(): Song[] {
 // collections, e.g. "top 100", are picked as tags in the game setup.
 export const DEFAULT_TAG = 'hitmix';
 
-// Tags present on at least one active song, cached per loaded catalog.
+// Tags switched off in /admin → Tags (playlists being built, special occasions). They
+// can't be picked in any game; their songs are unaffected.
+let inactiveTags = new Set<string>();
+
+// Fetches which tags are inactive (GET /api/tags). Without a backend all tags are active.
+export async function loadTagSettings(): Promise<void> {
+  try {
+    const res = await fetch(`${API_BASE}/api/tags`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as { tag: string; active: boolean }[];
+    inactiveTags = new Set(data.filter((t) => !t.active).map((t) => t.tag));
+    knownTagsCache = null;
+  } catch (err) {
+    console.warn('Tag settings unavailable; all tags count as active.', err);
+  }
+}
+
+export function isTagActive(tag: string): boolean {
+  return !inactiveTags.has(tag);
+}
+
+// Active tags present on at least one active song, cached per loaded catalog.
 let knownTagsCache: { key: Song[]; tags: Set<string> } | null = null;
 export function getKnownTags(): Set<string> {
   if (knownTagsCache?.key !== catalog) {
-    const tags = new Set(catalog.filter((s) => s.active !== false).flatMap((s) => s.tags ?? []));
+    const tags = new Set(
+      catalog.filter((s) => s.active !== false).flatMap((s) => s.tags ?? []).filter(isTagActive),
+    );
     knownTagsCache = { key: catalog, tags };
   }
   return knownTagsCache.tags;
 }
 
-// The chosen tags that some active song actually has. Unknown tags are dropped, so a
-// default like "hitmix" falls back to all songs until songs have been tagged (and with
-// the bundled songs.ts fallback, which has no tags).
+// The chosen tags that are active and that some active song actually has. Unknown and
+// inactive tags are dropped, so a default like "hitmix" falls back to all songs until
+// songs have been tagged (and with the bundled songs.ts fallback, which has no tags).
 export function effectiveTags(tags: string[]): string[] {
   const known = getKnownTags();
   return tags.filter((t) => known.has(t));

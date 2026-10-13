@@ -2,6 +2,7 @@ using System.Text.Json;
 using Hits.Api.Admin;
 using Hits.Api.Data;
 using Hits.Api.Models;
+using Hits.Api.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hits.Api.Gameplay;
@@ -31,7 +32,9 @@ public static class GameEndpoints
             // Optional song collection (tags, e.g. "hitmix" or "top 100"): keep songs with at
             // least one of them. Tags no song has are ignored, so the deck never ends up empty
             // just because a collection hasn't been tagged yet.
-            var tags = AdminEndpoints.NormalizeTags(req?.Tags);
+            // Inactive tags (playlists being built, special occasions) can't be picked.
+            var inactiveTags = await TagEndpoints.InactiveTagsAsync(db);
+            var tags = AdminEndpoints.NormalizeTags(req?.Tags).Where(t => !inactiveTags.Contains(t)).ToList();
             if (tags.Count > 0)
             {
                 var tagged = (await db.Songs.AsNoTracking()
@@ -50,6 +53,8 @@ public static class GameEndpoints
             {
                 if (!await db.RankedTags.AnyAsync(t => t.Tag == rankTag))
                     return Results.BadRequest($"Tagget '{rankTag}' har ingen tal.");
+                if (inactiveTags.Contains(rankTag))
+                    return Results.BadRequest($"Tagget '{rankTag}' er ikke aktivt.");
                 var numbered = (await db.SongTagValues.Where(v => v.Tag == rankTag).Select(v => v.SongId).ToListAsync()).ToHashSet();
                 var active = (await db.Songs.AsNoTracking()
                         .Where(s => s.Active && numbered.Contains(s.Id))

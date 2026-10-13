@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock } from 'lucide-react';
 import { BrandLogo } from '../BrandLogo';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
-import { getActiveSongs, matchesSettings } from '../../services/songsService';
+import { getActiveSongs, isTagActive, matchesSettings } from '../../services/songsService';
 import { formatRank, getRankedTags, songsWithRank } from '../../services/rankedTags';
 
 interface GameSetupModalProps {
@@ -59,7 +59,9 @@ export function GameSetupModal({
   // Tags present on active songs, most used first (the catalog is small, so no memo needed).
   const activeSongs = getActiveSongs();
   const tagCounts = new Map<string, number>();
-  for (const s of activeSongs) for (const t of s.tags ?? []) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  // Inactive tags (playlists being built …) can't be picked, so they aren't listed.
+  for (const s of activeSongs)
+    for (const t of s.tags ?? []) if (isTagActive(t)) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
   const allTags = [...tagCounts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'da'));
   const selectedTags = tags.filter((t) => tagCounts.has(t));
   const matchingCount = activeSongs.filter((s) =>

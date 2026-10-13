@@ -10,7 +10,8 @@ interface StartScreenProps {
   settings: GameSettings;
   highscores: BestScores;
   // Tags with numbers that can be played as a placement game (with their song counts).
-  rankChoices: { tag: string; count: number }[];
+  // noun: what the numbers are, e.g. "placering" or "uger" (see rankNoun).
+  rankChoices: { tag: string; count: number; noun: string }[];
   // Songs the current settings deal from.
   songCount: number;
   onSelectRankTag: (rankTag: string | undefined) => void;
@@ -39,7 +40,19 @@ export function StartScreen({
   const installOption = useInstallOption();
   const codeValid = /^\d{4}$/.test(joinCode);
   // Placement game on a tag with numbers, or the normal year game.
-  const rankTag = rankChoices.some((c) => c.tag === settings.rankTag) ? settings.rankTag : undefined;
+  const rank = rankChoices.find((c) => c.tag === settings.rankTag);
+  const rankTag = rank?.tag;
+  // "Gæt placeringen", "Gæt antal uger", "Gæt tallet"
+  const guessWhat = !rank
+    ? 'årstal'
+    : rank.noun === 'placering'
+    ? 'placeringen'
+    : rank.noun === 'tal'
+    ? 'tallet'
+    : `antal ${rank.noun}`;
+  // A team race to N cards can't be won when the collection has N songs or fewer
+  // (the start card is one of them).
+  const tooFewSongs = settings.winCondition === 'cards' && songCount <= settings.targetCards;
   const tags = effectiveTags(settings.tags);
 
   const joinGame = () => {
@@ -60,7 +73,7 @@ export function StartScreen({
           HITS
         </h1>
         <p className="mt-3 text-slate-300 text-base sm:text-lg font-medium">
-          {rankTag ? 'Gæt placeringen & byg jeres fælles liste' : 'Gæt årstal & byg jeres fælles tidslinje'}
+          Gæt {guessWhat} & byg jeres fælles {rank ? 'liste' : 'tidslinje'}
         </p>
 
         {/* Game type: the year game, or a placement game per tag with numbers */}
@@ -91,7 +104,9 @@ export function StartScreen({
 
         <p className="mt-3 text-slate-500 text-sm">
           {rankTag ? (
-            <>Placeringsspil · {rankTag}</>
+            <>
+              {rankTag} · sorteres efter {rank?.noun === 'tal' ? 'tal' : rank?.noun === 'placering' ? 'placering' : `antal ${rank?.noun}`}
+            </>
           ) : (
             <>
               {settings.categoryFilter === 'all'
@@ -107,6 +122,12 @@ export function StartScreen({
             ? `flest kort på ${settings.timeLimitMinutes} min`
             : `${settings.targetCards} sange`}
         </p>
+        {tooFewSongs && (
+          <p className="mt-1 text-xs text-amber-400">
+            Kun {songCount} sange — målet på {settings.targetCards} kort kan ikke nås i holdspil. Vælg et lavere mål
+            under Indstillinger.
+          </p>
+        )}
 
         {/* Primary start button — classic, single-device HITS */}
         <button

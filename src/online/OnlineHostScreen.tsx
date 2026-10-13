@@ -5,7 +5,7 @@ import { HitsterCard, decadeForYear } from '../components/HitsterCard';
 import { RevealOverlay, useRevealOverlay } from './RevealOverlay';
 import { Standings } from './Standings';
 import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
-import { DEFAULT_TAG, getActiveSongs, loadCatalog } from '../services/songsService';
+import { DEFAULT_TAG, getActiveSongs, isTagActive, loadCatalog, loadTagSettings } from '../services/songsService';
 import { loadRankedTags, songsWithRank } from '../services/rankedTags';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
@@ -32,9 +32,11 @@ export function OnlineHostScreen() {
   const { state } = useGameState(code);
 
   useEffect(() => {
-    loadCatalog().then(() => {
+    // Inactive tags (playlists being built …) can't be picked, so they aren't listed.
+    Promise.all([loadCatalog(), loadTagSettings()]).then(() => {
       const counts = new Map<string, number>();
-      for (const s of getActiveSongs()) for (const t of s.tags ?? []) counts.set(t, (counts.get(t) ?? 0) + 1);
+      for (const s of getActiveSongs())
+        for (const t of s.tags ?? []) if (isTagActive(t)) counts.set(t, (counts.get(t) ?? 0) + 1);
       setTagCounts([...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'da')));
       loadRankedTags().then((ranked) =>
         setRankChoices(

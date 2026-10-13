@@ -160,7 +160,8 @@ export function AdminAi({ request }: { request: Request }) {
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
       setResult(
         `Importeret i "${data.tag}": ${data.updated} eksisterende sange fik tag og tal, ${data.created} nye sange oprettet som inaktive. ` +
-          (data.created > 0 ? 'Find dem i Katalog (filtrér på tagget og "Kun inaktive"), lyt dem igennem og aktivér dem.' : ''),
+          (data.created > 0 ? 'Find dem i Katalog (filtrér på tagget og "Kun inaktive"), lyt dem igennem og aktivér dem. ' : '') +
+          (data.inactive ? 'Tagget er nyt og derfor inaktivt — aktivér det under Tags, når playlisten er færdig.' : ''),
       );
       setRows([]);
       setJob(null);
