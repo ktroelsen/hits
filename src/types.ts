@@ -16,6 +16,9 @@ export interface Song {
   // When present, the app plays these directly and never calls Apple at runtime.
   previewUrl?: string;
   artworkUrl?: string;
+  // The iTunes track picked by hand in /admin when the search's first hit was the wrong
+  // recording; the server's preview refresh keeps that exact track. Null = first search hit.
+  iTunesTrackId?: number | null;
   // Toggled in /admin; only active songs are played. Missing (bundled fallback) = active.
   active?: boolean;
   // Normalised labels (e.g. "dance", "melodi grand prix") set in /admin or via scripts/songs.ps1.

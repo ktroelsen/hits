@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSongAudioPreview } from '../services/audioService';
 import { Song, SongCategory } from '../types';
 import { RankedTag } from '../services/rankedTags';
+import { AdminPreviewPicker } from './AdminPreviewPicker';
 
 // "Katalog" tab on /admin: every song in the database, with search, preview,
 // edit, delete, tags and active toggle. Reads GET /api/songs and writes via PUT/DELETE
@@ -679,6 +680,13 @@ export function AdminCatalog({ request, onChanged }: AdminCatalogProps) {
                       />
                     </label>
                   ))}
+                <AdminPreviewPicker
+                  key={editing.id}
+                  artist={editing.artist}
+                  title={editing.title}
+                  value={editing}
+                  onChange={(patch) => setEditing((e) => (e ? { ...e, ...patch } : e))}
+                />
               </div>
               <div className="flex gap-2">
                 <button
