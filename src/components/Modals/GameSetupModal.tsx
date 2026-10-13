@@ -105,6 +105,10 @@ export function GameSetupModal({
     setNewPlayerName('');
   };
 
+  // Team names are edited in place; a blank name falls back to "Hold N" on start.
+  const handleRenamePlayer = (id: string, name: string) =>
+    setPlayers(players.map((p) => (p.id === id ? { ...p, name } : p)));
+
   const handleRemovePlayer = (id: string) => {
     if (players.length <= 1) return;
     setPlayers(players.filter((p) => p.id !== id));
@@ -123,7 +127,8 @@ export function GameSetupModal({
       uniqueYearsOnly,
       rankTag: selectedRank?.rank.tag,
     };
-    onStartGame(updatedSettings, players);
+    const namedPlayers = players.map((p, idx) => ({ ...p, name: p.name.trim() || `Hold ${idx + 1}` }));
+    onStartGame(updatedSettings, namedPlayers);
     onClose();
   };
 
@@ -529,16 +534,22 @@ export function GameSetupModal({
                   key={p.id}
                   className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 border border-slate-800"
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex min-w-0 flex-1 items-center gap-2.5">
                     <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-black"
+                      className="w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-white text-[10px] font-black"
                       style={{ backgroundColor: p.color }}
                     >
                       {idx + 1}
                     </div>
-                    <span className="text-sm font-semibold text-slate-200">
-                      {p.name}
-                    </span>
+                    <input
+                      value={p.name}
+                      onChange={(e) => handleRenamePlayer(p.id, e.target.value)}
+                      maxLength={30}
+                      placeholder={`Hold ${idx + 1}`}
+                      aria-label={`Navn på hold ${idx + 1}`}
+                      title="Klik for at ændre navnet"
+                      className="min-w-0 flex-1 rounded-lg bg-transparent px-2 py-1 text-sm font-semibold text-slate-200 outline-none ring-1 ring-transparent hover:ring-slate-700 focus:bg-slate-900 focus:ring-pink-500"
+                    />
                   </div>
 
                   {players.length > 1 && (
