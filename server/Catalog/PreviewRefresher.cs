@@ -139,6 +139,23 @@ public sealed partial class PreviewRefresher(
         return (song, result.Outcome);
     }
 
+    // Looks up preview + cover for newly imported songs, one by one in the background.
+    public void RefreshSongsInBackground(IReadOnlyList<string> ids)
+    {
+        if (ids.Count == 0) return;
+        _ = Task.Run(async () =>
+        {
+            using var scope = scopes.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            foreach (var id in ids)
+            {
+                try { await RefreshSongAsync(db, id, CancellationToken.None); }
+                catch (Exception ex) { logger.LogWarning(ex, "Preview lookup failed for {Id}", id); }
+                await Task.Delay(SearchDelay); // stay under the iTunes rate limit for long imports
+            }
+        });
+    }
+
     static void Apply(Song song, Resolved result)
     {
         song.PreviewUrl = result.PreviewUrl;
