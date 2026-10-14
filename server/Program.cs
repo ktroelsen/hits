@@ -4,6 +4,7 @@ using Hits.Api.Ai;
 using Hits.Api.Catalog;
 using Hits.Api.Data;
 using Hits.Api.Gameplay;
+using Hits.Api.Spotify;
 using Hits.Api.Tags;
 using Hits.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,14 @@ builder.Services.AddHostedService<PreviewRefreshJob>();
 
 // AI assistant in /admin (researches song collections with Claude; needs Anthropic__ApiKey).
 builder.Services.AddSingleton<AiResearch>();
+
+// Spotify playlist import in /admin (reads the public embed page; no key needed).
+builder.Services.AddHttpClient(nameof(SpotifyPlaylist), c =>
+{
+    c.Timeout = TimeSpan.FromSeconds(15);
+    c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; HitsAdmin/1.0)");
+});
+builder.Services.AddSingleton<SpotifyPlaylist>();
 
 // Allow the statically-hosted frontend (dev on :3000) to call the API cross-origin.
 const string DevCors = "dev-frontend";
@@ -146,6 +155,9 @@ app.MapRankedTagEndpoints();
 
 // ---- AI assistant (/admin → AI-assistent) ----
 app.MapAiEndpoints();
+
+// ---- Spotify playlist import (/admin → Spotify) ----
+app.MapSpotifyEndpoints();
 
 // ---- Online game API (issue 8) ----
 app.MapGameEndpoints();

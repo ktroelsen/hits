@@ -4,6 +4,7 @@ import { SongCategory } from '../types';
 import { AdminCatalog } from './AdminCatalog';
 import { AdminRankedTags } from './AdminRankedTags';
 import { AdminAi } from './AdminAi';
+import { AdminSpotify } from './AdminSpotify';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
@@ -119,7 +120,7 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
-  const [tab, setTab] = useState<'candidates' | 'catalog' | 'ranked' | 'ai'>('candidates');
+  const [tab, setTab] = useState<'candidates' | 'catalog' | 'ranked' | 'ai' | 'spotify'>('candidates');
   // Tags put on every song approved from here. Kept between songs (and reloads), so a
   // whole batch can be tagged while reviewing it.
   const [stickyTags, setStickyTags] = useState(readStickyTags);
@@ -416,6 +417,7 @@ export function AdminPage() {
                 { id: 'catalog' as const, label: `Katalog (${total})` },
                 { id: 'ranked' as const, label: 'Tags' },
                 { id: 'ai' as const, label: '✨ AI-assistent' },
+                { id: 'spotify' as const, label: 'Spotify' },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -437,6 +439,8 @@ export function AdminPage() {
             {tab === 'ranked' && <AdminRankedTags request={keyedFetch} />}
 
             {tab === 'ai' && <AdminAi request={keyedFetch} />}
+
+            {tab === 'spotify' && <AdminSpotify request={keyedFetch} />}
 
             {tab === 'candidates' && (
             <section className="rounded-xl bg-slate-900 p-5 ring-1 ring-slate-800">

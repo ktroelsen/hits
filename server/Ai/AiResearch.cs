@@ -39,6 +39,9 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
         public DateTime? FinishedAt { get; set; }
         public string? Error { get; set; }
         public Proposal? Result { get; set; }
+        // Year lookup for a Spotify playlist (StartYears): the playlist and Claude's answer.
+        public Spotify.SpotifyPlaylist.Playlist? Playlist { get; init; }
+        public List<YearItem>? Years { get; set; }
         public long InputTokens { get; set; }
         public long OutputTokens { get; set; }
         public long Searches { get; set; }
@@ -48,6 +51,10 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
     public record Proposal(string Tag, string Description, string ValuePrefix, string ValueSuffix, List<ProposalItem> Items, string Notes);
     public record ProposalItem(int Value, string Title, string Artist, int Year, string Category, string Source, bool Uncertain, string Note);
 
+    // The JSON Claude returns for a year lookup (see YearsSchema). Index = the track's position in the playlist.
+    public record YearsAnswer(List<YearItem> Items);
+    public record YearItem(int Index, int Year, string Category, bool Uncertain, string Note);
+
     public bool IsConfigured => ApiKey() is not null;
 
     string? ApiKey() =>
@@ -55,18 +62,58 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
 
     public Job Start(string prompt)
     {
-        var job = new Job { Id = Guid.NewGuid().ToString("n"), Prompt = prompt, StartedAt = DateTime.UtcNow };
+        var job = Add(new Job { Id = Guid.NewGuid().ToString("n"), Prompt = prompt, StartedAt = DateTime.UtcNow });
+        _ = Task.Run(() => RunAsync(job, SystemPrompt, prompt, Schema(), text =>
+        {
+            var proposal = JsonSerializer.Deserialize<Proposal>(text, JsonOpts)
+                ?? throw new InvalidOperationException("Tomt svar fra AI.");
+            job.Result = proposal with { Tag = AdminEndpoints.NormalizeTags([proposal.Tag]).FirstOrDefault() ?? "" };
+        }));
+        return job;
+    }
+
+    // Looks up the original release year (and category) of every track in a Spotify
+    // playlist — the embed page has no years. Without an API key the job finishes at once
+    // with no years, and the admin fills them in by hand.
+    public Job StartYears(Spotify.SpotifyPlaylist.Playlist playlist)
+    {
+        var job = Add(new Job
+        {
+            Id = Guid.NewGuid().ToString("n"),
+            Prompt = playlist.Name,
+            Playlist = playlist,
+            StartedAt = DateTime.UtcNow,
+        });
+        if (!IsConfigured)
+        {
+            job.Years = [];
+            job.Status = JobStatus.Done;
+            job.FinishedAt = DateTime.UtcNow;
+            return job;
+        }
+        var list = string.Join('\n', playlist.Tracks.Select((t, i) => $"{i}. {t.Artist} – {t.Title}"));
+        _ = Task.Run(() => RunAsync(job, YearsSystemPrompt, $"Playlist \"{playlist.Name}\":\n{list}", YearsSchema(), text =>
+        {
+            var answer = JsonSerializer.Deserialize<YearsAnswer>(text, JsonOpts)
+                ?? throw new InvalidOperationException("Tomt svar fra AI.");
+            job.Years = answer.Items;
+        }));
+        return job;
+    }
+
+    Job Add(Job job)
+    {
         _jobs[job.Id] = job;
         // Old jobs only matter while someone reviews them.
         foreach (var old in _jobs.Values.Where(j => j.StartedAt < DateTime.UtcNow.AddDays(-1)))
             _jobs.TryRemove(old.Id, out _);
-        _ = Task.Run(() => RunAsync(job));
         return job;
     }
 
     public Job? Get(string id) => _jobs.GetValueOrDefault(id);
 
-    async Task RunAsync(Job job)
+    // Runs one structured-output request with web search and hands the JSON answer to onResult.
+    async Task RunAsync(Job job, string system, string message, Dictionary<string, JsonElement> schema, Action<string> onResult)
     {
         try
         {
@@ -81,11 +128,11 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
                 OutputConfig = new BetaOutputConfig
                 {
                     Effort = Effort.High,
-                    Format = new BetaJsonOutputFormat { Schema = Schema() },
+                    Format = new BetaJsonOutputFormat { Schema = schema },
                 },
                 Tools = [new BetaToolUnion(new BetaWebSearchTool20260209 { MaxUses = MaxSearches })],
-                System = SystemPrompt,
-                Messages = [new() { Role = Role.User, Content = job.Prompt }],
+                System = system,
+                Messages = [new() { Role = Role.User, Content = message }],
             };
 
             // Streamed so the long research turn never hits an HTTP timeout. With
@@ -112,9 +159,7 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
             if (stopReason == "max_tokens") throw new InvalidOperationException("Svaret blev for langt. Bed om færre sange.");
             if (stopReason == "pause_turn") throw new InvalidOperationException("Researchen tog for mange skridt. Prøv en mere præcis beskrivelse.");
 
-            var proposal = JsonSerializer.Deserialize<Proposal>(text.ToString(), JsonOpts)
-                ?? throw new InvalidOperationException("Tomt svar fra AI.");
-            job.Result = proposal with { Tag = AdminEndpoints.NormalizeTags([proposal.Tag]).FirstOrDefault() ?? "" };
+            onResult(text.ToString());
             job.Status = JobStatus.Done;
         }
         catch (Exception ex)
@@ -186,51 +231,22 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
         await db.SaveChangesAsync();
 
         var catalog = await db.Songs.ToListAsync(); // tracked: songs get tags and numbers
-        int updated = 0, created = 0;
+        int updated = 0;
         var createdIds = new List<string>();
         foreach (var item in body.Items ?? [])
         {
-            var title = item.Title?.Trim() ?? "";
-            var artist = item.Artist?.Trim() ?? "";
-            var song = item.ExistingId is { } id ? catalog.FirstOrDefault(s => s.Id == id) : null;
-            song ??= title != "" && artist != "" ? AdminEndpoints.FindInCatalogLoose(catalog, artist, title) : null;
-            if (song is null)
-            {
-                if (title == "" || artist == "" || item.Year is < 1900 or > 2100) continue;
-                song = new Song
-                {
-                    Id = Guid.NewGuid().ToString("n"),
-                    Title = title,
-                    Artist = artist,
-                    Year = item.Year,
-                    Category = item.Category == "danish" ? "danish" : "international",
-                    Decade = AdminEndpoints.DecadeForYear(item.Year),
-                    Active = false,
-                };
-                db.Songs.Add(song);
-                catalog.Add(song);
-                createdIds.Add(song.Id);
-                created++;
-            }
+            var row = new SongImport.Row(item.Title, item.Artist, item.Year, item.Category, item.ExistingId);
+            if (SongImport.FindOrCreate(db, catalog, row, out var created) is not { } song) continue;
+            if (created) createdIds.Add(song.Id);
             else updated++;
             await Tags.RankedTagEndpoints.SetValueAsync(db, tag, song, item.Value);
         }
         await db.SaveChangesAsync();
 
         // Preview + cover for the new songs (iTunes), in the background.
-        if (createdIds.Count > 0)
-            _ = Task.Run(async () =>
-            {
-                using var scope = scopes.CreateScope();
-                var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                foreach (var id in createdIds)
-                {
-                    try { await previews.RefreshSongAsync(scopedDb, id, CancellationToken.None); }
-                    catch (Exception ex) { logger.LogWarning(ex, "Preview lookup failed for {Id}", id); }
-                }
-            });
+        previews.RefreshSongsInBackground(createdIds);
 
-        return new { tag, updated, created, inactive = newTag };
+        return new { tag, updated, created = createdIds.Count, inactive = newTag };
     }
 
     static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
@@ -258,6 +274,53 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
         numbers; if you can only verify part of the list, return that part and say so in notes.
         If the admin asks for a number of songs, return that many (when the source has them).
         """;
+
+    const string YearsSystemPrompt = """
+        You date songs for HITS, a Danish music quiz where players place songs on a timeline by
+        year. You get a numbered Spotify playlist ("index. artists – title"). For every line return:
+
+        - index: the line's number, unchanged. Return every line exactly once.
+        - year: the year the song was first released. Spotify often lists a remaster, a compilation
+          or a later live version; give the original release year of the song, not of that album.
+          If you are unsure, give your best year and set uncertain = true.
+        - category: "danish" for Danish artists, otherwise "international".
+        - uncertain: true when the year needs checking.
+        - note: short, in Danish, only when something needs checking (e.g. "Cover af …, originalen
+          er fra 1975"); empty string otherwise.
+
+        Use web search only for songs you cannot date confidently.
+        """;
+
+    static Dictionary<string, JsonElement> YearsSchema() => ToSchema(new
+    {
+        type = "object",
+        additionalProperties = false,
+        required = new[] { "items" },
+        properties = new
+        {
+            items = new
+            {
+                type = "array",
+                items = new
+                {
+                    type = "object",
+                    additionalProperties = false,
+                    required = new[] { "index", "year", "category", "uncertain", "note" },
+                    properties = new
+                    {
+                        index = new { type = "integer" },
+                        year = new { type = "integer" },
+                        category = new { type = "string", @enum = new[] { "danish", "international" } },
+                        uncertain = new { type = "boolean" },
+                        note = new { type = "string" },
+                    },
+                },
+            },
+        },
+    });
+
+    static Dictionary<string, JsonElement> ToSchema(object schema) =>
+        JsonSerializer.SerializeToElement(schema).EnumerateObject().ToDictionary(p => p.Name, p => p.Value.Clone());
 
     static Dictionary<string, JsonElement> Schema()
     {
@@ -297,6 +360,6 @@ public sealed class AiResearch(IConfiguration config, IServiceScopeFactory scope
                 },
             },
         };
-        return JsonSerializer.SerializeToElement(schema).EnumerateObject().ToDictionary(p => p.Name, p => p.Value.Clone());
+        return ToSchema(schema);
     }
 }
