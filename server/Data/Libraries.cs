@@ -19,11 +19,12 @@ public sealed record Library(string Id, string Name, string ConnectionString, st
 public sealed partial class LibraryRegistry
 {
     public const string DefaultId = "hits";
-    // The browser's chosen library: cookie (set by the frontend, so every request and the
-    // SignalR hub carry it), or ?lib= / X-Library for links and scripts.
+    // The browser's library: chosen by opening the site with ?db=<id> (not shown anywhere
+    // in the UI), which the frontend remembers in a cookie so every request and the SignalR
+    // hub carry it. X-Library is for scripts.
     public const string CookieName = "hits_lib";
     public const string HeaderName = "X-Library";
-    public const string QueryName = "lib";
+    public const string QueryName = "db";
 
     public IReadOnlyList<Library> All { get; }
     public Library Default => All[0];
@@ -99,12 +100,9 @@ public static class LibraryScopes
     {
         var group = app.MapGroup("/api/libraries");
 
-        // The libraries to choose between, and which one this browser uses.
-        group.MapGet("/", (LibraryRegistry registry, LibraryContext current) => Results.Ok(new
-        {
-            current = current.Current.Id,
-            libraries = registry.All.Select(l => new { l.Id, l.Name }),
-        }));
+        // The library this browser uses. The other libraries are deliberately not listed.
+        group.MapGet("/", (LibraryContext current) =>
+            Results.Ok(new { current.Current.Id, current.Current.Name }));
 
         // Which library an online game code belongs to, so a player who types the code on
         // another device joins the right one (the chosen library first).

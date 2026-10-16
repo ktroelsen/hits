@@ -95,11 +95,13 @@ tags, online-spil, highscores og **egen admin-nøgle**:
 - **Nyt bibliotek:** læg en fil `App_Data/hits-<navn>.db` (fx en kopi af `hits.db`) og genstart
   appen. En tom/ny fil migreres og seedes automatisk. Visningsnavnet er `<Navn>` eller
   `Libraries:<navn>:Name`. Biblioteker kan også oprettes kun via config (`Libraries:<navn>:...`).
-- **Valg:** findes der mere end ét bibliotek, vises en vælger på forsiden og i `/admin`.
-  Valget gemmes i cookien `hits_lib`, så alle API-kald og SignalR bruger det. Links kan tage
-  `?lib=<navn>` (join-linket til online-spil har det automatisk), og når man taster en spilkode,
-  finder appen selv det rigtige bibliotek.
-- **Separat login:** `/admin` bruger det valgte biblioteks nøgle og husker den pr. bibliotek i
+- **Valg (skjult):** der er ingen vælger på siden. Man åbner sitet med `?db=<navn>`, fx
+  `https://din-side.dk/?db=mol` eller `/admin?db=mol`. Browseren husker valget i cookien
+  `hits_lib`, så alle API-kald og SignalR bruger det, også når appen åbnes fra hjemmeskærmen.
+  `?db=hits` (eller tom `?db=`) går tilbage til standard. Ukendte navne giver standard. Join-linket
+  til online-spil har `?db=` med automatisk, og når man taster en spilkode, finder appen selv den
+  rigtige database. API'et viser kun den database, man selv bruger, og lister ikke de andre.
+- **Separat login:** `/admin` bruger det valgte biblioteks nøgle (og viser "Database: Mol") og husker den pr. bibliotek i
   browseren. Nøglen til ét bibliotek virker ikke på et andet. Uden nøgle er det biblioteks
   admin slået fra i produktion.
 - Afspilningsrækkefølge (`hits_session`, `hits_session-<navn>`) og kandidat-beslutninger
