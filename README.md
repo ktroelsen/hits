@@ -81,6 +81,31 @@ Nøglen sættes som konfiguration `Admin:Key` (env `Admin__Key`); i deployet kom
 GitHub-secret'en **`ADMIN_KEY`**. Uden nøgle er admin åben under `Development` og slået fra
 i produktion.
 
+## Flere sangbiblioteker (én database hver)
+
+Serveren kan have flere **sangbiblioteker**, så fx to familier eller admins hver har deres
+egne sange uden at genere hinanden. Hvert bibliotek er sin egen SQLite-fil med eget katalog,
+tags, online-spil, highscores og **egen admin-nøgle**:
+
+| Bibliotek | Fil | Admin-nøgle (config / env) |
+|---|---|---|
+| `hits` (Standard) | `App_Data/hits.db` | `Admin:Key` / `Admin__Key` |
+| `mol` | `App_Data/hits-mol.db` | `Libraries:mol:AdminKey` / `Libraries__mol__AdminKey` |
+
+- **Nyt bibliotek:** læg en fil `App_Data/hits-<navn>.db` (fx en kopi af `hits.db`) og genstart
+  appen. En tom/ny fil migreres og seedes automatisk. Visningsnavnet er `<Navn>` eller
+  `Libraries:<navn>:Name`. Biblioteker kan også oprettes kun via config (`Libraries:<navn>:...`).
+- **Valg:** findes der mere end ét bibliotek, vises en vælger på forsiden og i `/admin`.
+  Valget gemmes i cookien `hits_lib`, så alle API-kald og SignalR bruger det. Links kan tage
+  `?lib=<navn>` (join-linket til online-spil har det automatisk), og når man taster en spilkode,
+  finder appen selv det rigtige bibliotek.
+- **Separat login:** `/admin` bruger det valgte biblioteks nøgle og husker den pr. bibliotek i
+  browseren. Nøglen til ét bibliotek virker ikke på et andet. Uden nøgle er det biblioteks
+  admin slået fra i produktion.
+- Afspilningsrækkefølge (`hits_session`, `hits_session-<navn>`) og kandidat-beslutninger
+  (`candidate-status-<navn>.json`) holdes også adskilt. Preview-fornyelsen kører over alle
+  biblioteker.
+
 ## Berig sange: eksport/import og tags
 
 Sange kan have **tags** (fx `dance`, `melodi grand prix`, `80er hits`). Tags gemmes med små
@@ -207,7 +232,7 @@ API-forbrug (tokens + websøgninger, højst 8 søgninger pr. kørsel).
 ### Produktions-arkitektur
 
 Deployet er **self-contained**: `dotnet publish` bundter .NET-runtimen, så Simplys Windows/IIS
-ikke behøver .NET installeret. Appen kører i et app pool (ASP.NET Core Module, in-process) og
+ikke behøver .NET installeret. Appen kører i et app pool (ASP.NET Core Module, out-of-process via `Hits.Api.exe`) og
 serverer:
 
 - det byggede React-frontend fra `wwwroot` (med SPA-fallback til `index.html`),
@@ -226,6 +251,7 @@ lægge den et andet persistent sted, så sæt `ConnectionStrings__Default` i mil
 | `SIMPLY_WEBDEPLOY_USERNAME` | deploy | Web Deploy brugernavn |
 | `SIMPLY_WEBDEPLOY_PASSWORD` | deploy | Web Deploy adgangskode |
 | `ADMIN_KEY` | deploy | Admin-nøglen til `/admin` |
+| `ADMIN_KEY_MOL` | deploy | Admin-nøglen til sangbiblioteket `mol` (`hits-mol.db`) |
 | `ANTHROPIC_API_KEY` | deploy | Anthropic API-nøgle til AI-assistenten i `/admin` (valgfri) |
 | `CLAUDE_CODE_OAUTH_TOKEN` | claude | Fra `claude setup-token` (eller brug `ANTHROPIC_API_KEY`) |
 

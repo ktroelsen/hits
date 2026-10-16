@@ -60,11 +60,13 @@ jobs:
       # Admin-nøglen til /admin (secret ADMIN_KEY) og Anthropic-nøglen til AI-assistenten
       # (secret ANTHROPIC_API_KEY) lægges i appsettings.Production.json, så de ikke står i
       # repoet. Uden ADMIN_KEY er /admin slået fra i produktion (503); uden
-      # ANTHROPIC_API_KEY er kun AI-assistenten slået fra.
+      # ANTHROPIC_API_KEY er kun AI-assistenten slået fra. Sangbiblioteket "mol"
+      # (App_Data/hits-mol.db) har sin egen admin-nøgle (secret ADMIN_KEY_MOL).
       - name: Configure admin and AI keys
         shell: pwsh
         env:
           ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+          ADMIN_KEY_MOL: ${{ secrets.ADMIN_KEY_MOL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           $settings = @{}
@@ -73,13 +75,18 @@ jobs:
           } else {
             Write-Warning "ADMIN_KEY secret not set; /admin will be disabled in production."
           }
+          if ($env:ADMIN_KEY_MOL) {
+            $settings.Libraries = @{ mol = @{ AdminKey = $env:ADMIN_KEY_MOL } }
+          } else {
+            Write-Warning "ADMIN_KEY_MOL secret not set; /admin for the 'mol' library will be disabled in production."
+          }
           if ($env:ANTHROPIC_API_KEY) {
             $settings.Anthropic = @{ ApiKey = $env:ANTHROPIC_API_KEY }
           } else {
             Write-Warning "ANTHROPIC_API_KEY secret not set; the AI assistant in /admin will be disabled."
           }
           if ($settings.Count -gt 0) {
-            $settings | ConvertTo-Json | Set-Content publish/appsettings.Production.json -Encoding utf8
+            $settings | ConvertTo-Json -Depth 5 | Set-Content publish/appsettings.Production.json -Encoding utf8
           }
 
       # Synkronisér publish/ til IIS-sitets rod via Web Deploy. msdeploy.exe kaldes

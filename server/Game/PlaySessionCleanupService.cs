@@ -4,17 +4,19 @@ using Microsoft.EntityFrameworkCore;
 namespace Hits.Api.Gameplay;
 
 // Deletes play sessions that haven't been used for PlaySessionStore.IdleLifetime.
-// Runs at startup and then every 15 minutes.
+// Runs at startup and then every 15 minutes, in every song library.
 public class PlaySessionCleanupService : BackgroundService
 {
     private static readonly TimeSpan Interval = TimeSpan.FromMinutes(15);
 
     private readonly IServiceScopeFactory _scopes;
+    private readonly LibraryRegistry _libraries;
     private readonly ILogger<PlaySessionCleanupService> _logger;
 
-    public PlaySessionCleanupService(IServiceScopeFactory scopes, ILogger<PlaySessionCleanupService> logger)
+    public PlaySessionCleanupService(IServiceScopeFactory scopes, LibraryRegistry libraries, ILogger<PlaySessionCleanupService> logger)
     {
         _scopes = scopes;
+        _libraries = libraries;
         _logger = logger;
     }
 
@@ -23,20 +25,23 @@ public class PlaySessionCleanupService : BackgroundService
         using var timer = new PeriodicTimer(Interval);
         do
         {
-            try
+            foreach (var library in _libraries.All)
             {
-                using var scope = _scopes.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var cutoff = DateTime.UtcNow - PlaySessionStore.IdleLifetime;
-                var deleted = await db.PlaySessions
-                    .Where(s => s.LastSeenAt < cutoff)
-                    .ExecuteDeleteAsync(stoppingToken);
-                if (deleted > 0)
-                    _logger.LogInformation("Deleted {Count} idle play sessions.", deleted);
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException)
-            {
-                _logger.LogWarning(ex, "Play session cleanup failed.");
+                try
+                {
+                    using var scope = _scopes.CreateLibraryScope(library);
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var cutoff = DateTime.UtcNow - PlaySessionStore.IdleLifetime;
+                    var deleted = await db.PlaySessions
+                        .Where(s => s.LastSeenAt < cutoff)
+                        .ExecuteDeleteAsync(stoppingToken);
+                    if (deleted > 0)
+                        _logger.LogInformation("Deleted {Count} idle play sessions in library {Library}.", deleted, library.Id);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    _logger.LogWarning(ex, "Play session cleanup failed in library {Library}.", library.Id);
+                }
             }
         } while (await timer.WaitForNextTickAsync(stoppingToken));
     }

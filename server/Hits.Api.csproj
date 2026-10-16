@@ -4,6 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- IIS on Simply runs the app out-of-process (the generated web.config starts .\Hits.Api.exe
+         with hostingModel="outofprocess"); avoids bitness problems in the IIS worker. -->
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,6 +11,8 @@
     HITS_URL=https://din-side.dk
     HITS_ADMIN_KEY=...
   -Url / -Key overskriver dem, fx -Url http://localhost:5259 mod den lokale server.
+  -Library vælger sangbiblioteket (fx mol); brug så det biblioteks admin-nøgle
+  (HITS_LIBRARY i .env.local virker også).
 
 .EXAMPLE
   .\scripts\songs.ps1 export -Missing tags -Limit 10
@@ -28,6 +30,7 @@ param(
   [Parameter(Mandatory, Position = 0)][ValidateSet('export', 'import')][string]$Command,
   [string]$Url,
   [string]$Key,
+  [string]$Library,
   # export
   [string]$Out = 'songs-export.json',
   [int]$Limit,
@@ -54,6 +57,7 @@ if (Test-Path $envFile) {
     if ($line -match '^\s*([A-Z_]+)\s*=\s*"?(.*?)"?\s*$') {
       if ($Matches[1] -eq 'HITS_URL' -and -not $Url) { $Url = $Matches[2] }
       if ($Matches[1] -eq 'HITS_ADMIN_KEY' -and -not $Key) { $Key = $Matches[2] }
+      if ($Matches[1] -eq 'HITS_LIBRARY' -and -not $Library) { $Library = $Matches[2] }
     }
   }
 }
@@ -61,6 +65,7 @@ if (-not $Url) { throw 'Ingen URL. Sæt HITS_URL i .env.local eller brug -Url.' 
 $base = $Url.TrimEnd('/') + '/api/admin/songs'
 $headers = @{}
 if ($Key) { $headers['X-Admin-Key'] = $Key }
+if ($Library) { $headers['X-Library'] = $Library }
 
 # Calls the API and returns the response body as a UTF-8 string, also for 4xx answers
 # (the import reports its validation errors with 400).

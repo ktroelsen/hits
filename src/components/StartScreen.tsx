@@ -5,6 +5,8 @@ import { GameSettings } from '../types';
 import { effectiveTags } from '../services/songsService';
 import type { BestScores } from '../services/highscoreStore';
 import { useInstallOption } from '../services/installPrompt';
+import { findGameLibrary, withLibrary } from '../services/library';
+import { LibraryPicker } from './LibraryPicker';
 
 interface StartScreenProps {
   settings: GameSettings;
@@ -55,8 +57,11 @@ export function StartScreen({
   const tooFewSongs = settings.winCondition === 'cards' && songCount <= settings.targetCards;
   const tags = effectiveTags(settings.tags);
 
-  const joinGame = () => {
-    if (codeValid) window.location.href = `/game/${joinCode}`;
+  // The code may belong to another song library than the one chosen on this device.
+  const joinGame = async () => {
+    if (!codeValid) return;
+    const library = await findGameLibrary(joinCode);
+    window.location.href = library ? withLibrary(`/game/${joinCode}`, library) : `/game/${joinCode}`;
   };
 
   return (
@@ -75,6 +80,9 @@ export function StartScreen({
         <p className="mt-3 text-slate-300 text-base sm:text-lg font-medium">
           Gæt {guessWhat} & byg jeres fælles {rank ? 'liste' : 'tidslinje'}
         </p>
+
+        {/* Song library (one database each); only shown when the server has more than one */}
+        <LibraryPicker className="mt-4 justify-center" />
 
         {/* Game type: the year game, or a placement game per tag with numbers */}
         {rankChoices.length > 0 && (

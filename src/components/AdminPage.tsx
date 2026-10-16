@@ -5,15 +5,19 @@ import { AdminCatalog } from './AdminCatalog';
 import { AdminRankedTags } from './AdminRankedTags';
 import { AdminAi } from './AdminAi';
 import { AdminSpotify } from './AdminSpotify';
+import { LibraryPicker } from './LibraryPicker';
+import { currentLibraryId, DEFAULT_LIBRARY } from '../services/library';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
 // Works both locally and on the deployed site; requests carry the admin key
 // (X-Admin-Key), which the user enters once and is remembered in localStorage.
+// Each song library (database) has its own admin key, so the key is remembered per library.
 
 const GOAL = 500;
 const API = '/api/admin';
-const KEY_STORAGE = 'hits-admin-key';
+const library = currentLibraryId();
+const KEY_STORAGE = library === DEFAULT_LIBRARY ? 'hits-admin-key' : `hits-admin-key-${library}`;
 const STICKY_TAGS_STORAGE = 'hits-admin-sticky-tags';
 
 // "dance, Melodi  Grand Prix" → ["dance", "melodi grand prix"] (same rules as the server).
@@ -361,6 +365,24 @@ export function AdminPage() {
             Auditionér kandidater og vælg hvilke der ryger i kataloget. Godkendte sange gemmes
             direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
           </p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <LibraryPicker />
+            {!needsKey && state && (
+              <button
+                onClick={() => {
+                  try {
+                    localStorage.removeItem(KEY_STORAGE);
+                  } catch {}
+                  setState(null);
+                  setKeyInput('');
+                  setNeedsKey(true);
+                }}
+                className="text-xs font-semibold text-slate-400 hover:text-slate-200"
+              >
+                Log ud
+              </button>
+            )}
+          </div>
         </header>
 
         {needsKey && (

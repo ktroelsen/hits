@@ -5,12 +5,16 @@ import {AdminPage} from './components/AdminPage.tsx';
 import {OnlineHostScreen} from './online/OnlineHostScreen.tsx';
 import {OnlinePlayerScreen} from './online/OnlinePlayerScreen.tsx';
 import './index.css';
+import {applyLibraryFromUrl} from './services/library.ts';
 
 // Lightweight pathname routing (no router dependency):
 //   /admin        → unlisted local curation tool (write API only under `npm run dev`)
 //   /game         → online host / big-screen (create + drive the game)
 //   /game/{code}  → player join + answer screen
 //   everything else → the single-device game
+// A shared link may name the song library (?lib=…); apply it before anything loads.
+applyLibraryFromUrl();
+
 const path = window.location.pathname.replace(/\/+$/, '');
 const gameMatch = path.match(/^\/game\/([^/]+)$/);
 
