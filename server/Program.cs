@@ -14,12 +14,17 @@ var builder = WebApplication.CreateBuilder(args);
 // SQLite path. Defaults to App_Data/hits.db under the content root; the deploy keeps
 // App_Data across releases (msdeploy -skip) so game/catalog data survives redeploys.
 // Override with ConnectionStrings__Default to point at any persistent, writable path.
+// Every App_Data/hits-{id}.db is a separate song library with its own admin key; each
+// request uses the library the browser picked (see Data/Libraries.cs).
 var dataDir = Path.Combine(builder.Environment.ContentRootPath, "App_Data");
 Directory.CreateDirectory(dataDir);
-var connectionString = builder.Configuration.GetConnectionString("Default")
-    ?? $"Data Source={Path.Combine(dataDir, "hits.db")}";
+var libraries = LibraryRegistry.Load(builder.Configuration, dataDir);
 
-builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlite(connectionString));
+builder.Services.AddSingleton(libraries);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<LibraryContext>();
+builder.Services.AddDbContext<AppDbContext>((sp, o) =>
+    o.UseSqlite(sp.GetRequiredService<LibraryContext>().Current.ConnectionString));
 builder.Services.AddSignalR();
 builder.Services.AddScoped<GameBroadcaster>();
 builder.Services.AddHostedService<PlaySessionCleanupService>();
@@ -50,13 +55,15 @@ builder.Services.AddCors(o => o.AddPolicy(DevCors, p => p
 
 var app = builder.Build();
 
-// Apply migrations and seed the catalog on startup.
-using (var scope = app.Services.CreateScope())
+// Apply migrations and seed the catalog on startup, for every library.
+foreach (var library in libraries.All)
 {
+    using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateLibraryScope(library);
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
     await SeedSongsAsync(db, app.Environment, app.Logger);
 }
+app.Logger.LogInformation("Song libraries: {Libraries}", string.Join(", ", libraries.All.Select(l => $"{l.Id} ({l.Name})")));
 
 if (app.Environment.IsDevelopment())
     app.UseCors(DevCors);
@@ -145,6 +152,9 @@ songs.MapDelete("/{id}", async (string id, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.NoContent();
 }).AddEndpointFilter(AdminEndpoints.RequireAdminKey);
+
+// ---- Song libraries (one SQLite database each) ----
+app.MapLibraryEndpoints();
 
 // ---- Admin curation API (/admin) ----
 app.MapAdminEndpoints();

@@ -7,6 +7,7 @@ import { Standings } from './Standings';
 import { hostStorageKey, storageKey as playerStorageKey } from './OnlinePlayerScreen';
 import { DEFAULT_TAG, getActiveSongs, isTagActive, loadCatalog, loadTagSettings } from '../services/songsService';
 import { loadRankedTags, songsWithRank } from '../services/rankedTags';
+import { withLibrary } from '../services/library';
 
 // Callback ref: applies the fade envelope to each round's <audio> element.
 const fadeAudioRef = (el: HTMLAudioElement | null) => (el ? attachFadeEnvelope(el) : undefined);
@@ -87,7 +88,7 @@ export function OnlineHostScreen() {
   const round = state?.round ?? null;
   const overlay = useRevealOverlay(state);
 
-  const joinUrl = code ? `${window.location.origin}/game/${code}` : '';
+  const joinUrl = code ? withLibrary(`${window.location.origin}/game/${code}`) : '';
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">

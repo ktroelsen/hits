@@ -27,6 +27,7 @@ export default defineConfig(() => {
         '/api/session': { target: 'http://localhost:5099', changeOrigin: true },
         '/api/tags': { target: 'http://localhost:5099', changeOrigin: true },
         '/api/ranked-tags': { target: 'http://localhost:5099', changeOrigin: true },
+        '/api/libraries': { target: 'http://localhost:5099', changeOrigin: true },
         '/gameHub': { target: 'http://localhost:5099', ws: true, changeOrigin: true },
       },
     },

@@ -13,6 +13,8 @@ namespace Hits.Api.Gameplay;
 // by PlaySessionCleanupService.
 public static class PlaySessionStore
 {
+    // One cookie per song library ("hits_session", "hits_session-mol" …), since each
+    // library keeps its sessions in its own database.
     public const string CookieName = "hits_session";
     public static readonly TimeSpan IdleLifetime = TimeSpan.FromHours(2);
 
@@ -41,10 +43,11 @@ public static class PlaySessionStore
     public static async Task<PlaySession> GetOrCreateAsync(HttpContext http, AppDbContext db)
     {
         var now = DateTime.UtcNow;
+        var cookieName = CookieName + http.RequestServices.GetRequiredService<LibraryContext>().Current.Suffix;
         var catalogIds = await db.Songs.Where(s => s.Active).Select(s => s.Id).ToListAsync();
 
         PlaySession? session = null;
-        if (http.Request.Cookies.TryGetValue(CookieName, out var id) && !string.IsNullOrEmpty(id))
+        if (http.Request.Cookies.TryGetValue(cookieName, out var id) && !string.IsNullOrEmpty(id))
         {
             session = await db.PlaySessions.FindAsync(id);
             if (session is not null && session.LastSeenAt < now - IdleLifetime)
@@ -65,7 +68,7 @@ public static class PlaySessionStore
                 CreatedAt = now,
             };
             db.PlaySessions.Add(session);
-            http.Response.Cookies.Append(CookieName, session.Id, new CookieOptions
+            http.Response.Cookies.Append(cookieName, session.Id, new CookieOptions
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.Lax,

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { gameApi, GameState } from '../services/gameApi';
+import { withLibrary } from '../services/library';
 
 // Host controls shown on the player screen when the host also plays (created the game
 // on their phone and joined it). Mirrors the big-screen host's buttons: start in the
@@ -29,7 +30,7 @@ export function HostControls({ code, state }: { code: string; state: GameState }
 
   let content: React.ReactNode = null;
   if (state.status === 'lobby') {
-    const joinUrl = `${window.location.origin}/game/${code}`;
+    const joinUrl = withLibrary(`${window.location.origin}/game/${code}`);
     content = (
       <>
         <p className="text-sm text-slate-400">Andre joiner på</p>

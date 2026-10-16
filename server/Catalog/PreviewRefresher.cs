@@ -14,7 +14,8 @@ namespace Hits.Api.Catalog;
 // via the iTunes Lookup API for exactly that track, so a corrected preview stays correct.
 // It never clears a URL: songs that can't be resolved are left untouched.
 public sealed partial class PreviewRefresher(
-    IHttpClientFactory httpFactory, IServiceScopeFactory scopes, IWebHostEnvironment env, ILogger<PreviewRefresher> logger)
+    IHttpClientFactory httpFactory, IServiceScopeFactory scopes, LibraryRegistry libraries, IHttpContextAccessor http,
+    IWebHostEnvironment env, ILogger<PreviewRefresher> logger)
 {
     // Same pacing as scripts/check-previews.ts: iTunes Search allows ~20 req/min per IP,
     // and a 403/429 means "wait out the per-minute window", not "no preview".
@@ -77,44 +78,48 @@ public sealed partial class PreviewRefresher(
         Publish(true, null);
         logger.LogInformation("Preview refresh started.");
 
-        using var scope = scopes.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var songs = await db.Songs.ToListAsync(ct);
-
-        foreach (var song in songs)
+        // Every song library: one pass keeps all their previews alive.
+        foreach (var library in libraries.All)
         {
-            ct.ThrowIfCancellationRequested();
-            checkedCount++;
+            using var scope = scopes.CreateLibraryScope(library);
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var songs = await db.Songs.ToListAsync(ct);
 
-            // A hand-set custom preview wins over iTunes; nothing to maintain.
-            if (!string.IsNullOrWhiteSpace(song.CustomPreviewUrl)) { skipped++; Publish(true, null); continue; }
-
-            if (!string.IsNullOrWhiteSpace(song.PreviewUrl))
+            foreach (var song in songs)
             {
-                var alive = await IsAliveAsync(song.PreviewUrl, ct);
-                if (alive != false) { Publish(true, null); continue; } // alive, or unknown → leave it
-            }
+                ct.ThrowIfCancellationRequested();
+                checkedCount++;
 
-            var result = await ResolveForSongAsync(song, ct);
-            switch (result.Outcome)
-            {
-                case Outcome.Found:
-                    Apply(song, result);
-                    await db.SaveChangesAsync(ct);
-                    refreshed++;
-                    logger.LogInformation("Refreshed preview for {Id} {Artist} – {Title}.", song.Id, song.Artist, song.Title);
-                    break;
-                case Outcome.NotFound:
-                    missing++;
-                    logger.LogWarning("No iTunes preview for {Id} {Artist} – {Title}; left unchanged.", song.Id, song.Artist, song.Title);
-                    break;
-                default:
-                    skipped++;
-                    logger.LogWarning("Could not verify {Id} {Artist} – {Title} (throttled/network); left unchanged.", song.Id, song.Artist, song.Title);
-                    break;
+                // A hand-set custom preview wins over iTunes; nothing to maintain.
+                if (!string.IsNullOrWhiteSpace(song.CustomPreviewUrl)) { skipped++; Publish(true, null); continue; }
+
+                if (!string.IsNullOrWhiteSpace(song.PreviewUrl))
+                {
+                    var alive = await IsAliveAsync(song.PreviewUrl, ct);
+                    if (alive != false) { Publish(true, null); continue; } // alive, or unknown → leave it
+                }
+
+                var result = await ResolveForSongAsync(song, ct);
+                switch (result.Outcome)
+                {
+                    case Outcome.Found:
+                        Apply(song, result);
+                        await db.SaveChangesAsync(ct);
+                        refreshed++;
+                        logger.LogInformation("Refreshed preview for {Id} {Artist} – {Title}.", song.Id, song.Artist, song.Title);
+                        break;
+                    case Outcome.NotFound:
+                        missing++;
+                        logger.LogWarning("No iTunes preview for {Id} {Artist} – {Title}; left unchanged.", song.Id, song.Artist, song.Title);
+                        break;
+                    default:
+                        skipped++;
+                        logger.LogWarning("Could not verify {Id} {Artist} – {Title} (throttled/network); left unchanged.", song.Id, song.Artist, song.Title);
+                        break;
+                }
+                Publish(true, null);
+                await Task.Delay(SearchDelay, ct);
             }
-            Publish(true, null);
-            await Task.Delay(SearchDelay, ct);
         }
 
         var finished = DateTimeOffset.UtcNow;
@@ -143,9 +148,11 @@ public sealed partial class PreviewRefresher(
     public void RefreshSongsInBackground(IReadOnlyList<string> ids)
     {
         if (ids.Count == 0) return;
+        // The songs live in the library of the request that imported them.
+        var library = http.HttpContext?.RequestServices.GetRequiredService<LibraryContext>().Current ?? libraries.Default;
         _ = Task.Run(async () =>
         {
-            using var scope = scopes.CreateScope();
+            using var scope = scopes.CreateLibraryScope(library);
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             foreach (var id in ids)
             {

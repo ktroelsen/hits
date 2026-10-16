@@ -8,9 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Hits.Api.Admin;
 
 // Server-side /admin curation API. Replaces the old Vite dev-only plugin so /admin works
-// on the deployed site too. Protected by an admin key (config "Admin:Key", env Admin__Key)
-// sent as the X-Admin-Key header. Without a configured key, admin is open in Development
-// and disabled everywhere else.
+// on the deployed site too. Protected by the request's song library's admin key (config
+// "Admin:Key" for the default library, "Libraries:{id}:AdminKey" for the others — see
+// Data/Libraries.cs) sent as the X-Admin-Key header, so each library has its own login.
+// Without a configured key, admin is open in Development and disabled everywhere else.
 public static class AdminEndpoints
 {
     public const string KeyHeader = "X-Admin-Key";
@@ -39,12 +40,14 @@ public static class AdminEndpoints
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext ctx, EndpointFilterDelegate next)
         {
             var http = ctx.HttpContext;
-            var key = http.RequestServices.GetRequiredService<IConfiguration>()["Admin:Key"];
+            var library = http.RequestServices.GetRequiredService<LibraryContext>().Current;
+            var key = library.AdminKey;
             if (string.IsNullOrEmpty(key))
             {
                 if (http.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
                     return await next(ctx);
-                return Results.Json(new { error = "Admin er ikke konfigureret på serveren (sæt Admin__Key)." }, statusCode: 503);
+                var setting = library.IsDefault ? "Admin__Key" : $"Libraries__{library.Id}__AdminKey";
+                return Results.Json(new { error = $"Admin for \"{library.Name}\" er ikke konfigureret på serveren (sæt {setting})." }, statusCode: 503);
             }
             var given = http.Request.Headers[KeyHeader].ToString();
             if (!System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(
@@ -58,10 +61,10 @@ public static class AdminEndpoints
     {
         var admin = app.MapGroup("/api/admin").AddEndpointFilter(RequireAdminKey);
 
-        admin.MapGet("/state", async (AppDbContext db, IWebHostEnvironment env) =>
+        admin.MapGet("/state", async (AppDbContext db, IWebHostEnvironment env, LibraryContext lib) =>
         {
             var catalog = await db.Songs.AsNoTracking().ToListAsync();
-            var status = await LoadStatusAsync(env);
+            var status = await LoadStatusAsync(env, lib.Current);
             var candidates = LoadCandidates(env);
             var values = (await db.SongTagValues.AsNoTracking().ToListAsync())
                 .Select(v => (v.Tag, v.SongId, v.Value)).ToHashSet();
@@ -102,7 +105,7 @@ public static class AdminEndpoints
             });
         });
 
-        admin.MapPost("/approve", async (ApproveRequest body, AppDbContext db, IWebHostEnvironment env) =>
+        admin.MapPost("/approve", async (ApproveRequest body, AppDbContext db, IWebHostEnvironment env, LibraryContext lib) =>
         {
             var title = body.Title?.Trim() ?? "";
             var artist = body.Artist?.Trim() ?? "";
@@ -118,7 +121,7 @@ public static class AdminEndpoints
                 foreach (var (tag, value) in body.TagValues ?? new())
                     await RankedTagEndpoints.SetValueAsync(db, tag, existing, value);
                 await db.SaveChangesAsync();
-                await SetStatusAsync(env, body.CandidateId, "approved");
+                await SetStatusAsync(env, lib.Current, body.CandidateId, "approved");
                 return Results.Ok(new { id = existing.Id, duplicate = true, tagsAdded = added });
             }
 
@@ -140,15 +143,15 @@ public static class AdminEndpoints
             foreach (var (tag, value) in body.TagValues ?? new())
                 await RankedTagEndpoints.SetValueAsync(db, tag, song, value);
             await db.SaveChangesAsync();
-            await SetStatusAsync(env, body.CandidateId, "approved");
+            await SetStatusAsync(env, lib.Current, body.CandidateId, "approved");
             return Results.Ok(new { id = song.Id, duplicate = false });
         });
 
-        admin.MapPost("/reject", async (RejectRequest body, IWebHostEnvironment env) =>
+        admin.MapPost("/reject", async (RejectRequest body, IWebHostEnvironment env, LibraryContext lib) =>
         {
             if (string.IsNullOrWhiteSpace(body.CandidateId))
                 return Results.BadRequest(new { error = "candidateId mangler." });
-            await SetStatusAsync(env, body.CandidateId, "rejected");
+            await SetStatusAsync(env, lib.Current, body.CandidateId, "rejected");
             return Results.Ok(new { ok = true });
         });
 
@@ -261,29 +264,29 @@ public static class AdminEndpoints
         catch { return []; }
     }
 
-    // Decisions live in App_Data (survives deploys), initialised from the bundled
-    // candidate-status.json the first time.
-    static string StatusPath(IWebHostEnvironment env) =>
-        Path.Combine(env.ContentRootPath, "App_Data", "candidate-status.json");
+    // Decisions live in App_Data (survives deploys), one file per song library,
+    // initialised from the bundled candidate-status.json the first time.
+    static string StatusPath(IWebHostEnvironment env, Library library) =>
+        Path.Combine(env.ContentRootPath, "App_Data", $"candidate-status{library.Suffix}.json");
 
-    static async Task<Dictionary<string, string>> LoadStatusAsync(IWebHostEnvironment env)
+    static async Task<Dictionary<string, string>> LoadStatusAsync(IWebHostEnvironment env, Library library)
     {
-        var path = StatusPath(env);
+        var path = StatusPath(env, library);
         if (!File.Exists(path)) path = FindBundled(env, "candidate-status.json") ?? path;
         if (!File.Exists(path)) return new();
         try { return JsonSerializer.Deserialize<Dictionary<string, string>>(await File.ReadAllTextAsync(path), JsonOpts) ?? new(); }
         catch { return new(); }
     }
 
-    static async Task SetStatusAsync(IWebHostEnvironment env, string? candidateId, string decision)
+    static async Task SetStatusAsync(IWebHostEnvironment env, Library library, string? candidateId, string decision)
     {
         if (string.IsNullOrWhiteSpace(candidateId)) return;
         await StatusLock.WaitAsync();
         try
         {
-            var status = await LoadStatusAsync(env);
+            var status = await LoadStatusAsync(env, library);
             status[candidateId] = decision;
-            var path = StatusPath(env);
+            var path = StatusPath(env, library);
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             await File.WriteAllTextAsync(path, JsonSerializer.Serialize(status, JsonOpts) + "\n");
         }
