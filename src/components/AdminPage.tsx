@@ -5,14 +5,14 @@ import { AdminCatalog } from './AdminCatalog';
 import { AdminRankedTags } from './AdminRankedTags';
 import { AdminAi } from './AdminAi';
 import { AdminSpotify } from './AdminSpotify';
-import { LibraryPicker } from './LibraryPicker';
-import { currentLibraryId, DEFAULT_LIBRARY } from '../services/library';
+import { currentLibraryId, DEFAULT_LIBRARY, fetchCurrentLibrary } from '../services/library';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
 // Works both locally and on the deployed site; requests carry the admin key
 // (X-Admin-Key), which the user enters once and is remembered in localStorage.
-// Each song library (database) has its own admin key, so the key is remembered per library.
+// Each song library (database, picked with /admin?db=<id>) has its own admin key, so the
+// key is remembered per library.
 
 const GOAL = 500;
 const API = '/api/admin';
@@ -124,6 +124,12 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
+  // Display name of a non-default library, shown so you know which database you edit.
+  const [libraryName, setLibraryName] = useState<string | null>(null);
+  useEffect(() => {
+    if (library === DEFAULT_LIBRARY) return;
+    fetchCurrentLibrary().then((lib) => setLibraryName(lib?.name ?? null));
+  }, []);
   const [tab, setTab] = useState<'candidates' | 'catalog' | 'ranked' | 'ai' | 'spotify'>('candidates');
   // Tags put on every song approved from here. Kept between songs (and reloads), so a
   // whole batch can be tagged while reviewing it.
@@ -366,7 +372,11 @@ export function AdminPage() {
             direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            <LibraryPicker />
+            {libraryName && (
+              <span className="rounded-full bg-cyan-500/15 px-3 py-1 text-xs font-bold text-cyan-300 ring-1 ring-cyan-500/40">
+                Database: {libraryName}
+              </span>
+            )}
             {!needsKey && state && (
               <button
                 onClick={() => {
