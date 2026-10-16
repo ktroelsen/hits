@@ -232,7 +232,7 @@ API-forbrug (tokens + websøgninger, højst 8 søgninger pr. kørsel).
 ### Produktions-arkitektur
 
 Deployet er **self-contained**: `dotnet publish` bundter .NET-runtimen, så Simplys Windows/IIS
-ikke behøver .NET installeret. Appen kører i et app pool (ASP.NET Core Module, in-process) og
+ikke behøver .NET installeret. Appen kører i et app pool (ASP.NET Core Module, out-of-process via `Hits.Api.exe`) og
 serverer:
 
 - det byggede React-frontend fra `wwwroot` (med SPA-fallback til `index.html`),
