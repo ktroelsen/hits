@@ -90,25 +90,25 @@ tags, online-spil, highscores og **egen admin-nøgle**:
 | Bibliotek | Fil | Admin-nøgle (config / env) |
 |---|---|---|
 | `hits` (Standard) | `App_Data/hits.db` | `Admin:Key` / `Admin__Key` |
-| `playground` (Playground) | `App_Data/hits-playground.db` | `Libraries:playground:AdminKey`, ellers `Admin:Key` |
-| `mol` | `App_Data/hits-mol.db` | `Libraries:mol:AdminKey` / `Libraries__mol__AdminKey` |
+| `playground` (Playground) | `App_Data/hits-mol.db` | `Libraries:playground:AdminKey` (secret `ADMIN_KEY_MOL`) |
 
-- **Playground:** findes altid (filen oprettes, migreres og seedes automatisk ved opstart).
+- **Playground:** findes altid og er den tidligere `mol`-database (samme fil, `hits-mol.db`, og
+  samme admin-nøgle, `ADMIN_KEY_MOL`; `Libraries:mol:AdminKey` virker stadig). Gamle
+  `?db=mol`-links går til Playground. Filen oprettes, migreres og seedes automatisk ved opstart.
   Under **Indstillinger** vælger man database: *Standard* eller *Playground*. Valget gemmes i
   cookien `hits_lib` og appen genindlæses. Forsiden viser "🧪 Playground", og `/admin` går
   til den valgte database og viser altid hvilken ("Database: Standard" / "🧪 Database: Playground").
-  Har man allerede en anden database, kan man omdøbe filen til `hits-playground.db`.
 
 - **Nyt bibliotek:** læg en fil `App_Data/hits-<navn>.db` (fx en kopi af `hits.db`) og genstart
   appen. En tom/ny fil migreres og seedes automatisk. Visningsnavnet er `<Navn>` eller
   `Libraries:<navn>:Name`. Biblioteker kan også oprettes kun via config (`Libraries:<navn>:...`).
 - **Andre biblioteker (skjult):** de vises ikke i appen. Man åbner sitet med `?db=<navn>`, fx
-  `https://din-side.dk/?db=mol` eller `/admin?db=mol`. Browseren husker valget i cookien
+  `https://din-side.dk/?db=familie` eller `/admin?db=familie`. Browseren husker valget i cookien
   `hits_lib`, så alle API-kald og SignalR bruger det, også når appen åbnes fra hjemmeskærmen.
   `?db=hits` (eller tom `?db=`) går tilbage til standard. Ukendte navne giver standard. Join-linket
   til online-spil har `?db=` med automatisk, og når man taster en spilkode, finder appen selv den
   rigtige database. API'et viser kun den database, man selv bruger, og lister ikke de andre.
-- **Separat login:** `/admin` bruger det valgte biblioteks nøgle (og viser "Database: Mol") og husker den pr. bibliotek i
+- **Separat login:** `/admin` bruger det valgte biblioteks nøgle (og viser hvilken database) og husker den pr. bibliotek i
   browseren. Nøglen til ét bibliotek virker ikke på et andet. Uden nøgle er det biblioteks
   admin slået fra i produktion.
 - Afspilningsrækkefølge (`hits_session`, `hits_session-<navn>`) og kandidat-beslutninger
@@ -260,7 +260,7 @@ lægge den et andet persistent sted, så sæt `ConnectionStrings__Default` i mil
 | `SIMPLY_WEBDEPLOY_USERNAME` | deploy | Web Deploy brugernavn |
 | `SIMPLY_WEBDEPLOY_PASSWORD` | deploy | Web Deploy adgangskode |
 | `ADMIN_KEY` | deploy | Admin-nøglen til `/admin` |
-| `ADMIN_KEY_MOL` | deploy | Admin-nøglen til sangbiblioteket `mol` (`hits-mol.db`) |
+| `ADMIN_KEY_MOL` | deploy | Admin-nøglen til Playground-databasen (`hits-mol.db`) |
 | `ANTHROPIC_API_KEY` | deploy | Anthropic API-nøgle til AI-assistenten i `/admin` (valgfri) |
 | `CLAUDE_CODE_OAUTH_TOKEN` | claude | Fra `claude setup-token` (eller brug `ANTHROPIC_API_KEY`) |
 
