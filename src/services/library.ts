@@ -16,9 +16,11 @@ export interface LibraryInfo {
   name: string;
 }
 
+// "mol" is the playground's old name (old cookies and ?db=mol links).
 export function currentLibraryId(): string {
   const match = document.cookie.match(/(?:^|;\s*)hits_lib=([^;]*)/);
-  return match ? decodeURIComponent(match[1]) : DEFAULT_LIBRARY;
+  const id = match ? decodeURIComponent(match[1]) : DEFAULT_LIBRARY;
+  return id === 'mol' ? PLAYGROUND_LIBRARY : id;
 }
 
 function setLibrary(id: string): void {
