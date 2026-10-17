@@ -1,13 +1,15 @@
 // Song libraries: each is its own database on the server (own songs, tags, games,
-// highscores and admin key), e.g. one per family. There is no picker in the UI: a library
-// is chosen by opening the site with ?db=<id> (e.g. /?db=mol, back with ?db=hits). The
-// choice is remembered in a cookie, so every API request and the SignalR hub carry it.
+// highscores and admin key), e.g. one per family. The playground database can be chosen
+// under Indstillinger; other libraries are chosen by opening the site with ?db=<id> (e.g.
+// /?db=mol, back with ?db=hits). The choice is remembered in a cookie, so every API
+// request, the SignalR hub and /admin use it.
 // See server/Data/Libraries.cs.
 
 const API_BASE = (import.meta.env.VITE_API_BASE ?? '').replace(/\/$/, '');
 const COOKIE = 'hits_lib';
 const PARAM = 'db';
 export const DEFAULT_LIBRARY = 'hits';
+export const PLAYGROUND_LIBRARY = 'playground';
 
 export interface LibraryInfo {
   id: string;
@@ -24,6 +26,12 @@ function setLibrary(id: string): void {
     id === DEFAULT_LIBRARY
       ? `${COOKIE}=; path=/; max-age=0; samesite=lax`
       : `${COOKIE}=${encodeURIComponent(id)}; path=/; max-age=31536000; samesite=lax`;
+}
+
+// Switches database and reloads, so the catalog, tags and play session are fetched anew.
+export function switchLibrary(id: string): void {
+  setLibrary(id);
+  window.location.reload();
 }
 
 // A link that opens in the current library (?db=…), e.g. the join link for an online game.

@@ -90,12 +90,19 @@ tags, online-spil, highscores og **egen admin-nøgle**:
 | Bibliotek | Fil | Admin-nøgle (config / env) |
 |---|---|---|
 | `hits` (Standard) | `App_Data/hits.db` | `Admin:Key` / `Admin__Key` |
+| `playground` (Playground) | `App_Data/hits-playground.db` | `Libraries:playground:AdminKey`, ellers `Admin:Key` |
 | `mol` | `App_Data/hits-mol.db` | `Libraries:mol:AdminKey` / `Libraries__mol__AdminKey` |
+
+- **Playground:** findes altid (filen oprettes, migreres og seedes automatisk ved opstart).
+  Under **Indstillinger** vælger man database: *Standard* eller *Playground*. Valget gemmes i
+  cookien `hits_lib` og appen genindlæses. Forsiden viser "🧪 Playground", og `/admin` går
+  til den valgte database og viser altid hvilken ("Database: Standard" / "🧪 Database: Playground").
+  Har man allerede en anden database, kan man omdøbe filen til `hits-playground.db`.
 
 - **Nyt bibliotek:** læg en fil `App_Data/hits-<navn>.db` (fx en kopi af `hits.db`) og genstart
   appen. En tom/ny fil migreres og seedes automatisk. Visningsnavnet er `<Navn>` eller
   `Libraries:<navn>:Name`. Biblioteker kan også oprettes kun via config (`Libraries:<navn>:...`).
-- **Valg (skjult):** der er ingen vælger på siden. Man åbner sitet med `?db=<navn>`, fx
+- **Andre biblioteker (skjult):** de vises ikke i appen. Man åbner sitet med `?db=<navn>`, fx
   `https://din-side.dk/?db=mol` eller `/admin?db=mol`. Browseren husker valget i cookien
   `hits_lib`, så alle API-kald og SignalR bruger det, også når appen åbnes fra hjemmeskærmen.
   `?db=hits` (eller tom `?db=`) går tilbage til standard. Ukendte navne giver standard. Join-linket

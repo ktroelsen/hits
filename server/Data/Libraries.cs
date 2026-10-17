@@ -8,6 +8,8 @@ namespace Hits.Api.Data;
 // each other. The default library is App_Data/hits.db (admin key "Admin:Key"); every
 // App_Data/hits-{id}.db is another library (admin key "Libraries:{id}:AdminKey", env
 // Libraries__{id}__AdminKey). Its display name is "Libraries:{id}:Name" (default: the id).
+// The "playground" library (App_Data/hits-playground.db) always exists and can be chosen
+// under Indstillinger in the app; its admin key falls back to the default one.
 public sealed record Library(string Id, string Name, string ConnectionString, string? AdminKey)
 {
     public bool IsDefault => Id == LibraryRegistry.DefaultId;
@@ -19,9 +21,10 @@ public sealed record Library(string Id, string Name, string ConnectionString, st
 public sealed partial class LibraryRegistry
 {
     public const string DefaultId = "hits";
-    // The browser's library: chosen by opening the site with ?db=<id> (not shown anywhere
-    // in the UI), which the frontend remembers in a cookie so every request and the SignalR
-    // hub carry it. X-Library is for scripts.
+    public const string PlaygroundId = "playground";
+    // The browser's library: Standard/Playground chosen under Indstillinger, or any library
+    // by opening the site with ?db=<id>. The frontend remembers it in a cookie so every
+    // request and the SignalR hub carry it. X-Library is for scripts.
     public const string CookieName = "hits_lib";
     public const string HeaderName = "X-Library";
     public const string QueryName = "db";
@@ -54,8 +57,9 @@ public sealed partial class LibraryRegistry
                 config["Admin:Key"]),
         };
 
-        // Libraries named in config, plus every hits-{id}.db file dropped into App_Data.
+        // The playground, libraries named in config, and every hits-{id}.db file in App_Data.
         var ids = config.GetSection("Libraries").GetChildren().Select(c => c.Key.ToLowerInvariant())
+            .Append(PlaygroundId)
             .Concat(Directory.EnumerateFiles(dataDir, "hits-*.db")
                 .Select(f => Path.GetFileNameWithoutExtension(f)["hits-".Length..].ToLowerInvariant()))
             .Where(id => id != DefaultId && IdPattern().IsMatch(id))
@@ -66,7 +70,7 @@ public sealed partial class LibraryRegistry
             libraries.Add(new(id,
                 config[$"Libraries:{id}:Name"] ?? char.ToUpperInvariant(id[0]) + id[1..],
                 $"Data Source={Path.Combine(dataDir, $"hits-{id}.db")}",
-                config[$"Libraries:{id}:AdminKey"]));
+                config[$"Libraries:{id}:AdminKey"] ?? (id == PlaygroundId ? config["Admin:Key"] : null)));
         }
         return new LibraryRegistry(libraries);
     }

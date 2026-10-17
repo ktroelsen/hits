@@ -5,7 +5,7 @@ import { GameSettings } from '../types';
 import { effectiveTags } from '../services/songsService';
 import type { BestScores } from '../services/highscoreStore';
 import { useInstallOption } from '../services/installPrompt';
-import { findGameLibrary, withLibrary } from '../services/library';
+import { currentLibraryId, findGameLibrary, PLAYGROUND_LIBRARY, withLibrary } from '../services/library';
 
 interface StartScreenProps {
   settings: GameSettings;
@@ -76,6 +76,12 @@ export function StartScreen({
         <h1 className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-display tracking-wider">
           HITS
         </h1>
+        {/* Reminder that the playground database (chosen under Indstillinger) is in use */}
+        {currentLibraryId() === PLAYGROUND_LIBRARY && (
+          <span className="mt-2 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-300 ring-1 ring-amber-500/40">
+            🧪 Playground
+          </span>
+        )}
         <p className="mt-3 text-slate-300 text-base sm:text-lg font-medium">
           Gæt {guessWhat} & byg jeres fælles {rank ? 'liste' : 'tidslinje'}
         </p>

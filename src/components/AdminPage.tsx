@@ -5,14 +5,14 @@ import { AdminCatalog } from './AdminCatalog';
 import { AdminRankedTags } from './AdminRankedTags';
 import { AdminAi } from './AdminAi';
 import { AdminSpotify } from './AdminSpotify';
-import { currentLibraryId, DEFAULT_LIBRARY, fetchCurrentLibrary } from '../services/library';
+import { currentLibraryId, DEFAULT_LIBRARY, fetchCurrentLibrary, PLAYGROUND_LIBRARY } from '../services/library';
 
 // Curation tool (route: /admin). Reads the candidate pool and writes approved songs
 // to the catalog database via the .NET admin API (server/Admin/AdminEndpoints.cs).
 // Works both locally and on the deployed site; requests carry the admin key
 // (X-Admin-Key), which the user enters once and is remembered in localStorage.
-// Each song library (database, picked with /admin?db=<id>) has its own admin key, so the
-// key is remembered per library.
+// Edits the database chosen under Indstillinger (Standard or Playground) or with
+// /admin?db=<id>. Each song library has its own admin key, so the key is remembered per library.
 
 const GOAL = 500;
 const API = '/api/admin';
@@ -124,11 +124,12 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [needsKey, setNeedsKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
-  // Display name of a non-default library, shown so you know which database you edit.
-  const [libraryName, setLibraryName] = useState<string | null>(null);
+  // Display name of the database, always shown so you know which one you edit.
+  const [libraryName, setLibraryName] = useState<string>(
+    library === DEFAULT_LIBRARY ? 'Standard' : library === PLAYGROUND_LIBRARY ? 'Playground' : library,
+  );
   useEffect(() => {
-    if (library === DEFAULT_LIBRARY) return;
-    fetchCurrentLibrary().then((lib) => setLibraryName(lib?.name ?? null));
+    fetchCurrentLibrary().then((lib) => lib && setLibraryName(lib.name));
   }, []);
   const [tab, setTab] = useState<'candidates' | 'catalog' | 'ranked' | 'ai' | 'spotify'>('candidates');
   // Tags put on every song approved from here. Kept between songs (and reloads), so a
@@ -372,11 +373,15 @@ export function AdminPage() {
             direkte i <code className="text-pink-400">databasen</code> og er live med det samme.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            {libraryName && (
-              <span className="rounded-full bg-cyan-500/15 px-3 py-1 text-xs font-bold text-cyan-300 ring-1 ring-cyan-500/40">
-                Database: {libraryName}
-              </span>
-            )}
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-bold ring-1 ${
+                library === PLAYGROUND_LIBRARY
+                  ? 'bg-amber-500/15 text-amber-300 ring-amber-500/40'
+                  : 'bg-cyan-500/15 text-cyan-300 ring-cyan-500/40'
+              }`}
+            >
+              {library === PLAYGROUND_LIBRARY ? '🧪 ' : ''}Database: {libraryName}
+            </span>
             {!needsKey && state && (
               <button
                 onClick={() => {
