@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock, SlidersHorizontal } from 'lucide-react';
+import { X, Play, Users, Filter, Sparkles, Check, Plus, Trash2, Trophy, Clock, SlidersHorizontal, Database } from 'lucide-react';
+import { currentLibraryId, DEFAULT_LIBRARY, PLAYGROUND_LIBRARY, switchLibrary } from '../../services/library';
 import { BrandLogo } from '../BrandLogo';
 import { GameMode, GameSettings, Player, Decade, WinCondition } from '../../types';
 import { getActiveSongs, isTagActive, matchesSettings } from '../../services/songsService';
@@ -40,6 +41,7 @@ export function GameSetupModal({
   currentPlayers,
   onStartGame,
 }: GameSetupModalProps) {
+  const currentLibrary = currentLibraryId();
   const [mode, setMode] = useState<GameMode>(currentSettings.mode);
   const [targetCards, setTargetCards] = useState<number>(currentSettings.targetCards);
   const [winCondition, setWinCondition] = useState<WinCondition>(currentSettings.winCondition ?? 'cards');
@@ -627,6 +629,42 @@ export function GameSetupModal({
                 </span>
               </button>
             </div>
+          </div>
+
+          {/* Database: the normal one or the playground (switching reloads the app) */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
+              <Database className="inline w-3.5 h-3.5 mr-1 -mt-0.5" />
+              Database
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              {[
+                { id: DEFAULT_LIBRARY, label: 'Standard', hint: 'Den rigtige database' },
+                { id: PLAYGROUND_LIBRARY, label: 'Playground', hint: 'Til test og leg' },
+              ].map((db) => {
+                const selected = currentLibrary === db.id;
+                return (
+                  <button
+                    key={db.id}
+                    type="button"
+                    onClick={() => !selected && switchLibrary(db.id)}
+                    className={`p-3 rounded-xl border text-center transition-all ${
+                      selected
+                        ? db.id === PLAYGROUND_LIBRARY
+                          ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md'
+                          : 'bg-cyan-600 text-white border-cyan-500 font-bold shadow-md'
+                        : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    <span className="text-xs sm:text-sm block">{db.label}</span>
+                    <span className="text-[10px] opacity-80 block mt-0.5">{db.hint}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[11px] text-slate-500">
+              Skift genindlæser appen. Admin bruger også den valgte database.
+            </p>
           </div>
         </div>
 
